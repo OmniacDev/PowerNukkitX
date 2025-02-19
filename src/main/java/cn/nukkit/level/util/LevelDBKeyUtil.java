@@ -90,7 +90,6 @@ public enum LevelDBKeyUtil {
         bb.put(NEW_ENTITIES_INDEX_KEY);
         bb.putLong(entityId);
         return bb.array();
-
     }
 
     public static byte[] getChunkKey(int chunkX, int chunkZ) {
