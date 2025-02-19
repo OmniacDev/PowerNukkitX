@@ -32,6 +32,7 @@ import org.iq80.leveldb.WriteBatch;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -304,22 +305,55 @@ public class LevelDBChunkSerializer {
             builder.blockEntities(blockEntityTags);
         }
 
-        byte[] key = LevelDBKeyUtil.ENTITIES.getKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo);
-        byte[] entityBytes = db.get(key);
-        if (entityBytes == null) return;
-        List<CompoundTag> entityTags = new ArrayList<>();
-        try (BufferedInputStream stream = new BufferedInputStream(new ByteArrayInputStream(entityBytes))) {
-            while (stream.available() > 0) {
-                entityTags.add(NBTIO.read(stream, ByteOrder.LITTLE_ENDIAN));
+        byte[] chunk_key = LevelDBKeyUtil.getChunkKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo);
+        byte[] new_key = new byte[LevelDBKeyUtil.NEW_ENTITIES_KEY.length + chunk_key.length];
+        System.arraycopy(LevelDBKeyUtil.NEW_ENTITIES_KEY, 0, new_key, 0, LevelDBKeyUtil.NEW_ENTITIES_KEY.length);
+        System.arraycopy(chunk_key, 0, new_key, LevelDBKeyUtil.NEW_ENTITIES_KEY.length, chunk_key.length);
+
+        byte[] new_entity_bytes = db.get(new_key);
+        if (new_entity_bytes == null) {
+            byte[] key = LevelDBKeyUtil.ENTITIES.getKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo);
+            byte[] entityBytes = db.get(key);
+            if (entityBytes == null) return;
+            List<CompoundTag> entityTags = new ArrayList<>();
+            try (BufferedInputStream stream = new BufferedInputStream(new ByteArrayInputStream(entityBytes))) {
+                while (stream.available() > 0) {
+                    entityTags.add(NBTIO.read(stream, ByteOrder.LITTLE_ENDIAN));
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        if (pnxExtraData == null) {
-            db.delete(key);
-            List<CompoundTag> list = entityTags.stream().map(BDSEntityTranslator::translate).filter(Predicates.notNull()).toList();
-            builder.entities(list);
+            if (pnxExtraData == null) {
+                db.delete(key);
+                List<CompoundTag> list = entityTags.stream().map(BDSEntityTranslator::translate).filter(Predicates.notNull()).toList();
+                builder.entities(list);
+            } else {
+                builder.entities(entityTags);
+            }
         } else {
+            List<CompoundTag> entityTags = new ArrayList<>();
+            try (BufferedInputStream stream = new BufferedInputStream(new ByteArrayInputStream(new_entity_bytes))) {
+                while (stream.available() > 0) {
+                    byte[] bytes = new byte[8];
+                    int bytes_read = stream.read(bytes);
+                    if (bytes_read != 8) {
+                        throw new IOException("Failed to read 8 bytes for Int64");
+                    }
+                    ByteBuffer bb = ByteBuffer.wrap(bytes);
+                    bb.order(ByteOrder.LITTLE_ENDIAN);
+
+                    long entity_id = bb.getLong();
+
+                    byte[] entity_key = LevelDBKeyUtil.getEntityKey(entity_id);
+                    byte[] entity_bytes = db.get(entity_key);
+                    if (entity_bytes == null) {
+                        throw new IOException("Failed to read entity key");
+                    }
+                    entityTags.add(NBTIO.read(entity_bytes, ByteOrder.LITTLE_ENDIAN));
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             builder.entities(entityTags);
         }
     }

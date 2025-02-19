@@ -3,6 +3,9 @@ package cn.nukkit.level.util;
 import cn.nukkit.level.DimensionData;
 import cn.nukkit.level.DimensionEnum;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
 /**
  * Allay Project 8/22/2023
  *
@@ -76,6 +79,61 @@ public enum LevelDBKeyUtil {
 
     LevelDBKeyUtil(char encoded) {
         this.encoded = (byte) encoded;
+    }
+
+    public static final byte[] NEW_ENTITIES_KEY = "digp".getBytes();
+    public static final byte[] NEW_ENTITIES_INDEX_KEY = "actorprefix".getBytes();
+
+    public static byte[] getEntityKey(long entityId) {
+        ByteBuffer bb = ByteBuffer.allocate(NEW_ENTITIES_INDEX_KEY.length + Long.BYTES);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+        bb.put(NEW_ENTITIES_INDEX_KEY);
+        bb.putLong(entityId);
+        return bb.array();
+    }
+
+    public static byte[] getChunkKey(int chunkX, int chunkZ) {
+        return new byte[]{
+                (byte) (chunkX & 0xff),
+                (byte) ((chunkX >>> 8) & 0xff),
+                (byte) ((chunkX >>> 16) & 0xff),
+                (byte) ((chunkX >>> 24) & 0xff),
+                (byte) (chunkZ & 0xff),
+                (byte) ((chunkZ >>> 8) & 0xff),
+                (byte) ((chunkZ >>> 16) & 0xff),
+                (byte) ((chunkZ >>> 24) & 0xff),
+        };
+    }
+
+    public static byte[] getChunkKey(int chunkX, int chunkZ, DimensionData dimension) {
+        if (dimension.equals(DimensionEnum.OVERWORLD.getDimensionData())) {
+            return new byte[]{
+                    (byte) (chunkX & 0xff),
+                    (byte) ((chunkX >>> 8) & 0xff),
+                    (byte) ((chunkX >>> 16) & 0xff),
+                    (byte) ((chunkX >>> 24) & 0xff),
+                    (byte) (chunkZ & 0xff),
+                    (byte) ((chunkZ >>> 8) & 0xff),
+                    (byte) ((chunkZ >>> 16) & 0xff),
+                    (byte) ((chunkZ >>> 24) & 0xff)
+            };
+        } else {
+            byte dimensionId = (byte) dimension.getDimensionId();
+            return new byte[]{
+                    (byte) (chunkX & 0xff),
+                    (byte) ((chunkX >>> 8) & 0xff),
+                    (byte) ((chunkX >>> 16) & 0xff),
+                    (byte) ((chunkX >>> 24) & 0xff),
+                    (byte) (chunkZ & 0xff),
+                    (byte) ((chunkZ >>> 8) & 0xff),
+                    (byte) ((chunkZ >>> 16) & 0xff),
+                    (byte) ((chunkZ >>> 24) & 0xff),
+                    (byte) (dimensionId & 0xff),
+                    (byte) ((dimensionId >>> 8) & 0xff),
+                    (byte) ((dimensionId >>> 16) & 0xff),
+                    (byte) ((dimensionId >>> 24) & 0xff)
+            };
+        }
     }
 
     public byte[] getKey(int chunkX, int chunkZ) {
