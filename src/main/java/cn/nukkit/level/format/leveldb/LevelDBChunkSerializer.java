@@ -396,7 +396,10 @@ public class LevelDBChunkSerializer {
 
                     long entity_uuid = e.getUniqueId().getLeastSignificantBits();
 
-                    bufStream.writeLong(entity_uuid);
+                    ByteBuffer entity_uuid_buf = ByteBuffer.allocate(Long.BYTES);
+                    entity_uuid_buf.order(ByteOrder.LITTLE_ENDIAN);
+                    entity_uuid_buf.putLong(entity_uuid);
+                    bufStream.write(entity_uuid_buf.array());
 
                     byte[] entity_tag_bytes = NBTIO.write(e.namedTag, ByteOrder.LITTLE_ENDIAN);
                     byte[] actor_key = LevelDBKeyUtil.getEntityKey(entity_uuid);
