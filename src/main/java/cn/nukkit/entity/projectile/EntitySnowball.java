@@ -2,7 +2,7 @@ package cn.nukkit.entity.projectile;
 
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.mob.EntityBlaze;
+import cn.nukkit.entity.monster.EntityBlaze;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.level.particle.GenericParticle;

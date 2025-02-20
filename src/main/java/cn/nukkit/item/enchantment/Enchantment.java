@@ -1,6 +1,7 @@
 package cn.nukkit.item.enchantment;
 
 import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.monster.EntityMonster;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.item.Item;
@@ -629,7 +630,7 @@ public abstract class Enchantment implements Cloneable {
      * <p>
      * 覆写该方法提供当实体被攻击时盔甲提供的保护值
      * <p>
-     * 目前只生效于{@link cn.nukkit.entity.EntityHumanType HumanType} 和 {@link cn.nukkit.entity.mob.EntityMob EntityMob}
+     * 目前只生效于{@link cn.nukkit.entity.EntityHumanType HumanType} 和 {@link EntityMonster EntityMob}
      *
      * @param event 该实体被攻击的事件
      * @return the protection factor

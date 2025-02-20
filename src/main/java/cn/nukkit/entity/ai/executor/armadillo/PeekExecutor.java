@@ -3,7 +3,7 @@ package cn.nukkit.entity.ai.executor.armadillo;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.executor.EntityControl;
 import cn.nukkit.entity.ai.executor.IBehaviorExecutor;
-import cn.nukkit.entity.passive.EntityArmadillo;
+import cn.nukkit.entity.mob.EntityArmadillo;
 
 public class PeekExecutor implements EntityControl, IBehaviorExecutor {
 

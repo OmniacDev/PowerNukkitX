@@ -8,6 +8,7 @@ import cn.nukkit.item.ItemSpawnEgg;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.registry.Registries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +21,7 @@ public class BlockMobSpawner extends BlockSolid {
     }
 
     public BlockMobSpawner() {
-        super(PROPERTIES.getDefaultState());
+        this(PROPERTIES.getDefaultState());
     }
 
     public BlockMobSpawner(BlockState blockState) {
@@ -83,16 +84,18 @@ public class BlockMobSpawner extends BlockSolid {
     }
 
     public boolean setType(int networkId) {
+        String identifier = Registries.ENTITY.getEntityIdentifier(networkId);
+
         BlockEntity blockEntity = getLevel().getBlockEntity(this);
-        if(blockEntity != null && blockEntity instanceof BlockEntityMobSpawner spawner) {
-            spawner.setSpawnEntityType(networkId);
+        if(blockEntity instanceof BlockEntityMobSpawner spawner) {
+            spawner.setSpawnEntityType(identifier);
         } else {
             if (blockEntity != null) {
                 blockEntity.close();
             }
             CompoundTag nbt = new CompoundTag()
                     .putString(BlockEntityMobSpawner.TAG_ID, BlockEntity.MOB_SPAWNER)
-                    .putInt(BlockEntityMobSpawner.TAG_ENTITY_ID, networkId)
+                    .putString(BlockEntityMobSpawner.TAG_ENTITY_IDENTIFIER, identifier)
                     .putInt(BlockEntityMobSpawner.TAG_X, (int) x)
                     .putInt(BlockEntityMobSpawner.TAG_Y, (int) y)
                     .putInt(BlockEntityMobSpawner.TAG_Z, (int) z);

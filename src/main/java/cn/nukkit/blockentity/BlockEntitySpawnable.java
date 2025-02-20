@@ -22,10 +22,10 @@ public abstract class BlockEntitySpawnable extends BlockEntity {
 
     public CompoundTag getSpawnCompound() {
         return new CompoundTag()
-                .putString("id", namedTag.getString("id"))
-                .putInt("x", getFloorX())
-                .putInt("y", getFloorY())
-                .putInt("z", getFloorZ());
+                .putString(TAG_ID, namedTag.getString(TAG_ID))
+                .putInt(TAG_X, getFloorX())
+                .putInt(TAG_Y, getFloorY())
+                .putInt(TAG_Z, getFloorZ());
     }
 
     public void spawnTo(Player player) {

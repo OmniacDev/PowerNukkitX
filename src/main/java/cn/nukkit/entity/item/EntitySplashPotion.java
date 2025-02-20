@@ -1,8 +1,7 @@
 package cn.nukkit.entity.item;
 
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.entity.mob.EntityBlaze;
+import cn.nukkit.entity.monster.EntityBlaze;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;

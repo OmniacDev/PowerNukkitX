@@ -5,10 +5,9 @@ import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityLiving;
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityDataTypes;
-import cn.nukkit.entity.mob.EntityMob;
+import cn.nukkit.entity.monster.EntityMonster;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.Location;
@@ -85,7 +84,7 @@ public class GuardianAttackExecutor implements EntityControl, IBehaviorExecutor 
             tick2++;
             if (tick2 > attackDelay) {
                 if(entity.getDataProperty(EntityDataTypes.TARGET_EID, 0L) == target.getId()) {
-                    EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(entity, target, EntityDamageEvent.DamageCause.ENTITY_ATTACK, ((EntityMob) entity).getDiffHandDamage(Server.getInstance().getDifficulty()));
+                    EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(entity, target, EntityDamageEvent.DamageCause.ENTITY_ATTACK, ((EntityMonster) entity).getDiffHandDamage(Server.getInstance().getDifficulty()));
                     target.attack(event);
                     if(Server.getInstance().getDifficulty() >= 2) {
                         EntityDamageByEntityEvent event2 = new EntityDamageByEntityEvent(entity, target, EntityDamageEvent.DamageCause.MAGIC, 1);

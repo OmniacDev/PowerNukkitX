@@ -34,8 +34,8 @@ import cn.nukkit.entity.effect.EffectType;
 import cn.nukkit.entity.item.EntityFishingHook;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.entity.item.EntityXpOrb;
-import cn.nukkit.entity.mob.EntityBoss;
-import cn.nukkit.entity.passive.EntityHorse;
+import cn.nukkit.entity.monster.EntityBoss;
+import cn.nukkit.entity.mob.EntityHorse;
 import cn.nukkit.entity.projectile.EntityArrow;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.entity.projectile.EntityThrownTrident;
@@ -1155,10 +1155,10 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
             this.setLevel(this.server.getDefaultLevel());
             nbt.putString("Level", this.level.getName());
             Position spawnLocation = this.level.getSafeSpawn();
-            nbt.getList("Pos", DoubleTag.class)
-                    .add(new DoubleTag(spawnLocation.x))
-                    .add(new DoubleTag(spawnLocation.y))
-                    .add(new DoubleTag(spawnLocation.z));
+            nbt.getList("Pos", FloatTag.class)
+                    .add(new FloatTag(spawnLocation.x))
+                    .add(new FloatTag(spawnLocation.y))
+                    .add(new FloatTag(spawnLocation.z));
         } else {
             this.setLevel(level);
         }
@@ -1183,7 +1183,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
             this.server.saveOfflinePlayerData(this.uuid, nbt, true);
         }
 
-        ListTag<DoubleTag> posList = nbt.getList("Pos", DoubleTag.class);
+        ListTag<FloatTag> posList = nbt.getList("Pos", FloatTag.class);
 
         super.init(this.level.getChunk((int) posList.get(0).data >> 4, (int) posList.get(2).data >> 4, true), nbt);
 
@@ -4433,7 +4433,6 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
 
         if (book && dialogWindows.getIfPresent(dialog.getSceneName()) != null) dialog.updateSceneName();
         dialog.getBindEntity().setDataProperty(HAS_NPC, true);
-        dialog.getBindEntity().setDataProperty(NPC_DATA, dialog.getSkinData());
         dialog.getBindEntity().setDataProperty(ACTIONS, actionJson);
         dialog.getBindEntity().setDataProperty(INTERACT_TEXT, dialog.getContent());
 

@@ -3,7 +3,7 @@ package cn.nukkit.blockentity;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockCreakingHeart;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.mob.EntityCreaking;
+import cn.nukkit.entity.monster.EntityCreaking;
 import cn.nukkit.event.entity.CreatureSpawnEvent;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;

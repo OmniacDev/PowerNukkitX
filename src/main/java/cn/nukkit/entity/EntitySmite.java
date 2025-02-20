@@ -18,6 +18,5 @@ public interface EntitySmite {
                 && !entity.isInsideOfWater() && !entity.isUnderBlock() && !entity.isOnFire()) {
             entity.setOnFire(1);
         }
-
     }
 }

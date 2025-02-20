@@ -306,9 +306,11 @@ public class LevelDBChunkSerializer {
         }
 
         byte[] chunk_key = LevelDBKeyUtil.getChunkKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo);
-        byte[] new_key = new byte[LevelDBKeyUtil.NEW_ENTITIES_KEY.length + chunk_key.length];
-        System.arraycopy(LevelDBKeyUtil.NEW_ENTITIES_KEY, 0, new_key, 0, LevelDBKeyUtil.NEW_ENTITIES_KEY.length);
-        System.arraycopy(chunk_key, 0, new_key, LevelDBKeyUtil.NEW_ENTITIES_KEY.length, chunk_key.length);
+        ByteBuffer key_buf = ByteBuffer.allocate(LevelDBKeyUtil.NEW_ENTITIES_KEY.length + chunk_key.length);
+        key_buf.order(ByteOrder.LITTLE_ENDIAN);
+        key_buf.put(LevelDBKeyUtil.NEW_ENTITIES_KEY);
+        key_buf.put(chunk_key);
+        byte[] new_key = key_buf.array();
 
         byte[] new_entity_bytes = db.get(new_key);
         if (new_entity_bytes == null) {
@@ -341,7 +343,6 @@ public class LevelDBChunkSerializer {
                     }
                     ByteBuffer bb = ByteBuffer.wrap(bytes);
                     bb.order(ByteOrder.LITTLE_ENDIAN);
-
                     long entity_id = bb.getLong();
 
                     byte[] entity_key = LevelDBKeyUtil.getEntityKey(entity_id);
@@ -381,18 +382,28 @@ public class LevelDBChunkSerializer {
         Collection<Entity> entities = chunk.getEntities().values();
         ByteBuf entityBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
         try (var bufStream = new ByteBufOutputStream(entityBuffer)) {
-            byte[] key = LevelDBKeyUtil.ENTITIES.getKey(chunk.getX(), chunk.getZ(), chunk.getProvider().getDimensionData());
-            if (entities.isEmpty()) {
-                writeBatch.delete(key);
-            } else {
-                for (Entity e : entities) {
-                    if (!(e instanceof Player) && !e.closed && e.canBeSavedWithChunk()) {
-                        e.saveNBT();
-                        NBTIO.write(e.namedTag, bufStream, ByteOrder.LITTLE_ENDIAN);
-                    }
+
+            byte[] chunk_key = LevelDBKeyUtil.getChunkKey(chunk.getX(), chunk.getZ(), chunk.getProvider().getDimensionData());
+            ByteBuffer bb = ByteBuffer.allocate(LevelDBKeyUtil.NEW_ENTITIES_KEY.length + chunk_key.length);
+            bb.put(LevelDBKeyUtil.NEW_ENTITIES_KEY);
+            bb.put(chunk_key);
+            bb.order(ByteOrder.LITTLE_ENDIAN);
+            byte[] new_key = bb.array();
+
+            for (Entity e : entities) {
+                if (!(e instanceof Player) && !e.closed && e.canBeSavedWithChunk()) {
+                    e.saveNBT();
+
+                    long entity_uuid = e.getUniqueId().getLeastSignificantBits();
+
+                    bufStream.writeLong(entity_uuid);
+
+                    byte[] entity_tag_bytes = NBTIO.write(e.namedTag, ByteOrder.LITTLE_ENDIAN);
+                    byte[] actor_key = LevelDBKeyUtil.getEntityKey(entity_uuid);
+                    writeBatch.put(actor_key, entity_tag_bytes);
                 }
-                writeBatch.put(key, Utils.convertByteBuf2Array(entityBuffer));
             }
+            writeBatch.put(new_key, Utils.convertByteBuf2Array(entityBuffer));
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {

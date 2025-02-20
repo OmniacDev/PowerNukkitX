@@ -221,7 +221,7 @@ public class BlockEntityCommandBlock extends BlockEntitySpawnable implements ICo
             nbt.putList(TAG_LAST_OUTPUT_PARAMS, this.lastOutputParams);
         }
         if (this.hasName()) {
-            nbt.putString(TAG_CUSTOM_NAME, this.getName());
+            nbt.putString(ICommandBlock.TAG_CUSTOM_NAME, this.getName());
         }
         return nbt;
     }
@@ -235,20 +235,20 @@ public class BlockEntityCommandBlock extends BlockEntitySpawnable implements ICo
     @NotNull
     @Override
     public String getName() {
-        return this.hasName() ? this.namedTag.getString(TAG_CUSTOM_NAME) : "!";
+        return this.hasName() ? this.namedTag.getString(ICommandBlock.TAG_CUSTOM_NAME) : "!";
     }
 
     @Override
     public boolean hasName() {
-        return this.namedTag.contains(TAG_CUSTOM_NAME);
+        return this.namedTag.contains(ICommandBlock.TAG_CUSTOM_NAME);
     }
 
     @Override
     public void setName(String name) {
         if (Strings.isNullOrEmpty(name)) {
-            this.namedTag.remove(TAG_CUSTOM_NAME);
+            this.namedTag.remove(ICommandBlock.TAG_CUSTOM_NAME);
         } else {
-            this.namedTag.putString(TAG_CUSTOM_NAME, name);
+            this.namedTag.putString(ICommandBlock.TAG_CUSTOM_NAME, name);
         }
     }
 

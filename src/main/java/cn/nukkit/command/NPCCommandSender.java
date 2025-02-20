@@ -3,7 +3,7 @@ package cn.nukkit.command;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.passive.EntityNpc;
+import cn.nukkit.entity.mob.EntityNPC;
 import cn.nukkit.lang.CommandOutputContainer;
 import cn.nukkit.lang.TextContainer;
 import cn.nukkit.level.Location;
@@ -22,9 +22,9 @@ public class NPCCommandSender implements CommandSender {
 
     protected PermissibleBase perm = new PermissibleBase(this);
     private Player initiator;
-    private EntityNpc npc;
+    private EntityNPC npc;
 
-    public NPCCommandSender(EntityNpc npc, Player initiator) {
+    public NPCCommandSender(EntityNPC npc, Player initiator) {
         this.npc = npc;
         this.initiator = initiator;
     }
@@ -33,7 +33,7 @@ public class NPCCommandSender implements CommandSender {
         return initiator;
     }
 
-    public EntityNpc getNpc() {
+    public EntityNPC getNpc() {
         return npc;
     }
 

@@ -8,7 +8,7 @@ import cn.nukkit.entity.custom.CustomEntity;
 import cn.nukkit.entity.item.EntityChestBoat;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.entity.item.EntityXpOrb;
-import cn.nukkit.entity.passive.EntityHorse;
+import cn.nukkit.entity.mob.EntityHorse;
 import cn.nukkit.entity.projectile.EntityArrow;
 import cn.nukkit.event.player.PlayerKickEvent;
 import cn.nukkit.event.player.PlayerMouseOverEntityEvent;

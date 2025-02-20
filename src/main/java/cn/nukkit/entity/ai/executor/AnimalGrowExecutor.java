@@ -1,7 +1,7 @@
 package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.entity.EntityIntelligent;
-import cn.nukkit.entity.passive.EntityAnimal;
+import cn.nukkit.entity.mob.EntityAnimal;
 
 
 public class AnimalGrowExecutor implements IBehaviorExecutor {

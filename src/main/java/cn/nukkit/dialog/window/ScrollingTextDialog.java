@@ -84,9 +84,6 @@ public class ScrollingTextDialog implements Dialog {
     private class ScrollingRunner extends Task {
 
         private FormWindowDialog clone = new FormWindowDialog(dialog.getTitle(), dialog.getContent(), dialog.getBindEntity());
-        {
-            clone.setSkinData(dialog.getSkinData());
-        }
 
         @Override
         public void onRun(int currentTick) {

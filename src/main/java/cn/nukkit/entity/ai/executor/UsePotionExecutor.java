@@ -7,7 +7,7 @@ import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.effect.EffectType;
 import cn.nukkit.entity.effect.PotionType;
-import cn.nukkit.entity.mob.EntityMob;
+import cn.nukkit.entity.monster.EntityMonster;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.item.Item;
@@ -79,13 +79,13 @@ public class UsePotionExecutor implements EntityControl, IBehaviorExecutor {
 
 
     private void startShootSequence(Entity entity) {
-        if(entity instanceof EntityMob mob) {
+        if(entity instanceof EntityMonster mob) {
             mob.setItemInHand(getPotion(entity));
         }
     }
 
     private void endShootSequence(Entity entity) {
-        if(entity instanceof EntityMob mob) {
+        if(entity instanceof EntityMonster mob) {
             Item item = mob.getItemInHand();
             if(item instanceof ItemPotion potion) {
                 PotionType.get(potion.getDamage()).getEffects(false).forEach(entity::addEffect);

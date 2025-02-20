@@ -4,7 +4,7 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.effect.Effect;
 import cn.nukkit.entity.effect.PotionType;
 import cn.nukkit.entity.item.EntityAreaEffectCloud;
-import cn.nukkit.entity.mob.EntityEnderDragon;
+import cn.nukkit.entity.monster.EntityEnderDragon;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.Vector3;

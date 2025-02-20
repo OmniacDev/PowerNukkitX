@@ -3,7 +3,7 @@ package cn.nukkit.entity.ai.sensor;
 import cn.nukkit.Player;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
-import cn.nukkit.entity.passive.EntityAnimal;
+import cn.nukkit.entity.mob.EntityAnimal;
 
 
 public class NearestFeedingPlayerSensor implements ISensor {

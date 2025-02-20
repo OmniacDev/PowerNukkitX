@@ -195,20 +195,20 @@ public class BlockEntityStructBlock extends BlockEntitySpawnable implements IStr
     @NotNull
     @Override
     public String getName() {
-        return this.hasName() ? this.namedTag.getString(TAG_CUSTOM_NAME) : STRUCTURE_BLOCK;
+        return this.hasName() ? this.namedTag.getString(IStructBlock.TAG_CUSTOM_NAME) : STRUCTURE_BLOCK;
     }
 
     @Override
     public boolean hasName() {
-        return this.namedTag.contains(TAG_CUSTOM_NAME);
+        return this.namedTag.contains(IStructBlock.TAG_CUSTOM_NAME);
     }
 
     @Override
     public void setName(String name) {
         if (Strings.isNullOrEmpty(name)) {
-            this.namedTag.remove(TAG_CUSTOM_NAME);
+            this.namedTag.remove(IStructBlock.TAG_CUSTOM_NAME);
         } else {
-            this.namedTag.putString(TAG_CUSTOM_NAME, name);
+            this.namedTag.putString(IStructBlock.TAG_CUSTOM_NAME, name);
         }
     }
 

@@ -4,7 +4,7 @@ import cn.nukkit.Server;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.mob.EntityCreeper;
+import cn.nukkit.entity.monster.EntityCreeper;
 import cn.nukkit.event.entity.EntityExplosionPrimeEvent;
 import cn.nukkit.level.Explosion;
 import cn.nukkit.level.GameRule;

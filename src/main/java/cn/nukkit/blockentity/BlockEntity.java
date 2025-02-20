@@ -21,6 +21,13 @@ import java.util.List;
  */
 @Slf4j
 public abstract class BlockEntity extends Position implements BlockEntityID {
+    public static final String TAG_CUSTOM_NAME = "CustomName";
+    public static final String TAG_ID = "id";
+    public static final String TAG_IS_MOVABLE = "isMovable";
+    public static final String TAG_X = "x";
+    public static final String TAG_Y = "y";
+    public static final String TAG_Z = "z";
+
     public static long count = 1;
     public IChunk chunk;
     public String name;
@@ -106,13 +113,8 @@ public abstract class BlockEntity extends Position implements BlockEntityID {
         this.x = this.namedTag.getInt("x");
         this.y = this.namedTag.getInt("y");
         this.z = this.namedTag.getInt("z");
+        this.movable = this.namedTag.getBoolean("isMovable");
 
-        if (namedTag.contains("isMovable")) {
-            this.movable = this.namedTag.getBoolean("isMovable");
-        } else {
-            this.movable = true;
-            namedTag.putBoolean("isMovable", true);
-        }
 
         this.initBlockEntity();
 
@@ -138,11 +140,11 @@ public abstract class BlockEntity extends Position implements BlockEntityID {
      * 存储方块实体数据到namedtag
      */
     public void saveNBT() {
-        this.namedTag.putString("id", this.getSaveId());
-        this.namedTag.putInt("x", (int) this.getX());
-        this.namedTag.putInt("y", (int) this.getY());
-        this.namedTag.putInt("z", (int) this.getZ());
-        this.namedTag.putBoolean("isMovable", this.movable);
+        this.namedTag.putString(TAG_ID, this.getSaveId());
+        this.namedTag.putInt(TAG_X, (int) this.getX());
+        this.namedTag.putInt(TAG_Y, (int) this.getY());
+        this.namedTag.putInt(TAG_Z, (int) this.getZ());
+        this.namedTag.putBoolean(TAG_IS_MOVABLE, this.movable);
     }
 
     public final String getSaveId() {

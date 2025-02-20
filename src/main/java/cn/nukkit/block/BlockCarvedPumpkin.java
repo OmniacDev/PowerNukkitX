@@ -2,7 +2,7 @@ package cn.nukkit.block;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.entity.mob.EntityIronGolem;
+import cn.nukkit.entity.monster.EntityIronGolem;
 import cn.nukkit.item.Item;
 import cn.nukkit.math.BlockFace;
 import org.jetbrains.annotations.NotNull;

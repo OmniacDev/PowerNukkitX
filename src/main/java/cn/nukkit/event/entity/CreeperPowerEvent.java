@@ -1,6 +1,6 @@
 package cn.nukkit.event.entity;
 
-import cn.nukkit.entity.mob.EntityCreeper;
+import cn.nukkit.entity.monster.EntityCreeper;
 import cn.nukkit.entity.weather.EntityLightningStrike;
 import cn.nukkit.event.Cancellable;
 import cn.nukkit.event.HandlerList;

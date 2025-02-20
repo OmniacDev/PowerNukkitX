@@ -4,7 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.item.EntityArmorStand;
+import cn.nukkit.entity.mob.EntityArmorStand;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;

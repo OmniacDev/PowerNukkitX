@@ -5,7 +5,7 @@ import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.entity.mob.EntityMob;
+import cn.nukkit.entity.monster.EntityMonster;
 import cn.nukkit.inventory.InventorySlice;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemGoldIngot;
@@ -33,7 +33,7 @@ public class PiglinTradeExecutor implements EntityControl, IBehaviorExecutor {
             }
             return true;
         } else {
-            if(entity instanceof EntityMob mob) {
+            if(entity instanceof EntityMonster mob) {
                 Item offhand = mob.getItemInOffhand();
                 if(offhand instanceof ItemGoldIngot && !mob.isBaby()) {
                     mob.getEquipmentInventory().decreaseCount(OFFHAND);
@@ -55,7 +55,7 @@ public class PiglinTradeExecutor implements EntityControl, IBehaviorExecutor {
 
     @Override
     public void onStop(EntityIntelligent entity) {
-        if(entity instanceof EntityMob mob) {
+        if(entity instanceof EntityMonster mob) {
             clearOffhand(mob, mob.getItemInOffhand());
         }
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED);
@@ -113,7 +113,7 @@ public class PiglinTradeExecutor implements EntityControl, IBehaviorExecutor {
         onStop(entity);
     }
 
-    public void clearOffhand(EntityMob mob, Item item) {
+    public void clearOffhand(EntityMonster mob, Item item) {
         new InventorySlice(mob.getEquipmentInventory(), 2, mob.getEquipmentInventory().getSize()).addItem(item);
         mob.getEquipmentInventory().clear(OFFHAND);
     }

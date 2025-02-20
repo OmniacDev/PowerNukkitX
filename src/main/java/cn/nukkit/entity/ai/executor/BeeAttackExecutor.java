@@ -6,7 +6,7 @@ import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.effect.Effect;
 import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.entity.passive.EntityBee;
+import cn.nukkit.entity.mob.EntityBee;
 
 import static cn.nukkit.Server.getInstance;
 

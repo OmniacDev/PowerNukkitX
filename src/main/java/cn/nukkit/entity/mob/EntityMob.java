@@ -6,6 +6,7 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCanAttack;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
+import cn.nukkit.entity.monster.EntityCreeper;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.inventory.EntityArmorInventory;
@@ -31,10 +32,35 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 
 public abstract class EntityMob extends EntityIntelligent implements EntityInventoryHolder, EntityCanAttack {
-
-    private static final String TAG_MAINHAND = "Mainhand";
-    private static final String TAG_OFFHAND = "Offhand";
+    private static final String TAG_ACTIVE_EFFECTS = "ActiveEffects";
+    private static final String TAG_AIR = "Air";
     private static final String TAG_ARMOR = "Armor";
+    private static final String TAG_ATTACK_TIME = "AttackTime";
+    private static final String TAG_ATTRIBUTES = "Attributes";
+    private static final String TAG_BODY_ROT = "BodyRot";
+    private static final String TAG_BOUND_X = "boundX";
+    private static final String TAG_BOUND_Y = "boundY";
+    private static final String TAG_BOUND_Z = "boundZ";
+    private static final String TAG_CAN_PICKUP_ITEMS = "canPickupItems";
+    private static final String TAG_DEAD = "Dead";
+    private static final String TAG_DEATH_TIME = "DeathTime";
+    private static final String TAG_HAS_BOUND_ORIGIN = "hasBoundOrigin";
+    private static final String TAG_HAS_SET_CAN_PICKUP_ITEMS = "hasSetCanPickupItems";
+    private static final String TAG_HURT_TIME = "HurtTime";
+    private static final String TAG_LEASHER_ID = "LeasherID";
+    private static final String TAG_LIMITED_LIFE = "limitedLife";
+    private static final String TAG_MAINHAND = "Mainhand";
+    private static final String TAG_NATURAL_SPAWN = "NaturalSpawn";
+    private static final String TAG_OFFHAND = "Offhand";
+    private static final String TAG_PERSISTING_OFFERS = "persistingOffers";
+    private static final String TAG_PERSISTING_RICHES = "persistingRiches";
+    private static final String TAG_SURFACE = "Surface";
+    private static final String TAG_TARGET_CAPTAIN_ID = "TargetCaptainID";
+    private static final String TAG_TARGET_ID = "TargetID";
+    private static final String TAG_TRADE_EXPERIENCE = "TradeExperience";
+    private static final String TAG_TRADE_TIER = "TradeTier";
+    private static final String TAG_WANTS_TO_BE_JOCKEY = "WantsToBeJockey";
+
     /**
      * 不同难度下实体空手能造成的伤害.
      * <p>
@@ -58,28 +84,20 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
         this.armorInventory = new EntityArmorInventory(this);
 
         if (this.namedTag.contains(TAG_MAINHAND)) {
-            this.equipmentInventory.setItemInHand(NBTIO.getItemHelper(this.namedTag.getCompound(TAG_MAINHAND)), true);
+            this.equipmentInventory.setItemInHand(NBTIO.getItemHelper(this.namedTag.getList(TAG_MAINHAND, CompoundTag.class).get(0)), true);
         }
 
         if (this.namedTag.contains(TAG_OFFHAND)) {
-            this.equipmentInventory.setItemInOffhand(NBTIO.getItemHelper(this.namedTag.getCompound(TAG_OFFHAND)), true);
+            this.equipmentInventory.setItemInOffhand(NBTIO.getItemHelper(this.namedTag.getList(TAG_OFFHAND, CompoundTag.class).get(0)), true);
         }
 
         if (this.namedTag.contains(TAG_ARMOR)) {
             ListTag<CompoundTag> armorList = this.namedTag.getList(TAG_ARMOR, CompoundTag.class);
-            for (CompoundTag armorTag : armorList.getAll()) {
-                this.armorInventory.setItem(armorTag.getByte("Slot"), NBTIO.getItemHelper(armorTag));
-            }
+            this.armorInventory.setItem(0, NBTIO.getItemHelper(armorList.get(0)));
+            this.armorInventory.setItem(1, NBTIO.getItemHelper(armorList.get(1)));
+            this.armorInventory.setItem(2, NBTIO.getItemHelper(armorList.get(2)));
+            this.armorInventory.setItem(3, NBTIO.getItemHelper(armorList.get(3)));
         }
-    }
-
-    @Override
-    public boolean onUpdate(int currentTick) {
-        //怪物不能在和平模式下生存
-        if (this.getServer().getDifficulty() == 0) {
-            this.close();
-            return true;
-        } else return super.onUpdate(currentTick);
     }
 
     public void spawnToAll() {
@@ -166,23 +184,6 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
         } else {
             return false;
         }
-    }
-
-    @Override
-    public void setOnFire(int seconds) {
-        int level = 0;
-
-        for (Item armor : this.getArmorInventory().getContents().values()) {
-            Enchantment fireProtection = armor.getEnchantment(Enchantment.ID_PROTECTION_FIRE);
-
-            if (fireProtection != null && fireProtection.getLevel() > 0) {
-                level = Math.max(level, fireProtection.getLevel());
-            }
-        }
-
-        seconds = (int) (seconds * (1 - level * 0.15));
-
-        super.setOnFire(seconds);
     }
 
     protected double calculateEnchantmentProtectionFactor(Item item, EntityDamageEvent source) {

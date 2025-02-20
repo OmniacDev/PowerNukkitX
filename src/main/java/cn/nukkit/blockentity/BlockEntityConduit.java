@@ -5,7 +5,7 @@ import cn.nukkit.block.BlockID;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.effect.Effect;
 import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.entity.mob.EntityMob;
+import cn.nukkit.entity.monster.EntityMonster;
 import cn.nukkit.event.block.ConduitActivateEvent;
 import cn.nukkit.event.block.ConduitDeactivateEvent;
 import cn.nukkit.event.entity.EntityDamageByBlockEvent;
@@ -201,7 +201,7 @@ public class BlockEntityConduit extends BlockEntitySpawnable {
     }
 
     public boolean canAttack(Entity target) {
-        return target instanceof EntityMob && canAffect(target);
+        return target instanceof EntityMonster && canAffect(target);
     }
 
     public boolean canAffect(Entity target) {

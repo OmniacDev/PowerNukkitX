@@ -25,10 +25,10 @@ import cn.nukkit.entity.data.property.FloatEntityProperty;
 import cn.nukkit.entity.data.property.IntEntityProperty;
 import cn.nukkit.entity.effect.Effect;
 import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.entity.item.EntityArmorStand;
+import cn.nukkit.entity.mob.EntityArmorStand;
 import cn.nukkit.entity.item.EntityItem;
-import cn.nukkit.entity.mob.EntityBoss;
-import cn.nukkit.entity.mob.EntityEnderDragon;
+import cn.nukkit.entity.monster.EntityBoss;
+import cn.nukkit.entity.monster.EntityEnderDragon;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.block.FarmLandDecayEvent;
@@ -57,6 +57,7 @@ import cn.nukkit.math.MathHelper;
 import cn.nukkit.math.NukkitMath;
 import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector2;
+import cn.nukkit.math.Vector2f;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.math.Vector3f;
 import cn.nukkit.metadata.MetadataValue;
@@ -66,6 +67,7 @@ import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.nbt.tag.StringTag;
+import cn.nukkit.nbt.tag.Tag;
 import cn.nukkit.network.protocol.*;
 import cn.nukkit.network.protocol.types.EntityLink;
 import cn.nukkit.network.protocol.types.PropertySyncData;
@@ -92,6 +94,104 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author MagicDroidX
  */
 public abstract class Entity extends Location implements Metadatable, EntityID, EntityDataTypes {
+    public static final String TAG_CHESTED = "Chested";
+    public static final String TAG_COLOR = "Color";
+    public static final String TAG_COLOR2 = "Color2";
+    public static final String TAG_CUSTOM_NAME = "CustomName";
+    public static final String TAG_CUSTOM_NAME_VISIBLE = "CustomNameVisible";
+    public static final String TAG_DEFINITIONS = "definitions";
+    public static final String TAG_FALL_DISTANCE = "FallDistance";
+    public static final String TAG_FIRE = "Fire";
+    public static final String TAG_IDENTIFIER = "identifier";
+    public static final String TAG_INTERNAL_COMPONENTS = "InternalComponents";
+    public static final String TAG_INVULNERABLE = "Invulnerable";
+    public static final String TAG_IS_ANGRY = "IsAngry";
+    public static final String TAG_IS_AUTONOMOUS = "IsAutonomous";
+    public static final String TAG_IS_BABY = "IsBaby";
+    public static final String TAG_IS_EATING = "IsEating";
+    public static final String TAG_IS_GLIDING = "IsGliding";
+    public static final String TAG_IS_GLOBAL = "IsGlobal";
+    public static final String TAG_IS_ILLAGER_CAPTAIN = "IsIllagerCaptain";
+    public static final String TAG_IS_ORPHANED = "IsOrphaned";
+    public static final String TAG_IS_OUT_OF_CONTROL = "IsOutOfControl";
+    public static final String TAG_IS_ROARING = "IsRoaring";
+    public static final String TAG_IS_SCARED = "IsScared";
+    public static final String TAG_IS_STUNNED = "IsStunned";
+    public static final String TAG_IS_SWIMMING = "IsSwimming";
+    public static final String TAG_IS_TAMED = "IsTamed";
+    public static final String TAG_IS_TRUSTING = "IsTrusting";
+    public static final String TAG_LAST_DIMENSION_ID = "LastDimensionId";
+    public static final String TAG_LINKS_TAG = "LinksTag";
+    public static final String TAG_LOOT_DROPPED = "LootDropped";
+    public static final String TAG_MARK_VARIANT = "MarkVariant";
+    public static final String TAG_MOTION = "Motion";
+    public static final String TAG_ON_GROUND = "OnGround";
+    public static final String TAG_OWNER_NEW = "OwnerNew";
+    public static final String TAG_PERSISTENT = "Persistent";
+    public static final String TAG_PORTAL_COOLDOWN = "PortalCooldown";
+    public static final String TAG_POS = "Pos";
+    public static final String TAG_ROTATION = "Rotation";
+    public static final String TAG_SADDLED = "Saddled";
+    public static final String TAG_SHEARED = "Sheared";
+    public static final String TAG_SHOW_BOTTOM = "ShowBottom";
+    public static final String TAG_SKIN_ID = "SkinID";
+    public static final String TAG_STRENGTH = "Strength";
+    public static final String TAG_STRENGTH_MAX = "StrengthMax";
+    public static final String TAG_TAGS = "Tags";
+    public static final String TAG_UNIQUE_ID = "UniqueID";
+    public static final String TAG_VARIANT = "Variant";
+
+    public boolean chested;
+    public byte color;
+    public byte color2;
+    public String customName;
+    public boolean customNameVisible;
+    public ListTag<StringTag> definitions;
+    public float fallDistance;
+    public short fire;
+    public String identifier;
+    public CompoundTag internalComponents;
+    public boolean invulnerable;
+    public boolean isAngry;
+    public boolean isAutonomous;
+    public boolean isBaby;
+    public boolean isEating;
+    public boolean isGliding;
+    public boolean isGlobal;
+    public boolean isIllagerCaptain;
+    public boolean isOrphaned;
+    public boolean isOutOfControl;
+    public boolean isRoaring;
+    public boolean isScared;
+    public boolean isStunned;
+    public boolean isSwimming;
+    public boolean isTamed;
+    public boolean isTrusting;
+    public int lastDimensionId;
+    public CompoundTag linksTag;
+    public boolean lootDropped;
+    public int markVariant;
+    public Vector3f motion;
+    public boolean onGround;
+    public long ownerNew;
+    public boolean persistent;
+    public int portalCooldown;
+    public Vector3f pos;
+    public Vector2f rotation;
+    public boolean saddled;
+    public boolean sheared;
+    public boolean showBottom;
+    public boolean sitting;
+    public int skinId;
+    public int strength;
+    public int strengthMax;
+    public ListTag<StringTag> tags;
+    public long uniqueId;
+    public int variant;
+
+
+
+
     public static final Entity[] EMPTY_ARRAY = new Entity[0];
     protected final EntityDataMap entityDataMap = new EntityDataMap();
     public static AtomicLong entityCount = new AtomicLong(1);
@@ -131,10 +231,8 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
     public double headYawDelta;
     public double entityCollisionReduction = 0; // Higher than 0.9 will result a fast collisions
     public AxisAlignedBB boundingBox;
-    public boolean onGround;
     public boolean positionChanged;
     public boolean motionChanged;
-    public float fallDistance = 0;
     public int ticksLived = 0;
     public int lastUpdate;
     public int fireTicks = 0;
@@ -148,7 +246,6 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
     public int noDamageTicks;
     public boolean justCreated;
     public boolean fireProof;
-    public boolean invulnerable;
     public double highestPosition;
     public boolean closed = false;
     public boolean noClip = false;
@@ -195,12 +292,10 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
     }
 
     public Entity(IChunk chunk, CompoundTag nbt) {
-        if (this instanceof Player) {
-            initEntityProperties("minecraft:player");
-            return;
+        initEntityProperties(this.getIdentifier());
+        if (!(this instanceof Player)) {
+            this.init(chunk, nbt);
         }
-        initEntityProperties();
-        this.init(chunk, nbt);
     }
 
     /**
@@ -321,15 +416,15 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
     @NotNull
     public static CompoundTag getDefaultNBT(@NotNull Vector3 pos, @Nullable Vector3 motion, float yaw, float pitch) {
         return new CompoundTag()
-                .putList("Pos", new ListTag<DoubleTag>()
-                        .add(new DoubleTag(pos.x))
-                        .add(new DoubleTag(pos.y))
-                        .add(new DoubleTag(pos.z)))
-                .putList("Motion", new ListTag<DoubleTag>()
-                        .add(new DoubleTag(motion != null ? motion.x : 0))
-                        .add(new DoubleTag(motion != null ? motion.y : 0))
-                        .add(new DoubleTag(motion != null ? motion.z : 0)))
-                .putList("Rotation", new ListTag<FloatTag>()
+                .putList(TAG_POS, new ListTag<FloatTag>()
+                        .add(new FloatTag((float) pos.x))
+                        .add(new FloatTag((float) pos.y))
+                        .add(new FloatTag((float) pos.z)))
+                .putList(TAG_MOTION, new ListTag<FloatTag>()
+                        .add(new FloatTag(motion != null ? (float) motion.x : 0))
+                        .add(new FloatTag(motion != null ? (float) motion.y : 0))
+                        .add(new FloatTag(motion != null ? (float) motion.z : 0)))
+                .putList(TAG_ROTATION, new ListTag<FloatTag>()
                         .add(new FloatTag(yaw))
                         .add(new FloatTag(pitch)));
     }
@@ -441,44 +536,22 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
      */
     protected void initEntity() {
         if (!(this instanceof Player)) {
-            if (this.namedTag.contains("uuid")) {
-                this.entityUniqueId = UUID.fromString(this.namedTag.getString("uuid"));
+            if (this.namedTag.contains(TAG_UNIQUE_ID)) {
+                long uid = this.namedTag.getLong(TAG_UNIQUE_ID);
+                this.entityUniqueId = new UUID(0L, uid);
             } else {
-                this.entityUniqueId = UUID.randomUUID();
+                UUID full_uuid =  UUID.randomUUID();
+                this.entityUniqueId = new UUID(0L, full_uuid.getLeastSignificantBits());
             }
         }
 
-        if (this.namedTag.contains("ActiveEffects")) {
-            ListTag<CompoundTag> effects = this.namedTag.getList("ActiveEffects", CompoundTag.class);
-            for (CompoundTag e : effects.getAll()) {
-                Effect effect = Effect.get(e.getByte("Id"));
-                if (effect == null) {
-                    continue;
-                }
-
-                effect.setAmplifier(e.getByte("Amplifier")).setDuration(e.getInt("Duration")).setVisible(e.getBoolean("ShowParticles"));
-
-                this.addEffect(effect);
-            }
+        if (this.namedTag.contains(TAG_CUSTOM_NAME)) {
+            this.setNameTag(this.namedTag.getString(TAG_CUSTOM_NAME));
+        }
+        if (this.namedTag.contains(TAG_CUSTOM_NAME_VISIBLE)) {
+            this.setNameTagAlwaysVisible(this.namedTag.getBoolean(TAG_CUSTOM_NAME_VISIBLE));
         }
 
-        if (this.namedTag.contains("CustomName")) {
-            this.setNameTag(this.namedTag.getString("CustomName"));
-            if (this.namedTag.contains("CustomNameVisible")) {
-                this.setNameTagVisible(this.namedTag.getBoolean("CustomNameVisible"));
-            }
-            if (this.namedTag.contains("CustomNameAlwaysVisible")) {
-                this.setNameTagAlwaysVisible(this.namedTag.getBoolean("CustomNameAlwaysVisible"));
-            }
-        }
-
-        if (this.namedTag.contains("Attributes")) {
-            ListTag<CompoundTag> attributes = this.namedTag.getList("Attributes", CompoundTag.class);
-            for (var nbt : attributes.getAll()) {
-                Attribute attribute = Attribute.fromNBT(nbt);
-                this.attributes.put(attribute.getId(), attribute);
-            }
-        }
         this.entityDataMap.getOrCreateFlags();
         this.entityDataMap.put(AIR_SUPPLY, this.namedTag.getShort("Air"));
         this.entityDataMap.put(AIR_SUPPLY_MAX, 400);
@@ -506,60 +579,74 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
         this.server = chunk.getProvider().getLevel().getServer();
         this.boundingBox = new SimpleAxisAlignedBB(0, 0, 0, 0, 0, 0);
 
-        ListTag<DoubleTag> posList = this.namedTag.getList("Pos", DoubleTag.class);
+        if (this.namedTag.containsList("Pos", Tag.TAG_Double)) {
+            ListTag<DoubleTag> posList = this.namedTag.getList("Pos", DoubleTag.class);
+
+            this.temporalVector.setComponents(
+                    posList.get(0).data,
+                    posList.get(1).data,
+                    posList.get(2).data
+            );
+        } else if (this.namedTag.containsList("Pos", Tag.TAG_Float)) {
+            ListTag<FloatTag> posList = this.namedTag.getList("Pos", FloatTag.class);
+
+            this.temporalVector.setComponents(
+                    posList.get(0).data,
+                    posList.get(1).data,
+                    posList.get(2).data
+            );
+        }
+
         ListTag<FloatTag> rotationList = this.namedTag.getList("Rotation", FloatTag.class);
-        ListTag<DoubleTag> motionList = this.namedTag.getList("Motion", DoubleTag.class);
         this.setPositionAndRotation(
-                this.temporalVector.setComponents(
-                        posList.get(0).data,
-                        posList.get(1).data,
-                        posList.get(2).data
-                ),
+                this.temporalVector,
                 rotationList.get(0).data,
                 rotationList.get(1).data
         );
 
-        this.setMotion(this.temporalVector.setComponents(
-                motionList.get(0).data,
-                motionList.get(1).data,
-                motionList.get(2).data
-        ));
+        if (this.namedTag.containsList("Motion", Tag.TAG_Double)) {
+            ListTag<DoubleTag> motionList = this.namedTag.getList("Motion", DoubleTag.class);
 
-        if (!this.namedTag.contains("FallDistance")) {
-            this.namedTag.putFloat("FallDistance", 0);
-        }
-        this.fallDistance = this.namedTag.getFloat("FallDistance");
-        this.highestPosition = this.y + this.namedTag.getFloat("FallDistance");
+            this.setMotion(this.temporalVector.setComponents(
+                    motionList.get(0).data,
+                    motionList.get(1).data,
+                    motionList.get(2).data
+            ));
+        } else if (this.namedTag.containsList("Motion", Tag.TAG_Float)) {
+            ListTag<FloatTag> motionList = this.namedTag.getList("Motion", FloatTag.class);
 
-        if (!this.namedTag.contains("Fire") || this.namedTag.getShort("Fire") > 32767) {
-            this.namedTag.putShort("Fire", 0);
+            this.setMotion(this.temporalVector.setComponents(
+                    motionList.get(0).data,
+                    motionList.get(1).data,
+                    motionList.get(2).data
+            ));
         }
-        this.fireTicks = this.namedTag.getShort("Fire");
 
-        if (!this.namedTag.contains("Air")) {
-            this.namedTag.putShort("Air", 300);
+        if (!this.namedTag.contains(TAG_FALL_DISTANCE)) {
+            this.namedTag.putFloat(TAG_FALL_DISTANCE, 0);
         }
-        if (!this.namedTag.contains("OnGround")) {
-            this.namedTag.putBoolean("OnGround", false);
-        }
-        this.onGround = this.namedTag.getBoolean("OnGround");
+        this.fallDistance = this.namedTag.getFloat(TAG_FALL_DISTANCE);
+        this.highestPosition = this.y + this.namedTag.getFloat(TAG_FALL_DISTANCE);
 
-        if (!this.namedTag.contains("Invulnerable")) {
-            this.namedTag.putBoolean("Invulnerable", false);
+        if (!this.namedTag.contains(TAG_FIRE)) {
+            this.namedTag.putShort(TAG_FIRE, 0);
         }
-        this.invulnerable = this.namedTag.getBoolean("Invulnerable");
+        this.fireTicks = this.namedTag.getShort(TAG_FIRE);
 
-        if (!this.namedTag.contains("Scale")) {
-            this.namedTag.putFloat("Scale", 1);
+        if (!this.namedTag.contains(TAG_ON_GROUND)) {
+            this.namedTag.putBoolean(TAG_ON_GROUND, false);
         }
-        this.scale = this.namedTag.getFloat("Scale");
+        this.onGround = this.namedTag.getBoolean(TAG_ON_GROUND);
+
+        if (!this.namedTag.contains(TAG_INVULNERABLE)) {
+            this.namedTag.putBoolean(TAG_INVULNERABLE, false);
+        }
+        this.invulnerable = this.namedTag.getBoolean(TAG_INVULNERABLE);
 
         try {
             this.initEntity();
-            if (this.initialized) {
-                // We've already initialized this entity
-                return;
-            }
+            if (this.initialized) return;
+
             this.initialized = true;
 
             this.chunk.addEntity(this);
@@ -871,73 +958,42 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
 
     public void saveNBT() {
         if (!(this instanceof Player)) {
-            this.namedTag.putString("identifier", this.getIdentifier());
+            this.namedTag.putString(TAG_IDENTIFIER, this.getIdentifier());
             if (!this.getNameTag().isEmpty()) {
-                this.namedTag.putString("CustomName", this.getNameTag());
-                this.namedTag.putBoolean("CustomNameVisible", this.isNameTagVisible());
-                this.namedTag.putBoolean("CustomNameAlwaysVisible", this.isNameTagAlwaysVisible());
+                this.namedTag.putString(TAG_CUSTOM_NAME, this.getNameTag());
+                this.namedTag.putBoolean(TAG_CUSTOM_NAME_VISIBLE, this.isNameTagAlwaysVisible());
             } else {
-                this.namedTag.remove("CustomName");
-                this.namedTag.remove("CustomNameVisible");
-                this.namedTag.remove("CustomNameAlwaysVisible");
+                this.namedTag.remove(TAG_CUSTOM_NAME);
+                this.namedTag.remove(TAG_CUSTOM_NAME_VISIBLE);
             }
             if (this.entityUniqueId == null) {
-                this.entityUniqueId = UUID.randomUUID();
+                UUID full_uuid =  UUID.randomUUID();
+                this.entityUniqueId = new UUID(0L, full_uuid.getLeastSignificantBits());
             }
-            this.namedTag.putString("uuid", this.entityUniqueId.toString());
+            this.namedTag.putLong(TAG_UNIQUE_ID, this.entityUniqueId.getLeastSignificantBits());
         }
 
-        this.namedTag.putList("Pos", new ListTag<DoubleTag>()
-                .add(new DoubleTag(this.x))
-                .add(new DoubleTag(this.y))
-                .add(new DoubleTag(this.z))
+        this.namedTag.putList(TAG_POS, new ListTag<FloatTag>()
+                .add(new FloatTag((float) this.x))
+                .add(new FloatTag((float) this.y))
+                .add(new FloatTag((float) this.z))
         );
 
-        this.namedTag.putList("Motion", new ListTag<DoubleTag>()
-                .add(new DoubleTag(this.motionX))
-                .add(new DoubleTag(this.motionY))
-                .add(new DoubleTag(this.motionZ))
+        this.namedTag.putList(TAG_MOTION, new ListTag<FloatTag>()
+                .add(new FloatTag((float) this.motionX))
+                .add(new FloatTag((float) this.motionY))
+                .add(new FloatTag((float) this.motionZ))
         );
 
-        this.namedTag.putList("Rotation", new ListTag<FloatTag>()
+        this.namedTag.putList(TAG_ROTATION, new ListTag<FloatTag>()
                 .add(new FloatTag((float) this.yaw))
                 .add(new FloatTag((float) this.pitch))
         );
 
-        this.namedTag.putFloat("FallDistance", this.fallDistance);
-        this.namedTag.putShort("Fire", this.fireTicks);
-        this.namedTag.putShort("Air", this.getDataProperty(AIR_SUPPLY, (short) 0));
-        this.namedTag.putBoolean("OnGround", this.onGround);
-        this.namedTag.putBoolean("Invulnerable", this.invulnerable);
-        this.namedTag.putFloat("Scale", this.scale);
-
-        if (!this.effects.isEmpty()) {
-            ListTag<CompoundTag> list = new ListTag<>();
-            for (Effect effect : this.effects.values()) {
-                list.add(new CompoundTag()
-                        .putByte("Id", effect.getId())
-                        .putByte("Amplifier", effect.getAmplifier())
-                        .putInt("Duration", effect.getDuration())
-                        .putBoolean("Ambient", false)
-                        .putBoolean("ShowParticles", effect.isVisible())
-                );
-            }
-
-            this.namedTag.putList("ActiveEffects", list);
-        } else {
-            this.namedTag.remove("ActiveEffects");
-        }
-
-        if (!this.attributes.isEmpty()) {
-            ListTag<CompoundTag> attributes = new ListTag<>();
-            for (var attribute : this.attributes.values()) {
-                CompoundTag nbt = Attribute.toNBT(attribute);
-                attributes.add(nbt);
-            }
-            this.namedTag.putList("Attributes", attributes);
-        } else {
-            this.namedTag.remove("Attributes");
-        }
+        this.namedTag.putFloat(TAG_FALL_DISTANCE, this.fallDistance);
+        this.namedTag.putShort(TAG_FIRE, this.fireTicks);
+        this.namedTag.putBoolean(TAG_ON_GROUND, this.onGround);
+        this.namedTag.putBoolean(TAG_INVULNERABLE, this.invulnerable);
     }
 
     /**
@@ -1818,10 +1874,6 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
         this.setDataFlag(EntityFlag.ON_FIRE, false);
     }
 
-    public boolean canTriggerWalking() {
-        return true;
-    }
-
     public void resetFallDistance() {
         if (this.level != null) {
             this.highestPosition = this.level.getMinHeight();
@@ -1854,7 +1906,7 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
         return this.boundingBox;
     }
 
-    public void fall(float fallDistance) {//todo: check why @param fallDistance always less than the real distance
+    public void fall(float fallDistance) { //todo: check why @param fallDistance always less than the real distance
         if (this.hasEffect(EffectType.SLOW_FALLING)) {
             return;
         }
@@ -1886,7 +1938,7 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
 
         down.onEntityFallOn(this, fallDistance);
 
-        if (fallDistance > 0.75) {//todo: moving these into their own classes (method "onEntityFallOn()")
+        if (fallDistance > 0.75) { //todo: moving these into their own classes (method "onEntityFallOn()")
             if (Block.FARMLAND.equals(down.getId())) {
                 if (onPhysicalInteraction(down, false)) {
                     return;
@@ -1923,32 +1975,6 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
 
         this.server.getPluginManager().callEvent(ev);
         return ev.isCancelled();
-    }
-
-    public void handleLavaMovement() {
-        //todo
-    }
-
-    public void moveFlying(float strafe, float forward, float friction) {
-        // This is special for Nukkit! :)
-        float speed = strafe * strafe + forward * forward;
-        if (speed >= 1.0E-4F) {
-            speed = MathHelper.sqrt(speed);
-            if (speed < 1.0F) {
-                speed = 1.0F;
-            }
-            speed = friction / speed;
-            strafe *= speed;
-            forward *= speed;
-            float nest = MathHelper.sin((float) (this.yaw * 3.1415927F / 180.0F));
-            float place = MathHelper.cos((float) (this.yaw * 3.1415927F / 180.0F));
-            this.motionX += strafe * place - forward * nest;
-            this.motionZ += forward * place + strafe * nest;
-        }
-    }
-
-    public void onCollideWithPlayer(EntityHuman entityPlayer) {
-
     }
 
     public void applyEntityCollision(Entity entity) {
@@ -2246,7 +2272,7 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
             this.motionZ = 0;
         }
 
-        //TODO: vehicle collision events (first we need to spawn them!)
+        // TODO: vehicle collision events (first we need to spawn them!)
         return true;
     }
 
@@ -2507,7 +2533,7 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
 
     /**
      * Whether the entity can activate pressure plates.
-     * Used for {@link cn.nukkit.entity.passive.EntityBat}s only.
+     * Used for {@link cn.nukkit.entity.mob.EntityBat}s only.
      *
      * @return triggers pressure plate
      */
@@ -3095,10 +3121,7 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
     }
 
     public boolean isLookingAt(Vector3 location, double tolerance, boolean checkRaycast) {
-        if(getLookingAngleAt(location) <= tolerance && getLookingAngleAtPitch(location) <= tolerance && (!checkRaycast || getLevel().raycastBlocks(location, this.add(0, getEyeHeight(), 0)).isEmpty())) {
-            return true;
-        }
-        return false;
+        return getLookingAngleAt(location) <= tolerance && getLookingAngleAtPitch(location) <= tolerance && (!checkRaycast || getLevel().raycastBlocks(location, this.add(0, getEyeHeight(), 0)).isEmpty());
     }
 
     private boolean validateAndSetIntProperty(String identifier, int value) {
@@ -3126,7 +3149,7 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
 
     public final boolean setEnumEntityProperty(String identifier, String value) {
         if (!intProperties.containsKey(identifier)) return false;
-        List<EntityProperty> entityPropertyList = EntityProperty.getEntityProperty(this.getIdentifier().toString());
+        List<EntityProperty> entityPropertyList = EntityProperty.getEntityProperty(this.getIdentifier());
 
         for (EntityProperty property : entityPropertyList) {
             if (!identifier.equals(property.getIdentifier()) ||
@@ -3144,14 +3167,6 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
         return false;
     }
 
-
-    private void initEntityProperties() {
-        if (this.getIdentifier() != null) {
-            initEntityProperties(this.getIdentifier().toString());
-        }
-    }
-
-
     private void initEntityProperties(String entityIdentifier) {
         List<EntityProperty> entityPropertyList = EntityProperty.getEntityProperty(entityIdentifier);
         if (entityPropertyList.isEmpty()) return;
@@ -3159,14 +3174,16 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
         for (EntityProperty property : entityPropertyList) {
             final String identifier = property.getIdentifier();
 
-            if (property instanceof FloatEntityProperty floatProperty) {
-                floatProperties.put(identifier, floatProperty.getDefaultValue());
-            } else if (property instanceof IntEntityProperty intProperty) {
-                intProperties.put(identifier, intProperty.getDefaultValue());
-            } else if (property instanceof BooleanEntityProperty booleanProperty) {
-                intProperties.put(identifier, booleanProperty.getDefaultValue() ? 1 : 0);
-            } else if (property instanceof EnumEntityProperty enumProperty) {
-                intProperties.put(identifier, enumProperty.findIndex(enumProperty.getDefaultValue()));
+            switch (property) {
+                case FloatEntityProperty floatProperty ->
+                        floatProperties.put(identifier, floatProperty.getDefaultValue());
+                case IntEntityProperty intProperty ->
+                        intProperties.put(identifier, intProperty.getDefaultValue());
+                case BooleanEntityProperty booleanProperty ->
+                        intProperties.put(identifier, booleanProperty.getDefaultValue() ? 1 : 0);
+                case EnumEntityProperty enumProperty ->
+                        intProperties.put(identifier, enumProperty.findIndex(enumProperty.getDefaultValue()));
+                default -> {}
             }
         }
     }
