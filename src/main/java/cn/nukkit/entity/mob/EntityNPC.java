@@ -6,8 +6,16 @@ import cn.nukkit.command.NPCCommandSender;
 import cn.nukkit.dialog.element.ElementDialogButton;
 import cn.nukkit.dialog.window.FormWindowDialog;
 import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityInteractable;
 import cn.nukkit.entity.EntityLiving;
+import cn.nukkit.entity.ai.behavior.IBehavior;
+import cn.nukkit.entity.ai.behaviorgroup.BehaviorGroup;
+import cn.nukkit.entity.ai.behaviorgroup.IBehaviorGroup;
+import cn.nukkit.entity.ai.controller.LookController;
+import cn.nukkit.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder;
+import cn.nukkit.entity.ai.route.posevaluator.WalkingPosEvaluator;
+import cn.nukkit.entity.ai.sensor.NearestPlayerSensor;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.item.Item;
@@ -15,7 +23,10 @@ import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.NPCRequestPacket;
+import cn.nukkit.utils.MainLogger;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
 
 /**
  * @author good777LUCKY
@@ -28,12 +39,11 @@ public class EntityNPC extends EntityLiving implements EntityInteractable {
     }
 
     public static final String TAG_ACTIONS = "Actions";
-    public static final String TAG_INTERACTIVE_TEXT = "InteractiveText";
+    public static final String TAG_INTERACTIVE_TEXT = "InterativeText";
     public static final String TAG_PLAYER_SCENE_MAPPING = "PlayerSceneMapping";
     public static final String TAG_RAWTEXT_NAME = "RawtextName";
 
     protected FormWindowDialog dialog;
-
 
     public EntityNPC(IChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
@@ -73,8 +83,12 @@ public class EntityNPC extends EntityLiving implements EntityInteractable {
         this.setNameTagVisible(true);
         this.setNameTagAlwaysVisible(true);
 
-        this.dialog = new FormWindowDialog(this.namedTag.getString(TAG_RAWTEXT_NAME).isEmpty() ? "NPC" : this.namedTag.getString(TAG_RAWTEXT_NAME), this.namedTag.getString(TAG_INTERACTIVE_TEXT), this);
-        this.setNameTag(this.dialog.getTitle());
+        this.dialog = new FormWindowDialog(
+                this.namedTag.contains(TAG_RAWTEXT_NAME) ?
+                        this.namedTag.getString(TAG_RAWTEXT_NAME) :
+                        this.getNameTag(),
+                this.namedTag.contains(TAG_INTERACTIVE_TEXT) ?
+                    this.namedTag.getString(TAG_INTERACTIVE_TEXT) : "", this);
 
         if (!this.namedTag.getString(TAG_ACTIONS).isEmpty())
             this.dialog.setButtonJSONData(this.namedTag.getString(TAG_ACTIONS));

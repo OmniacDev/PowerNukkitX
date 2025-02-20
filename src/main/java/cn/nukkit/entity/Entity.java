@@ -561,6 +561,7 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
         this.entityDataMap.put(HEIGHT, this.getHeight());
         this.entityDataMap.put(WIDTH, this.getWidth());
         this.entityDataMap.put(STRUCTURAL_INTEGRITY, (int) this.getHealth());
+        this.entityDataMap.put(VARIANT, this.variant);
         this.sendData(this.hasSpawned.values().toArray(Player.EMPTY_ARRAY), entityDataMap);
         this.setDataFlags(EnumSet.of(EntityFlag.CAN_CLIMB, EntityFlag.BREATHING, EntityFlag.HAS_COLLISION, EntityFlag.HAS_GRAVITY));
     }
@@ -642,6 +643,8 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
             this.namedTag.putBoolean(TAG_INVULNERABLE, false);
         }
         this.invulnerable = this.namedTag.getBoolean(TAG_INVULNERABLE);
+
+        this.variant = this.namedTag.getInt(TAG_VARIANT);
 
         try {
             this.initEntity();

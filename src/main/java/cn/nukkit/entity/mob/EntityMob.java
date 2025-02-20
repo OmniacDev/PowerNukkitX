@@ -119,14 +119,22 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
     @Override
     public void saveNBT() {
         super.saveNBT();
-        this.namedTag.put(TAG_MAINHAND, NBTIO.putItemHelper(this.equipmentInventory.getItemInHand()));
-        this.namedTag.put(TAG_OFFHAND, NBTIO.putItemHelper(this.equipmentInventory.getItemInOffhand()));
+
+        ListTag<CompoundTag> mainHandList = new ListTag<CompoundTag>();
+        mainHandList.add(NBTIO.putItemHelper(this.equipmentInventory.getItemInHand()));
+
+        ListTag<CompoundTag> offHandList = new ListTag<CompoundTag>();
+        offHandList.add(NBTIO.putItemHelper(this.equipmentInventory.getItemInOffhand()));
+
+        this.namedTag.put(TAG_MAINHAND, mainHandList);
+        this.namedTag.put(TAG_OFFHAND, offHandList);
 
         if (this.armorInventory != null) {
             ListTag<CompoundTag> armorTag = new ListTag<>();
-            for (int i = 0; i < 4; i++) {
-                armorTag.add(NBTIO.putItemHelper(this.armorInventory.getItem(i), i));
-            }
+            armorTag.add(NBTIO.putItemHelper(this.armorInventory.getItem(0), 0));
+            armorTag.add(NBTIO.putItemHelper(this.armorInventory.getItem(1), 1));
+            armorTag.add(NBTIO.putItemHelper(this.armorInventory.getItem(2), 2));
+            armorTag.add(NBTIO.putItemHelper(this.armorInventory.getItem(3), 3));
             this.namedTag.putList(TAG_ARMOR,armorTag);
         }
     }
