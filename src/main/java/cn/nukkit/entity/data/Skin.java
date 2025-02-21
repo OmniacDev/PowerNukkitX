@@ -154,10 +154,7 @@ public class Skin {
     }
 
     public String getSkinResourcePatch() {
-        if (this.skinResourcePatch == null) {
-            return "";
-        }
-        return skinResourcePatch;
+        return Objects.requireNonNullElse(this.skinResourcePatch, "");
     }
 
     public void setSkinResourcePatch(String skinResourcePatch) {
