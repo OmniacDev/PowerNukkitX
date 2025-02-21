@@ -22,7 +22,7 @@ public interface EntityNameable {
     void setPersistent(boolean persistent);
 
     default boolean onInteract(Player player, Item item, Vector3 clickedPos) {
-        if (Objects.equals(item.getId(), Item.NAME_TAG) && !player.isSpectator() && !player.isAdventure()) {
+        if (Objects.equals(item.getId(), Item.NAME_TAG) && !player.isSpectator() && !player.isAdventure() && !(this instanceof Player)) {
             return playerApplyNameTag(player, item);
         }
         return false;
