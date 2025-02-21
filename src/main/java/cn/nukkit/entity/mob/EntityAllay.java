@@ -21,7 +21,6 @@ import cn.nukkit.entity.ai.route.posevaluator.FlyingPosEvaluator;
 import cn.nukkit.entity.ai.sensor.NearestItemSensor;
 import cn.nukkit.entity.ai.sensor.NearestPlayerSensor;
 import cn.nukkit.entity.item.EntityItem;
-import cn.nukkit.entity.monster.EntityMonster;
 import cn.nukkit.inventory.EntityInventoryHolder;
 import cn.nukkit.inventory.Inventory;
 import cn.nukkit.inventory.InventorySlice;
@@ -36,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-public class EntityAllay extends EntityMonster implements EntityFlyable, EntityOwnable, EntityInventoryHolder {
+public class EntityAllay extends EntityMob implements EntityFlyable, EntityOwnable, EntityInventoryHolder {
 
     @Override
     @NotNull public String getIdentifier() {

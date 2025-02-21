@@ -1,7 +1,7 @@
 package cn.nukkit.inventory;
 
 import cn.nukkit.Player;
-import cn.nukkit.entity.mob.EntityVillagerV2;
+import cn.nukkit.entity.mob.villagers.EntityVillagerV2;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.network.protocol.UpdateTradePacket;

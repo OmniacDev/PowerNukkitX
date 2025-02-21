@@ -6,7 +6,7 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCanAttack;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
-import cn.nukkit.entity.monster.EntityCreeper;
+import cn.nukkit.entity.mob.monster.EntityCreeper;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.inventory.EntityArmorInventory;

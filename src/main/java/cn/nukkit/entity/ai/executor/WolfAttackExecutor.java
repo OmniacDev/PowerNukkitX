@@ -5,7 +5,7 @@ import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.mob.EntityWolf;
+import cn.nukkit.entity.mob.animal.EntityWolf;
 
 /**
  * 狼执行攻击，会带有狼的动画，以及攻击过程中狼还会看向携带食物的玩家.

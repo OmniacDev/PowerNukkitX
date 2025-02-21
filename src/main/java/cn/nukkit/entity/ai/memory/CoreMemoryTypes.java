@@ -10,7 +10,7 @@ import cn.nukkit.entity.ai.memory.codec.StringMemoryCodec;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.item.EntityItem;
-import cn.nukkit.entity.humanoid_monster.EntityEvocationIllager;
+import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.math.BlockVector3;

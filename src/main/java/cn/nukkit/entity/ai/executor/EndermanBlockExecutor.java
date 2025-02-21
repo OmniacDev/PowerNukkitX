@@ -4,7 +4,7 @@ import cn.nukkit.block.Block;
 import cn.nukkit.block.Natural;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.data.EntityDataTypes;
-import cn.nukkit.entity.monster.EntityEnderman;
+import cn.nukkit.entity.mob.monster.EntityEnderman;
 import cn.nukkit.item.Item;
 
 import java.util.Arrays;

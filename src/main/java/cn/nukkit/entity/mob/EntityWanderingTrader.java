@@ -5,7 +5,7 @@ import cn.nukkit.level.format.IChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityWanderingTrader extends EntityCreature {
+public class EntityWanderingTrader extends EntityMob {
     @Override
     @NotNull public String getIdentifier() {
         return WANDERING_TRADER;

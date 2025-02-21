@@ -2,7 +2,7 @@ package cn.nukkit.entity.ai.executor.evocation;
 
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
-import cn.nukkit.entity.humanoid_monster.EntityEvocationIllager;
+import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager;
 import cn.nukkit.level.Location;
 
 import static cn.nukkit.entity.ai.memory.CoreMemoryTypes.LAST_MAGIC;

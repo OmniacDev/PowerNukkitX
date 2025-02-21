@@ -6,7 +6,7 @@ import cn.nukkit.entity.ai.executor.IBehaviorExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.item.EntityEnderCrystal;
-import cn.nukkit.entity.monster.EntityEnderDragon;
+import cn.nukkit.entity.mob.monster.EntityEnderDragon;
 import cn.nukkit.math.Vector2;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.Utils;

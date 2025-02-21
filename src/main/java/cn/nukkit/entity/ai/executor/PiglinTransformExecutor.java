@@ -4,7 +4,7 @@ import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.effect.Effect;
 import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.entity.humanoid_monster.EntityZombiePigman;
+import cn.nukkit.entity.mob.monster.humanoid_monster.EntityZombiePigman;
 import cn.nukkit.inventory.Inventory;
 import cn.nukkit.level.Sound;
 

@@ -4,8 +4,8 @@ import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityPhysical;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.monster.EntitySlime;
-import cn.nukkit.entity.mob.EntityRabbit;
+import cn.nukkit.entity.mob.monster.EntitySlime;
+import cn.nukkit.entity.mob.animal.EntityRabbit;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
 

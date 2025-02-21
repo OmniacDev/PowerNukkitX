@@ -5,7 +5,7 @@ import cn.nukkit.Player;
 import cn.nukkit.PlayerHandle;
 import cn.nukkit.entity.item.EntityBoat;
 import cn.nukkit.entity.item.EntityMinecartAbstract;
-import cn.nukkit.entity.mob.EntityHorse;
+import cn.nukkit.entity.mob.animal.EntityHorse;
 import cn.nukkit.event.player.PlayerJumpEvent;
 import cn.nukkit.event.player.PlayerKickEvent;
 import cn.nukkit.event.player.PlayerToggleFlightEvent;

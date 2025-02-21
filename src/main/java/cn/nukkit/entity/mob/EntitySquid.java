@@ -21,7 +21,7 @@ import java.util.Set;
 /**
  * @author PikyCZ
  */
-public class EntitySquid extends EntityAnimal implements EntitySwimmable {
+public class EntitySquid extends EntityMob implements EntitySwimmable {
     @Override
     @NotNull public String getIdentifier() {
         return SQUID;

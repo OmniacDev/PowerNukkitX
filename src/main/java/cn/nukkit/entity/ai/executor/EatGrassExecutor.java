@@ -4,7 +4,7 @@ import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.entity.EntityIntelligent;
-import cn.nukkit.entity.mob.EntitySheep;
+import cn.nukkit.entity.mob.animal.EntitySheep;
 import cn.nukkit.level.GameRule;
 import cn.nukkit.level.particle.DestroyBlockParticle;
 import cn.nukkit.network.protocol.EntityEventPacket;

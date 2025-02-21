@@ -2,7 +2,7 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.monster.EntityWarden;
+import cn.nukkit.entity.mob.monster.EntityWarden;
 import cn.nukkit.level.Sound;
 
 

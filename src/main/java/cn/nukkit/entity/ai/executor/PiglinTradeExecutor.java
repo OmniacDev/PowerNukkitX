@@ -5,7 +5,7 @@ import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.entity.monster.EntityMonster;
+import cn.nukkit.entity.mob.monster.EntityMonster;
 import cn.nukkit.inventory.InventorySlice;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemGoldIngot;

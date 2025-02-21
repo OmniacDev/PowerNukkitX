@@ -4,7 +4,7 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityExplosive;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.monster.EntityEnderDragon;
+import cn.nukkit.entity.mob.monster.EntityEnderDragon;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.Explosion;

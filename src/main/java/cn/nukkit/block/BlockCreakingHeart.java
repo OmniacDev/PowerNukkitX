@@ -5,7 +5,7 @@ import cn.nukkit.block.property.CommonBlockProperties;
 import cn.nukkit.block.property.enums.CreakingHeartState;
 import cn.nukkit.blockentity.BlockEntityCreakingHeart;
 import cn.nukkit.blockentity.BlockEntityID;
-import cn.nukkit.entity.monster.EntityCreaking;
+import cn.nukkit.entity.mob.monster.EntityCreaking;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.math.BlockFace;

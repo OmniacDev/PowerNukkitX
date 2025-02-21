@@ -4,7 +4,7 @@ import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.effect.Effect;
 import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.entity.monster.EntityZoglin;
+import cn.nukkit.entity.mob.EntityZoglin;
 import cn.nukkit.level.Sound;
 
 public class HoglinTransformExecutor implements EntityControl, IBehaviorExecutor {

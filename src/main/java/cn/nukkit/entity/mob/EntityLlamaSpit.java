@@ -1,6 +1,7 @@
 package cn.nukkit.entity.mob;
 
 import cn.nukkit.entity.EntityWalkable;
+import cn.nukkit.entity.mob.animal.EntityAnimal;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import org.jetbrains.annotations.NotNull;

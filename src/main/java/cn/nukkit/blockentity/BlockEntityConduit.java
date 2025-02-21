@@ -5,7 +5,7 @@ import cn.nukkit.block.BlockID;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.effect.Effect;
 import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.entity.monster.EntityMonster;
+import cn.nukkit.entity.mob.monster.EntityMonster;
 import cn.nukkit.event.block.ConduitActivateEvent;
 import cn.nukkit.event.block.ConduitDeactivateEvent;
 import cn.nukkit.event.entity.EntityDamageByBlockEvent;

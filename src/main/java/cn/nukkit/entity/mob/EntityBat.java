@@ -19,7 +19,7 @@ import java.util.Set;
 /**
  * @author PikyCZ
  */
-public class EntityBat extends EntityAnimal implements EntityFlyable {
+public class EntityBat extends EntityMob implements EntityFlyable {
     @Override
     @NotNull public String getIdentifier() {
         return BAT;

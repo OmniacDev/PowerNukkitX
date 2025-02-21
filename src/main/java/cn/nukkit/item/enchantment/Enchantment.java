@@ -1,7 +1,7 @@
 package cn.nukkit.item.enchantment;
 
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.monster.EntityMonster;
+import cn.nukkit.entity.mob.monster.EntityMonster;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.item.Item;

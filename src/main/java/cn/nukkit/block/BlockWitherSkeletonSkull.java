@@ -2,7 +2,7 @@ package cn.nukkit.block;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.entity.monster.EntityWither;
+import cn.nukkit.entity.mob.monster.EntityWither;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemWitherSkeletonSkull;
 import cn.nukkit.math.BlockFace;

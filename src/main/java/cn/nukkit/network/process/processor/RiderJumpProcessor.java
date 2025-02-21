@@ -2,7 +2,7 @@ package cn.nukkit.network.process.processor;
 
 import cn.nukkit.PlayerHandle;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.mob.EntityHorse;
+import cn.nukkit.entity.mob.animal.EntityHorse;
 import cn.nukkit.network.process.DataPacketProcessor;
 import cn.nukkit.network.protocol.ProtocolInfo;
 import cn.nukkit.network.protocol.RiderJumpPacket;
