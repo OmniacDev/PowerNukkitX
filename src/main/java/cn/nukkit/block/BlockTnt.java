@@ -2,7 +2,7 @@ package cn.nukkit.block;
 
 import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.abstract_arrow.EntityArrow;
+import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow;
 import cn.nukkit.entity.projectile.EntitySmallFireball;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;

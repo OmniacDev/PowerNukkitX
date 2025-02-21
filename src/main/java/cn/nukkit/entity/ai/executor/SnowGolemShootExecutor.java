@@ -8,7 +8,7 @@ import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.projectile.EntityProjectile;
-import cn.nukkit.entity.throwable.EntitySnowball;
+import cn.nukkit.entity.projectile.throwable.EntitySnowball;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
 import cn.nukkit.level.Location;
 import cn.nukkit.level.Sound;

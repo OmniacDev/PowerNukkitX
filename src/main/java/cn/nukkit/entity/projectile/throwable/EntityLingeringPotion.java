@@ -1,4 +1,4 @@
-package cn.nukkit.entity.throwable;
+package cn.nukkit.entity.projectile.throwable;
 
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.EntityFlag;

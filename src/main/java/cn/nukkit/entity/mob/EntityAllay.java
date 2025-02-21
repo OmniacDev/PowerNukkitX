@@ -36,6 +36,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 public class EntityAllay extends EntityMob implements EntityFlyable, EntityOwnable, EntityInventoryHolder {
+    public final static String TAG_ALLAY_DUPLICATION_COOLDOWN = "AllayDuplicationCooldown";
+    public final static String TAG_VIBRATION_LISTENER = "VibrationListener";
 
     @Override
     @NotNull public String getIdentifier() {

@@ -4,7 +4,7 @@ import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityDrowned;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityZombie;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityZombieVillager;
-import cn.nukkit.entity.abstract_arrow.EntityThrownTrident;
+import cn.nukkit.entity.projectile.abstract_arrow.EntityThrownTrident;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.format.IChunk;

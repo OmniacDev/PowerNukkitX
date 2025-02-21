@@ -3,7 +3,7 @@ package cn.nukkit.item;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.item.EntityCrossbowFirework;
-import cn.nukkit.entity.abstract_arrow.EntityArrow;
+import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.EntityShootCrossbowEvent;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;

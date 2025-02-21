@@ -1,8 +1,7 @@
-package cn.nukkit.entity.throwable;
+package cn.nukkit.entity.projectile.throwable;
 
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.mob.monster.EntityBlaze;
-import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.potion.PotionCollideEvent;

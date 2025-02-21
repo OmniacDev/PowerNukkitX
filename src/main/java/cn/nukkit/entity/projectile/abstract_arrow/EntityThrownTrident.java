@@ -1,11 +1,10 @@
-package cn.nukkit.entity.abstract_arrow;
+package cn.nukkit.entity.projectile.abstract_arrow;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.projectile.EntityProjectile;
-import cn.nukkit.entity.projectile.SlenderProjectile;
 import cn.nukkit.entity.weather.EntityLightningBolt;
 import cn.nukkit.event.entity.EntityDamageByChildEntityEvent;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;

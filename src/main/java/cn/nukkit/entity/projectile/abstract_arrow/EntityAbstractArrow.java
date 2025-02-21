@@ -1,4 +1,4 @@
-package cn.nukkit.entity.abstract_arrow;
+package cn.nukkit.entity.projectile.abstract_arrow;
 
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.projectile.SlenderProjectile;

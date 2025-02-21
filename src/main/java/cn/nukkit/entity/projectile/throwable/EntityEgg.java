@@ -1,7 +1,6 @@
-package cn.nukkit.entity.throwable;
+package cn.nukkit.entity.projectile.throwable;
 
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.item.ItemEgg;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.level.particle.ItemBreakParticle;

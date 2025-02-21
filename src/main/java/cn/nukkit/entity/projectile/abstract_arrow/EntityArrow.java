@@ -1,9 +1,8 @@
-package cn.nukkit.entity.abstract_arrow;
+package cn.nukkit.entity.projectile.abstract_arrow;
 
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.projectile.SlenderProjectile;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.nbt.tag.CompoundTag;

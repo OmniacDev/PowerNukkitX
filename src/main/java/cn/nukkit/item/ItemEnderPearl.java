@@ -2,7 +2,7 @@ package cn.nukkit.item;
 
 import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.throwable.EntityEnderPearl;
+import cn.nukkit.entity.projectile.throwable.EntityEnderPearl;
 
 public class ItemEnderPearl extends ProjectileItem {
 

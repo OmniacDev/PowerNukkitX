@@ -5,7 +5,7 @@ import cn.nukkit.block.BlockAir;
 import cn.nukkit.block.BlockBedrock;
 import cn.nukkit.block.BlockState;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.throwable.EntityEnderPearl;
+import cn.nukkit.entity.projectile.throwable.EntityEnderPearl;
 import cn.nukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.BlockVector3;
