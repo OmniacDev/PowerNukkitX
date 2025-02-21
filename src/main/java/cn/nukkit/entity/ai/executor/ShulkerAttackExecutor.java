@@ -40,14 +40,14 @@ public class ShulkerAttackExecutor implements IBehaviorExecutor {
             nextAttack = Utils.rand(20, 110);
             Location bulletLocation = entity.getLocation().clone().add(new Vector3(target.x - entity.x, target.y - entity.y, target.z - entity.z).normalize()).add(0, 0.5f, 0);
             CompoundTag nbt = new CompoundTag()
-                    .putList("Pos", new ListTag<DoubleTag>()
-                            .add(new DoubleTag(bulletLocation.x))
-                            .add(new DoubleTag(bulletLocation.y))
-                            .add(new DoubleTag(bulletLocation.z)))
-                    .putList("Motion", new ListTag<DoubleTag>()
-                            .add(new DoubleTag(0))
-                            .add(new DoubleTag(0))
-                            .add(new DoubleTag(0)))
+                    .putList("Pos", new ListTag<FloatTag>()
+                            .add(new FloatTag(bulletLocation.x))
+                            .add(new FloatTag(bulletLocation.y))
+                            .add(new FloatTag(bulletLocation.z)))
+                    .putList("Motion", new ListTag<FloatTag>()
+                            .add(new FloatTag(0))
+                            .add(new FloatTag(0))
+                            .add(new FloatTag(0)))
                     .putList("Rotation", new ListTag<FloatTag>()
                             .add(new FloatTag(0))
                             .add(new FloatTag(0)));

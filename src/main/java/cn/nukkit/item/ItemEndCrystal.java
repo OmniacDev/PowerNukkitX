@@ -48,14 +48,14 @@ public class ItemEndCrystal extends Item {
         }
 
         CompoundTag nbt = new CompoundTag()
-                .putList("Pos", new ListTag<DoubleTag>()
-                        .add(new DoubleTag(target.x + 0.5))
-                        .add(new DoubleTag(up.y))
-                        .add(new DoubleTag(target.z + 0.5)))
-                .putList("Motion", new ListTag<DoubleTag>()
-                        .add(new DoubleTag(0))
-                        .add(new DoubleTag(0))
-                        .add(new DoubleTag(0)))
+                .putList("Pos", new ListTag<FloatTag>()
+                        .add(new FloatTag(target.x + 0.5))
+                        .add(new FloatTag(up.y))
+                        .add(new FloatTag(target.z + 0.5)))
+                .putList("Motion", new ListTag<FloatTag>()
+                        .add(new FloatTag(0))
+                        .add(new FloatTag(0))
+                        .add(new FloatTag(0)))
                 .putList("Rotation", new ListTag<FloatTag>()
                         .add(new FloatTag(new Random().nextFloat() * 360))
                         .add(new FloatTag(0)));

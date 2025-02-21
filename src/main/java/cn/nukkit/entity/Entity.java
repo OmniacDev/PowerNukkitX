@@ -81,8 +81,8 @@ import cn.nukkit.utils.PortalHelper;
 import cn.nukkit.utils.TextFormat;
 import com.google.common.collect.Iterables;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
@@ -141,53 +141,53 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
     public static final String TAG_UNIQUE_ID = "UniqueID";
     public static final String TAG_VARIANT = "Variant";
 
-    public boolean chested;
-    public byte color;
-    public byte color2;
-    public String customName;
-    public boolean customNameVisible;
-    public ListTag<StringTag> definitions;
-    public float fallDistance;
-    public short fire;
-    public String identifier;
-    public CompoundTag internalComponents;
-    public boolean invulnerable;
-    public boolean isAngry;
-    public boolean isAutonomous;
-    public boolean isBaby;
-    public boolean isEating;
-    public boolean isGliding;
-    public boolean isGlobal;
-    public boolean isIllagerCaptain;
-    public boolean isOrphaned;
-    public boolean isOutOfControl;
-    public boolean isRoaring;
-    public boolean isScared;
-    public boolean isStunned;
-    public boolean isSwimming;
-    public boolean isTamed;
-    public boolean isTrusting;
-    public int lastDimensionId;
-    public CompoundTag linksTag;
-    public boolean lootDropped;
-    public int markVariant;
-    public Vector3f motion;
-    public boolean onGround;
-    public long ownerNew;
-    public boolean persistent;
-    public int portalCooldown;
-    public Vector3f pos;
-    public Vector2f rotation;
-    public boolean saddled;
-    public boolean sheared;
-    public boolean showBottom;
-    public boolean sitting;
-    public int skinId;
-    public int strength;
-    public int strengthMax;
-    public ListTag<StringTag> tags;
-    public long uniqueId;
-    public int variant;
+    @NotNull public Boolean chested = false;
+    @NotNull public Byte color = 0;
+    @NotNull public Byte color2 = 0;
+    @Nullable public String customName;
+    @Nullable public Boolean customNameVisible;
+    @Nullable public ListTag<StringTag> definitions;
+    @NotNull public Float fallDistance = 0.0F;
+    @NotNull public Short fire = 0;
+    @NotNull public String identifier = "";
+    @NotNull public CompoundTag internalComponents = new CompoundTag();
+    @NotNull public Boolean invulnerable = false;
+    @NotNull public Boolean isAngry = false;
+    @NotNull public Boolean isAutonomous = false;
+    @NotNull public Boolean isBaby = false;
+    @NotNull public Boolean isEating = false;
+    @NotNull public Boolean isGliding = false;
+    @NotNull public Boolean isGlobal = false;
+    @NotNull public Boolean isIllagerCaptain = false;
+    @NotNull public Boolean isOrphaned = false;
+    @NotNull public Boolean isOutOfControl = false;
+    @NotNull public Boolean isRoaring = false;
+    @NotNull public Boolean isScared = false;
+    @NotNull public Boolean isStunned = false;
+    @NotNull public Boolean isSwimming = false;
+    @NotNull public Boolean isTamed = false;
+    @NotNull public Boolean isTrusting = false;
+    @Nullable public Integer lastDimensionId;
+    @Nullable public CompoundTag linksTag;
+    @NotNull public Boolean lootDropped = true;
+    @NotNull public Integer markVariant= 0;
+    @Nullable public Vector3 motion;
+    @NotNull public Boolean onGround = true;
+    @NotNull public Long ownerNew = -1L;
+    @NotNull public Boolean persistent = false;
+    @NotNull public Integer portalCooldown = 0;
+    @NotNull public Vector3 pos = new Vector3();
+    @NotNull public Vector2 rotation = new Vector2();
+    @NotNull public Boolean saddled = false;
+    @NotNull public Boolean sheared = false;
+    @NotNull public Boolean showBottom = false;
+    @NotNull public Boolean sitting = false;
+    @NotNull public Integer skinId = 0;
+    @NotNull public Integer strength = 0;
+    @NotNull public Integer strengthMax = 0;
+    @Nullable public ListTag<StringTag> tags;
+    @NotNull public Long uniqueId = 0L;
+    @NotNull public Integer variant = 0;
 
 
 
@@ -580,43 +580,30 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
         this.server = chunk.getProvider().getLevel().getServer();
         this.boundingBox = new SimpleAxisAlignedBB(0, 0, 0, 0, 0, 0);
 
-        if (this.namedTag.containsList("Pos", Tag.TAG_Double)) {
-            ListTag<DoubleTag> posList = this.namedTag.getList("Pos", DoubleTag.class);
+        this.chested = this.namedTag.getBoolean(TAG_CHESTED);
+        this.color = this.namedTag.getByte(TAG_COLOR);
+        this.color2 = this.namedTag.getByte(TAG_COLOR2);
+        this.customName = this.namedTag.contains(TAG_CUSTOM_NAME) ? this.namedTag.getString(TAG_CUSTOM_NAME) : null;
+        this.customNameVisible = this.namedTag.getBoolean(TAG_CUSTOM_NAME_VISIBLE);
 
-            this.temporalVector.setComponents(
-                    posList.get(0).data,
-                    posList.get(1).data,
-                    posList.get(2).data
-            );
-        } else if (this.namedTag.containsList("Pos", Tag.TAG_Float)) {
-            ListTag<FloatTag> posList = this.namedTag.getList("Pos", FloatTag.class);
 
-            this.temporalVector.setComponents(
-                    posList.get(0).data,
-                    posList.get(1).data,
-                    posList.get(2).data
-            );
-        }
+        ListTag<FloatTag> posList = this.namedTag.getList(TAG_POS, FloatTag.class);
+        ListTag<FloatTag> rotationList = this.namedTag.getList(TAG_ROTATION, FloatTag.class);
 
-        ListTag<FloatTag> rotationList = this.namedTag.getList("Rotation", FloatTag.class);
         this.setPositionAndRotation(
-                this.temporalVector,
+                new Vector3(
+                        posList.get(0).data,
+                        posList.get(1).data,
+                        posList.get(2).data
+                ),
                 rotationList.get(0).data,
                 rotationList.get(1).data
         );
 
-        if (this.namedTag.containsList("Motion", Tag.TAG_Double)) {
-            ListTag<DoubleTag> motionList = this.namedTag.getList("Motion", DoubleTag.class);
+        if (this.namedTag.contains(TAG_MOTION)) {
+            ListTag<FloatTag> motionList = this.namedTag.getList(TAG_MOTION, FloatTag.class);
 
-            this.setMotion(this.temporalVector.setComponents(
-                    motionList.get(0).data,
-                    motionList.get(1).data,
-                    motionList.get(2).data
-            ));
-        } else if (this.namedTag.containsList("Motion", Tag.TAG_Float)) {
-            ListTag<FloatTag> motionList = this.namedTag.getList("Motion", FloatTag.class);
-
-            this.setMotion(this.temporalVector.setComponents(
+            this.setMotion(new Vector3(
                     motionList.get(0).data,
                     motionList.get(1).data,
                     motionList.get(2).data

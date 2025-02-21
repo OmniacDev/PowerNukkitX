@@ -18,10 +18,12 @@ import cn.nukkit.level.GameRule;
 import cn.nukkit.level.Location;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.*;
+import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.MinecartType;
 import cn.nukkit.utils.Rail;
 import cn.nukkit.utils.Rail.Orientation;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,6 +34,13 @@ import java.util.Objects;
  * @since 2017/6/26
  */
 public abstract class EntityMinecartAbstract extends EntityVehicle {
+    public final static String TAG_CUSTOM_DISPLAY_TILE = "CustomDisplayTile";
+    public final static String TAG_DISPLAY_BLOCK = "DisplayBlock";
+    public final static String TAG_DISPLAY_OFFSET = "DisplayOffset";
+
+    @Nullable public Boolean customDisplayTile;
+    @Nullable public Block displayBlock;
+    @Nullable public Integer displayOffset;
 
     private static final int[][][] matrix = new int[][][]{
             {{0, 0, -1}, {0, 0, 1}},
@@ -47,7 +56,6 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
     };
     private final boolean devs = false; // Avoid maintained features into production
     private double currentSpeed = 0;
-    private Block blockInside;
     // Plugins modifiers
     private boolean slowWhenEmpty = true;
     private double derailedX = 0.5;
@@ -64,6 +72,16 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
 
         setMaxHealth(40);
         setHealth(40);
+
+        if (nbt.contains(TAG_CUSTOM_DISPLAY_TILE)) {
+            this.customDisplayTile = nbt.getBoolean(TAG_CUSTOM_DISPLAY_TILE);
+        }
+        if (nbt.contains(TAG_DISPLAY_BLOCK)) {
+            this.displayBlock = Block.get(NBTIO.getBlockStateHelper(nbt.getCompound(TAG_DISPLAY_BLOCK)));
+        }
+        if (nbt.contains(TAG_DISPLAY_OFFSET)) {
+            this.displayOffset = nbt.getInt(TAG_DISPLAY_OFFSET);
+        }
     }
 
     public abstract MinecartType getType();
@@ -92,7 +110,7 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
 
     @Override
     public boolean canDoInteraction() {
-        return passengers.isEmpty() && this.getDisplayBlock() == null;
+        return passengers.isEmpty() && this.displayBlock == null;
     }
 
     @Override
@@ -284,7 +302,7 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
             return false;
         }
 
-        if (blockInside == null) {
+        if (displayBlock == null) {
             mountEntity(p);
         }
 
@@ -299,7 +317,7 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
                     && motionX * motionX + motionZ * motionZ > 0.01D
                     && passengers.isEmpty()
                     && entity.riding == null
-                    && blockInside == null) {
+                    && displayBlock == null) {
                 if (riding == null && devs) {
                     mountEntity(entity);// TODO: rewrite (weird riding)
                 }
@@ -379,7 +397,15 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
     public void saveNBT() {
         super.saveNBT();
 
-        saveEntityData();
+        if (this.customDisplayTile != null) {
+            namedTag.putBoolean(TAG_CUSTOM_DISPLAY_TILE, this.customDisplayTile);
+        }
+        if (this.displayBlock != null) {
+            namedTag.putCompound(TAG_DISPLAY_BLOCK, this.displayBlock.getBlockState().getBlockStateTag());
+        }
+        if (this.displayOffset != null) {
+            namedTag.putInt(TAG_DISPLAY_OFFSET, this.displayOffset);
+        }
     }
 
     public double getMaxSpeed() {
@@ -730,37 +756,15 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
     private void prepareDataProperty() {
         setRollingAmplitude(0);
         setRollingDirection(1);
-        if (namedTag.contains("CustomDisplayTile")) {
-            if (namedTag.getBoolean("CustomDisplayTile")) {
-                int display = namedTag.getInt("DisplayTile");
-                int offSet = namedTag.getInt("DisplayOffset");
-                setDataProperty(CUSTOM_DISPLAY, 1);
-                setDataProperty(HORSE_FLAGS, display);
-                setDataProperty(DISPLAY_OFFSET, offSet);
-            }
-        } else {
-            int display = blockInside == null ? 0 : blockInside.getRuntimeId();
-            if (display == 0) {
-                setDataProperty(CUSTOM_DISPLAY, 0);
-                return;
-            }
-            setDataProperty(CUSTOM_DISPLAY, 1);
-            setDataProperty(HORSE_FLAGS, display);
-            setDataProperty(DISPLAY_OFFSET, 6);
-        }
-    }
 
-    private void saveEntityData() {
-        boolean hasDisplay = super.getDataProperty(CUSTOM_DISPLAY) == 1
-                || blockInside != null;
-        int display;
-        int offSet;
-        namedTag.putBoolean("CustomDisplayTile", hasDisplay);
-        if (hasDisplay) {
-            display = blockInside.getRuntimeId();
-            offSet = getDataProperty(DISPLAY_OFFSET);
-            namedTag.putInt("DisplayTile", display);
-            namedTag.putInt("DisplayOffset", offSet);
+        if (this.customDisplayTile != null) {
+            setDataProperty(CUSTOM_DISPLAY, this.customDisplayTile ? 1 : 0);
+        }
+        if (this.displayBlock != null) {
+            setDataProperty(HORSE_FLAGS, this.displayBlock.getRuntimeId());
+        }
+        if (this.displayOffset != null) {
+            setDataProperty(DISPLAY_OFFSET, this.displayOffset);
         }
     }
 
@@ -768,10 +772,9 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
      * Set the minecart display block
      *
      * @param block The block that will changed. Set {@code null} for BlockAir
-     * @return {@code true} if the block is normal block
      */
-    public boolean setDisplayBlock(Block block) {
-        return setDisplayBlock(block, true);
+    public void setDisplayBlock(Block block) {
+        setDisplayBlock(block, true);
     }
 
     /**
@@ -779,60 +782,31 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
      *
      * @param block  The block that will changed. Set {@code null} for BlockAir
      * @param update Do update for the block. (This state changes if you want to show the block)
-     * @return {@code true} if the block is normal block
      */
-    public boolean setDisplayBlock(Block block, boolean update) {
+    public void setDisplayBlock(Block block, boolean update) {
         if (!update) {
-            if (block.isNormalBlock()) {
-                blockInside = block;
-            } else {
-                blockInside = null;
-            }
-            return true;
+            displayBlock = block;
+            return;
         }
-        if (block != null) {
-            if (block.isNormalBlock()) {
-                blockInside = block;
-                //              Runtimeid
-                int display = blockInside.getRuntimeId();
-                setDataProperty(CUSTOM_DISPLAY, 1);
-                setDataProperty(HORSE_FLAGS, display);
-                setDisplayBlockOffset(6);
-            }
+        displayBlock = block;
+        if (displayBlock != null) {
+            setCustomDisplayTile(true);
+            setDataProperty(HORSE_FLAGS, displayBlock.getRuntimeId());
+            setDisplayBlockOffset(6);
         } else {
-            // Set block to air (default).
-            blockInside = null;
-            setDataProperty(CUSTOM_DISPLAY, 0);
+            setCustomDisplayTile(false);
             setDataProperty(HORSE_FLAGS, 0);
             setDisplayBlockOffset(0);
         }
-        return true;
     }
 
-    /**
-     * Get the minecart display block
-     *
-     * @return Block of minecart display block
-     */
-    public Block getDisplayBlock() {
-        return blockInside;
+    public void setCustomDisplayTile(boolean customDisplayTile) {
+        this.customDisplayTile = customDisplayTile;
+        setDataProperty(CUSTOM_DISPLAY, customDisplayTile ? 1 : 0);
     }
 
-    /**
-     * Get the block display offset
-     *
-     * @return integer
-     */
-    public int getDisplayBlockOffset() {
-        return super.getDataProperty(DISPLAY_OFFSET);
-    }
-
-    /**
-     * Set the block offset.
-     *
-     * @param offset The offset
-     */
     public void setDisplayBlockOffset(int offset) {
+        this.displayOffset = offset;
         setDataProperty(DISPLAY_OFFSET, offset);
     }
 

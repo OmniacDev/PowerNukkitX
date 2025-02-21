@@ -96,14 +96,14 @@ public class FangLineExecutor implements EntityControl, IBehaviorExecutor {
 
     protected void spawn(EntityEvocationIllager illager, Location location) {
         CompoundTag nbt = new CompoundTag()
-                .putList("Pos", new ListTag<DoubleTag>()
-                        .add(new DoubleTag(location.x))
-                        .add(new DoubleTag(location.y))
-                        .add(new DoubleTag(location.z)))
-                .putList("Motion", new ListTag<DoubleTag>()
-                        .add(new DoubleTag(0))
-                        .add(new DoubleTag(0))
-                        .add(new DoubleTag(0)))
+                .putList("Pos", new ListTag<FloatTag>()
+                        .add(new FloatTag(location.x))
+                        .add(new FloatTag(location.y))
+                        .add(new FloatTag(location.z)))
+                .putList("Motion", new ListTag<FloatTag>()
+                        .add(new FloatTag(0))
+                        .add(new FloatTag(0))
+                        .add(new FloatTag(0)))
                 .putList("Rotation", new ListTag<FloatTag>()
                         .add(new FloatTag((location.yaw)))
                         .add(new FloatTag(0f)));

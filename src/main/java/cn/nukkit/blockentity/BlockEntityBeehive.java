@@ -257,16 +257,16 @@ public class BlockEntityBeehive extends BlockEntity {
                     face.getZOffset() * 0.25 - face.getXOffset() * 0.5
             );
 
-            saveData.putList("Pos", new ListTag<DoubleTag>()
-                    .add(new DoubleTag(spawnPosition.x))
-                    .add(new DoubleTag(spawnPosition.y))
-                    .add(new DoubleTag(spawnPosition.z))
+            saveData.putList("Pos", new ListTag<FloatTag>()
+                    .add(new FloatTag(spawnPosition.x))
+                    .add(new FloatTag(spawnPosition.y))
+                    .add(new FloatTag(spawnPosition.z))
             );
 
-            saveData.putList("Motion", new ListTag<DoubleTag>()
-                    .add(new DoubleTag(0))
-                    .add(new DoubleTag(0))
-                    .add(new DoubleTag(0))
+            saveData.putList("Motion", new ListTag<FloatTag>()
+                    .add(new FloatTag(0))
+                    .add(new FloatTag(0))
+                    .add(new FloatTag(0))
             );
 
             lookAt = getSide(face, 2);

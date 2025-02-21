@@ -17,33 +17,33 @@ public final class BDSEntityTranslator {
             if (entityNetworkId == 0) return null;
             linkedCompoundTag.putString("identifier", identifier);
         }
-        if (from.containsList("Pos", Tag.TAG_Float)) {
-            ListTag<FloatTag> pos = from.getList("Pos", FloatTag.class);
-            ListTag<DoubleTag> target = new ListTag<>();
+        if (from.containsList("Pos", Tag.TAG_Double)) {
+            ListTag<DoubleTag> pos = from.getList("Pos", DoubleTag.class);
+            ListTag<FloatTag> target = new ListTag<>();
             for (var v : pos.getAll()) {
-                target.add(new DoubleTag(v.data));
+                target.add(new FloatTag(v.data));
             }
             linkedCompoundTag.putList("Pos", target);
         } else {
-            ListTag<DoubleTag> target = new ListTag<>();
-            target.add(new DoubleTag(0));
-            target.add(new DoubleTag(0));
-            target.add(new DoubleTag(0));
+            ListTag<FloatTag> target = new ListTag<>();
+            target.add(new FloatTag(0));
+            target.add(new FloatTag(0));
+            target.add(new FloatTag(0));
             linkedCompoundTag.putList("Pos", target);
         }
-        if (from.containsList("Motion", Tag.TAG_Float)) {
-            ListTag<FloatTag> pos = from.getList("Motion", FloatTag.class);
-            ListTag<DoubleTag> target = new ListTag<>();
+        if (from.containsList("Motion", Tag.TAG_Double)) {
+            ListTag<DoubleTag> pos = from.getList("Motion", DoubleTag.class);
+            ListTag<FloatTag> target = new ListTag<>();
             for (var v : pos.getAll()) {
-                target.add(new DoubleTag(v.data));
+                target.add(new FloatTag(v.data));
             }
             from.putList("Motion", target);
             linkedCompoundTag.putList("Pos", target);
         } else {
-            ListTag<DoubleTag> target = new ListTag<>();
-            target.add(new DoubleTag(0));
-            target.add(new DoubleTag(0));
-            target.add(new DoubleTag(0));
+            ListTag<FloatTag> target = new ListTag<>();
+            target.add(new FloatTag(0));
+            target.add(new FloatTag(0));
+            target.add(new FloatTag(0));
             linkedCompoundTag.putList("Motion", target);
         }
         linkedCompoundTag.putList("Rotation", from.getList("Rotation"));

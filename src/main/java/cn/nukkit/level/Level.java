@@ -1240,10 +1240,10 @@ public class Level implements Metadatable {
             if (b.getProperties() != BlockTallGrass.PROPERTIES && !(b instanceof BlockFlowingWater))
                 vector.y += 1;
             CompoundTag nbt = new CompoundTag()
-                    .putList("Pos", new ListTag<DoubleTag>().add(new DoubleTag(vector.x))
-                            .add(new DoubleTag(vector.y)).add(new DoubleTag(vector.z)))
-                    .putList("Motion", new ListTag<DoubleTag>().add(new DoubleTag(0))
-                            .add(new DoubleTag(0)).add(new DoubleTag(0)))
+                    .putList("Pos", new ListTag<FloatTag>().add(new FloatTag(vector.x))
+                            .add(new FloatTag(vector.y)).add(new FloatTag(vector.z)))
+                    .putList("Motion", new ListTag<FloatTag>().add(new FloatTag(0))
+                            .add(new FloatTag(0)).add(new FloatTag(0)))
                     .putList("Rotation", new ListTag<FloatTag>().add(new FloatTag(0))
                             .add(new FloatTag(0)));
 
@@ -2474,11 +2474,11 @@ public class Level implements Metadatable {
 
         EntityItem itemEntity = (EntityItem) Entity.createEntity(Entity.ITEM,
                 this.getChunk((int) source.getX() >> 4, (int) source.getZ() >> 4, true),
-                new CompoundTag().putList("Pos", new ListTag<DoubleTag>().add(new DoubleTag(source.getX()))
-                                .add(new DoubleTag(source.getY())).add(new DoubleTag(source.getZ())))
+                new CompoundTag().putList("Pos", new ListTag<FloatTag>().add(new FloatTag(source.getX()))
+                                .add(new FloatTag(source.getY())).add(new FloatTag(source.getZ())))
 
-                        .putList("Motion", new ListTag<DoubleTag>().add(new DoubleTag(motion.x))
-                                .add(new DoubleTag(motion.y)).add(new DoubleTag(motion.z)))
+                        .putList("Motion", new ListTag<FloatTag>().add(new FloatTag(motion.x))
+                                .add(new FloatTag(motion.y)).add(new FloatTag(motion.z)))
 
                         .putList("Rotation", new ListTag<FloatTag>()
                                 .add(new FloatTag(ThreadLocalRandom.current().nextFloat() * 360))

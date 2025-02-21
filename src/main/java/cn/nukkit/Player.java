@@ -23,10 +23,13 @@ import cn.nukkit.config.ServerPropertiesKeys;
 import cn.nukkit.dialog.window.FormWindowDialog;
 import cn.nukkit.entity.Attribute;
 import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.EntityAbilities;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.entity.EntityInteractable;
+import cn.nukkit.entity.EntityItemSlot;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.EntityRideable;
+import cn.nukkit.entity.EntityTimer;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.data.PlayerFlag;
 import cn.nukkit.entity.data.Skin;
@@ -172,6 +175,80 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class Player extends EntityHuman implements CommandSender, ChunkLoader, IPlayer, IScoreboardViewer {
+
+    public final static String TAG_ABILITIES = "abilities";
+    public final static String TAG_TIMER = "timer";
+    public final static String TAG_AGENT_ID = "AgentID";
+    public final static String TAG_DIMENSION_ID = "DimensionId";
+    public final static String TAG_ENCHANTMENT_SEED = "EnchantmentSeed";
+    public final static String TAG_ENDER_CHEST_INVENTORY = "EnderChestInventory";
+    public final static String TAG_FOG_COMMAND_STACK = "fogCommandStack";
+    public final static String TAG_FORMAT_VERSION = "format_version";
+    public final static String TAG_HAS_SEEN_CREDITS = "HasSeenCredits";
+    public final static String TAG_INVENTORY = "Inventory";
+    public final static String TAG_LEFT_SHOULDER_RIDER_ID = "LeftShoulderRiderID";
+    public final static String TAG_MAP_INDEX = "MapIndex";
+    public final static String TAG_PLAYER_GAME_MODE = "PlayerGameMode";
+    public final static String TAG_PLAYER_LEVEL = "PlayerLevel";
+    public final static String TAG_PLAYER_LEVEL_PROGRESS = "PlayerLevelProgress";
+    public final static String TAG_PLAYER_UI_ITEMS = "PlayerUIItems";
+    public final static String TAG_RECIPE_UNLOCKING = "recipe_unlocking";
+    public final static String TAG_RIDE_ID = "RideID";
+    public final static String TAG_RIGHT_SHOULDER_RIDER_ID = "RightShoulderRiderID";
+    public final static String TAG_SELECTED_CONTAINER_ID = "SelectedContainerId";
+    public final static String TAG_SELECTED_INVENTORY_SLOT = "SelectedInventorySlot";
+    public final static String TAG_SLEEPING = "Sleeping";
+    public final static String TAG_SLEEP_TIMER = "SleepTimer";
+    public final static String TAG_SNEAKING = "Sneaking";
+    public final static String TAG_SPAWN_BLOCK_POSITION_X = "SpawnBlockPositionX";
+    public final static String TAG_SPAWN_BLOCK_POSITION_Y = "SpawnBlockPositionY";
+    public final static String TAG_SPAWN_BLOCK_POSITION_Z = "SpawnBlockPositionZ";
+    public final static String TAG_SPAWN_DIMENSION = "SpawnDimension";
+    public final static String TAG_SPAWN_X = "SpawnX";
+    public final static String TAG_SPAWN_Y = "SpawnY";
+    public final static String TAG_SPAWN_Z = "SpawnZ";
+    public final static String TAG_TIME_SINCE_REST = "TimeSinceRest";
+    public final static String TAG_WARDEN_THREAT_DECREASE_TIMER = "WardenThreatDecreaseTimer";
+    public final static String TAG_WARDEN_THREAT_LEVEL = "WardenThreatLevel";
+    public final static String TAG_WARDEN_THREAT_LEVEL_INCREASE_COOLDOWN = "WardenThreatLevelIncreaseCooldown";
+
+    @NotNull public EntityAbilities abilities = new EntityAbilities();
+    @NotNull public EntityTimer timer = new EntityTimer();
+    @NotNull public Long agentId = 0L;
+    @NotNull public Integer dimensionId = 0;
+    @NotNull public Integer enchantmentSeed = 0;
+    @NotNull public List<EntityItemSlot> enderChestInventory = new ArrayList<>();
+    @NotNull public List<String> fogCommandStack = new ArrayList<>();
+    @NotNull public String formatVersion = "";
+//    @NotNull public Boolean hasSeenCredits = false;
+//    @NotNull public List<EntityItemSlot> inventory = new ArrayList<>();
+    @NotNull public Long leftShoulderRiderID = 0L;
+    @NotNull public Integer mapIndex = 0;
+    @NotNull public Integer playerGameMode = 0;
+    @NotNull public Integer playerLevel = 0;
+    @NotNull public Float playerLevelProgress = 0.0F;
+    @NotNull public List<EntityItemSlot> playerUIItems = new ArrayList<>();
+    @NotNull public CompoundTag recipeUnlocking = new CompoundTag();
+    @NotNull public Long RideID = 0L;
+    @NotNull public Long rightShoulderRiderID = 0L;
+    @NotNull public Integer selectedContainerId = 0;
+    @NotNull public Integer selectedInventorySlot = 0;
+//    @NotNull public Boolean sleeping = false;
+    @NotNull public Short sleepTimer = 0;
+    @NotNull public Boolean sneaking = false;
+    @NotNull public Integer spawnBlockPositionX = 0;
+    @NotNull public Integer spawnBlockPositionY = 0;
+    @NotNull public Integer spawnBlockPositionZ = 0;
+    @NotNull public Integer spawnDimension = 0;
+    @NotNull public Integer spawnX = 0;
+    @NotNull public Integer spawnY = 0;
+    @NotNull public Integer spawnZ = 0;
+//    @NotNull public Integer timeSinceRest = 0;
+    @NotNull public Integer wardenThreatDecreaseTimer = 0;
+    @NotNull public Integer wardenThreatLevel = 0;
+    @NotNull public Integer wardenThreatLevelIncreaseCooldown = 0;
+
+
     /// static fields
     /**
      * 一个承载玩家的空数组静态常量
@@ -5139,14 +5216,14 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
      */
     public void startFishing(Item fishingRod) {
         CompoundTag nbt = new CompoundTag()
-                .putList("Pos", new ListTag<DoubleTag>()
-                        .add(new DoubleTag(x))
-                        .add(new DoubleTag(y + this.getEyeHeight()))
-                        .add(new DoubleTag(z)))
-                .putList("Motion", new ListTag<DoubleTag>()
-                        .add(new DoubleTag(-Math.sin(yaw / 180 + Math.PI) * Math.cos(pitch / 180 * Math.PI)))
-                        .add(new DoubleTag(-Math.sin(pitch / 180 * Math.PI)))
-                        .add(new DoubleTag(Math.cos(yaw / 180 * Math.PI) * Math.cos(pitch / 180 * Math.PI))))
+                .putList("Pos", new ListTag<FloatTag>()
+                        .add(new FloatTag(x))
+                        .add(new FloatTag(y + this.getEyeHeight()))
+                        .add(new FloatTag(z)))
+                .putList("Motion", new ListTag<FloatTag>()
+                        .add(new FloatTag(-Math.sin(yaw / 180 + Math.PI) * Math.cos(pitch / 180 * Math.PI)))
+                        .add(new FloatTag(-Math.sin(pitch / 180 * Math.PI)))
+                        .add(new FloatTag(Math.cos(yaw / 180 * Math.PI) * Math.cos(pitch / 180 * Math.PI))))
                 .putList("Rotation", new ListTag<FloatTag>()
                         .add(new FloatTag((float) yaw))
                         .add(new FloatTag((float) pitch)));

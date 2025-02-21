@@ -33,7 +33,7 @@ public class EntityMinecart extends EntityMinecartAbstract {
 
     @Override
     public MinecartType getType() {
-        return MinecartType.valueOf(0);
+        return MinecartType.MINECART_EMPTY;
     }
 
     @Override

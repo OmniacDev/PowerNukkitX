@@ -47,9 +47,9 @@ public class EntityLingeringPotion extends EntitySplashPotion {
                                 .add(new FloatTag(0))
                         )
                         .putList("Motion", new ListTag<>()
-                                .add(new DoubleTag(0))
-                                .add(new DoubleTag(0))
-                                .add(new DoubleTag(0))
+                                .add(new FloatTag(0))
+                                .add(new FloatTag(0))
+                                .add(new FloatTag(0))
                         )
                         .putShort("PotionId", potionId)
         );
