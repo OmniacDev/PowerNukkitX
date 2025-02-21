@@ -255,7 +255,7 @@ public interface Inventory {
     }
 
     /**
-     * native slot id <-> network slot id
+     * native slot id <---> network slot id
      */
     @ApiStatus.Internal
     default BiMap<Integer, Integer> networkSlotMap() {
@@ -263,7 +263,7 @@ public interface Inventory {
     }
 
     /**
-     * slot id -> ContainerSlotType
+     * slot id ---> ContainerSlotType
      */
     @ApiStatus.Internal
     default Map<Integer, ContainerSlotType> slotTypeMap() {
