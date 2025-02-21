@@ -146,7 +146,7 @@ public abstract class EntityHumanType extends EntityCreature implements IHuman {
     }
 
     @Override
-    protected boolean applyNameTag(@NotNull Player player, @NotNull Item item) {
+    public boolean playerApplyNameTag(@NotNull Player player, @NotNull Item item) {
         return false;
     }
 

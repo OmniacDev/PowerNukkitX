@@ -9,10 +9,15 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityInteractable;
 import cn.nukkit.entity.EntityLiving;
+import cn.nukkit.entity.ai.behavior.Behavior;
 import cn.nukkit.entity.ai.behavior.IBehavior;
 import cn.nukkit.entity.ai.behaviorgroup.BehaviorGroup;
 import cn.nukkit.entity.ai.behaviorgroup.IBehaviorGroup;
 import cn.nukkit.entity.ai.controller.LookController;
+import cn.nukkit.entity.ai.evaluator.DistanceEvaluator;
+import cn.nukkit.entity.ai.evaluator.ProbabilityEvaluator;
+import cn.nukkit.entity.ai.executor.LookAtTargetExecutor;
+import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder;
 import cn.nukkit.entity.ai.route.posevaluator.WalkingPosEvaluator;
 import cn.nukkit.entity.ai.sensor.NearestPlayerSensor;
@@ -26,12 +31,14 @@ import cn.nukkit.network.protocol.NPCRequestPacket;
 import cn.nukkit.utils.MainLogger;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
  * @author good777LUCKY
  */
-public class EntityNPC extends EntityLiving implements EntityInteractable {
+public class EntityNPC extends EntityMob implements EntityInteractable {
     @Override
     @NotNull
     public String getIdentifier() {
@@ -76,12 +83,37 @@ public class EntityNPC extends EntityLiving implements EntityInteractable {
     }
 
     @Override
+    public boolean canCollide() { return false; }
+
+    @Override
+    protected IBehaviorGroup requireBehaviorGroup() {
+        return new BehaviorGroup(
+                this.tickSpread,
+                Set.of(),
+                Set.of(
+                        new Behavior(
+                                new LookAtTargetExecutor(CoreMemoryTypes.NEAREST_PLAYER, 100),
+                                new ProbabilityEvaluator(2, 100)
+                        )
+                ),
+                Set.of(new NearestPlayerSensor(6, 0, 20)),
+                Set.of(new LookController(true, false)),
+                null,
+                this
+        );
+    }
+
+    @Override
+    public Integer getExperienceDrops() { return 0; }
+
+    @Override
     public void initEntity() {
         super.initEntity();
         this.setMaxHealth(Integer.MAX_VALUE); // Should be Float max value
         this.setHealth(20);
         this.setNameTagVisible(true);
         this.setNameTagAlwaysVisible(true);
+        this.setMovementSpeed(0.5f);
 
         this.dialog = new FormWindowDialog(
                 this.namedTag.contains(TAG_RAWTEXT_NAME) ?
@@ -150,10 +182,20 @@ public class EntityNPC extends EntityLiving implements EntityInteractable {
 
     @Override
     public boolean onInteract(Player player, Item item, Vector3 clickedPos) {
-        //对于创造模式玩家，NPC发送过去的dialog的sceneName必须为空，否则客户端会不允许修改对话框内容
-        //另外的，我们不需要记录发送给创造模式玩家的对话框，首先因为我们无法清除，其次没有必要
+        // For creative mode players, the NPC's dialog sent must have an empty sceneName; otherwise, the client will not allow the dialog box content to be modified.
+        // Additionally, we do not need to record the dialog box sent to creative mode players. Firstly, because we cannot clear it, and secondly, there is no need to do so.
         player.showDialogWindow(this.dialog, !player.isCreative());
-        return true;
+        return false;
+    }
+
+    @Override
+    public void kill() {
+        this.health = 0;
+        this.scheduleUpdate();
+
+        for (Entity passenger : new ArrayList<>(this.passengers)) {
+            dismountEntity(passenger);
+        }
     }
 
     @Override

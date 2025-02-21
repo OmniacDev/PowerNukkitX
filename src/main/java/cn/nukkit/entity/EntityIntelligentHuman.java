@@ -267,7 +267,7 @@ public class EntityIntelligentHuman extends EntityIntelligent implements EntityI
     }
 
     @Override
-    protected boolean applyNameTag(@NotNull Player player, @NotNull Item item) {
+    public boolean playerApplyNameTag(@NotNull Player player, @NotNull Item item) {
         return false;
     }
 

@@ -19,6 +19,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemArmor;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.item.ItemShield;
+import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.level.particle.DestroyBlockParticle;
@@ -31,7 +32,9 @@ import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.network.protocol.SetEntityDataPacket;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 public class EntityArmorStand extends EntityMob implements EntityInteractable, EntityNameable {
@@ -58,7 +61,6 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
             return EntityArmorInventory.SLOT_FEET;
         }
     }
-
 
     @Override
     public float getHeight() {
@@ -98,6 +100,17 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
     }
 
     @Override
+    public Integer getExperienceDrops() { return 0; }
+
+    @Override
+    public Item[] getDrops() {
+        return Item.EMPTY_ARRAY;
+    }
+
+    @Override
+    public boolean canCollide() { return false; }
+
+    @Override
     public boolean onInteract(Player player, Item item, Vector3 clickedPos) {
         if (player.isSpectator() || !isValid()) {
             return false;
@@ -109,7 +122,7 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
         }
 
         //Pose
-        if (player.isSneaking()) {
+        if (player.isSneaking() || player.isFlySneaking()) {
             if (this.getPose() >= 12) {
                 this.setPose(0);
             } else {
@@ -287,7 +300,13 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
 
     @Override
     public void kill() {
-        super.kill();
+        this.health = 0;
+        this.scheduleUpdate();
+
+        for (Entity passenger : new ArrayList<>(this.passengers)) {
+            dismountEntity(passenger);
+        }
+
         EntityDamageEvent lastDamageCause = this.lastDamageCause;
         boolean byAttack = lastDamageCause != null && lastDamageCause.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK;
 

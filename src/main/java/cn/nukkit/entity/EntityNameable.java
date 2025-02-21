@@ -5,30 +5,25 @@ import cn.nukkit.item.Item;
 import cn.nukkit.math.Vector3;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
  * An entity which can be named by name tags.
  */
 
 public interface EntityNameable {
     String getNameTag();
-
     void setNameTag(String nameTag);
 
     boolean isNameTagVisible();
-
     void setNameTagVisible(boolean visible);
 
-
     boolean isPersistent();
-
-
     void setPersistent(boolean persistent);
 
     default boolean onInteract(Player player, Item item, Vector3 clickedPos) {
-        if (item.getId() == Item.NAME_TAG) {
-            if (!player.isSpectator()) {
-                return playerApplyNameTag(player, item);
-            }
+        if (Objects.equals(item.getId(), Item.NAME_TAG) && !player.isSpectator() && !player.isAdventure()) {
+            return playerApplyNameTag(player, item);
         }
         return false;
     }

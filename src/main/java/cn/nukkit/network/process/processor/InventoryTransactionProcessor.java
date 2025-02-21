@@ -164,7 +164,7 @@ public class InventoryTransactionProcessor extends DataPacketProcessor<Inventory
                         }
                     }
 
-                    if (item.isNull() || player.getInventory().getItemInHand().getId() == item.getId()) {
+                    if (item.isNull() || Objects.equals(player.getInventory().getItemInHand().getId(), item.getId())) {
                         player.getInventory().setItemInHand(item);
                     } else {
                         logTriedToSetButHadInHand(playerHandle, item, player.getInventory().getItemInHand());

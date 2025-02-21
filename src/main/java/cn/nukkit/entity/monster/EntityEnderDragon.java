@@ -220,7 +220,7 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
     }
 
     @Override
-    protected boolean applyNameTag(@NotNull Player player, @NotNull Item item) {
+    public boolean playerApplyNameTag(@NotNull Player player, @NotNull Item item) {
         return false;
     }
 
