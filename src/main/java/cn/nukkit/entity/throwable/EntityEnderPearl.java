@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class EntityEnderPearl extends EntityProjectile {
+public class EntityEnderPearl extends EntityThrowable {
 
     @Override
     @NotNull public String getIdentifier() {

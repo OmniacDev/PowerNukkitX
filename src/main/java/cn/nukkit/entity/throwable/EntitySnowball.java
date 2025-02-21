@@ -19,7 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public class EntitySnowball extends EntityProjectile {
+public class EntitySnowball extends EntityThrowable {
     @Override
     @NotNull
     public String getIdentifier() {

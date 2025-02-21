@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author xtypr
  */
-public class EntityXpBottle extends EntityProjectile {
+public class EntityXpBottle extends EntityThrowable {
     @Override
     @NotNull public String getIdentifier() {
         return XP_BOTTLE;

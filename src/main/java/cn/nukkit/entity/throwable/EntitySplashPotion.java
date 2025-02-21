@@ -21,7 +21,7 @@ import java.awt.*;
 /**
  * @author xtypr
  */
-public class EntitySplashPotion extends EntityProjectile {
+public class EntitySplashPotion extends EntityThrowable {
 
     @Override
     @NotNull public String getIdentifier() {

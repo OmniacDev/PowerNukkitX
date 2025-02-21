@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public class EntityEgg extends EntityProjectile {
+public class EntityEgg extends EntityThrowable {
 
     @Override
     @NotNull public String getIdentifier() {
