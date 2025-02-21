@@ -1,8 +1,9 @@
-package cn.nukkit.entity.projectile;
+package cn.nukkit.entity.abstract_arrow;
 
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.projectile.SlenderProjectile;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -14,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public class EntityArrow extends SlenderProjectile {
+public class EntityArrow extends EntityAbstractArrow {
 
     @Override
     @NotNull

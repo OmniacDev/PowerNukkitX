@@ -1,14 +1,12 @@
 package cn.nukkit.blockentity;
 
-import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockAir;
 import cn.nukkit.block.BlockBedrock;
 import cn.nukkit.block.BlockState;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.projectile.EntityEnderPearl;
+import cn.nukkit.entity.throwable.EntityEnderPearl;
 import cn.nukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import cn.nukkit.level.Location;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.BlockVector3;
 import cn.nukkit.math.Vector2;

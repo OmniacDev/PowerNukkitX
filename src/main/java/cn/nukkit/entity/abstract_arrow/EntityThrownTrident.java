@@ -1,9 +1,11 @@
-package cn.nukkit.entity.projectile;
+package cn.nukkit.entity.abstract_arrow;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.projectile.EntityProjectile;
+import cn.nukkit.entity.projectile.SlenderProjectile;
 import cn.nukkit.entity.weather.EntityLightningBolt;
 import cn.nukkit.event.entity.EntityDamageByChildEntityEvent;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
@@ -35,7 +37,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author PetteriM1
  * @author GoodLucky777
  */
-public class EntityThrownTrident extends SlenderProjectile {
+public class EntityThrownTrident extends EntityAbstractArrow {
     @Override
     @NotNull
     public String getIdentifier() {

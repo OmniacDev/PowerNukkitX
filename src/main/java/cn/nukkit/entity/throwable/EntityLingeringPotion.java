@@ -1,10 +1,10 @@
-package cn.nukkit.entity.item;
+package cn.nukkit.entity.throwable;
 
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.item.EntityAreaEffectCloud;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.entity.effect.Effect;

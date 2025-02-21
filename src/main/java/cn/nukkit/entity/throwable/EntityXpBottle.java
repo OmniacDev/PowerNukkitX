@@ -1,4 +1,4 @@
-package cn.nukkit.entity.item;
+package cn.nukkit.entity.throwable;
 
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.projectile.EntityProjectile;

@@ -4,7 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.entity.projectile.EntityArrow;
+import cn.nukkit.entity.abstract_arrow.EntityArrow;
 import cn.nukkit.event.block.BlockBurnEvent;
 import cn.nukkit.event.block.BlockFadeEvent;
 import cn.nukkit.event.block.BlockIgniteEvent;

@@ -3,14 +3,13 @@ package cn.nukkit.item;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.projectile.EntityProjectile;
-import cn.nukkit.entity.projectile.EntityThrownTrident;
+import cn.nukkit.entity.abstract_arrow.EntityThrownTrident;
 import cn.nukkit.event.entity.EntityShootBowEvent;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 

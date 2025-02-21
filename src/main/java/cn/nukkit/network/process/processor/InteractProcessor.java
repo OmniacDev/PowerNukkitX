@@ -9,7 +9,7 @@ import cn.nukkit.entity.item.EntityChestBoat;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.entity.item.EntityXpOrb;
 import cn.nukkit.entity.mob.animal.EntityHorse;
-import cn.nukkit.entity.projectile.EntityArrow;
+import cn.nukkit.entity.abstract_arrow.EntityArrow;
 import cn.nukkit.event.player.PlayerHackDetectedEvent;
 import cn.nukkit.event.player.PlayerKickEvent;
 import cn.nukkit.event.player.PlayerMouseOverEntityEvent;

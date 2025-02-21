@@ -1,6 +1,6 @@
 package cn.nukkit.event.inventory;
 
-import cn.nukkit.entity.projectile.EntityArrow;
+import cn.nukkit.entity.abstract_arrow.EntityArrow;
 import cn.nukkit.event.Cancellable;
 import cn.nukkit.event.HandlerList;
 import cn.nukkit.inventory.Inventory;

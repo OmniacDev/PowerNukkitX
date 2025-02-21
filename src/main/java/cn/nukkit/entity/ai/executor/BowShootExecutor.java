@@ -8,7 +8,7 @@ import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.projectile.EntityArrow;
+import cn.nukkit.entity.abstract_arrow.EntityArrow;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.EntityShootBowEvent;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
@@ -19,7 +19,6 @@ import cn.nukkit.item.enchantment.bow.EnchantmentBow;
 import cn.nukkit.level.Location;
 import cn.nukkit.level.Sound;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 
