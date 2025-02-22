@@ -23,8 +23,12 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.utils.Utils;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -61,6 +65,34 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
     private static final String TAG_TRADE_TIER = "TradeTier";
     private static final String TAG_WANTS_TO_BE_JOCKEY = "WantsToBeJockey";
 
+    @Nullable public List<CompoundTag> activeEffects;
+    @NotNull public Short air = 0;
+    @NotNull public List<Item> armor = new ArrayList<>();
+    @NotNull public Short attackTime = 0;
+    @NotNull public List<CompoundTag> attributes = new ArrayList<>();
+    @Nullable public Float bodyRot;
+    @NotNull public Integer boundX = 0;
+    @NotNull public Integer boundY = 0;
+    @NotNull public Integer boundZ = 0;
+    @NotNull public Boolean canPickupItems = false;
+    @NotNull public Boolean dead = false;
+    @NotNull public Boolean hasBoundOrigin = false;
+    @NotNull public Boolean hasSetCanPickupItems = false;
+    @NotNull public Short hurtTime = 0;
+    @NotNull public Long leasherID = 0L;
+    @NotNull public Long limitedLife = 0L;
+    @NotNull public List<Item> mainHand = new ArrayList<>();
+    @NotNull public Boolean naturalSpawn = false;
+    @NotNull public List<Item> offHand = new ArrayList<>();
+    @Nullable public CompoundTag persistingOffers;
+    @Nullable public Integer persistingRiches;
+    @NotNull public Boolean surface = true;
+    @Nullable public Long targetCaptainID = 0L;
+    @NotNull public Long targetID = 0L;
+    @Nullable public Integer tradeExperience = 0;
+    @Nullable public Integer tradeTier = 0;
+    @Nullable public Boolean wantsToBeJockey = false;
+
     /**
      * 不同难度下实体空手能造成的伤害.
      * <p>
@@ -74,6 +106,14 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
 
     public EntityMob(IChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
+
+        if (nbt.contains(TAG_ACTIVE_EFFECTS)) {
+            this.activeEffects = nbt.getList(TAG_ACTIVE_EFFECTS, CompoundTag.class).getAll();
+        }
+        this.air = nbt.getShort(TAG_AIR);
+        this.armor = nbt.getList(TAG_ARMOR, CompoundTag.class).getAll().stream().map(NBTIO::getItemHelper).toList();
+        this.attackTime = nbt.getShort(TAG_ATTACK_TIME);
+        this.attributes = nbt.getList(TAG_ATTRIBUTES, CompoundTag.class).getAll();
     }
 
     @Override
