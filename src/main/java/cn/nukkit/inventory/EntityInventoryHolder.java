@@ -2,104 +2,74 @@ package cn.nukkit.inventory;
 
 
 
+import cn.nukkit.entity.EntityEquipment;
 import cn.nukkit.item.Item;
 
 public interface EntityInventoryHolder extends InventoryHolder {
 
-    EntityArmorInventory getArmorInventory();
-
-    EntityEquipmentInventory getEquipmentInventory();
+    EntityEquipment getEquipment();
 
     default boolean canEquipByDispenser() {
         return false;
     }
 
     default Item getHelmet() {
-        return getArmorInventory().getHelmet();
+        return getEquipment().getHead();
     }
 
     default boolean setHelmet(Item item) {
-        return getArmorInventory().setHelmet(item);
+        return getEquipment().setHead(item);
     }
 
     default Item getChestplate() {
-        return getArmorInventory().getChestplate();
+        return getEquipment().getChest();
     }
 
     default boolean setChestplate(Item item) {
-        return getArmorInventory().setChestplate(item);
+        return getEquipment().setChest(item);
     }
 
     default Item getLeggings() {
-        return getArmorInventory().getLeggings();
+        return getEquipment().getLegs();
     }
 
     default boolean setLeggings(Item item) {
-        return getArmorInventory().setLeggings(item);
+        return getEquipment().setLegs(item);
     }
 
     default Item getBoots() {
-        return getArmorInventory().getBoots();
+        return getEquipment().getFeet();
     }
 
     default boolean setBoots(Item item) {
-        return getArmorInventory().setBoots(item);
+        return getEquipment().setFeet(item);
     }
 
     default Item getItemInHand() {
-        return getEquipmentInventory().getItemInHand();
+        return getEquipment().getMainHand();
     }
 
     default Item getItemInOffhand() {
-        return this.getEquipmentInventory().getItemInOffhand();
+        return getEquipment().getOffHand();
     }
 
     default boolean setItemInHand(Item item) {
-        return getEquipmentInventory().setItemInHand(item);
+        return getEquipment().setMainHand(item);
     }
 
     default boolean setItemInHand(Item item, boolean send) {
-        return getEquipmentInventory().setItemInHand(item, send);
+        return getEquipment().setMainHand(item, send);
     }
 
     default boolean setItemInOffhand(Item item) {
-        return this.getEquipmentInventory().setItemInOffhand(item, true);
+        return getEquipment().setOffHand(item, true);
     }
 
     default boolean setItemInOffhand(Item item, boolean send) {
-        return this.getEquipmentInventory().setItemInOffhand(item, send);
+        return getEquipment().setOffHand(item, send);
     }
 
     default boolean equip(Item item) {
-        if(item.isHelmet()) {
-            if(item.getTier() > getHelmet().getTier()) {
-                this.getInventory().addItem(getHelmet());
-                this.setHelmet(item);
-                return true;
-            }
-        } else if(item.isChestplate()) {
-            if(item.getTier() > getChestplate().getTier()) {
-                this.getInventory().addItem(getChestplate());
-                this.setChestplate(item);
-                return true;
-            }
-        } else if(item.isLeggings()) {
-            if(item.getTier() > getLeggings().getTier()) {
-                this.getInventory().addItem(getLeggings());
-                this.setLeggings(item);
-                return true;
-            }
-        } else if(item.isBoots()) {
-            if(item.getTier() > getBoots().getTier()) {
-                this.getInventory().addItem(getBoots());
-                this.setBoots(item);
-                return true;
-            }
-        } else if(item.getTier() > getItemInHand().getTier()) {
-            this.getInventory().addItem(getItemInHand());
-            this.setItemInHand(item);
-            return true;
-        }
-        return false;
+        return this.getEquipment().equip(item);
     }
 }

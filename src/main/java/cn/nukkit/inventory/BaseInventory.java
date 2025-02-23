@@ -87,10 +87,7 @@ public abstract class BaseInventory implements Inventory {
     @Override
     public void setContents(Map<Integer, Item> items) {
         if (items.size() > this.size) {
-            TreeMap<Integer, Item> newItems = new TreeMap<>();
-            for (Map.Entry<Integer, Item> entry : items.entrySet()) {
-                newItems.put(entry.getKey(), entry.getValue());
-            }
+            TreeMap<Integer, Item> newItems = new TreeMap<>(items);
             items = newItems;
             newItems = new TreeMap<>();
             int i = 0;

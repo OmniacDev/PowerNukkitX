@@ -166,7 +166,7 @@ public class HumanInventory extends BaseInventory {
 
         MobEquipmentPacket pk = new MobEquipmentPacket();
         pk.item = item;
-        pk.inventorySlot = pk.hotbarSlot = this.getHeldItemIndex();
+        pk.slot = pk.selectedSlot = this.getHeldItemIndex();
 
         for (Player player : players) {
             pk.eid = this.getHolder().getEntity().getId();

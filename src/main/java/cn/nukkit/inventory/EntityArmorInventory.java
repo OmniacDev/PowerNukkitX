@@ -25,7 +25,7 @@ public class EntityArmorInventory extends BaseInventory {
      * @throws ClassCastException if the entity does not implements {@link InventoryHolder}
      */
     public EntityArmorInventory(InventoryHolder holder) {
-        super(holder, InventoryType.INVENTORY, 4);
+        super(holder, InventoryType.ARMOR, 4);
         this.entity = (Entity) holder;
     }
 
@@ -134,16 +134,6 @@ public class EntityArmorInventory extends BaseInventory {
         } else {
             player.dataPacket(mobArmorEquipmentPacket);
         }
-    }
-
-    @Override
-    public void onOpen(Player who) {
-        this.viewers.add(who);
-    }
-
-    @Override
-    public void onClose(Player who) {
-        this.viewers.remove(who);
     }
 
     @Override

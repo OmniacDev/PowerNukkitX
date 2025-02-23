@@ -46,7 +46,7 @@ public class EntityEquipmentInventory extends BaseInventory {
     public void sendSlot(int index, Player player) {
         MobEquipmentPacket mobEquipmentPacket = new MobEquipmentPacket();
         mobEquipmentPacket.eid = this.entity.getId();
-        mobEquipmentPacket.inventorySlot = mobEquipmentPacket.hotbarSlot = index;//todo check inventorySlot and hotbarSlot for MobEquipmentPacket
+        mobEquipmentPacket.slot = mobEquipmentPacket.selectedSlot = index;//todo check inventorySlot and hotbarSlot for MobEquipmentPacket
         mobEquipmentPacket.item = this.getItem(index);
         player.dataPacket(mobEquipmentPacket);
     }
@@ -61,11 +61,6 @@ public class EntityEquipmentInventory extends BaseInventory {
     @Override
     public boolean open(Player who) {
         return this.viewers.add(who);
-    }
-
-    @Override
-    public void onClose(Player who) {
-        this.viewers.remove(who);
     }
 
 

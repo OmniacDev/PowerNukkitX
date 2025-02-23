@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * @author MagicDroidX (Nukkit Project)
  */
 
-public abstract class EntityHumanoidMonster extends EntityMonster implements EntityInventoryHolder, EntityCanAttack {
+public abstract class EntityHumanoidMonster extends EntityMonster implements EntityCanAttack {
     private static final String TAG_ITEM_IN_HAND = "ItemInHand";
 
     @Nullable protected Item itemInHand;

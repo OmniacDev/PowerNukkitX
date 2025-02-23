@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @author MagicDroidX (Nukkit Project)
  */
 
-public abstract class EntityMonster extends EntityMob implements EntityInventoryHolder, EntityCanAttack {
+public abstract class EntityMonster extends EntityMob implements EntityCanAttack {
     private static final String TAG_SPAWNED_BY_NIGHT = "SpawnedByNight";
 
     @NotNull protected Boolean spawnedByNight = true;
@@ -48,7 +48,7 @@ public abstract class EntityMonster extends EntityMob implements EntityInventory
     public void setOnFire(int seconds) {
         int level = 0;
 
-        for (Item armor : this.getArmorInventory().getContents().values()) {
+        for (Item armor : this.getEquipment().getArmor()) {
             Enchantment fireProtection = armor.getEnchantment(Enchantment.ID_PROTECTION_FIRE);
 
             if (fireProtection != null && fireProtection.getLevel() > 0) {

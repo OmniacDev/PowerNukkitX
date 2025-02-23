@@ -5,6 +5,7 @@ import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.EntityEquipment;
 import cn.nukkit.entity.EntityInteractable;
 import cn.nukkit.entity.EntityNameable;
 import cn.nukkit.entity.effect.EffectType;
@@ -142,44 +143,44 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
             slot = getArmorSlot(itemArmor);
         } else if (hasItemInHand && (Objects.equals(item.getId(), BlockID.SKULL)) || Objects.equals(item.getBlockId(), BlockID.CARVED_PUMPKIN)) {
             isArmor = true;
-            slot = EntityArmorInventory.SLOT_HEAD;
+            slot = EntityEquipment.HEAD;
         } else if (hasItemInHand) {
             isArmor = false;
             if (item instanceof ItemShield) {
-                slot = EntityEquipmentInventory.OFFHAND;
+                slot = EntityEquipment.OFF_HAND;
             } else {
-                slot = EntityEquipmentInventory.MAIN_HAND;
+                slot = EntityEquipment.MAIN_HAND;
             }
         } else {
             double clickHeight = clickedPos.y - this.y;
             if (clickHeight >= 0.1 && clickHeight < 0.55 && !getBoots().isNull()) {
                 isArmor = true;
-                slot = EntityArmorInventory.SLOT_FEET;
+                slot = EntityEquipment.FEET;
             } else if (clickHeight >= 0.9 && clickHeight < 1.6) {
                 if (!getItemInOffhand().isNull()) {
                     isArmor = false;
-                    slot = EntityEquipmentInventory.OFFHAND;
+                    slot = EntityEquipment.OFF_HAND;
                 } else if (!getItemInHand().isNull()) {
                     isArmor = false;
-                    slot = EntityEquipmentInventory.MAIN_HAND;
+                    slot = EntityEquipment.MAIN_HAND;
                 } else if (!getChestplate().isNull()) {
                     isArmor = true;
-                    slot = EntityArmorInventory.SLOT_CHEST;
+                    slot = EntityEquipment.CHEST;
                 } else {
                     return false;
                 }
             } else if (clickHeight >= 0.4 && clickHeight < 1.2 && !getLeggings().isNull()) {
                 isArmor = true;
-                slot = EntityArmorInventory.SLOT_LEGS;
+                slot = EntityEquipment.LEGS;
             } else if (clickHeight >= 1.6 && !getHelmet().isNull()) {
                 isArmor = true;
-                slot = EntityArmorInventory.SLOT_HEAD;
+                slot = EntityEquipment.HEAD;
             } else if (!getItemInOffhand().isNull()) {
                 isArmor = false;
-                slot = EntityEquipmentInventory.OFFHAND;
+                slot = EntityEquipment.OFF_HAND;
             } else if (!getItemInHand().isNull()) {
                 isArmor = false;
-                slot = EntityEquipmentInventory.MAIN_HAND;
+                slot = EntityEquipment.MAIN_HAND;
             } else {
                 return false;
             }
@@ -191,12 +192,12 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
 
         boolean changed = false;
         if (isArmor) {
-            changed = this.tryChangeEquipment(player, ev.getItem(), slot, true);
-            slot = EntityEquipmentInventory.MAIN_HAND;
+            changed = this.tryChangeEquipment(player, ev.getItem(), slot);
+            slot = EntityEquipment.MAIN_HAND;
         }
 
         if (!changed) {
-            changed = this.tryChangeEquipment(player, ev.getItem(), slot, false);
+            changed = this.tryChangeEquipment(player, ev.getItem(), slot);
         }
 
         if (changed) {
@@ -206,8 +207,8 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
         return false; // Returning true would consume the item but tryChangeEquipment already manages the inventory
     }
 
-    private boolean tryChangeEquipment(Player player, Item handItem, int slot, boolean isArmorSlot) {
-        BaseInventory inventory = isArmorSlot ? getArmorInventory() : getEquipmentInventory();
+    private boolean tryChangeEquipment(Player player, Item handItem, int slot) {
+        BaseInventory inventory = getEquipment();
         Item item = inventory.getItem(slot);
 
         if (item.isNull() && !handItem.isNull()) {
@@ -321,12 +322,12 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
         pos.y = y + 1.4;
         level.dropItem(byAttack ? pos : this, Item.get(ItemID.ARMOR_STAND));
         level.dropItem(pos, getChestplate());
-        getEquipmentInventory().getContents().values().forEach(items -> this.level.dropItem(this, items));
-        getEquipmentInventory().clearAll();
+        level.dropItem(pos, getItemInHand());
+        level.dropItem(pos, getItemInOffhand());
 
         pos.y = y + 1.8;
         level.dropItem(pos, getHelmet());
-        getArmorInventory().clearAll();
+        getEquipment().clearAll();
 
         level.addSound(this, Sound.MOB_ARMOR_STAND_BREAK);
 

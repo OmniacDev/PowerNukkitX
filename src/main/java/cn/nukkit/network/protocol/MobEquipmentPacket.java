@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import cn.nukkit.network.connection.util.HandleByteBuf;
 import lombok.*;
 
 @Getter
@@ -17,26 +16,26 @@ import lombok.*;
 public class MobEquipmentPacket extends DataPacket {
     public long eid;
     public Item item;
-    public int inventorySlot;
-    public int hotbarSlot;
-    public int windowId;
+    public int slot;
+    public int selectedSlot;
+    public int containerId;
 
     @Override
     public void decode(HandleByteBuf byteBuf) {
         this.eid = byteBuf.readEntityRuntimeId(); //EntityRuntimeID
         this.item = byteBuf.readSlot();
-        this.inventorySlot = byteBuf.readByte();
-        this.hotbarSlot = byteBuf.readByte();
-        this.windowId = byteBuf.readByte();
+        this.slot = byteBuf.readByte();
+        this.selectedSlot = byteBuf.readByte();
+        this.containerId = byteBuf.readByte();
     }
 
     @Override
     public void encode(HandleByteBuf byteBuf) {
         byteBuf.writeEntityRuntimeId(this.eid); //EntityRuntimeID
         byteBuf.writeSlot(this.item);
-        byteBuf.writeByte((byte) this.inventorySlot);
-        byteBuf.writeByte((byte) this.hotbarSlot);
-        byteBuf.writeByte((byte) this.windowId);
+        byteBuf.writeByte((byte) this.slot);
+        byteBuf.writeByte((byte) this.selectedSlot);
+        byteBuf.writeByte((byte) this.containerId);
     }
 
     @Override

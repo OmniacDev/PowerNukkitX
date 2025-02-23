@@ -1,6 +1,7 @@
 package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.block.Block;
+import cn.nukkit.entity.EntityEquipment;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.data.EntityFlag;
@@ -36,7 +37,7 @@ public class PiglinTradeExecutor implements EntityControl, IBehaviorExecutor {
             if(entity instanceof EntityMonster mob) {
                 Item offhand = mob.getItemInOffhand();
                 if(offhand instanceof ItemGoldIngot && !mob.isBaby()) {
-                    mob.getEquipmentInventory().decreaseCount(OFFHAND);
+                    mob.getEquipment().decreaseCount(EntityEquipment.OFF_HAND);
                     Vector3 motion = entity.getDirectionVector().multiply(0.4);
                     entity.level.dropItem(entity.add(0, 1.3, 0), getDrop(), motion, 40);
                 }
@@ -114,8 +115,8 @@ public class PiglinTradeExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     public void clearOffhand(EntityMonster mob, Item item) {
-        new InventorySlice(mob.getEquipmentInventory(), 2, mob.getEquipmentInventory().getSize()).addItem(item);
-        mob.getEquipmentInventory().clear(OFFHAND);
+        mob.level.dropItem(mob, item); // TODO
+        mob.getEquipment().clear(EntityEquipment.OFF_HAND);
     }
 }
 

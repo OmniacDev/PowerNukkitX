@@ -49,11 +49,12 @@ public class PiglinTransformExecutor implements EntityControl, IBehaviorExecutor
         entityZombiePigman.setRotation(entity.yaw, entity.pitch);
         entityZombiePigman.spawnToAll();
         entityZombiePigman.level.addSound(entityZombiePigman, Sound.MOB_PIGLIN_CONVERTED_TO_ZOMBIFIED);
-        Inventory inventory = entityZombiePigman.getEquipmentInventory();
+        Inventory inventory = entityZombiePigman.getEquipment();
         for(int i = 2; i < inventory.getSize(); i++) {
             entityZombiePigman.level.dropItem(entityZombiePigman, inventory.getItem(i));
             inventory.clear(i);
         }
+        // TODO
         entityZombiePigman.addEffect(Effect.get(EffectType.NAUSEA).setDuration(15));
     }
 

@@ -108,7 +108,7 @@ public class EntityVindicator extends EntityIllager implements EntityWalkable {
 
     @Override
     public Integer getExperienceDrops() {
-        return Math.toIntExact(isBaby() ? 1 : 5 + (getArmorInventory().getContents().values().stream().filter(Item::isArmor).count() * ThreadLocalRandom.current().nextInt(1, 4)));
+        return Math.toIntExact(isBaby() ? 1 : 5 + (getEquipment().getContents().values().stream().filter(Item::isArmor).count() * ThreadLocalRandom.current().nextInt(1, 4)));
     }
 
     @Override

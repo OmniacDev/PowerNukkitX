@@ -234,9 +234,9 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
         List<Item> drops = new ArrayList<>();
         if(ThreadLocalRandom.current().nextInt(200) < 17) { // 8.5%
             drops.add(getItemInHand());
-            drops.addAll(getArmorInventory().getContents().values());
+            drops.addAll(getEquipment().getArmor());
         }
-        drops.addAll(new InventorySlice(getEquipmentInventory(), 1, getEquipmentInventory().getSize()).getContents().values());
+        drops.add(getItemInOffhand());
         return drops.toArray(Item.EMPTY_ARRAY);
     }
 
@@ -299,13 +299,13 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
 
     @Override
     public Integer getExperienceDrops() {
-        return Math.toIntExact(isBaby() ? 1 : 5 + (getArmorInventory().getContents().values().stream().filter(Item::isArmor).count() * ThreadLocalRandom.current().nextInt(1, 4)));
+        return Math.toIntExact(isBaby() ? 1 : 5 + (getEquipment().getArmor().stream().filter(Item::isArmor).count() * ThreadLocalRandom.current().nextInt(1, 4)));
     }
 
     @Override
     public boolean equip(Item item) {
          if((item.getTier() > getItemInHand().getTier() && getItemInHand().getTier() != ItemArmor.TIER_GOLD) || item.getTier() == ItemArmor.TIER_GOLD) {
-            this.getEquipmentInventory().addItem(getItemInHand());
+            this.level.dropItem(this, getItemInHand());
             this.setItemInHand(item);
             return true;
         }

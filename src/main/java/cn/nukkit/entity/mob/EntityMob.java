@@ -4,15 +4,15 @@ import cn.nukkit.Player;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCanAttack;
+import cn.nukkit.entity.EntityEquipment;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.mob.monster.EntityCreeper;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
-import cn.nukkit.inventory.EntityArmorInventory;
-import cn.nukkit.inventory.EntityEquipmentInventory;
 import cn.nukkit.inventory.EntityInventoryHolder;
 import cn.nukkit.inventory.Inventory;
+import cn.nukkit.inventory.InventoryHolder;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Sound;
@@ -76,6 +76,7 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
     @NotNull public Integer boundZ = 0;
     @NotNull public Boolean canPickupItems = false;
     @NotNull public Boolean dead = false;
+    @NotNull public Short deathTime = 0;
     @NotNull public Boolean hasBoundOrigin = false;
     @NotNull public Boolean hasSetCanPickupItems = false;
     @NotNull public Short hurtTime = 0;
@@ -87,11 +88,11 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
     @Nullable public CompoundTag persistingOffers;
     @Nullable public Integer persistingRiches;
     @NotNull public Boolean surface = true;
-    @Nullable public Long targetCaptainID = 0L;
+    @Nullable public Long targetCaptainID;
     @NotNull public Long targetID = 0L;
-    @Nullable public Integer tradeExperience = 0;
-    @Nullable public Integer tradeTier = 0;
-    @Nullable public Boolean wantsToBeJockey = false;
+    @Nullable public Integer tradeExperience;
+    @Nullable public Integer tradeTier;
+    @Nullable public Boolean wantsToBeJockey;
 
     /**
      * 不同难度下实体空手能造成的伤害.
@@ -99,44 +100,60 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
      * The damage that can be caused by the entity's empty hand at different difficulties.
      */
     protected float[] diffHandDamage;
+
     @Getter
-    private EntityEquipmentInventory equipmentInventory;
-    @Getter
-    private EntityArmorInventory armorInventory;
+    private EntityEquipment equipment;
 
     public EntityMob(IChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
 
-        if (nbt.contains(TAG_ACTIVE_EFFECTS)) {
-            this.activeEffects = nbt.getList(TAG_ACTIVE_EFFECTS, CompoundTag.class).getAll();
-        }
+        if (nbt.contains(TAG_ACTIVE_EFFECTS)) this.activeEffects = nbt.getList(TAG_ACTIVE_EFFECTS, CompoundTag.class).getAll();
         this.air = nbt.getShort(TAG_AIR);
         this.armor = nbt.getList(TAG_ARMOR, CompoundTag.class).getAll().stream().map(NBTIO::getItemHelper).toList();
         this.attackTime = nbt.getShort(TAG_ATTACK_TIME);
         this.attributes = nbt.getList(TAG_ATTRIBUTES, CompoundTag.class).getAll();
+        if (nbt.contains(TAG_BODY_ROT)) this.bodyRot = nbt.getFloat(TAG_BODY_ROT);
+        this.boundX = nbt.getInt(TAG_BOUND_X);
+        this.boundY = nbt.getInt(TAG_BOUND_Y);
+        this.boundZ = nbt.getInt(TAG_BOUND_Z);
+        this.canPickupItems = nbt.getBoolean(TAG_CAN_PICKUP_ITEMS);
+        this.dead = nbt.getBoolean(TAG_DEAD);
+        this.deathTime = nbt.getShort(TAG_DEATH_TIME);
+        this.hasBoundOrigin = nbt.getBoolean(TAG_HAS_BOUND_ORIGIN);
+        this.hasSetCanPickupItems = nbt.getBoolean(TAG_HAS_SET_CAN_PICKUP_ITEMS);
+        this.hurtTime = nbt.getShort(TAG_HURT_TIME);
+        this.leasherID = nbt.getLong(TAG_LEASHER_ID);
+        this.limitedLife = nbt.getLong(TAG_LIMITED_LIFE);
+        this.mainHand = nbt.getList(TAG_MAINHAND, CompoundTag.class).getAll().stream().map(NBTIO::getItemHelper).toList();
+        this.naturalSpawn = nbt.getBoolean(TAG_NATURAL_SPAWN);
+        this.offHand = nbt.getList(TAG_OFFHAND, CompoundTag.class).getAll().stream().map(NBTIO::getItemHelper).toList();
+        if (nbt.contains(TAG_PERSISTING_OFFERS)) this.persistingOffers = nbt.getCompound(TAG_PERSISTING_OFFERS);
+        if (nbt.contains(TAG_PERSISTING_RICHES)) this.persistingRiches = nbt.getInt(TAG_PERSISTING_RICHES);
+        this.surface = nbt.getBoolean(TAG_SURFACE);
+        if (nbt.contains(TAG_TARGET_CAPTAIN_ID)) this.targetCaptainID = nbt.getLong(TAG_TARGET_CAPTAIN_ID);
+        this.targetID = nbt.getLong(TAG_TARGET_ID);
+        if (nbt.contains(TAG_TRADE_EXPERIENCE)) this.tradeExperience = nbt.getInt(TAG_TRADE_EXPERIENCE);
+        if (nbt.contains(TAG_TRADE_TIER)) this.tradeTier = nbt.getInt(TAG_TRADE_TIER);
+        if (nbt.contains(TAG_WANTS_TO_BE_JOCKEY)) this.wantsToBeJockey = nbt.getBoolean(TAG_WANTS_TO_BE_JOCKEY);
     }
 
     @Override
     protected void initEntity() {
         super.initEntity();
 
-        this.equipmentInventory = new EntityEquipmentInventory(this);
-        this.armorInventory = new EntityArmorInventory(this);
+        this.equipment = new EntityEquipment(this);
 
         if (this.namedTag.contains(TAG_MAINHAND)) {
-            this.equipmentInventory.setItemInHand(NBTIO.getItemHelper(this.namedTag.getList(TAG_MAINHAND, CompoundTag.class).get(0)), true);
+            this.equipment.setMainHand(NBTIO.getItemHelper(this.namedTag.getList(TAG_MAINHAND, CompoundTag.class).get(0)), true);
         }
 
         if (this.namedTag.contains(TAG_OFFHAND)) {
-            this.equipmentInventory.setItemInOffhand(NBTIO.getItemHelper(this.namedTag.getList(TAG_OFFHAND, CompoundTag.class).get(0)), true);
+            this.equipment.setOffHand(NBTIO.getItemHelper(this.namedTag.getList(TAG_OFFHAND, CompoundTag.class).get(0)), true);
         }
 
         if (this.namedTag.contains(TAG_ARMOR)) {
             ListTag<CompoundTag> armorList = this.namedTag.getList(TAG_ARMOR, CompoundTag.class);
-            this.armorInventory.setItem(0, NBTIO.getItemHelper(armorList.get(0)));
-            this.armorInventory.setItem(1, NBTIO.getItemHelper(armorList.get(1)));
-            this.armorInventory.setItem(2, NBTIO.getItemHelper(armorList.get(2)));
-            this.armorInventory.setItem(3, NBTIO.getItemHelper(armorList.get(3)));
+            this.equipment.setArmor(armorList.getAll().stream().map(NBTIO::getItemHelper).toList());
         }
     }
 
@@ -152,31 +169,25 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
     @Override
     public void spawnTo(Player player) {
         super.spawnTo(player);
-        this.equipmentInventory.sendContents(player);
-        this.armorInventory.sendContents(player);
+        this.equipment.sendContents(player);
     }
 
     @Override
     public void saveNBT() {
         super.saveNBT();
 
-        ListTag<CompoundTag> mainHandList = new ListTag<CompoundTag>();
-        mainHandList.add(NBTIO.putItemHelper(this.equipmentInventory.getItemInHand()));
+        ListTag<CompoundTag> mainHand = new ListTag<>();
+        mainHand.add(NBTIO.putItemHelper(this.equipment.getMainHand()));
 
-        ListTag<CompoundTag> offHandList = new ListTag<CompoundTag>();
-        offHandList.add(NBTIO.putItemHelper(this.equipmentInventory.getItemInOffhand()));
+        ListTag<CompoundTag> offHand = new ListTag<>();
+        offHand.add(NBTIO.putItemHelper(this.equipment.getOffHand()));
 
-        this.namedTag.put(TAG_MAINHAND, mainHandList);
-        this.namedTag.put(TAG_OFFHAND, offHandList);
+        ListTag<CompoundTag> armor = new ListTag<>();
+        armor.setAll(this.equipment.getArmor().stream().map(NBTIO::putItemHelper).toList());
 
-        if (this.armorInventory != null) {
-            ListTag<CompoundTag> armorTag = new ListTag<>();
-            armorTag.add(NBTIO.putItemHelper(this.armorInventory.getItem(0), 0));
-            armorTag.add(NBTIO.putItemHelper(this.armorInventory.getItem(1), 1));
-            armorTag.add(NBTIO.putItemHelper(this.armorInventory.getItem(2), 2));
-            armorTag.add(NBTIO.putItemHelper(this.armorInventory.getItem(3), 3));
-            this.namedTag.putList(TAG_ARMOR,armorTag);
-        }
+        this.namedTag.put(TAG_MAINHAND, mainHand);
+        this.namedTag.put(TAG_OFFHAND, offHand);
+        this.namedTag.putList(TAG_ARMOR, armor);
     }
 
     public int getAdditionalArmor() {
@@ -199,10 +210,9 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
             int epf = 0;
 //            int toughness = 0;
 
-            var armorInventory = this.getArmorInventory();
-            for (Item armor : armorInventory.getContents().values()) {
+            for (Item armor : equipment.getArmor()) {
                 armorPoints += armor.getArmorPoints();
-                epf += calculateEnchantmentProtectionFactor(armor, source);
+                epf += (int) calculateEnchantmentProtectionFactor(armor, source);
                 //toughness += armor.getToughness();
             }
 
@@ -217,16 +227,14 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
         }
 
         if (super.attack(source)) {
-            Entity damager = null;
+            Entity damager;
 
             if (source instanceof EntityDamageByEntityEvent) {
                 damager = ((EntityDamageByEntityEvent) source).getDamager();
-            }
+            } else damager = null;
 
-            for (int slot = 0; slot < 4; slot++) {
-                Item armor = damageArmor(armorInventory.getItem(slot), damager);
-                armorInventory.setItem(slot, armor, armor.getId() != BlockID.AIR);
-            }
+            List<Item> damaged_armor = this.equipment.getArmor().stream().map(i -> damageArmor(i, damager)).toList();
+            this.equipment.setArmor(damaged_armor);
 
             return true;
         } else {
@@ -284,12 +292,7 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
 
     @Override
     public Inventory getInventory() {
-        return this.armorInventory;
-    }
-
-    @Override
-    public boolean canEquipByDispenser() {
-        return true;
+        return this.equipment;
     }
 
     @Override

@@ -136,7 +136,7 @@ public class EntityAllay extends EntityMob implements EntityFlyable, EntityOwnab
     @Override
     public Inventory getInventory() {
         //0 = hand, 1 = offhand
-        return new InventorySlice(getEquipmentInventory(), 2, 3);
+        return new InventorySlice(getEquipment(), 2, 3); // TODO
     }
 
     @Override

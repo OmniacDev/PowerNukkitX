@@ -86,8 +86,8 @@ public class HumanOffHandInventory extends BaseInventory {
         MobEquipmentPacket pk = new MobEquipmentPacket();
         pk.eid = this.getHolder().getEntity().getId();
         pk.item = item;
-        pk.inventorySlot = 1;
-        pk.windowId = SpecialWindowId.OFFHAND.getId();
+        pk.slot = 1;
+        pk.containerId = SpecialWindowId.OFFHAND.getId();
         return pk;
     }
 

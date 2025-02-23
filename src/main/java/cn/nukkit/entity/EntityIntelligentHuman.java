@@ -41,7 +41,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 
 
-public class EntityIntelligentHuman extends EntityIntelligent implements EntityInventoryHolder, IHuman {
+public class EntityIntelligentHuman extends EntityIntelligent implements IHuman {
     @Override
     public @NotNull String getIdentifier() {
         return PLAYER;
@@ -411,16 +411,6 @@ public class EntityIntelligentHuman extends EntityIntelligent implements EntityI
             shieldOffhand = damageArmor(shieldOffhand, entity, event);
             getOffhandInventory().setItem(0, shieldOffhand);
         }
-    }
-
-    @Override
-    public EntityArmorInventory getArmorInventory() {
-        return null;
-    }
-
-    @Override
-    public EntityEquipmentInventory getEquipmentInventory() {
-        return null;
     }
 
     public Item getHelmet() {

@@ -7,7 +7,6 @@ import cn.nukkit.inventory.HumanInventory;
 import cn.nukkit.inventory.Inventory;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.item.enchantment.loot.EnchantmentLootDigging;
 import cn.nukkit.network.process.DataPacketProcessor;
 import cn.nukkit.network.protocol.MobEquipmentPacket;
 import cn.nukkit.network.protocol.ProtocolInfo;
@@ -23,7 +22,7 @@ public class MobEquipmentProcessor extends DataPacketProcessor<MobEquipmentPacke
             return;
         }
 
-        if(pk.hotbarSlot < 0 || pk.hotbarSlot > 8) {
+        if(pk.selectedSlot < 0 || pk.selectedSlot > 8) {
             player.close("§cPacket handling error");
             return;
         }
@@ -46,23 +45,23 @@ public class MobEquipmentProcessor extends DataPacketProcessor<MobEquipmentPacke
             }
         }
 
-        Inventory inv = player.getWindowById(pk.windowId);
+        Inventory inv = player.getWindowById(pk.containerId);
 
         if (inv == null) {
-            log.debug("Player {} has no open container with window ID {}", player.getName(), pk.windowId);
+            log.debug("Player {} has no open container with window ID {}", player.getName(), pk.containerId);
             return;
         }
 
-        if (inv instanceof HumanInventory inventory && inventory.getHeldItemIndex() == pk.hotbarSlot) {
+        if (inv instanceof HumanInventory inventory && inventory.getHeldItemIndex() == pk.selectedSlot) {
             return;
         }
 
-        Item item = inv.getItem(pk.hotbarSlot);
+        Item item = inv.getItem(pk.selectedSlot);
 
         if (!item.equals(pk.item, false, true)) {
             Item fixItem = Item.get(item.getId(), item.getDamage(), item.getCount(), item.getCompoundTag());
             if (fixItem.equals(pk.item, false, true)) {
-                inv.setItem(pk.hotbarSlot, fixItem);
+                inv.setItem(pk.selectedSlot, fixItem);
             } else {
                 log.debug("Tried to equip {} but have {} in target slot", pk.item, fixItem);
                 inv.sendContents(player);
@@ -70,7 +69,7 @@ public class MobEquipmentProcessor extends DataPacketProcessor<MobEquipmentPacke
         }
 
         if (inv instanceof HumanInventory inventory) {
-            inventory.equipItem(pk.hotbarSlot);
+            inventory.equipItem(pk.selectedSlot);
         }
 
         player.setDataFlag(EntityFlag.USING_ITEM, false);
