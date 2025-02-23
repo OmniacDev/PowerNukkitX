@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -67,7 +68,6 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
 
     @Nullable public List<CompoundTag> activeEffects;
     @NotNull public Short air = 0;
-    @NotNull public List<Item> armor = new ArrayList<>();
     @NotNull public Short attackTime = 0;
     @NotNull public List<CompoundTag> attributes = new ArrayList<>();
     @Nullable public Float bodyRot;
@@ -82,9 +82,7 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
     @NotNull public Short hurtTime = 0;
     @NotNull public Long leasherID = 0L;
     @NotNull public Long limitedLife = 0L;
-    @NotNull public List<Item> mainHand = new ArrayList<>();
     @NotNull public Boolean naturalSpawn = false;
-    @NotNull public List<Item> offHand = new ArrayList<>();
     @Nullable public CompoundTag persistingOffers;
     @Nullable public Integer persistingRiches;
     @NotNull public Boolean surface = true;
@@ -102,14 +100,15 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
     protected float[] diffHandDamage;
 
     @Getter
-    private EntityEquipment equipment;
+    private final EntityEquipment equipment;
 
     public EntityMob(IChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
+        this.equipment = new EntityEquipment(this);
 
         if (nbt.contains(TAG_ACTIVE_EFFECTS)) this.activeEffects = nbt.getList(TAG_ACTIVE_EFFECTS, CompoundTag.class).getAll();
         this.air = nbt.getShort(TAG_AIR);
-        this.armor = nbt.getList(TAG_ARMOR, CompoundTag.class).getAll().stream().map(NBTIO::getItemHelper).toList();
+        this.equipment.setArmor(nbt.getList(TAG_ARMOR, CompoundTag.class).getAll().stream().map(NBTIO::getItemHelper).toList());
         this.attackTime = nbt.getShort(TAG_ATTACK_TIME);
         this.attributes = nbt.getList(TAG_ATTRIBUTES, CompoundTag.class).getAll();
         if (nbt.contains(TAG_BODY_ROT)) this.bodyRot = nbt.getFloat(TAG_BODY_ROT);
@@ -124,9 +123,9 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
         this.hurtTime = nbt.getShort(TAG_HURT_TIME);
         this.leasherID = nbt.getLong(TAG_LEASHER_ID);
         this.limitedLife = nbt.getLong(TAG_LIMITED_LIFE);
-        this.mainHand = nbt.getList(TAG_MAINHAND, CompoundTag.class).getAll().stream().map(NBTIO::getItemHelper).toList();
+        this.equipment.setMainHand(nbt.getList(TAG_MAINHAND, CompoundTag.class).getAll().stream().map(NBTIO::getItemHelper).toList().getFirst());
         this.naturalSpawn = nbt.getBoolean(TAG_NATURAL_SPAWN);
-        this.offHand = nbt.getList(TAG_OFFHAND, CompoundTag.class).getAll().stream().map(NBTIO::getItemHelper).toList();
+        this.equipment.setOffHand(nbt.getList(TAG_OFFHAND, CompoundTag.class).getAll().stream().map(NBTIO::getItemHelper).toList().getFirst());
         if (nbt.contains(TAG_PERSISTING_OFFERS)) this.persistingOffers = nbt.getCompound(TAG_PERSISTING_OFFERS);
         if (nbt.contains(TAG_PERSISTING_RICHES)) this.persistingRiches = nbt.getInt(TAG_PERSISTING_RICHES);
         this.surface = nbt.getBoolean(TAG_SURFACE);
@@ -140,21 +139,6 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
     @Override
     protected void initEntity() {
         super.initEntity();
-
-        this.equipment = new EntityEquipment(this);
-
-        if (this.namedTag.contains(TAG_MAINHAND)) {
-            this.equipment.setMainHand(NBTIO.getItemHelper(this.namedTag.getList(TAG_MAINHAND, CompoundTag.class).get(0)), true);
-        }
-
-        if (this.namedTag.contains(TAG_OFFHAND)) {
-            this.equipment.setOffHand(NBTIO.getItemHelper(this.namedTag.getList(TAG_OFFHAND, CompoundTag.class).get(0)), true);
-        }
-
-        if (this.namedTag.contains(TAG_ARMOR)) {
-            ListTag<CompoundTag> armorList = this.namedTag.getList(TAG_ARMOR, CompoundTag.class);
-            this.equipment.setArmor(armorList.getAll().stream().map(NBTIO::getItemHelper).toList());
-        }
     }
 
     public void spawnToAll() {
@@ -176,18 +160,34 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
     public void saveNBT() {
         super.saveNBT();
 
-        ListTag<CompoundTag> mainHand = new ListTag<>();
-        mainHand.add(NBTIO.putItemHelper(this.equipment.getMainHand()));
-
-        ListTag<CompoundTag> offHand = new ListTag<>();
-        offHand.add(NBTIO.putItemHelper(this.equipment.getOffHand()));
-
-        ListTag<CompoundTag> armor = new ListTag<>();
-        armor.setAll(this.equipment.getArmor().stream().map(NBTIO::putItemHelper).toList());
-
-        this.namedTag.put(TAG_MAINHAND, mainHand);
-        this.namedTag.put(TAG_OFFHAND, offHand);
-        this.namedTag.putList(TAG_ARMOR, armor);
+        if (activeEffects != null) this.namedTag.putList(TAG_ACTIVE_EFFECTS, new ListTag<>(activeEffects));
+        this.namedTag.putShort(TAG_AIR, air);
+        this.namedTag.putList(TAG_ARMOR, new ListTag<>(this.equipment.getArmor().stream().map(NBTIO::putItemHelper).toList()));
+        this.namedTag.putShort(TAG_ATTACK_TIME, attackTime);
+        this.namedTag.putList(TAG_ATTRIBUTES, new ListTag<>(this.attributes));
+        if (bodyRot != null) this.namedTag.putFloat(TAG_BODY_ROT, bodyRot);
+        this.namedTag.putInt(TAG_BOUND_X, boundX);
+        this.namedTag.putInt(TAG_BOUND_Y, boundY);
+        this.namedTag.putInt(TAG_BOUND_Z, boundZ);
+        this.namedTag.putBoolean(TAG_CAN_PICKUP_ITEMS, canPickupItems);
+        this.namedTag.putBoolean(TAG_DEAD, dead);
+        this.namedTag.putShort(TAG_DEATH_TIME, deathTime);
+        this.namedTag.putBoolean(TAG_HAS_BOUND_ORIGIN, hasBoundOrigin);
+        this.namedTag.putBoolean(TAG_HAS_SET_CAN_PICKUP_ITEMS, hasSetCanPickupItems);
+        this.namedTag.putShort(TAG_HURT_TIME, hurtTime);
+        this.namedTag.putLong(TAG_LEASHER_ID, leasherID);
+        this.namedTag.putLong(TAG_LIMITED_LIFE, limitedLife);
+        this.namedTag.putList(TAG_MAINHAND, new ListTag<>(List.of(NBTIO.putItemHelper(this.equipment.getMainHand()))));
+        this.namedTag.putBoolean(TAG_NATURAL_SPAWN, naturalSpawn);
+        this.namedTag.putList(TAG_OFFHAND, new ListTag<>(List.of(NBTIO.putItemHelper(this.equipment.getOffHand()))));
+        if (persistingOffers != null) this.namedTag.putCompound(TAG_PERSISTING_OFFERS, this.persistingOffers);
+        if (persistingRiches != null) this.namedTag.putInt(TAG_PERSISTING_RICHES, this.persistingRiches);
+        this.namedTag.putBoolean(TAG_SURFACE, this.surface);
+        if (targetCaptainID != null) this.namedTag.putLong(TAG_TARGET_CAPTAIN_ID, targetCaptainID);
+        this.namedTag.putLong(TAG_TARGET_ID, targetID);
+        if (tradeExperience != null) this.namedTag.putInt(TAG_TRADE_EXPERIENCE, tradeExperience);
+        if (tradeTier != null) this.namedTag.putInt(TAG_TRADE_TIER, tradeTier);
+        if (wantsToBeJockey != null) this.namedTag.putBoolean(TAG_WANTS_TO_BE_JOCKEY, wantsToBeJockey);
     }
 
     public int getAdditionalArmor() {
