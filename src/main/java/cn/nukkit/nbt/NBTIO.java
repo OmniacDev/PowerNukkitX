@@ -71,6 +71,8 @@ public class NBTIO {
     }
 
     public static Item getItemHelper(CompoundTag tag) {
+        if (tag == null) return Item.AIR;
+
         String name = tag.getString("Name");
         if (name == null || name.isBlank() || name.equals(BlockID.AIR)) {
             return Item.AIR;

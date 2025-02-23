@@ -27,14 +27,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-
-/**
- * @author MagicDroidX (Nukkit Project)
- */
+import java.util.stream.Stream;
 
 public abstract class EntityMob extends EntityIntelligent implements EntityInventoryHolder, EntityCanAttack {
     private static final String TAG_ACTIVE_EFFECTS = "ActiveEffects";
@@ -108,7 +104,7 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
 
         if (nbt.contains(TAG_ACTIVE_EFFECTS)) this.activeEffects = nbt.getList(TAG_ACTIVE_EFFECTS, CompoundTag.class).getAll();
         this.air = nbt.getShort(TAG_AIR);
-        this.equipment.setArmor(nbt.getList(TAG_ARMOR, CompoundTag.class).getAll().stream().map(NBTIO::getItemHelper).toList());
+        this.equipment.setArmor(Stream.concat(nbt.getList(TAG_ARMOR, CompoundTag.class).getAll().stream(), Stream.generate(() -> null)).limit(4).map(NBTIO::getItemHelper).toList());
         this.attackTime = nbt.getShort(TAG_ATTACK_TIME);
         this.attributes = nbt.getList(TAG_ATTRIBUTES, CompoundTag.class).getAll();
         if (nbt.contains(TAG_BODY_ROT)) this.bodyRot = nbt.getFloat(TAG_BODY_ROT);
@@ -123,9 +119,9 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
         this.hurtTime = nbt.getShort(TAG_HURT_TIME);
         this.leasherID = nbt.getLong(TAG_LEASHER_ID);
         this.limitedLife = nbt.getLong(TAG_LIMITED_LIFE);
-        this.equipment.setMainHand(nbt.getList(TAG_MAINHAND, CompoundTag.class).getAll().stream().map(NBTIO::getItemHelper).toList().getFirst());
+        this.equipment.setMainHand(Stream.concat(nbt.getList(TAG_MAINHAND, CompoundTag.class).getAll().stream(), Stream.generate(() -> null)).limit(1).map(NBTIO::getItemHelper).toList().getFirst());
         this.naturalSpawn = nbt.getBoolean(TAG_NATURAL_SPAWN);
-        this.equipment.setOffHand(nbt.getList(TAG_OFFHAND, CompoundTag.class).getAll().stream().map(NBTIO::getItemHelper).toList().getFirst());
+        this.equipment.setOffHand(Stream.concat(nbt.getList(TAG_OFFHAND, CompoundTag.class).getAll().stream(), Stream.generate(() -> null)).limit(1).map(NBTIO::getItemHelper).toList().getFirst());
         if (nbt.contains(TAG_PERSISTING_OFFERS)) this.persistingOffers = nbt.getCompound(TAG_PERSISTING_OFFERS);
         if (nbt.contains(TAG_PERSISTING_RICHES)) this.persistingRiches = nbt.getInt(TAG_PERSISTING_RICHES);
         this.surface = nbt.getBoolean(TAG_SURFACE);
