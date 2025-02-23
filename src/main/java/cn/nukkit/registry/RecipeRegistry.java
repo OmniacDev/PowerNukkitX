@@ -312,24 +312,6 @@ public class RecipeRegistry implements IRegistry<String, Recipe, Recipe> {
         return null;
     }
 
-    public Set<ModProcessRecipe> getModProcessRecipeMap() {
-        HashSet<ModProcessRecipe> result = new HashSet<>();
-        for (var s : recipeMaps.get(RecipeType.MOD_PROCESS).values()) {
-            result.addAll(Collections2.transform(s, d -> (ModProcessRecipe) d));
-        }
-        return result;
-    }
-
-    public ModProcessRecipe findModProcessRecipe(Item... items) {
-        Set<Recipe> recipes = recipeMaps.get(RecipeType.MOD_PROCESS).get(items.length);
-        if (recipes != null) {
-            for (var r : recipes) {
-                if (r.fastCheck(items)) return (ModProcessRecipe) r;
-            }
-        }
-        return null;
-    }
-
     public ByteBuf getCraftingPacket() {
         return buffer.copy();
     }
