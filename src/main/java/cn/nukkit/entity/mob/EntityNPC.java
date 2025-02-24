@@ -27,6 +27,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.nbt.tag.StringTag;
 import cn.nukkit.network.protocol.NPCRequestPacket;
 import cn.nukkit.utils.MainLogger;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +55,8 @@ public class EntityNPC extends EntityMob implements EntityInteractable {
 
     public EntityNPC(IChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
+
+        nbt.putIfNull(TAG_RAWTEXT_NAME, new StringTag("NPC"));
     }
 
 
