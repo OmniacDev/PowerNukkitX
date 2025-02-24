@@ -3126,13 +3126,11 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
         return validateAndSetIntProperty(identifier, value ? 1 : 0);
     }
 
-
     public final boolean setFloatEntityProperty(String identifier, float value) {
         if (!floatProperties.containsKey(identifier)) return false;
         floatProperties.put(identifier, value);
         return true;
     }
-
 
     public final boolean setEnumEntityProperty(String identifier, String value) {
         if (!intProperties.containsKey(identifier)) return false;
@@ -3152,6 +3150,31 @@ public abstract class Entity extends Location implements Metadatable, EntityID, 
             return false;
         }
         return false;
+    }
+
+    public final int getIntEntityProperty(String identifier) {
+        return intProperties.get(identifier);
+    }
+
+    public final boolean getBooleanEntityProperty(String identifier) {
+        return intProperties.get(identifier) == 1;
+    }
+
+    public final float getFloatEntityProperty(String identifier) {
+        return floatProperties.get(identifier);
+    }
+
+    public final String getEnumEntityProperty(String identifier) {
+        List<EntityProperty> entityPropertyList = EntityProperty.getEntityProperty(this.getIdentifier());
+
+        for (EntityProperty property : entityPropertyList) {
+            if (!identifier.equals(property.getIdentifier()) ||
+                    !(property instanceof EnumEntityProperty enumProperty)) {
+                continue;
+            }
+            return enumProperty.getEnums()[intProperties.get(identifier)];
+        }
+        return null;
     }
 
     private void initEntityProperties(String entityIdentifier) {
