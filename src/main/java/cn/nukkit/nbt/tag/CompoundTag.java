@@ -33,6 +33,13 @@ public class CompoundTag extends Tag {
         return this;
     }
 
+    public CompoundTag putIfNull(String name, Tag tag) {
+        if (!tags.containsKey(name)) {
+            tags.put(name, tag);
+        }
+        return this;
+    }
+
     public CompoundTag putByte(String name, int value) {
         tags.put(name, new ByteTag(value));
         return this;
@@ -127,10 +134,9 @@ public class CompoundTag extends Tag {
 
     public boolean containsList(String name, byte type) {
         Tag tag = tags.get(name);
-        if (!(tag instanceof ListTag)) {
+        if (!(tag instanceof ListTag<?> list)) {
             return false;
         }
-        ListTag<?> list = (ListTag<?>) tag;
         byte listType = list.type;
         return listType == 0 || listType == type;
     }
