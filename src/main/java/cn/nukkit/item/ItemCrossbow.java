@@ -15,9 +15,12 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.nbt.tag.Tag;
+import cn.nukkit.plugin.InternalPlugin;
 import cn.nukkit.utils.Utils;
 
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 
 public class ItemCrossbow extends ItemTool {
@@ -51,26 +54,29 @@ public class ItemCrossbow extends ItemTool {
 
         if (ticksUsed >= needTickUsed) {
             Item itemArrow;
-            Inventory inventory = player.getOffhandInventory();
-            if (!this.canLoad(itemArrow = inventory.getItem(0))) {
-                for (Item item : (inventory = player.getInventory()).getContents().values()) {
-                    if (this.canLoad(item)) {
-                        itemArrow = item;
-                        break;
-                    }
+            Optional<Map.Entry<Integer, Item>> inventoryOptional = player.getInventory().getContents().entrySet().stream().filter(item -> item.getValue() instanceof ItemArrow || item.getValue() instanceof ItemFireworkRocket).findFirst();
+            Optional<Map.Entry<Integer, Item>> offhandOptional = player.getOffhandInventory().getContents().entrySet().stream().filter(item -> item.getValue() instanceof ItemArrow || item.getValue() instanceof ItemFireworkRocket).findFirst();
+            Item item = null;
+            Inventory inventory = null;
+            if(offhandOptional.isPresent()) {
+                inventory = player.getOffhandInventory();
+                item = offhandOptional.get().getValue();
+            }
+            else if(inventoryOptional.isPresent())  {
+                inventory = player.getInventory();
+                item = inventoryOptional.get().getValue();;
+            }
+            if(inventory == null) return false;
+            if (!this.canLoad(item)) {
+                if (player.isCreative()) {
+                    this.loadArrow(player, item);
                 }
 
-                if (!this.canLoad(itemArrow)) {
-                    if (player.isCreative()) {
-                        this.loadArrow(player, Item.get(ARROW));
-                    }
-
-                    return true;
-                }
+                return true;
             }
 
             if (!this.isLoaded()) {
-                itemArrow = itemArrow.clone();
+                itemArrow = item.clone();
                 itemArrow.setCount(1);
 
                 if (!player.isCreative()) {
@@ -81,7 +87,6 @@ public class ItemCrossbow extends ItemTool {
                             if (this.getDamage() >= 385) {
                                 --this.count;
                             }
-
                             player.getInventory().setItemInHand(this);
                         }
                     }
@@ -91,7 +96,6 @@ public class ItemCrossbow extends ItemTool {
 
                 this.loadArrow(player, itemArrow);
             }
-
         }
         return true;
     }
@@ -129,6 +133,8 @@ public class ItemCrossbow extends ItemTool {
                 removeChargedItem(player);
             } else {
                 EntityArrow entity = new EntityArrow(player.chunk, nbt, player, true);
+                CompoundTag chargedItem = this.getNamedTag().getCompound("chargedItem");
+                entity.setItem((ItemArrow) Item.get(chargedItem.getString("Name"), chargedItem.getShort("Damage"), chargedItem.getByte("Count")));
                 EntityShootCrossbowEvent entityShootBowEvent = new EntityShootCrossbowEvent(player, this, entity);
                 Server.getInstance().getPluginManager().callEvent(entityShootBowEvent);
                 if (entityShootBowEvent.isCancelled()) {
@@ -162,6 +168,7 @@ public class ItemCrossbow extends ItemTool {
     public boolean onRelease(Player player, int ticksUsed) {
         return true;
     }
+
 
     public void loadArrow(Player player, Item arrow) {
         if (arrow != null) {

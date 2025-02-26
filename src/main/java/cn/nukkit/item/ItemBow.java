@@ -14,9 +14,12 @@ import cn.nukkit.level.Location;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 
+import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Stream;
 
@@ -50,19 +53,19 @@ public class ItemBow extends ItemTool {
     @Override
     public boolean onClickAir(Player player, Vector3 directionVector) {
         return player.isCreative() ||
-                Stream.of(player.getInventory(), player.getOffhandInventory())
-                        .anyMatch(inv -> inv.contains(Item.get(ItemID.ARROW)));
+                player.getInventory().getContents().values().stream().filter(item -> item instanceof ItemArrow).findFirst().isPresent() ||
+                player.getOffhandInventory().getContents().values().stream().filter(item -> item instanceof ItemArrow).findFirst().isPresent();
     }
 
     @Override
     public boolean onRelease(Player player, int ticksUsed) {
-        Item itemArrow = Item.get(Item.ARROW, 0, 1);
+        Optional<Map.Entry<Integer, Item>> inventoryOptional = player.getInventory().getContents().entrySet().stream().filter(item -> item.getValue() instanceof ItemArrow).findFirst();
+        Optional<Map.Entry<Integer, Item>> offhandOptional = player.getOffhandInventory().getContents().entrySet().stream().filter(item -> item.getValue() instanceof ItemArrow).findFirst();
 
-        Inventory inventory = player.getOffhandInventory();
 
-        if (!inventory.contains(itemArrow) && !(inventory = player.getInventory()).contains(itemArrow) && (player.isAdventure() || player.isSurvival())) {
+        if (offhandOptional.isEmpty() && inventoryOptional.isEmpty() && (player.isAdventure() || player.isSurvival())) {
             player.getOffhandInventory().sendContents(player);
-            inventory.sendContents(player);
+            player.getInventory().sendContents(player);
             return false;
         }
 
@@ -80,6 +83,8 @@ public class ItemBow extends ItemTool {
         Vector3 directionVector = player.getDirectionVector().multiply(1.1);
         arrowLocation = arrowLocation.add(directionVector.getX(), 0, directionVector.getZ());
         arrowLocation.setY(player.y + player.getEyeHeight() + directionVector.getY());
+
+        ItemArrow itemArrow = (ItemArrow) (offhandOptional.isPresent() ?  offhandOptional.get().getValue() : inventoryOptional.get().getValue());
 
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
@@ -101,11 +106,12 @@ public class ItemBow extends ItemTool {
         double f = Math.min((p * p + p * 2) / 3, 1) * maxForce;
 
         EntityArrow arrow = (EntityArrow) Entity.createEntity(Entity.ARROW, player.chunk, nbt, player, f == maxForce);
-
+        ItemArrow copy = (ItemArrow) itemArrow.clone();
+        copy.setCount(1);
+        arrow.setItem(copy);
         if (arrow == null) {
             return false;
         }
-
         EntityShootBowEvent entityShootBowEvent = new EntityShootBowEvent(player, this, arrow, f);
 
         if (f < 0.1 || ticksUsed < 3) {
@@ -134,7 +140,13 @@ public class ItemBow extends ItemTool {
 
             if (player.isAdventure() || player.isSurvival()) {
                 if (!infinity) {
-                    inventory.removeItem(itemArrow);
+                    if(offhandOptional.isPresent()) {
+                        int index = offhandOptional.get().getKey();
+                        player.getOffhandInventory().setItem(index, player.getOffhandInventory().getItem(index).decrement(1));
+                    } else {
+                        int index = inventoryOptional.get().getKey();
+                        player.getInventory().setItem(index, player.getInventory().getItem(index).decrement(1));
+                    }
                 }
                 if (!this.isUnbreakable()) {
                     Enchantment durability = this.getEnchantment(Enchantment.ID_DURABILITY);
