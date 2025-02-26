@@ -356,7 +356,7 @@ public class LevelDBProvider implements LevelProvider {
 
     @Override
     public Vector3 getSpawn() {
-        return this.levelDat.getSpawnPoint().asVector3();
+        return this.levelDat.getSpawnPoint().asVector3().add(0.5, 0, 0.5);
     }
 
     @Override
