@@ -7,7 +7,7 @@ import cn.nukkit.entity.ai.executor.IBehaviorExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.passive.EntityVillagerV2;
+import cn.nukkit.entity.mob.villagers.EntityVillagerV2;
 import cn.nukkit.level.Location;
 import cn.nukkit.math.BVector3;
 import cn.nukkit.math.BlockVector3;

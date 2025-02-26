@@ -4,7 +4,7 @@ import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.executor.EntityControl;
 import cn.nukkit.entity.ai.executor.IBehaviorExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
-import cn.nukkit.entity.passive.EntityVillagerV2;
+import cn.nukkit.entity.mob.villagers.EntityVillagerV2;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemFood;
 

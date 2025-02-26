@@ -7,7 +7,7 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.executor.EntityBreedingExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
-import cn.nukkit.entity.passive.EntityVillagerV2;
+import cn.nukkit.entity.mob.villagers.EntityVillagerV2;
 import cn.nukkit.level.Location;
 import cn.nukkit.network.protocol.EntityEventPacket;
 

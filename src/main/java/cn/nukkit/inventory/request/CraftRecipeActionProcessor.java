@@ -3,7 +3,7 @@ package cn.nukkit.inventory.request;
 import cn.nukkit.Player;
 import cn.nukkit.PlayerHandle;
 import cn.nukkit.Server;
-import cn.nukkit.entity.passive.EntityVillagerV2;
+import cn.nukkit.entity.mob.villagers.EntityVillagerV2;
 import cn.nukkit.event.inventory.CraftItemEvent;
 import cn.nukkit.event.inventory.EnchantItemEvent;
 import cn.nukkit.inventory.EnchantInventory;
