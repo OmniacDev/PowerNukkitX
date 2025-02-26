@@ -357,6 +357,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     private int exp = 0;
     private int expLevel = 0;
     private int enchSeed;
+    private int loadingScreenId = 0;
     private final int loaderId;
     private BlockVector3 lastBreakPosition = new BlockVector3();
     private boolean hasSeenCredits;
@@ -663,6 +664,9 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
         pk.x = (float) this.x;
         pk.y = (float) this.y;
         pk.z = (float) this.z;
+        pk.respawn = false;
+        pk.loadingScreenId = this.loadingScreenId++;
+
         this.dataPacket(pk);
 
         this.needDimensionChangeACK = true;
@@ -4920,6 +4924,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
             if (oldLevel.getDimension() != level.getDimension()) {
                 this.setDimension(level.getDimension());
             }
+
             updateTrackingPositions(true);
             return true;
         }
