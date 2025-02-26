@@ -44,6 +44,7 @@ import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.data.profession.Profession;
 import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.item.EntityItem;
+import cn.nukkit.entity.mob.animal.EntityAnimal;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityZombie;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
