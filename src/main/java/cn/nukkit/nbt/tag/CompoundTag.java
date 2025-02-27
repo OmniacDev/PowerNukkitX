@@ -40,6 +40,13 @@ public class CompoundTag extends Tag {
         return this;
     }
 
+    public CompoundTag putIfNull(CompoundTag other) {
+        for (Map.Entry<String, Tag> entry : other.tags.entrySet()) {
+            this.putIfNull(entry.getKey(), entry.getValue());
+        }
+        return this;
+    }
+
     public CompoundTag putByte(String name, int value) {
         tags.put(name, new ByteTag(value));
         return this;
