@@ -93,7 +93,7 @@ public class LevelPosition extends NamedPosition {
 
     @Override
     public String toString() {
-        return "Position(level=" + (this.isValid() ? this.getLevel().getName() : "null") + ",x=" + this.x + ",y=" + this.y + ",z=" + this.z + ")";
+        return "LevelPosition(level=" + (this.isValid() ? this.getLevel().getName() : "null") + ",x=" + this.x + ",y=" + this.y + ",z=" + this.z + ")";
     }
 
     @Override
