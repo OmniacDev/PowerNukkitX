@@ -21,6 +21,7 @@ import cn.nukkit.math.NukkitMath;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
+import cn.nukkit.nbt.tag.Tag;
 import cn.nukkit.utils.Utils;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -158,9 +159,9 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
 
         if (activeEffects != null) this.namedTag.putList(TAG_ACTIVE_EFFECTS, new ListTag<>(activeEffects));
         this.namedTag.putShort(TAG_AIR, air);
-        this.namedTag.putList(TAG_ARMOR, new ListTag<>(this.equipment.getArmor().stream().map(NBTIO::putItemHelper).toList()));
+        this.namedTag.putList(TAG_ARMOR, new ListTag<>(Tag.TAG_Compound, this.equipment.getArmor().stream().map(NBTIO::putItemHelper).toList()));
         this.namedTag.putShort(TAG_ATTACK_TIME, attackTime);
-        this.namedTag.putList(TAG_ATTRIBUTES, new ListTag<>(this.attributes));
+        this.namedTag.putList(TAG_ATTRIBUTES, new ListTag<>(Tag.TAG_Compound, this.attributes));
         if (bodyRot != null) this.namedTag.putFloat(TAG_BODY_ROT, bodyRot);
         this.namedTag.putInt(TAG_BOUND_X, boundX);
         this.namedTag.putInt(TAG_BOUND_Y, boundY);
@@ -173,9 +174,9 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
         this.namedTag.putShort(TAG_HURT_TIME, hurtTime);
         this.namedTag.putLong(TAG_LEASHER_ID, leasherID);
         this.namedTag.putLong(TAG_LIMITED_LIFE, limitedLife);
-        this.namedTag.putList(TAG_MAINHAND, new ListTag<>(List.of(NBTIO.putItemHelper(this.equipment.getMainHand()))));
+        this.namedTag.putList(TAG_MAINHAND, new ListTag<>(Tag.TAG_Compound, List.of(NBTIO.putItemHelper(this.equipment.getMainHand()))));
         this.namedTag.putBoolean(TAG_NATURAL_SPAWN, naturalSpawn);
-        this.namedTag.putList(TAG_OFFHAND, new ListTag<>(List.of(NBTIO.putItemHelper(this.equipment.getOffHand()))));
+        this.namedTag.putList(TAG_OFFHAND, new ListTag<>(Tag.TAG_Compound, List.of(NBTIO.putItemHelper(this.equipment.getOffHand()))));
         if (persistingOffers != null) this.namedTag.putCompound(TAG_PERSISTING_OFFERS, this.persistingOffers);
         if (persistingRiches != null) this.namedTag.putInt(TAG_PERSISTING_RICHES, this.persistingRiches);
         this.namedTag.putBoolean(TAG_SURFACE, this.surface);
