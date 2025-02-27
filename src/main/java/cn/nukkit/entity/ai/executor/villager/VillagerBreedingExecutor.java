@@ -8,7 +8,7 @@ import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.executor.EntityBreedingExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.mob.villagers.EntityVillagerV2;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.network.protocol.EntityEventPacket;
 
 import java.util.Arrays;
@@ -49,7 +49,7 @@ public class VillagerBreedingExecutor extends EntityBreedingExecutor {
         for (int x = -range; x <= range; x++) {
             for (int z = -range; z <= range; z++) {
                 for (int y = -lookY; y <= lookY; y++) {
-                    Location lookLocation = entity.add(x, y, z);
+                    Transform lookLocation = entity.add(x, y, z);
                     Block lookBlock = lookLocation.getLevelBlock();
                     if (lookBlock instanceof BlockBed bed) {
                         if (!bed.isHeadPiece() && Arrays.stream(entity.getLevel().getEntities()).noneMatch(entity1 -> entity1 instanceof EntityVillagerV2 v && v.getMemoryStorage().notEmpty(CoreMemoryTypes.OCCUPIED_BED) && v.getBed().equals(bed))) {

@@ -2,8 +2,8 @@ package cn.nukkit.block;
 
 import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Location;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Transform;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.BlockVector3;
 import cn.nukkit.math.Vector3;
@@ -98,7 +98,7 @@ public interface BlockEntityHolder<E extends BlockEntity> {
     int getFloorZ();
 
     @NotNull
-    Location getLocation();
+    Transform getLocation();
 
     Level getLevel();
 
@@ -138,7 +138,7 @@ public interface BlockEntityHolder<E extends BlockEntity> {
     default Block getBlock() {
         if (this instanceof Block block) {
             return block;
-        } else if (this instanceof Position position) {
+        } else if (this instanceof LevelPosition position) {
             return position.getLevelBlock();
         } else if (this instanceof Vector3 vector3) {
             return getLevel().getBlock(vector3);

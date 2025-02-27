@@ -6,7 +6,7 @@ import cn.nukkit.block.property.CommonPropertyMap;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.level.ParticleEffect;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.utils.Faceable;
 import cn.nukkit.utils.random.NukkitRandom;
@@ -146,7 +146,7 @@ public class BlockSmallDripleafBlock extends BlockFlowable implements Faceable {
         return false;
     }
 
-    public boolean canKeepAlive(Position pos) {
+    public boolean canKeepAlive(LevelPosition pos) {
         Block blockDown = this.level.getBlock(pos.getSide(BlockFace.DOWN));
         Block blockHere = this.level.getBlock(pos, 1);
         Block blockUp = this.level.getBlock(pos.getSide(BlockFace.UP));

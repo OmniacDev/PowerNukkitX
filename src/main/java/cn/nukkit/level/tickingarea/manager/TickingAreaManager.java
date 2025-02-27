@@ -1,6 +1,6 @@
 package cn.nukkit.level.tickingarea.manager;
 
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.level.tickingarea.TickingArea;
 import cn.nukkit.level.tickingarea.storage.TickingAreaStorage;
 
@@ -29,7 +29,7 @@ public abstract class TickingAreaManager {
 
     public abstract TickingArea getTickingAreaByChunk(String levelName, TickingArea.ChunkPos chunkPos);
 
-    public abstract TickingArea getTickingAreaByPos(Position pos);
+    public abstract TickingArea getTickingAreaByPos(LevelPosition pos);
 
     public abstract void loadAllTickingArea();
 

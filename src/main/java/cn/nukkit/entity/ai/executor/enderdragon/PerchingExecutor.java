@@ -1,7 +1,6 @@
 package cn.nukkit.entity.ai.executor.enderdragon;
 
 import cn.nukkit.Player;
-import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.executor.EntityControl;
@@ -10,10 +9,9 @@ import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.effect.Effect;
 import cn.nukkit.entity.effect.PotionType;
 import cn.nukkit.entity.item.EntityAreaEffectCloud;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 
@@ -38,7 +36,7 @@ public class PerchingExecutor implements EntityControl, IBehaviorExecutor {
                     removeRouteTarget(entity);
                     setLookTarget(entity, player);
                     Vector3 toPlayerVector = new Vector3(player.x - entity.x, player.y - entity.y, player.z - entity.z).normalize();
-                    Location location = entity.getLocation().add(toPlayerVector.multiply(10));
+                    Transform location = entity.getLocation().add(toPlayerVector.multiply(10));
                     location.y = location.level.getHighestBlockAt(location.toHorizontal()) + 1;
                     EntityAreaEffectCloud areaEffectCloud = (EntityAreaEffectCloud) Entity.createEntity(Entity.AREA_EFFECT_CLOUD, location.getChunk(),
                             new CompoundTag().putList("Pos", new ListTag<>()

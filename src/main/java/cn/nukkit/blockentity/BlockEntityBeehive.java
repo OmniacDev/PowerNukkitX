@@ -6,7 +6,7 @@ import cn.nukkit.block.BlockBeehive;
 import cn.nukkit.block.BlockLiquid;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.mob.animal.EntityBee;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.BlockFace;
@@ -246,8 +246,8 @@ public class BlockEntityBeehive extends BlockEntity {
 
         CompoundTag saveData = occupant.saveData.copy();
 
-        Position lookAt;
-        Position spawnPosition;
+        LevelPosition lookAt;
+        LevelPosition spawnPosition;
         if (validFaces != null) {
             BlockFace face = validFaces.get(RANDOM.nextInt(validFaces.size()));
             spawnPosition = add(

@@ -1,10 +1,9 @@
 package cn.nukkit.blockentity;
 
 import cn.nukkit.Player;
-import cn.nukkit.Server;
 import cn.nukkit.block.BlockCauldron;
 import cn.nukkit.block.BlockID;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -128,7 +127,7 @@ public class BlockEntityCauldron extends BlockEntitySpawnable {
         Player[] viewers = this.level.getChunkPlayers(getChunkX(), getChunkZ()).values().toArray(Player.EMPTY_ARRAY);
         this.level.sendBlocks(viewers, new Vector3[]{block});
         super.spawnToAll();
-        Location location = getLocation();
+        Transform location = getLocation();
         getLevel().getScheduler().scheduleTask(null, () -> {
             if (isValid()) {
                 BlockEntity cauldron = this.level.getBlockEntity(location);

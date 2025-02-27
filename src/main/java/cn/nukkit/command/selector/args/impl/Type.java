@@ -7,7 +7,7 @@ import cn.nukkit.command.selector.SelectorType;
 import cn.nukkit.command.selector.args.CachedSimpleSelectorArgument;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.custom.CustomEntity;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.registry.Registries;
 import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +30,7 @@ public class Type extends CachedSimpleSelectorArgument {
     }
 
     @Override
-    protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location basePos, String... arguments) {
+    protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Transform basePos, String... arguments) {
         final var have = new ArrayList<String>();
         final var dontHave = new ArrayList<String>();
         for (var type : arguments) {

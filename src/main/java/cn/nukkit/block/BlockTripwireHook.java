@@ -5,7 +5,7 @@ import cn.nukkit.event.block.BlockRedstoneEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemBlock;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
 import cn.nukkit.math.BlockFace;
@@ -112,7 +112,7 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
         }
 
         BlockFace facing = this.getFacing();
-        Position position = this.getLocation();
+        LevelPosition position = this.getLocation();
         boolean wasConnected = this.isAttached();
         boolean wasPowered = this.isPowered();
 
@@ -162,7 +162,7 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
         updatedHook.setPowered(isPowered);
 
         if (foundPairedHook) {
-            Position pairedPos = position.getSide(facing, pairedHookDistance);
+            LevelPosition pairedPos = position.getSide(facing, pairedHookDistance);
             BlockFace pairedFace = facing.getOpposite();
             updatedHook.setFace(pairedFace);
             this.level.setBlock(pairedPos, updatedHook, true, true);

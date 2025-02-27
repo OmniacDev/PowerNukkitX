@@ -7,7 +7,7 @@ import cn.nukkit.entity.projectile.EntitySmallFireball;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
 import cn.nukkit.math.BlockFace;
@@ -145,7 +145,7 @@ public class BlockTnt extends BlockSolid implements RedstoneComponent, Natural {
     }
 
     @Override
-    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Position position, @NotNull Vector3 motion) {
+    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull LevelPosition position, @NotNull Vector3 motion) {
         //TODO: Wither skull, ghast fireball
         if (projectile instanceof EntitySmallFireball ||
                 (projectile.isOnFire() && projectile instanceof EntityArrow)) {

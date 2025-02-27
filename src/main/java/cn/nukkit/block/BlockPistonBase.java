@@ -10,7 +10,7 @@ import cn.nukkit.event.block.BlockPistonEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
@@ -280,7 +280,7 @@ public abstract class BlockPistonBase extends BlockTransparent implements Faceab
                 }
                 oldPosList.add(oldPos);
 
-                blockEntityHolderList.add((BlockEntityHolder<?>) Block.get(MOVING_BLOCK, Position.fromObject(newPos, this.level)));
+                blockEntityHolderList.add((BlockEntityHolder<?>) Block.get(MOVING_BLOCK, LevelPosition.fromObject(newPos, this.level)));
                 nbtList.add(nbt);
             }
         }

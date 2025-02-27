@@ -5,8 +5,8 @@ import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.lang.CommandOutputContainer;
 import cn.nukkit.lang.TextContainer;
-import cn.nukkit.level.Location;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Transform;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.permission.Permissible;
 import org.jetbrains.annotations.NotNull;
 
@@ -126,15 +126,15 @@ public interface CommandSender extends Permissible {
      * @return 返回发送者的Position<br>return the sender's position.
      */
     @NotNull
-    default Position getPosition() {
-        return new Position(0, 0, 0, Server.getInstance().getDefaultLevel());
+    default LevelPosition getPosition() {
+        return new LevelPosition(0, 0, 0, Server.getInstance().getDefaultLevel());
     }
 
     /**
      * @return 返回发送者克隆过的Location<br>return the sender's location.
      */
     @NotNull
-    default Location getLocation() {
-        return new Location(0, 0, 0, Server.getInstance().getDefaultLevel());
+    default Transform getLocation() {
+        return new Transform(0, 0, 0, Server.getInstance().getDefaultLevel());
     }
 }

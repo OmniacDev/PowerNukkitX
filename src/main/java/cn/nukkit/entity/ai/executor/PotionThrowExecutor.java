@@ -12,7 +12,7 @@ import cn.nukkit.entity.effect.EffectType;
 import cn.nukkit.entity.projectile.throwable.EntitySplashPotion;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.FloatTag;
@@ -77,7 +77,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Location clone = this.target.clone();
+        Transform clone = this.target.clone();
 
         if (entity.distanceSquared(target) > maxShootDistanceSquared) {
             setRouteTarget(entity, clone);
@@ -132,7 +132,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
 
     protected void throwPotion(EntityLiving entity) {
 
-        Location potionLocation = entity.getLocation();
+        Transform potionLocation = entity.getLocation();
         Vector3 directionVector = entity.getDirectionVector();
         potionLocation.setY(entity.y + entity.getEyeHeight() + directionVector.getY());
         CompoundTag nbt = new CompoundTag()

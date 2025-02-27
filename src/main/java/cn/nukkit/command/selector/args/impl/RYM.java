@@ -6,14 +6,14 @@ import cn.nukkit.command.selector.ParseUtils;
 import cn.nukkit.command.selector.SelectorType;
 import cn.nukkit.command.selector.args.CachedSimpleSelectorArgument;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 
 import java.util.function.Predicate;
 
 
 public class RYM extends CachedSimpleSelectorArgument {
     @Override
-    protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location basePos, String... arguments) throws SelectorSyntaxException {
+    protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Transform basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
         ParseUtils.cannotReversed(arguments[0]);
         final var rym = Double.parseDouble(arguments[0]);

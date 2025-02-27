@@ -7,7 +7,7 @@ import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.command.tree.ParamList;
 import cn.nukkit.command.utils.CommandLogger;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.level.tickingarea.TickingArea;
 import cn.nukkit.level.tickingarea.manager.TickingAreaManager;
 import cn.nukkit.math.Vector2;
@@ -62,8 +62,8 @@ public class TickingAreaCommand extends VanillaCommand {
         Level level = sender.getPosition().getLevel();
         switch (result.getKey()) {
             case "add-pos" -> {
-                Position from = list.getResult(1);
-                Position to = list.getResult(2);
+                LevelPosition from = list.getResult(1);
+                LevelPosition to = list.getResult(2);
                 String name = "";//will auto generate name if not set, like "Area0"
                 if (list.hasResult(3))
                     name = list.getResult(3);
@@ -82,7 +82,7 @@ public class TickingAreaCommand extends VanillaCommand {
                 return 1;
             }
             case "add-circle" -> {
-                Position center = list.getResult(2);
+                LevelPosition center = list.getResult(2);
                 int radius = list.getResult(3);
                 String name = "";//will auto generate name if not set, like "Area0"
                 if (list.hasResult(4))
@@ -108,7 +108,7 @@ public class TickingAreaCommand extends VanillaCommand {
                 return 1;
             }
             case "remove-pos" -> {
-                Position pos = list.getResult(1);
+                LevelPosition pos = list.getResult(1);
                 if (manager.getTickingAreaByPos(pos) == null) {
                     log.addSuccess("commands.tickingarea-remove.failure", String.valueOf((int) pos.x), String.valueOf((int) pos.y), String.valueOf((int) pos.z)).output();
                     return 0;

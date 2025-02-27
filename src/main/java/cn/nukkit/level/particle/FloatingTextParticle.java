@@ -7,7 +7,7 @@ import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.*;
 import cn.nukkit.utils.SerializedImage;
@@ -36,11 +36,11 @@ public class FloatingTextParticle extends Particle {
     protected boolean invisible = false;
     protected EntityDataMap entityData = new EntityDataMap();
 
-    public FloatingTextParticle(Location location, String title) {
+    public FloatingTextParticle(Transform location, String title) {
         this(location, title, null);
     }
 
-    public FloatingTextParticle(Location location, String title, String text) {
+    public FloatingTextParticle(Transform location, String title, String text) {
         this(location.getLevel(), location, title, text);
     }
 

@@ -15,7 +15,7 @@ import cn.nukkit.inventory.InventoryHolder;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemMinecart;
 import cn.nukkit.level.GameRule;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.*;
 import cn.nukkit.nbt.NBTIO;
@@ -199,8 +199,8 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
 
             setRotation(yawToChange, pitch);
 
-            Location from = new Location(lastX, lastY, lastZ, lastYaw, lastPitch, level);
-            Location to = new Location(this.x, this.y, this.z, this.yaw, this.pitch, level);
+            Transform from = new Transform(lastX, lastY, lastZ, lastYaw, lastPitch, level);
+            Transform to = new Transform(this.x, this.y, this.z, this.yaw, this.pitch, level);
 
             this.getServer().getPluginManager().callEvent(new VehicleUpdateEvent(this));
 

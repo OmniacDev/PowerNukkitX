@@ -2,7 +2,7 @@ package cn.nukkit.event.level;
 
 import cn.nukkit.event.HandlerList;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 
 /**
  * @author MagicDroidX (Nukkit Project)
@@ -15,14 +15,14 @@ public class SpawnChangeEvent extends LevelEvent {
         return handlers;
     }
 
-    private final Position previousSpawn;
+    private final LevelPosition previousSpawn;
 
-    public SpawnChangeEvent(Level level, Position previousSpawn) {
+    public SpawnChangeEvent(Level level, LevelPosition previousSpawn) {
         super(level);
         this.previousSpawn = previousSpawn;
     }
 
-    public Position getPreviousSpawn() {
+    public LevelPosition getPreviousSpawn() {
         return previousSpawn;
     }
 }

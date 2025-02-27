@@ -14,7 +14,7 @@ import cn.nukkit.entity.EntityVariant;
 import cn.nukkit.event.player.PlayerBucketEmptyEvent;
 import cn.nukkit.event.player.PlayerBucketFillEvent;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.particle.ExplodeParticle;
 import cn.nukkit.level.vibration.VibrationEvent;
@@ -372,7 +372,7 @@ public class ItemBucket extends Item {
         spawnFishEntity(block.add(0.5, 0.5, 0.5));
     }
 
-    public void spawnFishEntity(Position spawnPos) {
+    public void spawnFishEntity(LevelPosition spawnPos) {
         var fishEntityId = getFishEntityId();
         if (fishEntityId != null) {
             var fishEntity = Entity.createEntity(fishEntityId, spawnPos);

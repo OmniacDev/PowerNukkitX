@@ -57,7 +57,6 @@ import cn.nukkit.metadata.MetadataValue;
 import cn.nukkit.metadata.Metadatable;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.nbt.tag.StringTag;
@@ -549,7 +548,7 @@ public class Level implements Metadatable {
 
     public void initLevel() {
         this.gameRules = this.requireProvider().getGamerules();
-        Position spawn = this.getSpawnLocation();
+        LevelPosition spawn = this.getSpawnLocation();
         if (!getChunk(spawn.getChunkX(), spawn.getChunkZ(), true).getChunkState().canSend()) {
             this.generateChunk(spawn.getChunkX(), spawn.getChunkZ());
         }
@@ -2382,7 +2381,7 @@ public class Level implements Metadatable {
     public void breakBlock(Block block) {
         if(block.isValid() && block.level == this) {
             this.setBlock(block, Block.get(Block.AIR));
-            Position position = block.add(0.5, 0.5, 0.5);
+            LevelPosition position = block.add(0.5, 0.5, 0.5);
             this.addParticle(new DestroyBlockParticle(position, block));
             this.getVibrationManager().callVibrationEvent(new VibrationEvent(null, position, VibrationType.BLOCK_DESTROY));
         }
@@ -3415,12 +3414,12 @@ public class Level implements Metadatable {
         return chunk != null && chunk.isPopulated();
     }
 
-    public Position getSpawnLocation() {
-        return Position.fromObject(this.requireProvider().getSpawn(), this);
+    public LevelPosition getSpawnLocation() {
+        return LevelPosition.fromObject(this.requireProvider().getSpawn(), this);
     }
 
     public void setSpawnLocation(Vector3 pos) {
-        Position previousSpawn = this.getSpawnLocation();
+        LevelPosition previousSpawn = this.getSpawnLocation();
         this.requireProvider().setSpawn(pos);
         this.server.getPluginManager().callEvent(new SpawnChangeEvent(this, previousSpawn));
         this.getPlayers().values().stream().filter(player ->
@@ -3428,8 +3427,8 @@ public class Level implements Metadatable {
         ).forEach(player -> player.setSpawn(this.getSpawnLocation(), SpawnPointType.WORLD));
     }
 
-    public Position getFuzzySpawnLocation() {
-        Position spawn = getSpawnLocation();
+    public LevelPosition getFuzzySpawnLocation() {
+        LevelPosition spawn = getSpawnLocation();
         int radius = gameRules.getInteger(GameRule.SPAWN_RADIUS);
         if (radius > 0) {
             ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -3776,34 +3775,34 @@ public class Level implements Metadatable {
         return x == spawnCX && z == spawnCZ;
     }
 
-    public Position getSafeSpawn() {
+    public LevelPosition getSafeSpawn() {
         return getSafeSpawn(null);
     }
 
-    public Position getSafeSpawn(Vector3 spawn) {
+    public LevelPosition getSafeSpawn(Vector3 spawn) {
         return getSafeSpawn(spawn, getServer().getSettings().playerSettings().spawnRadius());
     }
 
-    public Position getSafeSpawn(Vector3 spawn, int horizontalMaxOffset) {
+    public LevelPosition getSafeSpawn(Vector3 spawn, int horizontalMaxOffset) {
         return getSafeSpawn(spawn, horizontalMaxOffset, true);
     }
 
-    public Position getSafeSpawn(Vector3 spawn, int horizontalMaxOffset, boolean allowWaterUnder) {
+    public LevelPosition getSafeSpawn(Vector3 spawn, int horizontalMaxOffset, boolean allowWaterUnder) {
         if (spawn == null)
             spawn = this.getFuzzySpawnLocation();
         if (spawn == null)
             return null;
         if (standable(spawn, true))
-            return Position.fromObject(spawn, this);
+            return LevelPosition.fromObject(spawn, this);
 
         int maxY = isNether() ? 127 : (isOverWorld() ? 319 : 255);
         int minY = isOverWorld() ? -64 : 0;
 
         for (int horizontalOffset = 0; horizontalOffset <= horizontalMaxOffset; horizontalOffset++) {
             for (int y = maxY; y >= minY; y--) {
-                Position pos = Position.fromObject(spawn, this);
+                LevelPosition pos = LevelPosition.fromObject(spawn, this);
                 pos.setY(y);
-                Position newSpawn;
+                LevelPosition newSpawn;
                 if (standable(newSpawn = pos.add(horizontalOffset, 0, horizontalOffset), allowWaterUnder))
                     return newSpawn;
                 if (standable(newSpawn = pos.add(horizontalOffset, 0, -horizontalOffset), allowWaterUnder))
@@ -3816,7 +3815,7 @@ public class Level implements Metadatable {
         }
 
         log.warn("cannot find a safe spawn around " + spawn.asBlockVector3() + "!");
-        return Position.fromObject(spawn, this);
+        return LevelPosition.fromObject(spawn, this);
     }
 
     public boolean standable(Vector3 vec) {
@@ -3824,7 +3823,7 @@ public class Level implements Metadatable {
     }
 
     public boolean standable(Vector3 vec, boolean allowWaterUnder) {
-        Position pos = Position.fromObject(vec, this);
+        LevelPosition pos = LevelPosition.fromObject(vec, this);
         Block blockUnder = pos.add(0, -1, 0).getLevelBlock(0, true);
         Block block = pos.getLevelBlock(0, true);
         Block blockUpper = pos.add(0, 1, 0).getLevelBlock(0, true);

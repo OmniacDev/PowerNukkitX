@@ -10,7 +10,7 @@ import cn.nukkit.command.tree.ParamList;
 import cn.nukkit.command.utils.CommandLogger;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 
 import java.util.Map;
 
@@ -32,7 +32,7 @@ public class SetBlockCommand extends VanillaCommand {
     @Override
     public int execute(CommandSender sender, String commandLabel, Map.Entry<String, ParamList> result, CommandLogger log) {
         var list = result.getValue();
-        Position position = list.getResult(0);
+        LevelPosition position = list.getResult(0);
         Block block = list.getResult(1);
         try {
             if (list.hasResult(2)) {

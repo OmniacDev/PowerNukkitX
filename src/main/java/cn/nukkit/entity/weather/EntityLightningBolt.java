@@ -11,7 +11,7 @@ import cn.nukkit.event.block.BlockFadeEvent;
 import cn.nukkit.event.block.BlockIgniteEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.GameRule;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.level.particle.ElectricSparkParticle;
@@ -122,14 +122,14 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
 
             Block down = getLevel().getBlock(down());
             if (isVulnerableOxidizable(down)) {
-                Map<Position, OxidizationLevel> changes = new LinkedHashMap<>();
-                changes.put(new Position().setComponents(down).setLevel(level), OxidizationLevel.UNAFFECTED);
+                Map<LevelPosition, OxidizationLevel> changes = new LinkedHashMap<>();
+                changes.put(new LevelPosition().setComponents(down).setLevel(level), OxidizationLevel.UNAFFECTED);
 
                 ThreadLocalRandom random = ThreadLocalRandom.current();
                 int scans = random.nextInt(3) + 3;
 
-                Position directionPos = new Position().setLevel(level);
-                Position randomPos = new Position().setLevel(level);
+                LevelPosition directionPos = new LevelPosition().setLevel(level);
+                LevelPosition randomPos = new LevelPosition().setLevel(level);
                 Supplier<Vector3> cleanOxidizationAround = () -> {
                     for (int attempt = 0; attempt < 10; attempt++) {
                         randomPos.x = directionPos.x + (random.nextInt(3) - 1);
@@ -137,7 +137,7 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
                         randomPos.z = directionPos.z + (random.nextInt(3) - 1);
                         Block possibility = level.getBlock(randomPos);
                         if (isVulnerableOxidizable(possibility)) {
-                            Position nextPos = randomPos.clone();
+                            LevelPosition nextPos = randomPos.clone();
                             changes.compute(nextPos, (k, v) -> {
                                 int nextLevel = v == null ?
                                         ((Oxidizable) possibility).getOxidizationLevel().ordinal() - 1 :
@@ -167,7 +167,7 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
                     cleanOxidizationAroundLoop.accept(count);
                 }
 
-                for (Map.Entry<Position, OxidizationLevel> entry : changes.entrySet()) {
+                for (Map.Entry<LevelPosition, OxidizationLevel> entry : changes.entrySet()) {
                     Block current = level.getBlock(entry.getKey());
                     Block next = ((Oxidizable) current).getBlockWithOxidizationLevel(entry.getValue());
                     BlockFadeEvent event = new BlockFadeEvent(current, next);

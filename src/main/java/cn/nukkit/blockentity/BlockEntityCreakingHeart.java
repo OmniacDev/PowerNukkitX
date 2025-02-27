@@ -6,7 +6,7 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.mob.monster.EntityCreaking;
 import cn.nukkit.event.entity.CreatureSpawnEvent;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.BlockFace;
@@ -65,7 +65,7 @@ public class BlockEntityCreakingHeart extends BlockEntitySpawnable {
             getLevel().addSound(this, Sound.BLOCK_CREAKING_HEART_AMBIENT);
         }
         if((getLinkedCreaking() == null || !getLinkedCreaking().isAlive()) && isBlockEntityValid() && getHeart().isActive() && (!getLevel().isDay() || getLevel().isRaining() || getLevel().isThundering())) {
-            Position pos = new Position(
+            LevelPosition pos = new LevelPosition(
                             this.x + Utils.rand(-this.spawnRangeHorizontal, this.spawnRangeHorizontal),
                             this.y,
                             this.z + Utils.rand(-this.spawnRangeHorizontal, this.spawnRangeHorizontal),
@@ -74,7 +74,7 @@ public class BlockEntityCreakingHeart extends BlockEntitySpawnable {
 
             height:
             for(double i = -spawnRangeVertical; i < spawnRangeVertical; i++) {
-                Position newPos = pos.add(0, i, 0);
+                LevelPosition newPos = pos.add(0, i, 0);
                 if(!newPos.getLevelBlock().isAir()) {
                     for(int j = 1; j < 3; j++) {
                         if(!getSide(BlockFace.UP, j).getLevelBlock().isAir()) continue height;

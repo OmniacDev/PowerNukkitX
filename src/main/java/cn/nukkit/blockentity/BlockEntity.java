@@ -2,7 +2,7 @@ package cn.nukkit.blockentity;
 
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -20,7 +20,7 @@ import java.util.List;
  * @author MagicDroidX
  */
 @Slf4j
-public abstract class BlockEntity extends Position implements BlockEntityID {
+public abstract class BlockEntity extends LevelPosition implements BlockEntityID {
     public static final String TAG_CUSTOM_NAME = "CustomName";
     public static final String TAG_ID = "id";
     public static final String TAG_IS_MOVABLE = "isMovable";
@@ -37,12 +37,12 @@ public abstract class BlockEntity extends Position implements BlockEntityID {
     public CompoundTag namedTag;
     protected Server server;
 
-    public static BlockEntity createBlockEntity(String type, Position position, Object... args) {
+    public static BlockEntity createBlockEntity(String type, LevelPosition position, Object... args) {
         return createBlockEntity(type, position, BlockEntity.getDefaultCompound(position, type), args);
     }
 
 
-    public static BlockEntity createBlockEntity(String type, Position pos, CompoundTag nbt, Object... args) {
+    public static BlockEntity createBlockEntity(String type, LevelPosition pos, CompoundTag nbt, Object... args) {
         return createBlockEntity(type, pos.getLevel().getChunk(pos.getFloorX() >> 4, pos.getFloorZ() >> 4), nbt, args);
     }
 

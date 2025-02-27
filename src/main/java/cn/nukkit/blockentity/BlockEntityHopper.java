@@ -18,7 +18,7 @@ import cn.nukkit.inventory.SmeltingInventory;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemPotion;
 import cn.nukkit.item.ItemSplashPotion;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.BlockFace;
@@ -367,7 +367,7 @@ public class BlockEntityHopper extends BlockEntitySpawnable implements BlockEnti
         }
 
         BlockFace side = BlockFace.fromIndex(levelBlockState.getPropertyValue(CommonBlockProperties.FACING_DIRECTION));
-        Position sidePos = this.getSide(side);
+        LevelPosition sidePos = this.getSide(side);
         Block blockSide = sidePos.getLevelBlock(false);
         if (blockSide.isAir()) return false;
         BlockEntity be = this.level.getBlockEntity(temporalVector.setComponentsAdding(this, side));
@@ -581,7 +581,7 @@ public class BlockEntityHopper extends BlockEntitySpawnable implements BlockEnti
     }
 
     @Override
-    public Position getPosition() {
+    public LevelPosition getPosition() {
         return this.getBlock();
     }
 }

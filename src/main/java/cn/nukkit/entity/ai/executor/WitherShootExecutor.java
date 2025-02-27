@@ -9,10 +9,9 @@ import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.entity.projectile.EntitySmallFireball;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.level.Sound;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 
@@ -51,7 +50,7 @@ public class WitherShootExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     protected void spawn(Entity entity, boolean charged) {
-        Location fireballLocation = entity.getLocation();
+        Transform fireballLocation = entity.getLocation();
         fireballLocation.add(entity.getDirectionVector());
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()

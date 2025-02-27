@@ -2,7 +2,7 @@ package cn.nukkit.block;
 
 import cn.nukkit.block.property.type.BlockPropertyType;
 import cn.nukkit.item.Item;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.CompoundTagView;
 import cn.nukkit.registry.Registries;
@@ -67,7 +67,7 @@ public interface BlockState {
         return Block.get(this);
     }
 
-    default Block toBlock(Position position) {
+    default Block toBlock(LevelPosition position) {
         return Block.get(this, position);
     }
 

@@ -6,7 +6,7 @@ import cn.nukkit.blockentity.BlockEntityEndPortal;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemBlock;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
@@ -116,7 +116,7 @@ public class BlockEndPortal extends BlockFlowable implements BlockEntityHolder<B
         return getY() + (12.0 / 16.0);
     }
 
-    public static void spawnObsidianPlatform(Position position) {
+    public static void spawnObsidianPlatform(LevelPosition position) {
         Level level = position.getLevel();
         int x = position.getFloorX();
         int y = position.getFloorY();

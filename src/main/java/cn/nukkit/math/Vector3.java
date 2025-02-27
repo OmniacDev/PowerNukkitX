@@ -9,8 +9,6 @@ import javax.annotation.Nullable;
  * @author MagicDroidX (Nukkit Project)
  */
 public class Vector3 implements Cloneable {
-
-
     public static final Vector3 ZERO = new Vector3(0, 0, 0);
 
     public double x;
@@ -61,6 +59,7 @@ public class Vector3 implements Cloneable {
         this.z = z;
         return this;
     }
+
     public int getFloorX() {
         return (int) Math.floor(this.x);
     }
@@ -121,8 +120,8 @@ public class Vector3 implements Cloneable {
         return new Vector3(this.x + x, this.y + y, this.z + z);
     }
 
-    public Vector3 add(Vector3 x) {
-        return new Vector3(this.x + x.getX(), this.y + x.getY(), this.z + x.getZ());
+    public Vector3 add(Vector3 v) {
+        return new Vector3(this.x + v.x, this.y + v.y, this.z + v.z);
     }
 
     public Vector3 subtract(double x) {
@@ -137,8 +136,8 @@ public class Vector3 implements Cloneable {
         return this.add(-x, -y, -z);
     }
 
-    public Vector3 subtract(Vector3 x) {
-        return this.add(-x.getX(), -x.getY(), -x.getZ());
+    public Vector3 subtract(Vector3 v) {
+        return this.add(-v.x, -v.y, -v.z);
     }
 
     public Vector3 multiply(double number) {

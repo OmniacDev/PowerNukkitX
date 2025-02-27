@@ -38,7 +38,7 @@ public class Explosion {
     private final double STEP_LEN = 0.3d;
 
     private final Level level;
-    private final Position source;
+    private final LevelPosition source;
     private final double size;
     private double fireChance;
 
@@ -48,11 +48,11 @@ public class Explosion {
 
     private final Object what;
 
-    public Explosion(Position center, double size, Entity what) {
+    public Explosion(LevelPosition center, double size, Entity what) {
         this(center, size, (Object) what);
     }
 
-    public Explosion(Position center, double size, Block what) {
+    public Explosion(LevelPosition center, double size, Block what) {
         this(center, size, (Object) what);
     }
 
@@ -63,7 +63,7 @@ public class Explosion {
      * @param size   the power of explosion
      * @param what   the source object, used for tracking damage
      */
-    protected Explosion(Position center, double size, Object what) {
+    protected Explosion(LevelPosition center, double size, Object what) {
         this.level = center.getLevel();
         this.source = center;
         this.size = Math.max(size, 0);

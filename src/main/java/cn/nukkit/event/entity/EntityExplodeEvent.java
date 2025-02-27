@@ -4,7 +4,7 @@ import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.event.Cancellable;
 import cn.nukkit.event.HandlerList;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 
 import java.util.HashSet;
 import java.util.List;
@@ -21,13 +21,13 @@ public class EntityExplodeEvent extends EntityEvent implements Cancellable {
         return handlers;
     }
 
-    protected final Position position;
+    protected final LevelPosition position;
     protected List<Block> blocks;
 
     protected Set<Block> ignitions;
     protected double yield;
 
-    public EntityExplodeEvent(Entity entity, Position position, List<Block> blocks, double yield) {
+    public EntityExplodeEvent(Entity entity, LevelPosition position, List<Block> blocks, double yield) {
         this.entity = entity;
         this.position = position;
         this.blocks = blocks;
@@ -35,7 +35,7 @@ public class EntityExplodeEvent extends EntityEvent implements Cancellable {
         this.ignitions = new HashSet<>(0);
     }
 
-    public Position getPosition() {
+    public LevelPosition getPosition() {
         return this.position;
     }
 

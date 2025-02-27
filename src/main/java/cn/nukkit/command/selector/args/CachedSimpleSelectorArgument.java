@@ -4,7 +4,7 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.exceptions.SelectorSyntaxException;
 import cn.nukkit.command.selector.SelectorType;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.Sets;
@@ -28,7 +28,7 @@ public abstract class CachedSimpleSelectorArgument implements ISelectorArgument 
     }
 
     @Override
-    public Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location basePos, String... arguments) throws SelectorSyntaxException {
+    public Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Transform basePos, String... arguments) throws SelectorSyntaxException {
         var value = cache.getIfPresent(Sets.newHashSet(arguments));
         if (value == null) {
             value = cache(selectorType, sender, basePos, arguments);
@@ -40,7 +40,7 @@ public abstract class CachedSimpleSelectorArgument implements ISelectorArgument 
     /**
      * 当未在缓存中找到解析结果时，则调用此方法对参数进行解析
      */
-    protected abstract Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location basePos, String... arguments) throws SelectorSyntaxException;
+    protected abstract Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Transform basePos, String... arguments) throws SelectorSyntaxException;
 
     /**
      * 初始化缓存时调用此方法<p/>

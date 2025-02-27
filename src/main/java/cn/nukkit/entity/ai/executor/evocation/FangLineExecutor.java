@@ -11,7 +11,7 @@ import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.mob.monster.EntityEvocationFang;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -87,13 +87,13 @@ public class FangLineExecutor implements EntityControl, IBehaviorExecutor {
 
     protected void spell(EntityLiving entity, int distance) {
         if(!entity.getDataFlag(EntityFlag.CASTING)) return;
-        Location fangLocation = entity.getLocation();
+        Transform fangLocation = entity.getLocation();
         Vector3 directionVector = entity.getDirectionVector().multiply(0.8 * (distance+1));
         fangLocation = fangLocation.add(directionVector.getX(), 0, directionVector.getZ());
         spawn((EntityEvocationIllager) entity, fangLocation);
     }
 
-    protected void spawn(EntityEvocationIllager illager, Location location) {
+    protected void spawn(EntityEvocationIllager illager, Transform location) {
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
                         .add(new FloatTag(location.x))

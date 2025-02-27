@@ -9,7 +9,7 @@ import cn.nukkit.command.tree.node.PlayersNode;
 import cn.nukkit.command.utils.CommandLogger;
 import cn.nukkit.lang.TranslationContainer;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.network.protocol.types.SpawnPointType;
 import cn.nukkit.utils.TextFormat;
 
@@ -49,7 +49,7 @@ public class SpawnpointCommand extends VanillaCommand {
             Level level = sender.getPosition().getLevel();
             if (list.hasResult(1)) {
                 if (level != null) {
-                    Position position = list.getResult(1);
+                    LevelPosition position = list.getResult(1);
                     if (level.isOverWorld()) {
                         if (position.y < -64) position.y = -64;
                         if (position.y > 320) position.y = 320;
@@ -71,7 +71,7 @@ public class SpawnpointCommand extends VanillaCommand {
             return 0;
         }
         if (!players.isEmpty()) {
-            Position pos = players.get(0).getPosition();
+            LevelPosition pos = players.get(0).getPosition();
             players.get(0).setSpawn(pos, SpawnPointType.PLAYER);
             log.addSuccess("commands.spawnpoint.success.single", sender.getName(),
                     round2.format(pos.x),

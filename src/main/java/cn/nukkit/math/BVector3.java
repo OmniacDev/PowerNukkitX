@@ -1,7 +1,7 @@
 package cn.nukkit.math;
 
 import cn.nukkit.api.DoNotModify;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 
 import static java.lang.StrictMath.*;
 
@@ -36,7 +36,7 @@ public final class BVector3 {
      * @param location the location
      * @return the b vector 3
      */
-    public static BVector3 fromLocation(Location location) {
+    public static BVector3 fromLocation(Transform location) {
         return fromLocation(location, 1);
     }
 
@@ -50,7 +50,7 @@ public final class BVector3 {
      * @param location the location
      * @return the b vector 3
      */
-    public static BVector3 fromLocation(Location location, double length) {
+    public static BVector3 fromLocation(Transform location, double length) {
         return new BVector3(location.getYaw(), location.getPitch(), length);
     }
 

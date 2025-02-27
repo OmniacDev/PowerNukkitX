@@ -1,22 +1,18 @@
 package cn.nukkit.entity.projectile;
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
 import cn.nukkit.block.*;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.item.Item;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.level.format.IChunk;
-import cn.nukkit.level.particle.DestroyBlockParticle;
 import cn.nukkit.level.particle.GenericParticle;
 import cn.nukkit.level.particle.Particle;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.LevelSoundEventPacket;
-import cn.nukkit.utils.RedstoneComponent;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -38,7 +34,7 @@ public class EntityWindCharge extends EntityProjectile {
     }
 
     @Override
-    protected boolean onCollideWithBlock(Position position, Vector3 motion, Block collisionBlock) {
+    protected boolean onCollideWithBlock(LevelPosition position, Vector3 motion, Block collisionBlock) {
 
         if(collisionBlock instanceof BlockDoor
                 || collisionBlock instanceof BlockTrapdoor

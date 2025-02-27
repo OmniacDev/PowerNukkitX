@@ -7,11 +7,10 @@ import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.executor.EntityControl;
 import cn.nukkit.entity.ai.executor.IBehaviorExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.math.BVector3;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 
@@ -35,7 +34,7 @@ public class StrafeExecutor implements EntityControl, IBehaviorExecutor {
 
             Vector3 toPlayerVector = new Vector3(player.x - entity.x, player.y - entity.y, player.z - entity.z).normalize();
 
-            Location fireballLocation = entity.getLocation().add(toPlayerVector.multiply(5));
+            Transform fireballLocation = entity.getLocation().add(toPlayerVector.multiply(5));
             double yaw = BVector3.getYawFromVector(toPlayerVector);
             double pitch = BVector3.getPitchFromVector(toPlayerVector);
             CompoundTag nbt = new CompoundTag()

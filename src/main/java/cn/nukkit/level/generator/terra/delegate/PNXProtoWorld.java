@@ -1,6 +1,6 @@
 package cn.nukkit.level.generator.terra.delegate;
 
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import com.dfsek.terra.api.block.entity.BlockEntity;
 import com.dfsek.terra.api.block.state.BlockState;
 import com.dfsek.terra.api.config.ConfigPack;
@@ -36,7 +36,7 @@ public record PNXProtoWorld(ServerWorld serverWorld, int centerChunkX, int cente
     @Override
     public Entity spawnEntity(double v, double v1, double v2, EntityType entityType) {
         String identifier = (String) entityType.getHandle();
-        cn.nukkit.entity.Entity nukkitEntity = cn.nukkit.entity.Entity.createEntity(identifier, new Position(v, v1, v2, ((PNXServerWorld) serverWorld).generatorWrapper().getLevel()));
+        cn.nukkit.entity.Entity nukkitEntity = cn.nukkit.entity.Entity.createEntity(identifier, new LevelPosition(v, v1, v2, ((PNXServerWorld) serverWorld).generatorWrapper().getLevel()));
         return new PNXEntity(nukkitEntity, serverWorld);
     }
 

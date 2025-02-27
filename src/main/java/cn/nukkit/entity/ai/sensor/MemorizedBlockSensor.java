@@ -3,7 +3,7 @@ package cn.nukkit.entity.ai.sensor;
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import lombok.Getter;
 
 //存储最近的玩家的Memory
@@ -36,7 +36,7 @@ public class MemorizedBlockSensor implements ISensor {
         for(int x = -range; x<=range; x++) {
             for(int z = -range; z<=range; z++) {
                 for(int y = -lookY; y<=lookY; y++) {
-                    Location lookLocation = entity.add(x, y, z);
+                    Transform lookLocation = entity.add(x, y, z);
                     Block lookBlock = lookLocation.getLevelBlock();
                     if(lookBlock.getId().equals(Block.DIRT) || lookBlock.getId().equals(Block.GRASS_BLOCK) || lookBlock.isAir() || lookBlock.getId().equals(Block.BEDROCK)) continue;
                     if(blockClass.isAssignableFrom(lookBlock.getClass())) {

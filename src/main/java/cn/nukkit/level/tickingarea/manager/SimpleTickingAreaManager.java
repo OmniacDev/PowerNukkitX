@@ -1,6 +1,6 @@
 package cn.nukkit.level.tickingarea.manager;
 
-import cn.nukkit.level.Position;
+import cn.nukkit.level.LevelPosition;
 import cn.nukkit.level.tickingarea.TickingArea;
 import cn.nukkit.level.tickingarea.storage.TickingAreaStorage;
 
@@ -65,7 +65,7 @@ public class SimpleTickingAreaManager extends TickingAreaManager {
     }
 
     @Override
-    public TickingArea getTickingAreaByPos(Position pos) {
+    public TickingArea getTickingAreaByPos(LevelPosition pos) {
         return getTickingAreaByChunk(pos.getLevelName(), new TickingArea.ChunkPos(pos.getChunkX(), pos.getChunkZ()));
     }
 

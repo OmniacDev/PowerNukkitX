@@ -3,7 +3,7 @@ package cn.nukkit.network.process.processor;
 import cn.nukkit.Player;
 import cn.nukkit.PlayerHandle;
 import cn.nukkit.Server;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.process.DataPacketProcessor;
 import cn.nukkit.network.protocol.MovePlayerPacket;
@@ -28,7 +28,7 @@ public class MovePlayerProcessor extends DataPacketProcessor<MovePlayerPacket> {
         if (pk.headYaw < 0) {
             pk.headYaw += 360;
         }
-        playerHandle.offerMovementTask(Location.fromObject(newPos, player.level, pk.yaw, pk.pitch, pk.headYaw));
+        playerHandle.offerMovementTask(Transform.fromObject(newPos, player.level, pk.yaw, pk.pitch, pk.headYaw));
     }
 
     @Override
