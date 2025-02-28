@@ -4921,6 +4921,23 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
             gameRulesChanged.gameRules = level.getGameRules();
             this.dataPacket(gameRulesChanged);
 
+            if (level.getDimension() == this.level.getDimension()) {
+                ChangeDimensionPacket packet = new ChangeDimensionPacket();
+                packet.x = 0.0f;
+                packet.y = 0.0f;
+                packet.z = 0.0f;
+                packet.respawn = false;
+                packet.loadingScreenId = this.loadingScreenId++;
+
+                if (this.level.getDimension() == Level.DIMENSION_NETHER) {
+                    packet.dimension = Level.DIMENSION_OVERWORLD;
+                } else {
+                    packet.dimension = Level.DIMENSION_NETHER;
+                }
+
+                this.dataPacket(packet);
+            }
+
             this.setDimension(level.getDimension());
 
             updateTrackingPositions(true);
