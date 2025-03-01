@@ -8,7 +8,7 @@ import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.command.tree.ParamList;
 import cn.nukkit.command.tree.node.PlayersNode;
 import cn.nukkit.command.utils.CommandLogger;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.network.protocol.PlaySoundPacket;
 import com.google.common.collect.Lists;
@@ -40,7 +40,7 @@ public class PlaySoundCommand extends VanillaCommand {
         var list = result.getValue();
         String sound = list.getResult(0);
         List<Player> targets = null;
-        LevelPosition position = null;
+        Position position = null;
         float volume = 1;
         float pitch = 1;
         float minimumVolume = 0;

@@ -16,8 +16,8 @@ import cn.nukkit.lang.TextContainer;
 import cn.nukkit.lang.TranslationContainer;
 import cn.nukkit.level.GameRule;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Transform;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Location;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
@@ -555,14 +555,14 @@ public class BlockEntityCommandBlock extends BlockEntitySpawnable implements ICo
 
     @Override
     @NotNull
-    public LevelPosition getPosition() {
+    public Position getPosition() {
         return this;
     }
 
     @NotNull
     @Override
-    public Transform getLocation() {
-        return Transform.fromObject(this.getPosition(), this.getLevel());
+    public Location getLocation() {
+        return Location.fromObject(this.getPosition(), this.getLevel());
     }
 
     @Override

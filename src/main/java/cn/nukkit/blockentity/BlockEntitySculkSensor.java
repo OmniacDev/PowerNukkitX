@@ -1,8 +1,9 @@
 package cn.nukkit.blockentity;
 
+import cn.nukkit.Server;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.block.BlockSculkSensor;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationListener;
@@ -55,7 +56,7 @@ public class BlockEntitySculkSensor extends BlockEntity implements VibrationList
     }
 
     @Override
-    public LevelPosition getListenerVector() {
+    public Position getListenerVector() {
         return this.clone().setLevel(this.level).floor().add(0.5f, 0.5f, 0.5f);
     }
 

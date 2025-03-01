@@ -13,7 +13,7 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.inventory.EntityInventoryHolder;
 import cn.nukkit.inventory.InventoryHolder;
 import cn.nukkit.item.Item;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 
 import java.util.List;
 import java.util.Map;
@@ -91,7 +91,7 @@ public class ReplaceItemCommand extends VanillaCommand {
                 return entity(sender, result.getKey(), list, log);
             }
             case "block", "block-oldItemHandling" -> {
-                LevelPosition pos = list.getResult(1);
+                Position pos = list.getResult(1);
                 Block block = pos.getLevelBlock();
                 InventoryHolder holder = null;
                 if (block instanceof BlockEntityHolder<?> h) {

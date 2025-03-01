@@ -5,8 +5,8 @@ import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.lang.CommandOutputContainer;
 import cn.nukkit.lang.TextContainer;
-import cn.nukkit.level.Transform;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Location;
+import cn.nukkit.level.Position;
 import cn.nukkit.permission.Permission;
 import cn.nukkit.permission.PermissionAttachment;
 import cn.nukkit.permission.PermissionAttachmentInfo;
@@ -23,9 +23,9 @@ public class ExecutorCommandSender implements CommandSender {
 
     private final CommandSender executor;
     private final Entity entity;
-    private final Transform executeLocation;
+    private final Location executeLocation;
 
-    public ExecutorCommandSender(@NotNull CommandSender executor, @Nullable Entity entity, @Nullable Transform executeLocation) {
+    public ExecutorCommandSender(@NotNull CommandSender executor, @Nullable Entity entity, @Nullable Location executeLocation) {
         if (executor instanceof ExecutorCommandSender executorCommandSender) {
             this.executor = executorCommandSender.getExecutor();
         } else {
@@ -80,12 +80,12 @@ public class ExecutorCommandSender implements CommandSender {
     }
 
     @Override
-    @NotNull public LevelPosition getPosition() {
+    @NotNull public Position getPosition() {
         return (executeLocation == null ? entity : executeLocation).clone();
     }
 
     @Override
-    @NotNull public Transform getLocation() {
+    @NotNull public Location getLocation() {
         return (executeLocation == null ? entity : executeLocation).clone();
     }
 

@@ -2,13 +2,15 @@ package cn.nukkit.utils;
 
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
+import cn.nukkit.block.BlockAir;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.block.BlockState;
 import cn.nukkit.level.DimensionData;
 import cn.nukkit.level.DimensionEnum;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 import cn.nukkit.math.AxisAlignedBB;
+import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.BlockVector3;
 import cn.nukkit.math.NukkitMath;
 import cn.nukkit.math.SimpleAxisAlignedBB;
@@ -25,7 +27,7 @@ import static cn.nukkit.level.Level.DIMENSION_OVERWORLD;
 
 @Slf4j
 public final class PortalHelper implements BlockID {
-    public static void spawnPortal(LevelPosition pos) {
+    public static void spawnPortal(Position pos) {
         Level lvl = pos.level; //TODO: This will generate part of the time, seems to be only when the chunk is populated
         int x = pos.getFloorX();
         int y = pos.getFloorY();
@@ -71,7 +73,7 @@ public final class PortalHelper implements BlockID {
         lvl.setBlock(x + 3, y, z, obsidian, false, true);
     }
 
-    public static LevelPosition getNearestValidPortal(LevelPosition currentPos) {
+    public static Position getNearestValidPortal(Position currentPos) {
         AxisAlignedBB axisAlignedBB = new SimpleAxisAlignedBB(
                 new Vector3(currentPos.getFloorX() - 128.0, currentPos.level.getDimensionData().getMinHeight(), currentPos.getFloorZ() - 128.0),
                 new Vector3(currentPos.getFloorX() + 128.0, currentPos.level.getDimensionData().getMaxHeight(), currentPos.getFloorZ() + 128.0));
@@ -96,26 +98,26 @@ public final class PortalHelper implements BlockID {
                 .orElse(null);
     }
 
-    public static LevelPosition convertPosBetweenNetherAndOverworld(LevelPosition current) {
+    public static Position convertPosBetweenNetherAndOverworld(Position current) {
         Level defaultNetherLevel = Server.getInstance().getDefaultNetherLevel();
         if (defaultNetherLevel == null) return null;
         DimensionData dimensionData;
         if (current.level.getDimension() == DIMENSION_OVERWORLD) {
             dimensionData = DimensionEnum.NETHER.getDimensionData();
-            return new LevelPosition(current.getFloorX() >> 3, NukkitMath.clamp(current.getFloorY(), dimensionData.getMinHeight(), dimensionData.getMaxHeight()), current.getFloorZ() >> 3, defaultNetherLevel);
+            return new Position(current.getFloorX() >> 3, NukkitMath.clamp(current.getFloorY(), dimensionData.getMinHeight(), dimensionData.getMaxHeight()), current.getFloorZ() >> 3, defaultNetherLevel);
         } else if (current.level.getDimension() == Level.DIMENSION_NETHER) {
             dimensionData = DimensionEnum.OVERWORLD.getDimensionData();
-            return new LevelPosition(current.getFloorX() << 3, NukkitMath.clamp(current.getFloorY(), dimensionData.getMinHeight(), dimensionData.getMaxHeight()), current.getFloorZ() << 3, Server.getInstance().getDefaultLevel());
+            return new Position(current.getFloorX() << 3, NukkitMath.clamp(current.getFloorY(), dimensionData.getMinHeight(), dimensionData.getMaxHeight()), current.getFloorZ() << 3, Server.getInstance().getDefaultLevel());
         } else {
             throw new IllegalArgumentException("Neither overworld nor nether given!");
         }
     }
 
-    public static LevelPosition moveToTheEnd(LevelPosition current) {
+    public static Position moveToTheEnd(Position current) {
         Level defaultEndLevel = Server.getInstance().getDefaultEndLevel();
         if (defaultEndLevel == null) return null;
         if (current.level.getDimension() == DIMENSION_OVERWORLD) {
-            return new LevelPosition(100, 49, 0, defaultEndLevel);
+            return new Position(100, 49, 0, defaultEndLevel);
         } else if (current.level.getDimension() == Level.DIMENSION_THE_END) {
             return Server.getInstance().getDefaultLevel().getSpawnLocation();
         } else {

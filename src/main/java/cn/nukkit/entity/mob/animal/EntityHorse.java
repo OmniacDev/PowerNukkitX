@@ -41,7 +41,7 @@ import cn.nukkit.inventory.HorseInventory;
 import cn.nukkit.inventory.InventoryHolder;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.GameRule;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.math.Vector3f;
@@ -286,7 +286,7 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
             return;
         }
 
-        Transform floorLocation = this.floor();
+        Location floorLocation = this.floor();
         Block down = this.level.getBlock(floorLocation.down());
 
         EntityFallEvent event = new EntityFallEvent(this, down, fallDistance);
@@ -346,7 +346,7 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
         return super.canCollideWith(entity) && entity != this.getRider();
     }
 
-    public void onInput(Transform clientLoc) {
+    public void onInput(Location clientLoc) {
         if (this.getRider() == null || this.getOwner() == null || this.getSaddle().isNull()) return;
         //每次输入乘骑玩家位置之前都要确保motion为0,避免onGround不更新
         this.motionX = 0;

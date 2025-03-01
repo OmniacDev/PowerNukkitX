@@ -16,7 +16,7 @@ import cn.nukkit.event.vehicle.VehicleUpdateEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.level.GameRule;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.NukkitMath;
@@ -286,8 +286,8 @@ public class EntityBoat extends EntityVehicle {
 
         this.motionZ *= friction;
 
-        Transform from = new Transform(lastX, lastY, lastZ, lastYaw, lastPitch, level);
-        Transform to = new Transform(this.x, this.y, this.z, this.yaw, this.pitch, level);
+        Location from = new Location(lastX, lastY, lastZ, lastYaw, lastPitch, level);
+        Location to = new Location(this.x, this.y, this.z, this.yaw, this.pitch, level);
 
         if (!from.equals(to)) {
             this.getServer().getPluginManager().callEvent(new VehicleMoveEvent(this, from, to));
@@ -585,7 +585,7 @@ public class EntityBoat extends EntityVehicle {
         return "Boat";
     }
 
-    public void onInput(Transform loc) {
+    public void onInput(Location loc) {
         this.move(loc.x - this.x, loc.y - this.y, loc.z - this.z);
         this.yaw = loc.yaw;
         this.headYaw = loc.headYaw;

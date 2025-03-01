@@ -10,7 +10,7 @@ import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.ProjectileHitEvent;
 import cn.nukkit.level.MovingObjectPosition;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
@@ -88,7 +88,7 @@ public class EntitySmallFireball extends EntityProjectile {
     }
 
     @Override
-    protected void onCollideWithBlock(LevelPosition position, Vector3 motion) {
+    protected void onCollideWithBlock(Position position, Vector3 motion) {
         this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.clone(), VibrationType.PROJECTILE_LAND));
         var affect = false;
         for (Block collisionBlock : level.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1)))

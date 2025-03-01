@@ -3,7 +3,7 @@ package cn.nukkit.block;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.projectile.EntitySmallFireball;
 import cn.nukkit.item.Item;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
 import org.jetbrains.annotations.NotNull;
@@ -66,7 +66,7 @@ public class BlockPowderSnow extends BlockTransparent {
     }
 
     @Override
-    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull LevelPosition position, @NotNull Vector3 motion) {
+    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Position position, @NotNull Vector3 motion) {
         if (projectile instanceof EntitySmallFireball) {
             this.getLevel().useBreakOn(this);
             return true;

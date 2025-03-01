@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockBed;
+import cn.nukkit.block.BlockCrops;
 import cn.nukkit.block.BlockDoor;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.entity.Entity;
@@ -20,6 +21,7 @@ import cn.nukkit.entity.ai.evaluator.MemoryCheckNotEmptyEvaluator;
 import cn.nukkit.entity.ai.evaluator.PassByTimeEvaluator;
 import cn.nukkit.entity.ai.evaluator.RandomSoundEvaluator;
 import cn.nukkit.entity.ai.executor.AnimalGrowExecutor;
+import cn.nukkit.entity.ai.executor.DoNothingExecutor;
 import cn.nukkit.entity.ai.executor.FlatRandomRoamExecutor;
 import cn.nukkit.entity.ai.executor.FleeFromTargetExecutor;
 import cn.nukkit.entity.ai.executor.MoveToTargetExecutor;
@@ -33,6 +35,7 @@ import cn.nukkit.entity.ai.executor.villager.WillingnessExecutor;
 import cn.nukkit.entity.ai.executor.villager.WorkExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder;
+import cn.nukkit.entity.ai.route.posevaluator.IPosEvaluator;
 import cn.nukkit.entity.ai.route.posevaluator.WalkingPosEvaluator;
 import cn.nukkit.entity.ai.sensor.BlockSensor;
 import cn.nukkit.entity.ai.sensor.NearestEntitySensor;
@@ -51,7 +54,7 @@ import cn.nukkit.inventory.InventorySlice;
 import cn.nukkit.inventory.TradeInventory;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import cn.nukkit.level.ParticleEffect;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
@@ -229,7 +232,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                     for (int x = -range; x <= range; x++) {
                                         for (int z = -range; z <= range; z++) {
                                             for (int y = -lookY; y <= lookY; y++) {
-                                                Transform lookLocation = entity.add(x, y, z);
+                                                Location lookLocation = entity.add(x, y, z);
                                                 Block lookBlock = lookLocation.getLevelBlock();
                                                 if (lookBlock instanceof BlockBed bed) {
                                                     if (!bed.isHeadPiece() && Arrays.stream(getLevel().getEntities()).noneMatch(entity1 -> entity1 instanceof EntityVillagerV2 v && v.getMemoryStorage().notEmpty(CoreMemoryTypes.OCCUPIED_BED) && v.getBed().equals(bed))) {

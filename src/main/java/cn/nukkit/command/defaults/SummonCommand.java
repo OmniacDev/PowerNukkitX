@@ -8,7 +8,7 @@ import cn.nukkit.command.selector.args.impl.Type;
 import cn.nukkit.command.tree.ParamList;
 import cn.nukkit.command.utils.CommandLogger;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 import cn.nukkit.registry.Registries;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class SummonCommand extends VanillaCommand {
             return 0;
         }
         Integer entityId = Type.ENTITY_TYPE2ID.get(entityType);
-        LevelPosition pos = sender.getPosition();
+        Position pos = sender.getPosition();
         if (list.hasResult(1)) {
             pos = list.getResult(1);
         }

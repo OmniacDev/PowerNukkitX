@@ -3,7 +3,7 @@ package cn.nukkit.entity.ai.executor;
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.MemoryType;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +55,7 @@ public class MoveToTargetExecutor implements EntityControl, IBehaviorExecutor {
         //获取目标位置（这个clone很重要）
         Vector3 target = entity.getBehaviorGroup().getMemoryStorage().get(memory).clone();
 
-        if (target instanceof LevelPosition position && !position.level.getName().equals(entity.level.getName()))
+        if (target instanceof Position position && !position.level.getName().equals(entity.level.getName()))
             return false;
 
         if(target instanceof Block) {

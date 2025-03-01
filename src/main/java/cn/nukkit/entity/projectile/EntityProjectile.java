@@ -14,7 +14,7 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityDamageEvent.DamageCause;
 import cn.nukkit.event.entity.ProjectileHitEvent;
 import cn.nukkit.level.MovingObjectPosition;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
@@ -228,7 +228,7 @@ public abstract class EntityProjectile extends Entity {
                 }
             }
 
-            LevelPosition position = getPosition();
+            Position position = getPosition();
             Vector3 motion = getMotion();
             this.move(this.motionX, this.motionY, this.motionZ);
 
@@ -272,14 +272,14 @@ public abstract class EntityProjectile extends Entity {
         this.motionZ += rand.nextGaussian() * 0.007499999832361937 * modifier;
     }
 
-    protected void onCollideWithBlock(LevelPosition position, Vector3 motion) {
+    protected void onCollideWithBlock(Position position, Vector3 motion) {
         this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.clone(), VibrationType.PROJECTILE_LAND));
         for (Block collisionBlock : level.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1))) {
             onCollideWithBlock(position, motion, collisionBlock);
         }
     }
 
-    protected boolean onCollideWithBlock(LevelPosition position, Vector3 motion, Block collisionBlock) {
+    protected boolean onCollideWithBlock(Position position, Vector3 motion, Block collisionBlock) {
         return collisionBlock.onProjectileHit(this, position, motion);
     }
 

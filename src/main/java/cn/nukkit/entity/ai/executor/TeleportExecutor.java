@@ -2,8 +2,9 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.EntityIntelligent;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import cn.nukkit.level.Sound;
+import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.Vector3;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class TeleportExecutor implements IBehaviorExecutor {
     int minDistance;
     int maxTries = 16;
 
-    private Transform find(Transform location) {
+    private Location find(Location location) {
         int distance = maxDistance-minDistance;
         double dx = location.x + ThreadLocalRandom.current().nextInt(-distance, distance) + minDistance;
         double dz = location.z + ThreadLocalRandom.current().nextInt(-distance, distance) + minDistance;
@@ -34,7 +35,7 @@ public class TeleportExecutor implements IBehaviorExecutor {
 
     @Override
     public boolean execute(EntityIntelligent entity) {
-        Transform location = entity.getLocation();
+        Location location = entity.getLocation();
         for(int i = 0; i < maxTries; i++) {
             if(location.distance(entity) < minDistance) {
                 location = find(entity.getLocation());

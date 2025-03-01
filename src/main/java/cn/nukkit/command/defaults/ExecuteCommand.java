@@ -14,8 +14,8 @@ import cn.nukkit.command.tree.ParamList;
 import cn.nukkit.command.utils.CommandLogger;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Transform;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Location;
+import cn.nukkit.level.Position;
 import cn.nukkit.math.*;
 import cn.nukkit.scoreboard.scorer.EntityScorer;
 import cn.nukkit.scoreboard.scorer.IScorer;
@@ -207,7 +207,7 @@ public class ExecuteCommand extends VanillaCommand {
                     return 0;
                 }
                 String chainCommand = list.getResult(2);
-                for (Transform location : locations) {
+                for (Location location : locations) {
                     ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), location);
                     num += executorCommandSender.getServer().executeCommand(executorCommandSender, chainCommand);
                 }
@@ -220,7 +220,7 @@ public class ExecuteCommand extends VanillaCommand {
                     return 0;
                 }
                 String chainCommand = list.getResult(2);
-                Transform location = sender.getLocation();
+                Location location = sender.getLocation();
                 location.setLevel(level);
                 ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), location);
                 return executorCommandSender.getServer().executeCommand(executorCommandSender, chainCommand);
@@ -228,7 +228,7 @@ public class ExecuteCommand extends VanillaCommand {
             case "facing" -> {
                 Vector3 pos = list.getResult(1);
                 String chainCommand = list.getResult(2);
-                Transform source = sender.getLocation();
+                Location source = sender.getLocation();
                 BVector3 bv = BVector3.fromPos(pos.x - source.x, pos.y - source.y, pos.z - source.z);
                 source.setPitch(bv.getPitch());
                 source.setYaw(bv.getYaw());
@@ -245,7 +245,7 @@ public class ExecuteCommand extends VanillaCommand {
                 boolean anchorAtEyes = anchor.equals("eyes");
                 String chainCommand = list.getResult(4);
                 for (Entity target : targets) {
-                    Transform source = sender.getLocation();
+                    Location source = sender.getLocation();
                     BVector3 bv = BVector3.fromPos(target.x - source.x, target.y + (anchorAtEyes ? target.getEyeHeight() : 0) - source.y, target.z - source.z);
                     source.setPitch(bv.getPitch());
                     source.setYaw(bv.getYaw());
@@ -260,7 +260,7 @@ public class ExecuteCommand extends VanillaCommand {
                 double pitch = sender.getLocation().pitch;
                 if (list.hasResult(2)) pitch = list.getResult(2);
                 String chainCommand = list.getResult(3);
-                Transform location = sender.getLocation();
+                Location location = sender.getLocation();
                 location.setYaw(yaw);
                 location.setPitch(pitch);
                 ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), location);
@@ -274,7 +274,7 @@ public class ExecuteCommand extends VanillaCommand {
                 }
                 String chainCommand = list.getResult(3);
                 for (Entity executor : executors) {
-                    Transform location = sender.getLocation();
+                    Location location = sender.getLocation();
                     location.setYaw(executor.getYaw());
                     location.setPitch(executor.getPitch());
                     ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), location);
@@ -285,7 +285,7 @@ public class ExecuteCommand extends VanillaCommand {
             case "align" -> {
                 String axes = list.getResult(1);
                 String chainCommand = list.getResult(2);
-                Transform location = sender.getLocation();
+                Location location = sender.getLocation();
                 for (char c : axes.toCharArray()) {
                     switch (c) {
                         case 'x' -> location.x = location.getFloorX();
@@ -298,7 +298,7 @@ public class ExecuteCommand extends VanillaCommand {
             }
             case "anchored" -> {
                 if (!sender.isEntity()) return 0;
-                Transform location = sender.getLocation();
+                Location location = sender.getLocation();
                 String anchor = list.getResult(1);
                 String chainCommand = list.getResult(2);
                 switch (anchor) {
@@ -312,7 +312,7 @@ public class ExecuteCommand extends VanillaCommand {
             }
             case "positioned" -> {
                 Vector3 vec = list.getResult(1);
-                Transform newLoc = sender.getLocation();
+                Location newLoc = sender.getLocation();
                 newLoc.setX(vec.getX());
                 newLoc.setY(vec.getY());
                 newLoc.setZ(vec.getZ());
@@ -328,7 +328,7 @@ public class ExecuteCommand extends VanillaCommand {
                 }
                 String chainCommand = list.getResult(3);
                 for (Vector3 vec : targets) {
-                    Transform newLoc = sender.getLocation();
+                    Location newLoc = sender.getLocation();
                     newLoc.setX(vec.getX());
                     newLoc.setY(vec.getY());
                     newLoc.setZ(vec.getZ());
@@ -338,7 +338,7 @@ public class ExecuteCommand extends VanillaCommand {
                 return num;
             }
             case "if-unless-block" -> {
-                LevelPosition pos = list.getResult(2);
+                Position pos = list.getResult(2);
                 Block block = pos.getLevelBlock();
                 Block blockName = list.getResult(3);
                 String id = blockName.getId();
@@ -360,7 +360,7 @@ public class ExecuteCommand extends VanillaCommand {
                 }
             }
             case "if-unless-block-data" -> {
-                LevelPosition pos = list.getResult(2);
+                Position pos = list.getResult(2);
                 Block block = pos.getLevelBlock();
                 Block blockName = list.getResult(3);
                 String id = blockName.getId();
@@ -385,9 +385,9 @@ public class ExecuteCommand extends VanillaCommand {
             case "if-unless-blocks" -> {
                 String isIF = list.getResult(0);
                 boolean shouldMatch = isIF.equals("if");
-                LevelPosition begin = list.getResult(2);
-                LevelPosition end = list.getResult(3);
-                LevelPosition destination = list.getResult(4);
+                Position begin = list.getResult(2);
+                Position end = list.getResult(3);
+                Position destination = list.getResult(4);
                 TestForBlocksCommand.TestForBlocksMode mode = TestForBlocksCommand.TestForBlocksMode.ALL;
                 if (list.hasResult(5)) {
                     String str5 = list.getResult(5);
@@ -403,7 +403,7 @@ public class ExecuteCommand extends VanillaCommand {
                             .successCount(2).output();
                 }
 
-                LevelPosition to = new LevelPosition(destination.getX() + (blocksAABB.getMaxX() - blocksAABB.getMinX()), destination.getY() + (blocksAABB.getMaxY() - blocksAABB.getMinY()), destination.getZ() + (blocksAABB.getMaxZ() - blocksAABB.getMinZ()));
+                Position to = new Position(destination.getX() + (blocksAABB.getMaxX() - blocksAABB.getMinX()), destination.getY() + (blocksAABB.getMaxY() - blocksAABB.getMinY()), destination.getZ() + (blocksAABB.getMaxZ() - blocksAABB.getMinZ()));
                 AxisAlignedBB destinationAABB = new SimpleAxisAlignedBB(Math.min(destination.getX(), to.getX()), Math.min(destination.getY(), to.getY()), Math.min(destination.getZ(), to.getZ()), Math.max(destination.getX(), to.getX()), Math.max(destination.getY(), to.getY()), Math.max(destination.getZ(), to.getZ()));
 
                 if (blocksAABB.getMinY() < 0 || blocksAABB.getMaxY() > 255 || destinationAABB.getMinY() < 0 || destinationAABB.getMaxY() > 255) {

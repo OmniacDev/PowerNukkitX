@@ -8,7 +8,7 @@ import cn.nukkit.event.block.DoorToggleEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.Set;
 
+import static cn.nukkit.block.property.CommonBlockProperties.DIRECTION;
+import static cn.nukkit.block.property.CommonBlockProperties.FACING_DIRECTION;
 import static cn.nukkit.block.property.CommonBlockProperties.IN_WALL_BIT;
 import static cn.nukkit.block.property.CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION;
 import static cn.nukkit.block.property.CommonBlockProperties.OPEN_BIT;
@@ -41,7 +43,7 @@ public class BlockFenceGate extends BlockTransparent implements RedstoneComponen
     // It is used to detect on redstone update, if the gate should be closed if redstone is off on the update,
     // previously the gate always closed, when placing an unpowered redstone at the gate, this fixes it
     // and gives the vanilla behavior; no idea how to make this better :d
-    private static final Set<Transform> manualOverrides = Sets.newConcurrentHashSet();
+    private static final Set<Location> manualOverrides = Sets.newConcurrentHashSet();
 
     public BlockFenceGate() {
         this(PROPERTIES.getDefaultState());

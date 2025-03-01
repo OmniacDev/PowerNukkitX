@@ -8,8 +8,8 @@ import cn.nukkit.command.tree.ParamList;
 import cn.nukkit.command.tree.node.PositionNode;
 import cn.nukkit.command.utils.CommandLogger;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.level.Transform;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Location;
+import cn.nukkit.level.Position;
 
 import java.util.List;
 import java.util.Map;
@@ -51,8 +51,8 @@ public class ExecuteCommandOld extends VanillaCommand {
             case "default" -> {
                 String command = list.getResult(2);
                 for (Entity entity : entities) {
-                    LevelPosition pos = ((PositionNode) list.get(1)).get(entity);
-                    ExecutorCommandSender executeSender = new ExecutorCommandSender(sender, entity, Transform.fromObject(pos));
+                    Position pos = ((PositionNode) list.get(1)).get(entity);
+                    ExecutorCommandSender executeSender = new ExecutorCommandSender(sender, entity, Location.fromObject(pos));
                     int n = executeSender.getServer().executeCommand(executeSender, command);
                     if (n == 0) {
                         log.addError("commands.execute.failed", command, entity.getName());
@@ -64,10 +64,10 @@ public class ExecuteCommandOld extends VanillaCommand {
                 int meta = list.getResult(5);
                 String command = list.getResult(6);
                 for (Entity entity : entities) {
-                    LevelPosition pos = ((PositionNode) list.get(1)).get(entity);
-                    LevelPosition detect = ((PositionNode) list.get(3)).get(pos);
+                    Position pos = ((PositionNode) list.get(1)).get(entity);
+                    Position detect = ((PositionNode) list.get(3)).get(pos);
                     if (detect.getLevelBlock().getId() == blockId && detect.getLevelBlock().getBlockState().specialValue() == meta) {
-                        ExecutorCommandSender executeSender = new ExecutorCommandSender(sender, entity, Transform.fromObject(pos));
+                        ExecutorCommandSender executeSender = new ExecutorCommandSender(sender, entity, Location.fromObject(pos));
                         int n = executeSender.getServer().executeCommand(executeSender, command);
                         if (n == 0) {
                             log.addError("commands.execute.failed", command, entity.getName());

@@ -10,7 +10,7 @@ import cn.nukkit.event.block.BigDripleafTiltChangeEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.particle.BoneMealParticle;
 import cn.nukkit.math.AxisAlignedBB;
@@ -242,7 +242,7 @@ public class BlockBigDripleaf extends BlockFlowable implements Faceable {
     }
 
     @Override
-    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull LevelPosition position, @NotNull Vector3 motion) {
+    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Position position, @NotNull Vector3 motion) {
         setTiltAndScheduleTick(BigDripleafTilt.FULL_TILT);
         return true;
     }

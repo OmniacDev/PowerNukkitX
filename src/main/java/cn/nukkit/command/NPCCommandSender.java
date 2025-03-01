@@ -6,8 +6,8 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.mob.EntityNPC;
 import cn.nukkit.lang.CommandOutputContainer;
 import cn.nukkit.lang.TextContainer;
-import cn.nukkit.level.Transform;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Location;
+import cn.nukkit.level.Position;
 import cn.nukkit.permission.PermissibleBase;
 import cn.nukkit.permission.Permission;
 import cn.nukkit.permission.PermissionAttachment;
@@ -77,12 +77,12 @@ public class NPCCommandSender implements CommandSender {
     }
 
     @Override
-    @NotNull public LevelPosition getPosition() {
+    @NotNull public Position getPosition() {
         return npc.getPosition();
     }
 
     @Override
-    @NotNull public Transform getLocation() {
+    @NotNull public Location getLocation() {
         return npc.getLocation();
     }
 

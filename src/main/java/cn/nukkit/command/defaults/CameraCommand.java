@@ -17,7 +17,7 @@ import cn.nukkit.command.tree.node.FloatNode;
 import cn.nukkit.command.tree.node.PlayersNode;
 import cn.nukkit.command.tree.node.RelativeFloatNode;
 import cn.nukkit.command.utils.CommandLogger;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector2f;
 import cn.nukkit.math.Vector3f;
 import cn.nukkit.network.protocol.CameraInstructionPacket;
@@ -209,7 +209,7 @@ public class CameraCommand extends VanillaCommand {
                     log.addError("commands.camera.invalid-preset").output();
                     return 0;
                 }
-                LevelPosition position = list.get(4).get();
+                Position position = list.get(4).get();
                 pk.setInstruction(SetInstruction.builder()
                         .preset(preset)
                         .pos(new Vector3f((float) position.getX(), (float) position.getY(), (float) position.getZ()))
@@ -221,7 +221,7 @@ public class CameraCommand extends VanillaCommand {
                     log.addError("commands.camera.invalid-preset").output();
                     return 0;
                 }
-                LevelPosition position = list.get(4).get();
+                Position position = list.get(4).get();
                 pk.setInstruction(SetInstruction.builder()
                         .preset(preset)
                         .pos(new Vector3f((float) position.getX(), (float) position.getY(), (float) position.getZ()))
@@ -263,7 +263,7 @@ public class CameraCommand extends VanillaCommand {
                 }
                 float easeTime = list.get(4).get();
                 var easeType = EaseType.valueOf(((String) list.get(5).get()).toUpperCase(Locale.ENGLISH));
-                LevelPosition position = list.get(7).get();
+                Position position = list.get(7).get();
                 pk.setInstruction(SetInstruction.builder()
                         .preset(preset)
                         .ease(new Ease(easeTime, easeType))
@@ -278,7 +278,7 @@ public class CameraCommand extends VanillaCommand {
                 }
                 float easeTime = list.get(4).get();
                 var easeType = EaseType.valueOf(((String) list.get(5).get()).toUpperCase(Locale.ENGLISH));
-                LevelPosition position = list.get(7).get();
+                Position position = list.get(7).get();
                 pk.setInstruction(SetInstruction.builder()
                         .preset(preset)
                         .ease(new Ease(easeTime, easeType))

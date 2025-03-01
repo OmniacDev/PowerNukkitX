@@ -19,45 +19,45 @@ import java.util.Set;
  */
 
 @Slf4j
-public class LevelPosition extends NamedPosition {
+public class Position extends NamedPosition {
     public Level level;
 
-    public LevelPosition() {
+    public Position() {
         this(0, 0, 0, null);
     }
 
-    public LevelPosition(double x) {
+    public Position(double x) {
         this(x, 0, 0, null);
     }
 
-    public LevelPosition(double x, double y) {
+    public Position(double x, double y) {
         this(x, y, 0, null);
     }
 
-    public LevelPosition(double x, double y, double z) {
+    public Position(double x, double y, double z) {
         this(x, y, z, null);
     }
 
-    public LevelPosition(double x, double y, double z, Level level) {
+    public Position(double x, double y, double z, Level level) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.level = level;
     }
 
-    public static LevelPosition fromObject(Vector3 pos) {
+    public static Position fromObject(Vector3 pos) {
         return fromObject(pos, null);
     }
 
-    public static LevelPosition fromObject(Vector3 pos, Level level) {
-        return new LevelPosition(pos.x, pos.y, pos.z, level);
+    public static Position fromObject(Vector3 pos, Level level) {
+        return new Position(pos.x, pos.y, pos.z, level);
     }
 
     public Level getLevel() {
         return this.level;
     }
 
-    public LevelPosition setLevel(Level level) {
+    public Position setLevel(Level level) {
         this.level = level;
         return this;
     }
@@ -75,20 +75,20 @@ public class LevelPosition extends NamedPosition {
     }
 
     @Override
-    public LevelPosition getSide(BlockFace face) {
+    public Position getSide(BlockFace face) {
         return this.getSide(face, 1);
     }
 
     @Override
-    public LevelPosition getSide(BlockFace face, int step) {
-        return LevelPosition.fromObject(super.getSide(face, step), getValidLevel());
+    public Position getSide(BlockFace face, int step) {
+        return Position.fromObject(super.getSide(face, step), getValidLevel());
     }
 
     // Get as a Position for better performance. Do not override it!
 
 
-    public LevelPosition getSidePos(BlockFace face) {
-        return LevelPosition.fromObject(super.getSide(face, 1), getValidLevel());
+    public Position getSidePos(BlockFace face) {
+        return Position.fromObject(super.getSide(face, 1), getValidLevel());
     }
 
     @Override
@@ -97,7 +97,7 @@ public class LevelPosition extends NamedPosition {
     }
 
     @Override
-    public LevelPosition setComponents(double x, double y, double z) {
+    public Position setComponents(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -105,7 +105,7 @@ public class LevelPosition extends NamedPosition {
     }
 
     @Override
-    public @NotNull LevelPosition setComponents(@NotNull Vector3 pos) {
+    public Position setComponents(Vector3 pos) {
         super.setComponents(pos);
         return this;
     }
@@ -159,8 +159,8 @@ public class LevelPosition extends NamedPosition {
         return getValidLevel().getTickCachedBlock(this, layer);
     }
 
-    @NotNull public Transform getLocation() {
-        return new Transform(this.x, this.y, this.z, 0, 0, getValidLevel());
+    @NotNull public Location getLocation() {
+        return new Location(this.x, this.y, this.z, 0, 0, getValidLevel());
     }
 
     @Override
@@ -177,78 +177,78 @@ public class LevelPosition extends NamedPosition {
     }
 
     @Override
-    public LevelPosition add(double x) {
+    public Position add(double x) {
         return this.add(x, 0, 0);
     }
 
     @Override
-    public LevelPosition add(double x, double y) {
+    public Position add(double x, double y) {
         return this.add(x, y, 0);
     }
 
     @Override
-    public LevelPosition add(double x, double y, double z) {
-        return new LevelPosition(this.x + x, this.y + y, this.z + z, this.level);
+    public Position add(double x, double y, double z) {
+        return new Position(this.x + x, this.y + y, this.z + z, this.level);
     }
 
     @Override
-    public LevelPosition add(Vector3 v) {
-        return new LevelPosition(this.x + v.getX(), this.y + v.getY(), this.z + v.getZ(), this.level);
+    public Position add(Vector3 x) {
+        return new Position(this.x + x.getX(), this.y + x.getY(), this.z + x.getZ(), this.level);
     }
 
     @Override
-    public LevelPosition subtract(double x) {
+    public Position subtract(double x) {
         return this.subtract(x, 0, 0);
     }
 
     @Override
-    public LevelPosition subtract(double x, double y) {
+    public Position subtract(double x, double y) {
         return this.subtract(x, y, 0);
     }
 
     @Override
-    public LevelPosition subtract(double x, double y, double z) {
+    public Position subtract(double x, double y, double z) {
         return this.add(-x, -y, -z);
     }
 
     @Override
-    public LevelPosition subtract(Vector3 v) {
-        return this.add(-v.getX(), -v.getY(), -v.getZ());
+    public Position subtract(Vector3 x) {
+        return this.add(-x.getX(), -x.getY(), -x.getZ());
     }
 
     @Override
-    public LevelPosition multiply(double number) {
-        return new LevelPosition(this.x * number, this.y * number, this.z * number, this.level);
+    public Position multiply(double number) {
+        return new Position(this.x * number, this.y * number, this.z * number, this.level);
     }
 
     @Override
-    public LevelPosition divide(double number) {
-        return new LevelPosition(this.x / number, this.y / number, this.z / number, this.level);
+    public Position divide(double number) {
+        return new Position(this.x / number, this.y / number, this.z / number, this.level);
     }
 
     @Override
-    public LevelPosition ceil() {
-        return new LevelPosition((int) Math.ceil(this.x), (int) Math.ceil(this.y), (int) Math.ceil(this.z), this.level);
+    public Position ceil() {
+        return new Position((int) Math.ceil(this.x), (int) Math.ceil(this.y), (int) Math.ceil(this.z), this.level);
     }
 
     @Override
-    public LevelPosition floor() {
-        return new LevelPosition(this.getFloorX(), this.getFloorY(), this.getFloorZ(), this.level);
+    public Position floor() {
+        return new Position(this.getFloorX(), this.getFloorY(), this.getFloorZ(), this.level);
     }
 
     @Override
-    public LevelPosition round() {
-        return new LevelPosition(Math.round(this.x), Math.round(this.y), Math.round(this.z), this.level);
+    public Position round() {
+        return new Position(Math.round(this.x), Math.round(this.y), Math.round(this.z), this.level);
     }
 
     @Override
-    public LevelPosition abs() {
-        return new LevelPosition((int) Math.abs(this.x), (int) Math.abs(this.y), (int) Math.abs(this.z), this.level);
+    public Position abs() {
+        return new Position((int) Math.abs(this.x), (int) Math.abs(this.y), (int) Math.abs(this.z), this.level);
     }
 
     @Override
-    public LevelPosition clone() {
-        return (LevelPosition) super.clone();
+    public Position clone() {
+        return (Position) super.clone();
     }
 
     public IChunk getChunk() {

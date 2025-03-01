@@ -13,7 +13,7 @@ import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.mob.EntityShulker;
 import cn.nukkit.entity.projectile.EntityShulkerBullet;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -37,7 +37,7 @@ public class ShulkerAttackExecutor implements IBehaviorExecutor {
         if(tick > nextAttack) {
             tick = 0;
             nextAttack = Utils.rand(20, 110);
-            Transform bulletLocation = entity.getLocation().clone().add(new Vector3(target.x - entity.x, target.y - entity.y, target.z - entity.z).normalize()).add(0, 0.5f, 0);
+            Location bulletLocation = entity.getLocation().clone().add(new Vector3(target.x - entity.x, target.y - entity.y, target.z - entity.z).normalize()).add(0, 0.5f, 0);
             CompoundTag nbt = new CompoundTag()
                     .putList("Pos", new ListTag<FloatTag>()
                             .add(new FloatTag(bulletLocation.x))

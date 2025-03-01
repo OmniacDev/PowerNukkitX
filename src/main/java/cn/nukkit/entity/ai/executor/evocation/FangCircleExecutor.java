@@ -3,7 +3,7 @@ package cn.nukkit.entity.ai.executor.evocation;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 
 import static cn.nukkit.entity.ai.memory.CoreMemoryTypes.LAST_MAGIC;
 
@@ -46,7 +46,7 @@ public class FangCircleExecutor extends FangLineExecutor {
             double angle = Math.toRadians((i * angleIncrement) + origin.getHeadYaw());
             double particleX = origin.getX() + Math.cos(angle) * size;
             double particleZ = origin.getZ() + Math.sin(angle) * size;
-            spawn(origin, new Transform(particleX, origin.y, particleZ, angle, 0, origin.level));
+            spawn(origin, new Location(particleX, origin.y, particleZ, angle, 0, origin.level));
         }
     }
 

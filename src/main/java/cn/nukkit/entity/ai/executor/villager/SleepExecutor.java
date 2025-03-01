@@ -8,7 +8,7 @@ import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.mob.villagers.EntityVillagerV2;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import cn.nukkit.math.BVector3;
 import cn.nukkit.math.BlockVector3;
 import cn.nukkit.math.Vector3;
@@ -33,7 +33,7 @@ public class SleepExecutor implements EntityControl, IBehaviorExecutor {
                 BlockBed head = bed.getHeadPart();
                 BlockBed foot = bed.getFootPart();
 
-                Transform sleepingLocation = foot.getLocation().add(switch (head.getBlockFace()) {
+                Location sleepingLocation = foot.getLocation().add(switch (head.getBlockFace()) {
                     case NORTH -> new Vector3(0.5f, 0.5625f, 0);
                     case SOUTH -> new Vector3(0.5f, 0.5625f, 1);
                     case WEST -> new Vector3(0, 0.5625f, 0.5);

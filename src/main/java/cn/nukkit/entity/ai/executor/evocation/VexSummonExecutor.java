@@ -9,7 +9,7 @@ import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager;
 import cn.nukkit.entity.mob.monster.EntityVex;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import cn.nukkit.level.Sound;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.FloatTag;
@@ -60,7 +60,7 @@ public class VexSummonExecutor extends FangLineExecutor {
 
     protected void summon(EntityLiving entity) {
         if(!entity.getDataFlag(EntityFlag.CASTING)) return;
-        Transform vexLocation = entity.getLocation();
+        Location vexLocation = entity.getLocation();
         vexLocation.x += ThreadLocalRandom.current().nextFloat(2);
         vexLocation.y += ThreadLocalRandom.current().nextFloat(2);
         vexLocation.z += ThreadLocalRandom.current().nextFloat(2);

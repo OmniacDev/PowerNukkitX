@@ -10,7 +10,7 @@ import cn.nukkit.event.block.BlockGrowEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
@@ -202,7 +202,7 @@ public class BlockChorusFlower extends BlockTransparent {
     }
 
     @Override
-    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull LevelPosition position, @NotNull Vector3 motion) {
+    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Position position, @NotNull Vector3 motion) {
         if (projectile instanceof EntityArrow || projectile instanceof EntitySnowball || projectile instanceof EntitySmallFireball) {
             this.getLevel().useBreakOn(this);
             return true;

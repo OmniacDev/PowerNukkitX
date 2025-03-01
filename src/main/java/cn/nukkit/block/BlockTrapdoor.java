@@ -9,7 +9,7 @@ import cn.nukkit.event.block.DoorToggleEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
@@ -38,7 +38,7 @@ public class BlockTrapdoor extends BlockTransparent implements RedstoneComponent
     // It is used to detect on redstone update, if the door should be closed if redstone is off on the update,
     // previously the door always closed, when placing an unpowered redstone at the door, this fixes it
     // and gives the vanilla behavior; no idea how to make this better :d
-    private static final Set<Transform> manualOverrides = Sets.newConcurrentHashSet();
+    private static final Set<Location> manualOverrides = Sets.newConcurrentHashSet();
 
     private static final AxisAlignedBB[] boundingBox2SpecialV = new AxisAlignedBB[0x1 << PROPERTIES.getSpecialValueBits()];
 

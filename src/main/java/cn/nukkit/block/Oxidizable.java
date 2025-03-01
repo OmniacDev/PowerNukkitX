@@ -5,8 +5,8 @@ import cn.nukkit.block.property.enums.OxidizationLevel;
 import cn.nukkit.event.block.BlockFadeEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Transform;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Location;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.particle.ScrapeParticle;
 import cn.nukkit.math.BlockFace;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public interface Oxidizable {
 
     @NotNull
-    Transform getLocation();
+    Location getLocation();
 
     default int onUpdate(int type) {
         if (type != Level.BLOCK_UPDATE_RANDOM) {
@@ -43,7 +43,7 @@ public interface Oxidizable {
         }
 
         Block block = this instanceof Block? (Block) this : getLocation().getLevelBlock();
-        Transform mutableLocation = block.getLocation();
+        Location mutableLocation = block.getLocation();
 
         int odds = 0;
         int cons = 0;
@@ -105,7 +105,7 @@ public interface Oxidizable {
             return false;
         }
 
-        LevelPosition location = this instanceof Block? (LevelPosition) this : getLocation();
+        Position location = this instanceof Block? (Position) this : getLocation();
         if (player == null || !player.isCreative()) {
             item.useOn(this instanceof Block? (Block) this : location.getLevelBlock());
         }

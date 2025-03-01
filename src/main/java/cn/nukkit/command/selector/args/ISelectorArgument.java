@@ -4,7 +4,7 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.exceptions.SelectorSyntaxException;
 import cn.nukkit.command.selector.SelectorType;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,7 +31,7 @@ public interface ISelectorArgument extends Comparable<ISelectorArgument>{
      * @throws SelectorSyntaxException 当解析出错
      */
     @Nullable
-    default Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Transform basePos, String... arguments) throws SelectorSyntaxException {
+    default Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location basePos, String... arguments) throws SelectorSyntaxException {
         return null;
     }
 
@@ -47,7 +47,7 @@ public interface ISelectorArgument extends Comparable<ISelectorArgument>{
      * @return 实体过滤器
      * @throws SelectorSyntaxException 当解析出错
      */
-    default Function<List<Entity>, List<Entity>> getFilter(SelectorType selectorType, CommandSender sender, Transform basePos, String... arguments) throws SelectorSyntaxException {
+    default Function<List<Entity>, List<Entity>> getFilter(SelectorType selectorType, CommandSender sender, Location basePos, String... arguments) throws SelectorSyntaxException {
         return null;
     }
 

@@ -2,7 +2,7 @@ package cn.nukkit.entity.ai.route.posevaluator;
 
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.EntityIntelligent;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 public class SwimmingPosEvaluator implements IPosEvaluator {
     @Override
     public boolean evalPos(@NotNull EntityIntelligent entity, @NotNull Vector3 pos) {
-        String blockId = entity.level.getTickCachedBlock(LevelPosition.fromObject(pos, entity.level)).getId();
+        String blockId = entity.level.getTickCachedBlock(Position.fromObject(pos, entity.level)).getId();
         return isPassable(entity, pos) && (blockId == Block.FLOWING_WATER || blockId == Block.WATER);
     }
 

@@ -11,7 +11,7 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemSweetBerries;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.particle.BoneMealParticle;
 import cn.nukkit.math.AxisAlignedBB;
@@ -110,7 +110,7 @@ public class BlockSweetBerryBush extends BlockFlowable {
             getLevel().setBlock(this, event.getNewState(), true, true);
             Item[] drops = event.getDrops();
             if (drops != null) {
-                LevelPosition dropPos = add(0.5, 0.5, 0.5);
+                Position dropPos = add(0.5, 0.5, 0.5);
                 for (Item drop : drops) {
                     if (drop != null) {
                         getLevel().dropItem(dropPos, drop);

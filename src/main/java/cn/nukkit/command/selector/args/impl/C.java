@@ -6,7 +6,7 @@ import cn.nukkit.command.selector.ParseUtils;
 import cn.nukkit.command.selector.SelectorType;
 import cn.nukkit.command.selector.args.CachedFilterSelectorArgument;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 public class C extends CachedFilterSelectorArgument {
     @Override
-    public Function<List<Entity>, List<Entity>> cache(SelectorType selectorType, CommandSender sender, Transform basePos, String... arguments) throws SelectorSyntaxException {
+    public Function<List<Entity>, List<Entity>> cache(SelectorType selectorType, CommandSender sender, Location basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
         ParseUtils.cannotReversed(arguments[0]);
         final var c = Integer.parseInt(arguments[0]);

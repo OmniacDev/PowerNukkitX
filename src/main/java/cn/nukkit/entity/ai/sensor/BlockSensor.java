@@ -2,8 +2,9 @@ package cn.nukkit.entity.ai.sensor;
 
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +44,7 @@ public class BlockSensor implements ISensor {
         for(int x = -range; x<=range; x++) {
             for(int z = -range; z<=range; z++) {
                 for(int y = -lookY; y<=lookY; y++) {
-                    Transform lookLocation = entity.add(x, y, z);
+                    Location lookLocation = entity.add(x, y, z);
                     Block lookBlock = lookLocation.getLevelBlock();
                     if(blockClass.isAssignableFrom(lookBlock.getClass())) {
                         block = lookBlock;

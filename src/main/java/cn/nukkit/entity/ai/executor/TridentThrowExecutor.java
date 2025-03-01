@@ -12,7 +12,7 @@ import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.entity.projectile.abstract_arrow.EntityThrownTrident;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -82,7 +82,7 @@ public class TridentThrowExecutor implements EntityControl, IBehaviorExecutor {
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Transform clone = this.target.clone();
+        Location clone = this.target.clone();
 
         if (entity.distanceSquared(target) > maxShootDistanceSquared) {
             //更新寻路target
@@ -142,7 +142,7 @@ public class TridentThrowExecutor implements EntityControl, IBehaviorExecutor {
 
     protected void throwTrident(EntityLiving entity) {
 
-        Transform fireballLocation = entity.getLocation();
+        Location fireballLocation = entity.getLocation();
         Vector3 directionVector = entity.getDirectionVector().multiply(1 + ThreadLocalRandom.current().nextFloat(0.2f));
         fireballLocation.setY(entity.y + entity.getEyeHeight() + directionVector.getY());
         CompoundTag nbt = new CompoundTag()

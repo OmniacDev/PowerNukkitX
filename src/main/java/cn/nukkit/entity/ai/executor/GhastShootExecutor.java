@@ -12,9 +12,10 @@ import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.projectile.EntityFireball;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.network.protocol.LevelEventPacket;
@@ -78,7 +79,7 @@ public class GhastShootExecutor implements EntityControl, IBehaviorExecutor {
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Transform clone = this.target.clone();
+        Location clone = this.target.clone();
 
         if (entity.distanceSquared(target) > maxShootDistanceSquared) {
             setRouteTarget(entity, clone);
@@ -133,7 +134,7 @@ public class GhastShootExecutor implements EntityControl, IBehaviorExecutor {
 
     protected void shootFireball(EntityLiving entity) {
 
-        Transform fireballLocation = entity.getLocation();
+        Location fireballLocation = entity.getLocation();
         Vector3 directionVector = entity.getDirectionVector().multiply(1 + ThreadLocalRandom.current().nextFloat(0.2f));
         fireballLocation.setY(entity.y + entity.getEyeHeight() + directionVector.getY());
         CompoundTag nbt = new CompoundTag()

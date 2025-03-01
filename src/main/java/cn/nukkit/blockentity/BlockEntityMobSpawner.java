@@ -9,7 +9,7 @@ import cn.nukkit.entity.mob.monster.EntityMonster;
 import cn.nukkit.entity.mob.animal.EntityAnimal;
 import cn.nukkit.event.entity.CreatureSpawnEvent;
 import cn.nukkit.level.GameRule;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
@@ -111,7 +111,7 @@ public class BlockEntityMobSpawner extends BlockEntitySpawnable {
 
             for (int i = 0; i < this.spawnCount; i++) {
                 if (playerInRange && nearbyEntities <= this.maxNearbyEntities) {
-                    LevelPosition pos = new LevelPosition
+                    Position pos = new Position
                             (
                                     this.x + Utils.rand(-this.spawnRange, this.spawnRange),
                                     this.getY(),

@@ -8,7 +8,7 @@ import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.command.tree.ParamList;
 import cn.nukkit.command.utils.CommandLogger;
 import cn.nukkit.level.ParticleEffect;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class ParticleCommand extends VanillaCommand {
     @Override
     public int execute(CommandSender sender, String commandLabel, Map.Entry<String, ParamList> result, CommandLogger log) {
         String name = result.getValue().getResult(0);
-        LevelPosition position = result.getValue().getResult(1);
+        Position position = result.getValue().getResult(1);
         int count = 1;
         if (result.getValue().hasResult(2)) count = result.getValue().getResult(2);
         if (count < 1) {

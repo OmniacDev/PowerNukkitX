@@ -10,7 +10,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
@@ -38,7 +38,7 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
     // It is used to detect on redstone update, if the door should be closed if redstone is off on the update,
     // previously the door always closed, when placing an unpowered redstone at the door, this fixes it
     // and gives the vanilla behavior; no idea how to make this better :d
-    private static final List<Transform> manualOverrides = new ArrayList<>();
+    private static final List<Location> manualOverrides = new ArrayList<>();
 
     protected final static BiMap<BlockFace, Integer> DOOR_DIRECTION = HashBiMap.create(4);
 
@@ -158,8 +158,8 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
     }
 
     public void setManualOverride(boolean val) {
-        Transform down;
-        Transform up;
+        Location down;
+        Location up;
         if (this.isTop()) {
             down = down().getLocation();
             up = getLocation();
@@ -178,8 +178,8 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
     }
 
     public boolean getManualOverride() {
-        Transform down;
-        Transform up;
+        Location down;
+        Location up;
         if (this.isTop()) {
             down = down().getLocation();
             up = getLocation();
@@ -193,8 +193,8 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
 
     @Override
     public boolean isGettingPower() {
-        Transform down;
-        Transform up;
+        Location down;
+        Location up;
         if (this.isTop()) {
             down = down().getLocation();
             up = getLocation();

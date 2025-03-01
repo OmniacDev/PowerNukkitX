@@ -15,7 +15,7 @@ import cn.nukkit.event.entity.ProjectileLaunchEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemCrossbow;
 import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.level.Transform;
+import cn.nukkit.level.Location;
 import cn.nukkit.level.Sound;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.FloatTag;
@@ -87,7 +87,7 @@ public class CrossBowShootExecutor implements EntityControl, IBehaviorExecutor {
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Transform clone = this.target.clone();
+        Location clone = this.target.clone();
 
         if (entity.distanceSquared(target) > maxShootDistanceSquared) {
             //更新寻路target

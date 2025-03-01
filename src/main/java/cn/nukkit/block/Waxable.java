@@ -3,8 +3,8 @@ package cn.nukkit.block;
 import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemID;
-import cn.nukkit.level.Transform;
-import cn.nukkit.level.LevelPosition;
+import cn.nukkit.level.Location;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.particle.WaxOffParticle;
 import cn.nukkit.level.particle.WaxOnParticle;
 import cn.nukkit.math.BlockFace;
@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
  */
 public interface Waxable {
 
-    @NotNull Transform getLocation();
+    @NotNull Location getLocation();
 
     default boolean onActivate(@NotNull Item item, @Nullable Player player, BlockFace blockFace, float fx, float fy, float fz) {
         boolean waxed = isWaxed();
@@ -31,7 +31,7 @@ public interface Waxable {
             return false;
         }
 
-        LevelPosition location = this instanceof Block ? (LevelPosition) this : getLocation();
+        Position location = this instanceof Block ? (Position) this : getLocation();
         if (player == null || !player.isCreative()) {
             if (waxed) {
                 item.count--;
