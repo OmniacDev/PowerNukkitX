@@ -96,7 +96,7 @@ public abstract class BlockCoralFan extends BlockFlowable implements Faceable {
         }
 
         if (face == BlockFace.UP) {
-            double rotation = player.yaw % 360;
+            double rotation = player.rotation.yaw % 360;
             if (rotation < 0) {
                 rotation += 360.0;
             }

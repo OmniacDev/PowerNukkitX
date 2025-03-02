@@ -1025,8 +1025,8 @@ public class Level implements Metadatable {
                 highLightChunks.clear();
                 for (var player : this.players.values()) {
                     if (player.isOnline()) {
-                        int chunkX = player.getChunkX();
-                        int chunkZ = player.getChunkZ();
+                        int chunkX = player.pos.getChunkX();
+                        int chunkZ = player.pos.getChunkZ();
                         for (int dx = -1; dx <= 1; dx++) {
                             for (int dz = -1; dz <= 1; dz++) {
                                 highLightChunks.add(Level.chunkHash(chunkX + dx, chunkZ + dz));
@@ -1272,7 +1272,7 @@ public class Level implements Metadatable {
         List<Entity> list = new ArrayList<>();
 
         for (Entity entity : this.getCollidingEntities(axisalignedbb)) {
-            if (entity.isAlive() && canBlockSeeSky(entity)) {
+            if (entity.isAlive() && canBlockSeeSky(entity.pos)) {
                 list.add(entity);
             }
         }
@@ -2643,7 +2643,7 @@ public class Level implements Metadatable {
         item.useOn(target);
         if (item.isTool() && item.getDamage() >= item.getMaxDurability()) {
             if (player != null) {
-                addSound(player, Sound.RANDOM_BREAK);
+                addSound(player.pos, Sound.RANDOM_BREAK);
             }
             item = Item.AIR;
         }
@@ -2746,7 +2746,7 @@ public class Level implements Metadatable {
                 target.onTouch(vector, item, face, fx, fy, fz, player, ev.getAction());
                 if (ev.getAction() == Action.RIGHT_CLICK_BLOCK && target.canBeActivated() && target.onActivate(item, player, face, fx, fy, fz)) {
                     if (item.isTool() && item.getDamage() >= item.getMaxDurability()) {
-                        addSound(player, Sound.RANDOM_BREAK);
+                        addSound(player.pos, Sound.RANDOM_BREAK);
                         item = Item.AIR;
                     }
                     return item;
@@ -3489,7 +3489,7 @@ public class Level implements Metadatable {
                 for (Player player : Objects.requireNonNull(players).values()) {
                     if (player.isConnected()) {
                         NetworkChunkPublisherUpdatePacket ncp = new NetworkChunkPublisherUpdatePacket();
-                        ncp.position = player.asBlockVector3();
+                        ncp.position = player.pos.asBlockVector3();
                         ncp.radius = player.getViewDistance() << 4;
                         player.dataPacket(ncp);
 

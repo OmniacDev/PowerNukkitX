@@ -97,7 +97,7 @@ public abstract class BlockHangingSign extends BlockSignBase implements BlockEnt
         if (face == BlockFace.DOWN) {
             this.setPropertyValue(CommonBlockProperties.HANGING, true);
             CompassRoseDirection direction = CompassRoseDirection.from(
-                    (int) Math.floor((((player != null ? player.yaw : 0) + 180) * 16 / 360) + 0.5) & 0x0f
+                    (int) Math.floor((((player != null ? player.rotation.yaw : 0) + 180) * 16 / 360) + 0.5) & 0x0f
             );
             if ((player != null && player.isSneaking()) || target instanceof BlockThin || target instanceof BlockChain || target instanceof BlockHangingSign) {
                 this.setPropertyValue(CommonBlockProperties.ATTACHED_BIT, true);

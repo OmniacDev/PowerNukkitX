@@ -130,7 +130,7 @@ public class BlockBell extends BlockTransparent implements RedstoneComponent, Fa
                         (blockBoundingBox.getMaxY() - blockBoundingBox.getMinY()) / 2,
                         (blockBoundingBox.getMaxZ() - blockBoundingBox.getMinZ()) / 2
                 );
-                Vector3 entityPos = entity.add(entityCenter);
+                Vector3 entityPos = entity.pos.add(entityCenter);
                 Vector3 blockPos = this.add(
                         blockBoundingBox.getMinX() - x + blockCenter.x,
                         blockBoundingBox.getMinY() - y + blockCenter.y,
@@ -183,7 +183,7 @@ public class BlockBell extends BlockTransparent implements RedstoneComponent, Fa
             if (causeEntity != null) {
                 if (causeEntity instanceof EntityItem) {
                     Position blockMid = add(0.5, 0.5, 0.5);
-                    Vector3 vector = causeEntity.subtract(blockMid).normalize();
+                    Vector3 vector = causeEntity.pos.subtract(blockMid).normalize();
                     int x = vector.x < 0 ? -1 : vector.x > 0 ? 1 : 0;
                     int z = vector.z < 0 ? -1 : vector.z > 0 ? 1 : 0;
                     if (x != 0 && z != 0) {
@@ -369,8 +369,8 @@ public class BlockBell extends BlockTransparent implements RedstoneComponent, Fa
     @Override
     public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Position position, @NotNull Vector3 motion) {
         ring(projectile, BellRingEvent.RingCause.PROJECTILE);
-        if (projectile.isOnFire() && projectile instanceof EntityArrow && level.getBlock(projectile).isAir()) {
-            level.setBlock(projectile, Block.get(BlockID.FIRE), true);
+        if (projectile.isOnFire() && projectile instanceof EntityArrow && level.getBlock(projectile.pos).isAir()) {
+            level.setBlock(projectile.pos, Block.get(BlockID.FIRE), true);
         }
         return true;
     }

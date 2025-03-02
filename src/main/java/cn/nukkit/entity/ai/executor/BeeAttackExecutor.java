@@ -23,7 +23,7 @@ public class BeeAttackExecutor extends MeleeAttackExecutor {
                 if (!entity.isEnablePitch()) entity.setEnablePitch(true);
                 Entity entity1 = entity.getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET);
                 if (entity1 != null) {
-                    this.lookTarget = entity1.clone();
+                    this.lookTarget = entity1.pos.clone();
                     if (getInstance().getDifficulty() == 2) {
                         entity1.addEffect(Effect.get(EffectType.POISON).setDuration(200));
                     } else if (getInstance().getDifficulty() == 3) {
@@ -32,7 +32,7 @@ public class BeeAttackExecutor extends MeleeAttackExecutor {
                 }
             }
 
-            if (entity.distanceSquared(entity.getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET)) <= 2.5 && attackTick > coolDown && bee.hasSting()) {
+            if (entity.pos.distanceSquared(entity.getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET).pos) <= 2.5 && attackTick > coolDown && bee.hasSting()) {
                 bee.dieInTicks = 700;
             }
             return super.execute(entity);

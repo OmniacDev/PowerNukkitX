@@ -114,9 +114,9 @@ public class DummyBossBar {
         pkAdd.type = Registries.ENTITY.getEntityNetworkId(EntityID.CREEPER);
         pkAdd.entityUniqueId = bossBarId;
         pkAdd.entityRuntimeId = bossBarId;
-        pkAdd.x = (float) player.x;
+        pkAdd.x = (float) player.pos.x;
         pkAdd.y = (float) -74; // Below the bedrock
-        pkAdd.z = (float) player.z;
+        pkAdd.z = (float) player.pos.z;
         pkAdd.speedX = 0;
         pkAdd.speedY = 0;
         pkAdd.speedZ = 0;
@@ -189,9 +189,9 @@ public class DummyBossBar {
     public void updateBossEntityPosition() {
         MoveEntityAbsolutePacket pk = new MoveEntityAbsolutePacket();
         pk.eid = this.bossBarId;
-        pk.x = this.player.x;
+        pk.x = this.player.pos.x;
         pk.y = -74;
-        pk.z = this.player.z;
+        pk.z = this.player.pos.z;
         pk.headYaw = 0;
         pk.yaw = 0;
         pk.pitch = 0;

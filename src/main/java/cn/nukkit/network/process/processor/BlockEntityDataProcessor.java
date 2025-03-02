@@ -20,7 +20,7 @@ public class BlockEntityDataProcessor extends DataPacketProcessor<BlockEntityDat
         }
 
         Vector3 pos = new Vector3(pk.x, pk.y, pk.z);
-        if (pos.distanceSquared(player) > 10000) {
+        if (pos.distanceSquared(player.pos) > 10000) {
             return;
         }
         player.resetInventory();

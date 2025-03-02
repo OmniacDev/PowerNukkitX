@@ -131,9 +131,9 @@ public class EntityCreaking extends EntityMonster {
         packet.eventId = LevelEventPacket.EVENT_PARTICLE_CREAKING_HEART_TRIAL;
         CompoundTag tag = new CompoundTag();
         tag.putInt("CreakingAmount", 1);
-        tag.putFloat("CreakingX", (float) this.x);
-        tag.putFloat("CreakingY", (float) this.y);
-        tag.putFloat("CreakingZ", (float) this.z);
+        tag.putFloat("CreakingX", (float) this.pos.x);
+        tag.putFloat("CreakingY", (float) this.pos.y);
+        tag.putFloat("CreakingZ", (float) this.pos.z);
         tag.putInt("HeartAmount", 1);
         tag.putFloat("HeartX", (float) creakingHeart.x);
         tag.putFloat("HeartY", (float) creakingHeart.y);
@@ -173,7 +173,7 @@ public class EntityCreaking extends EntityMonster {
             this.kill();
         }
         if(creakingHeart != null) {
-            if(this.distance(creakingHeart) > 32) {
+            if(this.pos.distance(creakingHeart) > 32) {
                 setMoveTarget(creakingHeart);
                 setLookTarget(creakingHeart);
             }
@@ -222,9 +222,9 @@ public class EntityCreaking extends EntityMonster {
             Player after = entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER);
             if(before != after) {
                 if(before == null) {
-                    entity.level.addSound(entity, Sound.MOB_CREAKING_ACTIVATE);
+                    entity.level.addSound(entity.pos, Sound.MOB_CREAKING_ACTIVATE);
                 } else if(after == null) {
-                    entity.level.addSound(entity, Sound.MOB_CREAKING_DEACTIVATE);
+                    entity.level.addSound(entity.pos, Sound.MOB_CREAKING_DEACTIVATE);
                 }
             }
         }
@@ -243,9 +243,9 @@ public class EntityCreaking extends EntityMonster {
             Player after = entity.getMemoryStorage().get(CoreMemoryTypes.STARING_PLAYER);
             if(before != after) {
                 if(before == null) {
-                    entity.level.addSound(entity, Sound.MOB_CREAKING_FREEZE);
+                    entity.level.addSound(entity.pos, Sound.MOB_CREAKING_FREEZE);
                 } else if(after == null) {
-                    entity.level.addSound(entity, Sound.MOB_CREAKING_UNFREEZE);
+                    entity.level.addSound(entity.pos, Sound.MOB_CREAKING_UNFREEZE);
                 }
             }
         }

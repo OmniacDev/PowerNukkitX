@@ -135,8 +135,8 @@ public class BlockDispenser extends BlockSolid implements RedstoneComponent, Fac
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         if (player != null) {
-            if (Math.abs(player.x - this.x) < 2 && Math.abs(player.z - this.z) < 2) {
-                double y = player.y + player.getEyeHeight();
+            if (Math.abs(player.pos.x - this.x) < 2 && Math.abs(player.pos.z - this.z) < 2) {
+                double y = player.pos.y + player.getEyeHeight();
 
                 if (y - this.y > 2) {
                     setBlockFace(BlockFace.UP);

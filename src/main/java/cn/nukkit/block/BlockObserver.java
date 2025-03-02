@@ -47,8 +47,8 @@ public class BlockObserver extends BlockSolid implements RedstoneComponent, Face
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         if (player != null) {
-            if (Math.abs(player.getFloorX() - this.x) <= 1 && Math.abs(player.getFloorZ() - this.z) <= 1) {
-                double y = player.y + player.getEyeHeight();
+            if (Math.abs(player.pos.getFloorX() - this.x) <= 1 && Math.abs(player.pos.getFloorZ() - this.z) <= 1) {
+                double y = player.pos.y + player.getEyeHeight();
                 if (y - this.y > 2) {
                     setBlockFace(BlockFace.DOWN);
                 } else if (this.y - y > 0) {

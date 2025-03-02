@@ -73,12 +73,12 @@ public abstract class SlenderProjectile extends EntityProjectile {
             var collisionEntities = this.getLevel().fastCollidingEntities(currentAABB, this);
             if (collisionBlocks.length != 0) {
                 currentAABB.offset(-dirVector.x, -dirVector.y, -dirVector.z);
-                collisionBlock = Arrays.stream(collisionBlocks).min(Comparator.comparingDouble(projectile::distanceSquared)).get();
+                collisionBlock = Arrays.stream(collisionBlocks).min(Comparator.comparingDouble(projectile.pos::distanceSquared)).get();
                 break;
             }
             collisionEntity = collisionEntities.stream()
                     .filter(this::collideEntityFilter)
-                    .min(Comparator.comparingDouble(o -> o.distanceSquared(projectile)))
+                    .min(Comparator.comparingDouble(o -> o.pos.distanceSquared(projectile.pos)))
                     .orElse(null);
             if (collisionEntity != null) {
                 break;
@@ -134,9 +134,9 @@ public abstract class SlenderProjectile extends EntityProjectile {
         this.boundingBox.offset(0, dy, 0);
         this.boundingBox.offset(dx, 0, 0);
         this.boundingBox.offset(0, 0, dz);
-        this.x = (this.boundingBox.getMinX() + this.boundingBox.getMaxX()) / 2;
-        this.y = this.boundingBox.getMinY() - this.ySize;
-        this.z = (this.boundingBox.getMinZ() + this.boundingBox.getMaxZ()) / 2;
+        this.pos.x = (this.boundingBox.getMinX() + this.boundingBox.getMaxX()) / 2;
+        this.pos.y = this.boundingBox.getMinY() - this.ySize;
+        this.pos.z = (this.boundingBox.getMinZ() + this.boundingBox.getMaxZ()) / 2;
 
         this.checkChunks();
 
@@ -161,19 +161,19 @@ public abstract class SlenderProjectile extends EntityProjectile {
             this.motionZ = 0;
             BVector3 bVector3 = BVector3.fromPos(new Vector3(dx, dy, dz));
             BlockFace blockFace = BlockFace.fromHorizontalAngle(bVector3.getYaw());
-            Block block = level.getBlock(this.getFloorX(), this.getFloorY(), this.getFloorZ()).getSide(blockFace);
+            Block block = level.getBlock(this.pos.getFloorX(), this.pos.getFloorY(), this.pos.getFloorZ()).getSide(blockFace);
             if (block.isAir()) {
                 blockFace = BlockFace.DOWN;
-                block = level.getBlock(this.getFloorX(), this.getFloorY(), this.getFloorZ()).down();
+                block = level.getBlock(this.pos.getFloorX(), this.pos.getFloorY(), this.pos.getFloorZ()).down();
             }
             if (block.isAir()) {
                 blockFace = BlockFace.UP;
-                block = level.getBlock(this.getFloorX(), this.getFloorY(), this.getFloorZ()).up();
+                block = level.getBlock(this.pos.getFloorX(), this.pos.getFloorY(), this.pos.getFloorZ()).up();
             }
             if (block.isAir() && collisionBlock != null) {
                 block = collisionBlock;
             }
-            this.server.getPluginManager().callEvent(new ProjectileHitEvent(this, lastHitBlock = MovingObjectPosition.fromBlock(block.getFloorX(), block.getFloorY(), block.getFloorZ(), blockFace, this)));
+            this.server.getPluginManager().callEvent(new ProjectileHitEvent(this, lastHitBlock = MovingObjectPosition.fromBlock(block.getFloorX(), block.getFloorY(), block.getFloorZ(), blockFace, this.pos)));
             onCollideWithBlock(getPosition(), getMotion());
             addHitEffect();
         }

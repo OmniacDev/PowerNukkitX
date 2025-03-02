@@ -118,7 +118,7 @@ public class BlockBamboo extends BlockTransparent implements BlockFlowerPot.Flow
                 AnimatePacket animatePacket = new AnimatePacket();
                 animatePacket.action = AnimatePacket.Action.SWING_ARM;
                 animatePacket.eid = player.getId();
-                this.getLevel().addChunkPacket(player.getChunkX(), player.getChunkZ(), animatePacket);
+                this.getLevel().addChunkPacket(player.pos.getChunkX(), player.pos.getChunkZ(), animatePacket);
             }
             setBambooLeafSize(BambooLeafSize.SMALL_LEAVES);
         }

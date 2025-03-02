@@ -97,7 +97,7 @@ public class EntityFishingHook extends SlenderProjectile {
                 setDataProperty(TARGET_EID, 0L);
             } else {
                 Vector3f offset = entity.getMountedOffset(this);
-                setPosition(new Vector3(entity.x + offset.x, entity.y + offset.y, entity.z + offset.z));
+                setPosition(new Vector3(entity.pos.x + offset.x, entity.pos.y + offset.y, entity.pos.z + offset.z));
             }
             return false;
         }
@@ -170,13 +170,13 @@ public class EntityFishingHook extends SlenderProjectile {
     }
 
     public int getWaterHeight() {
-        for (int y = this.getFloorY(); y <= level.getMaxHeight(); y++) {
-            String id = this.level.getBlockIdAt(this.getFloorX(), y, this.getFloorZ());
+        for (int y = this.pos.getFloorY(); y <= level.getMaxHeight(); y++) {
+            String id = this.level.getBlockIdAt(this.pos.getFloorX(), y, this.pos.getFloorZ());
             if (Objects.equals(id, Block.AIR)) {
                 return y;
             }
         }
-        return this.getFloorY();
+        return this.pos.getFloorY();
     }
 
     public void fishBites() {
@@ -199,10 +199,10 @@ public class EntityFishingHook extends SlenderProjectile {
 
         ThreadLocalRandom random = ThreadLocalRandom.current();
         for (int i = 0; i < 5; i++) {
-            this.level.addParticle(new BubbleParticle(this.setComponents(
-                    this.x + random.nextDouble() * 0.5 - 0.25,
+            this.level.addParticle(new BubbleParticle(this.pos.setComponents(
+                    this.pos.x + random.nextDouble() * 0.5 - 0.25,
                     this.getWaterHeight(),
-                    this.z + random.nextDouble() * 0.5 - 0.25
+                    this.pos.z + random.nextDouble() * 0.5 - 0.25
             )));
         }
     }
@@ -210,23 +210,23 @@ public class EntityFishingHook extends SlenderProjectile {
     public void spawnFish() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         this.fish = new Vector3(
-                this.x + (random.nextDouble() * 1.2 + 1) * (random.nextBoolean() ? -1 : 1),
+                this.pos.x + (random.nextDouble() * 1.2 + 1) * (random.nextBoolean() ? -1 : 1),
                 this.getWaterHeight(),
-                this.z + (random.nextDouble() * 1.2 + 1) * (random.nextBoolean() ? -1 : 1)
+                this.pos.z + (random.nextDouble() * 1.2 + 1) * (random.nextBoolean() ? -1 : 1)
         );
     }
 
     public boolean attractFish() {
         double multiply = 0.1;
         this.fish.setComponents(
-                this.fish.x + (this.x - this.fish.x) * multiply,
+                this.fish.x + (this.pos.x - this.fish.x) * multiply,
                 this.fish.y,
-                this.fish.z + (this.z - this.fish.z) * multiply
+                this.fish.z + (this.pos.z - this.fish.z) * multiply
         );
         if (ThreadLocalRandom.current().nextInt(100) < 85) {
             this.level.addParticle(new WaterParticle(this.fish));
         }
-        double dist = Math.abs(Math.sqrt(this.x * this.x + this.z * this.z) - Math.sqrt(this.fish.x * this.fish.x + this.fish.z * this.fish.z));
+        double dist = Math.abs(Math.sqrt(this.pos.x * this.pos.x + this.pos.z * this.pos.z) - Math.sqrt(this.fish.x * this.fish.x + this.fish.z * this.fish.z));
         return dist < 0.15;
     }
 
@@ -234,16 +234,16 @@ public class EntityFishingHook extends SlenderProjectile {
         if (this.shootingEntity instanceof Player player && this.caught) {
             Item item = Fishing.getFishingResult(this.rod);
             int experience = ThreadLocalRandom.current().nextInt(3) + 1;
-            Vector3 pos = new Vector3(this.x, this.getWaterHeight(), this.z); //实体生成在水面上
-            Vector3 motion = player.subtract(pos).multiply(0.1);
-            motion.y += Math.sqrt(player.distance(pos)) * 0.08;
+            Vector3 pos = new Vector3(this.pos.x, this.getWaterHeight(), this.pos.z); //实体生成在水面上
+            Vector3 motion = player.pos.subtract(pos).multiply(0.1);
+            motion.y += Math.sqrt(player.pos.distance(pos)) * 0.08;
 
             PlayerFishEvent event = new PlayerFishEvent(player, this, item, experience, motion);
             this.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
                 EntityItem itemEntity = (EntityItem) Entity.createEntity(Entity.ITEM,
-                        this.level.getChunk((int) this.x >> 4, (int) this.z >> 4, true),
+                        this.level.getChunk((int) this.pos.x >> 4, (int) this.pos.z >> 4, true),
                         Entity.getDefaultNBT(
                                         pos,
                                         event.getMotion(), ThreadLocalRandom.current().nextFloat() * 360,
@@ -255,14 +255,14 @@ public class EntityFishingHook extends SlenderProjectile {
                 if (itemEntity != null) {
                     itemEntity.setOwner(player.getName());
                     itemEntity.spawnToAll();
-                    player.getLevel().dropExpOrb(player, event.getExperience());
+                    player.getLevel().dropExpOrb(player.pos, event.getExperience());
                 }
             }
         } else if (this.shootingEntity != null) {
             var eid = this.getDataProperty(TARGET_EID);
             var targetEntity = this.getLevel().getEntity(eid);
             if (targetEntity != null && targetEntity.isAlive()) { // 钓鱼竿收杆应该牵引被钓生物
-                targetEntity.setMotion(this.shootingEntity.subtract(targetEntity).divide(8).add(0, 0.3, 0));
+                targetEntity.setMotion(this.shootingEntity.pos.subtract(targetEntity.pos).divide(8).add(0, 0.3, 0));
             }
         }
         this.close();
@@ -274,14 +274,14 @@ public class EntityFishingHook extends SlenderProjectile {
         pk.entityRuntimeId = this.getId();
         pk.entityUniqueId = this.getId();
         pk.type = getNetworkId();
-        pk.x = (float) this.x;
-        pk.y = (float) this.y;
-        pk.z = (float) this.z;
+        pk.x = (float) this.pos.x;
+        pk.y = (float) this.pos.y;
+        pk.z = (float) this.pos.z;
         pk.speedX = (float) this.motionX;
         pk.speedY = (float) this.motionY;
         pk.speedZ = (float) this.motionZ;
-        pk.yaw = (float) this.yaw;
-        pk.pitch = (float) this.pitch;
+        pk.yaw = (float) this.rotation.yaw;
+        pk.pitch = (float) this.rotation.pitch;
 
         long ownerId = -1;
         if (this.shootingEntity != null) {

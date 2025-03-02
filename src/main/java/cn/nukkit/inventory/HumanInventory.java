@@ -198,7 +198,7 @@ public class HumanInventory extends BaseInventory {
             this.sendArmorSlot(index - ARMORS_INDEX, this.getViewers());
             this.sendArmorSlot(index - ARMORS_INDEX, this.getHolder().getEntity().getViewers().values());
             if (this.getItem(index) instanceof ItemArmor) {
-                this.getHolder().getEntity().level.getVibrationManager().callVibrationEvent(new VibrationEvent(getHolder(), this.getHolder().getEntity(), VibrationType.EQUIP));
+                this.getHolder().getEntity().level.getVibrationManager().callVibrationEvent(new VibrationEvent(getHolder(), this.getHolder().getEntity().pos, VibrationType.EQUIP));
             }
         } else {
             super.onSlotChange(index, before, send);
@@ -677,9 +677,9 @@ public class HumanInventory extends BaseInventory {
             ContainerOpenPacket pk = new ContainerOpenPacket();
             pk.windowId = who.getWindowId(this);
             pk.type = this.getType().getNetworkType();
-            pk.x = who.getFloorX();
-            pk.y = who.getFloorY();
-            pk.z = who.getFloorZ();
+            pk.x = who.pos.getFloorX();
+            pk.y = who.pos.getFloorY();
+            pk.z = who.pos.getFloorZ();
             pk.entityId = who.getId();
             who.dataPacket(pk);
         }

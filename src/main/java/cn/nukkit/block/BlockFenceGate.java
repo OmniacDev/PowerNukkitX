@@ -184,7 +184,7 @@ public class BlockFenceGate extends BlockTransparent implements RedstoneComponen
         BlockFace originDirection = getBlockFace();
         
         if (player != null) {
-            double yaw = player.yaw;
+            double yaw = player.rotation.yaw;
             double rotation = (yaw - 90) % 360;
 
             if (rotation < 0) {

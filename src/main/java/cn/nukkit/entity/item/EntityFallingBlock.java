@@ -142,7 +142,7 @@ public class EntityFallingBlock extends Entity {
                 aliveTick++;
                 if (aliveTick > sandAliveTick) {
                     aliveTick = 0;
-                    level.addParticle(new DestroyBlockParticle(this, blockState.toBlock()));
+                    level.addParticle(new DestroyBlockParticle(this.pos, blockState.toBlock()));
                     this.close();
                     dropItems();
                 }
@@ -158,7 +158,7 @@ public class EntityFallingBlock extends Entity {
             motionY *= 1 - getDrag();
             motionZ *= friction;
 
-            Vector3 pos = (new Vector3(x - 0.5, y, z - 0.5)).round();
+            Vector3 pos = (new Vector3(this.pos.x - 0.5, this.pos.y, this.pos.z - 0.5)).round();
             if (breakOnLava && level.getBlock(pos.subtract(0, 1, 0)) instanceof BlockFlowingLava) {
                 close();
                 if (this.level.getGameRules().getBoolean(GameRule.DO_ENTITY_DROPS)) {
@@ -172,7 +172,7 @@ public class EntityFallingBlock extends Entity {
                 close();
                 Block block = level.getBlock(pos);
 
-                Vector3 floorPos = (new Vector3(x - 0.5, y, z - 0.5)).floor();
+                Vector3 floorPos = (new Vector3(this.pos.x - 0.5, this.pos.y, this.pos.z - 0.5)).floor();
                 Block floorBlock = this.level.getBlock(floorPos);
                 //handle for snow stack
                 if (this.getBlock().getId().equals(Block.SNOW_LAYER) && floorBlock.getId().equals(Block.SNOW_LAYER) && floorBlock.getPropertyValue(CommonBlockProperties.HEIGHT) != 7) {
@@ -281,13 +281,13 @@ public class EntityFallingBlock extends Entity {
     @Override
     public void resetFallDistance() {
         if (!this.closed) { // For falling anvil: do not reset fall distance before dealing damage to entities
-            this.highestPosition = this.y;
+            this.highestPosition = this.pos.y;
         }
     }
 
     private void dropItems() {
         Block block = this.getBlock();
-        getLevel().dropItem(this, block instanceof BlockFallable ? ((BlockFallable) block).toFallingItem() : block.toItem());
+        getLevel().dropItem(this.pos, block instanceof BlockFallable ? ((BlockFallable) block).toFallingItem() : block.toItem());
     }
 
     @Override

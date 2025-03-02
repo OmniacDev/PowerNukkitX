@@ -149,13 +149,13 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
             }
 
             // Entity variables
-            lastX = x;
-            lastY = y;
-            lastZ = z;
+            lastX = this.pos.x;
+            lastY = this.pos.y;
+            lastZ = this.pos.z;
             motionY -= 0.03999999910593033D;
-            int dx = MathHelper.floor(x);
-            int dy = MathHelper.floor(y);
-            int dz = MathHelper.floor(z);
+            int dx = MathHelper.floor(this.pos.x);
+            int dy = MathHelper.floor(this.pos.y);
+            int dz = MathHelper.floor(this.pos.z);
 
             // Some hack to check rails
             if (Rail.isRailBlock(level.getBlockIdAt(dx, dy - 1, dz))) {
@@ -183,10 +183,10 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
             checkBlockCollision();
 
             // Minecart head
-            pitch = 0;
-            double diffX = this.lastX - this.x;
-            double diffZ = this.lastZ - this.z;
-            double yawToChange = yaw;
+            this.rotation.pitch = 0;
+            double diffX = this.lastX - this.pos.x;
+            double diffZ = this.lastZ - this.pos.z;
+            double yawToChange = this.rotation.yaw;
             if (diffX * diffX + diffZ * diffZ > 0.001D) {
                 yawToChange = (Math.atan2(diffZ, diffX) * 180 / Math.PI);
             }
@@ -197,10 +197,10 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
                 yawToChange -= 0.0;
             }
 
-            setRotation(yawToChange, pitch);
+            setRotation(yawToChange, this.rotation.pitch);
 
             Location from = new Location(lastX, lastY, lastZ, lastYaw, lastPitch, level);
-            Location to = new Location(this.x, this.y, this.z, this.yaw, this.pitch, level);
+            Location to = new Location(this.pos.x, this.pos.y, this.pos.z, this.rotation.yaw, this.rotation.pitch, level);
 
             this.getServer().getPluginManager().callEvent(new VehicleUpdateEvent(this));
 
@@ -232,11 +232,11 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
             //使矿车通知漏斗更新而不是漏斗来检测矿车
             //通常情况下，矿车的数量远远少于漏斗，所以说此举能大福提高性能
             if (this instanceof InventoryHolder holder) {
-                var pickupArea = new SimpleAxisAlignedBB(this.x, this.y - 1, this.z, this.x + 1, this.y, this.z + 1);
+                var pickupArea = new SimpleAxisAlignedBB(this.pos.x, this.pos.y - 1, this.pos.z, this.pos.x + 1, this.pos.y, this.pos.z + 1);
                 checkPickupHopper(pickupArea, holder);
                 //漏斗矿车会自行拉取物品!
                 if (!(this instanceof EntityHopperMinecart)) {
-                    var pushArea = new SimpleAxisAlignedBB(this.x, this.y, this.z, this.x + 1, this.y + 2, this.z + 1);
+                    var pushArea = new SimpleAxisAlignedBB(this.pos.x, this.pos.y, this.pos.z, this.pos.x + 1, this.pos.y + 2, this.pos.z + 1);
                     checkPushHopper(pushArea, holder);
                 }
             }
@@ -272,7 +272,7 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
                 return;
             }
         }
-        level.dropItem(this, new ItemMinecart());
+        level.dropItem(this.pos, new ItemMinecart());
     }
 
     @Override
@@ -323,8 +323,8 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
                 }
             }
 
-            double motiveX = entity.x - x;
-            double motiveZ = entity.z - z;
+            double motiveX = entity.pos.x - this.pos.x;
+            double motiveZ = entity.pos.z - this.pos.z;
             double square = motiveX * motiveX + motiveZ * motiveZ;
 
             if (square >= 9.999999747378752E-5D) {
@@ -346,10 +346,10 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
                 motiveX *= 0.5D;
                 motiveZ *= 0.5D;
                 if (entity instanceof EntityMinecartAbstract mine) {
-                    double desinityX = mine.x - x;
-                    double desinityZ = mine.z - z;
+                    double desinityX = mine.pos.x - this.pos.x;
+                    double desinityZ = mine.pos.z - this.pos.z;
                     Vector3 vector = new Vector3(desinityX, 0, desinityZ).normalize();
-                    Vector3 vec = new Vector3(MathHelper.cos((float) yaw * 0.017453292F), 0, MathHelper.sin((float) yaw * 0.017453292F)).normalize();
+                    Vector3 vec = new Vector3(MathHelper.cos((float) this.rotation.yaw * 0.017453292F), 0, MathHelper.sin((float) this.rotation.yaw * 0.017453292F)).normalize();
                     double desinityXZ = Math.abs(vector.dot(vec));
 
                     if (desinityXZ < 0.800000011920929D) {
@@ -502,9 +502,9 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
 
     private void processMovement(int dx, int dy, int dz, BlockRail block) {
         fallDistance = 0.0F;
-        Vector3 vector = getNextRail(x, y, z);
+        Vector3 vector = getNextRail(this.pos.x, this.pos.y, this.pos.z);
 
-        y = dy;
+        this.pos.y = dy;
         boolean isPowered = false;
         boolean isSlowed = false;
 
@@ -516,19 +516,19 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
         switch (Orientation.byMetadata(block.getRealMeta())) {
             case ASCENDING_NORTH:
                 motionX -= 0.0078125D;
-                y += 1;
+                this.pos.y += 1;
                 break;
             case ASCENDING_SOUTH:
                 motionX += 0.0078125D;
-                y += 1;
+                this.pos.y += 1;
                 break;
             case ASCENDING_EAST:
                 motionZ += 0.0078125D;
-                y += 1;
+                this.pos.y += 1;
                 break;
             case ASCENDING_WEST:
                 motionZ -= 0.0078125D;
-                y += 1;
+                this.pos.y += 1;
                 break;
         }
 
@@ -562,8 +562,8 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
             expectedSpeed = currentSpeed;
             if (expectedSpeed > 0) {
                 // This is a trajectory (Angle of elevation)
-                playerYawNeg = -Math.sin(linked.yaw * Math.PI / 180.0F);
-                playerYawPos = Math.cos(linked.yaw * Math.PI / 180.0F);
+                playerYawNeg = -Math.sin(linked.rotation.yaw * Math.PI / 180.0F);
+                playerYawPos = Math.cos(linked.rotation.yaw * Math.PI / 180.0F);
                 motion = motionX * motionX + motionZ * motionZ;
                 if (motion < 0.01D) {
                     motionX += playerYawNeg * 0.1D;
@@ -599,20 +599,20 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
         double motZ;
 
         if (facing1 == 0) {
-            x = (double) dx + 0.5D;
-            expectedSpeed = z - (double) dz;
+            this.pos.x = (double) dx + 0.5D;
+            expectedSpeed = this.pos.z - (double) dz;
         } else if (facing2 == 0) {
-            z = (double) dz + 0.5D;
-            expectedSpeed = x - (double) dx;
+            this.pos.z = (double) dz + 0.5D;
+            expectedSpeed = this.pos.x - (double) dx;
         } else {
-            motX = x - playerYawNeg;
-            motZ = z - playerYawPos;
+            motX = this.pos.x - playerYawNeg;
+            motZ = this.pos.z - playerYawPos;
             expectedSpeed = (motX * facing1 + motZ * facing2) * 2;
         }
 
-        x = playerYawNeg + facing1 * expectedSpeed;
-        z = playerYawPos + facing2 * expectedSpeed;
-        setPosition(new Vector3(x, y, z)); // Hehe, my minstake :3
+        this.pos.x = playerYawNeg + facing1 * expectedSpeed;
+        this.pos.z = playerYawPos + facing2 * expectedSpeed;
+        setPosition(this.pos.clone()); // Hehe, my minstake :3
 
         motX = motionX;
         motZ = motionZ;
@@ -624,14 +624,14 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
         motZ = NukkitMath.clamp(motZ, -getMaxSpeed(), getMaxSpeed());
 
         move(motX, 0, motZ);
-        if (facing[0][1] != 0 && MathHelper.floor(x) - dx == facing[0][0] && MathHelper.floor(z) - dz == facing[0][2]) {
-            setPosition(new Vector3(x, y + (double) facing[0][1], z));
-        } else if (facing[1][1] != 0 && MathHelper.floor(x) - dx == facing[1][0] && MathHelper.floor(z) - dz == facing[1][2]) {
-            setPosition(new Vector3(x, y + (double) facing[1][1], z));
+        if (facing[0][1] != 0 && MathHelper.floor(this.pos.x) - dx == facing[0][0] && MathHelper.floor(this.pos.z) - dz == facing[0][2]) {
+            setPosition(new Vector3(this.pos.x, this.pos.y + (double) facing[0][1], this.pos.z));
+        } else if (facing[1][1] != 0 && MathHelper.floor(this.pos.x) - dx == facing[1][0] && MathHelper.floor(this.pos.z) - dz == facing[1][2]) {
+            setPosition(new Vector3(this.pos.x, this.pos.y + (double) facing[1][1], this.pos.z));
         }
 
         applyDrag();
-        Vector3 vector1 = getNextRail(x, y, z);
+        Vector3 vector1 = getNextRail(this.pos.x, this.pos.y, this.pos.z);
 
         if (vector1 != null && vector != null) {
             double d14 = (vector.y - vector1.y) * 0.05D;
@@ -642,11 +642,11 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
                 motionZ = motionZ / squareOfFame * (squareOfFame + d14);
             }
 
-            setPosition(new Vector3(x, vector1.y, z));
+            setPosition(new Vector3(this.pos.x, vector1.y, this.pos.z));
         }
 
-        int floorX = MathHelper.floor(x);
-        int floorZ = MathHelper.floor(z);
+        int floorX = MathHelper.floor(this.pos.x);
+        int floorZ = MathHelper.floor(this.pos.z);
 
         if (floorX != dx || floorZ != dz) {
             squareOfFame = Math.sqrt(motionX * motionX + motionZ * motionZ);

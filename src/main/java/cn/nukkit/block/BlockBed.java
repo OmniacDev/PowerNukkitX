@@ -149,12 +149,12 @@ public class BlockBed extends BlockTransparent implements Faceable, BlockEntityH
         AxisAlignedBB accessArea = new SimpleAxisAlignedBB(head.x - 2, head.y - 5.5, head.z - 2, head.x + 3, head.y + 2.5, head.z + 3)
                 .addCoord(footPart.getXOffset(), 0, footPart.getZOffset());
 
-        if (!accessArea.isVectorInside(player)) {
+        if (!accessArea.isVectorInside(player.pos)) {
             player.sendMessage(new TranslationContainer(TextFormat.GRAY + "%tile.bed.tooFar"));
             return true;
         }
 
-        Location spawn = Location.fromObject(head.add(0.5, 0.5, 0.5), player.getLevel(), player.getYaw(), player.getPitch());
+        Location spawn = Location.fromObject(head.add(0.5, 0.5, 0.5), player.getLevel(), player.rotation.yaw, player.rotation.pitch);
         if (!player.getSpawn().equals(spawn)) {
             player.setSpawn(this, SpawnPointType.BLOCK);
         }

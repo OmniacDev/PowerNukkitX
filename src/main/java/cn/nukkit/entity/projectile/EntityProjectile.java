@@ -187,7 +187,7 @@ public abstract class EntityProjectile extends Entity {
                 updateMotion();
             }
 
-            Vector3 moveVector = new Vector3(this.x + this.motionX, this.y + this.motionY, this.z + this.motionZ);
+            Vector3 moveVector = new Vector3(this.pos.x + this.motionX, this.pos.y + this.motionY, this.pos.z + this.motionZ);
 
             Entity[] list = this.getLevel().getCollidingEntities(this.getBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expand(1, 1, 1), this);
 
@@ -200,13 +200,13 @@ public abstract class EntityProjectile extends Entity {
                 }
 
                 AxisAlignedBB axisalignedbb = entity.getBoundingBox().grow(0.3, 0.3, 0.3);
-                MovingObjectPosition ob = axisalignedbb.calculateIntercept(this, moveVector);
+                MovingObjectPosition ob = axisalignedbb.calculateIntercept(this.pos, moveVector);
 
                 if (ob == null) {
                     continue;
                 }
 
-                double distance = this.distanceSquared(ob.hitVector);
+                double distance = this.pos.distanceSquared(ob.hitVector);
 
                 if (distance < nearDistance) {
                     nearDistance = distance;
@@ -239,7 +239,7 @@ public abstract class EntityProjectile extends Entity {
                 this.motionY = 0;
                 this.motionZ = 0;
 
-                this.server.getPluginManager().callEvent(new ProjectileHitEvent(this, MovingObjectPosition.fromBlock(this.getFloorX(), this.getFloorY(), this.getFloorZ(), BlockFace.UP, this)));
+                this.server.getPluginManager().callEvent(new ProjectileHitEvent(this, MovingObjectPosition.fromBlock(this.pos.getFloorX(), this.pos.getFloorY(), this.pos.getFloorZ(), BlockFace.UP, this.pos)));
                 onCollideWithBlock(position, motion);
                 addHitEffect();
                 return false;
@@ -260,8 +260,8 @@ public abstract class EntityProjectile extends Entity {
 
     public void updateRotation() {
         double f = Math.sqrt((this.motionX * this.motionX) + (this.motionZ * this.motionZ));
-        this.yaw = Math.atan2(this.motionX, this.motionZ) * 180 / Math.PI;
-        this.pitch = Math.atan2(this.motionY, f) * 180 / Math.PI;
+        this.rotation.yaw = Math.atan2(this.motionX, this.motionZ) * 180 / Math.PI;
+        this.rotation.pitch = Math.atan2(this.motionY, f) * 180 / Math.PI;
     }
 
     public void inaccurate(float modifier) {

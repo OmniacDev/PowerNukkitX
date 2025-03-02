@@ -94,7 +94,7 @@ public class BlockStandingSign extends BlockSignBase implements BlockEntityHolde
         CompoundTag nbt = new CompoundTag();
 
         if (face == BlockFace.UP) {
-            CompassRoseDirection direction = CompassRoseDirection.from((int) Math.floor((((player != null ? player.yaw : 0) + 180) * 16 / 360) + 0.5) & 0x0f);
+            CompassRoseDirection direction = CompassRoseDirection.from((int) Math.floor((((player != null ? player.rotation.yaw : 0) + 180) * 16 / 360) + 0.5) & 0x0f);
             Block post = Block.get(getStandingSignId());
             post.setPropertyValue(GROUND_SIGN_DIRECTION, direction.getIndex());
             getLevel().setBlock(block, post, true);

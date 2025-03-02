@@ -158,30 +158,30 @@ public class EntityEquipment extends BaseInventory {
     public boolean equip(Item item) {
         if (item.isHelmet()) {
             if (item.getTier() > getHead().getTier()) {
-                this.entity.level.dropItem(this.entity, getHead());
+                this.entity.level.dropItem(this.entity.pos, getHead());
                 this.setHead(item);
                 return true;
             }
         } else if (item.isChestplate()) {
             if (item.getTier() > getChest().getTier()) {
-                this.entity.level.dropItem(this.entity, getChest());
+                this.entity.level.dropItem(this.entity.pos, getChest());
                 this.setChest(item);
                 return true;
             }
         } else if (item.isLeggings()) {
             if (item.getTier() > getLegs().getTier()) {
-                this.entity.level.dropItem(this.entity, getLegs());
+                this.entity.level.dropItem(this.entity.pos, getLegs());
                 this.setLegs(item);
                 return true;
             }
         } else if (item.isBoots()) {
             if (item.getTier() > getFeet().getTier()) {
-                this.entity.level.dropItem(this.entity, getFeet());
+                this.entity.level.dropItem(this.entity.pos, getFeet());
                 this.setFeet(item);
                 return true;
             }
         } else if (item.getTier() > getMainHand().getTier()) {
-            this.entity.level.dropItem(this.entity, getMainHand());
+            this.entity.level.dropItem(this.entity.pos, getMainHand());
             this.setMainHand(item);
             return true;
         }
