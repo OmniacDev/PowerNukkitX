@@ -123,16 +123,7 @@ public abstract class Block extends Position implements Metadatable, AxisAligned
 
     @NotNull
     public static Block get(BlockState blockState, Position pos) {
-        Block block = Registries.BLOCK.get(blockState, pos.getFloorX(), pos.getFloorY(), pos.getFloorZ(), pos.level);
-        if (block == null) {
-            BlockAir blockAir = new BlockAir();
-            blockAir.x = pos.getFloorX();
-            blockAir.y = pos.getFloorY();
-            blockAir.z = pos.getFloorZ();
-            blockAir.level = pos.level;
-            return blockAir;
-        }
-        return block;
+        return get(blockState, pos.level, pos.getFloorX(), pos.getFloorY(), pos.getFloorZ());
     }
 
     @NotNull
@@ -144,16 +135,7 @@ public abstract class Block extends Position implements Metadatable, AxisAligned
 
     @NotNull
     public static Block get(BlockState blockState, Level level, int x, int y, int z) {
-        Block block = Registries.BLOCK.get(blockState, x, y, z, level);
-        if (block == null) {
-            BlockAir blockAir = new BlockAir();
-            blockAir.x = x;
-            blockAir.y = y;
-            blockAir.z = z;
-            blockAir.level = level;
-            return blockAir;
-        }
-        return block;
+        return get(blockState.getIdentifier(), level, x, y, z);
     }
 
     @NotNull
