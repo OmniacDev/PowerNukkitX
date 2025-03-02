@@ -190,7 +190,7 @@ public class EntityWarden extends EntityMonster implements EntityWalkable, Vibra
 
     @Override
     public Vector3 getListenerVector() {
-        return this.clone();
+        return this.getVector3();
     }
 
     @Override
