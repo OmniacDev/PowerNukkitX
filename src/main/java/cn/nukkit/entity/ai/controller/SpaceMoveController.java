@@ -18,8 +18,8 @@ public class SpaceMoveController implements IController {
             if (entity.motionX * entity.motionX + entity.motionY * entity.motionY + entity.motionZ * entity.motionZ > speed * speed * 0.4756) {
                 return false;
             }
-            var relativeVector = direction.clone().setComponents(direction.x - entity.x,
-                    direction.y - entity.y, direction.z - entity.z);
+            var relativeVector = direction.clone().setComponents(direction.x - entity.pos.x,
+                    direction.y - entity.pos.y, direction.z - entity.pos.z);
             var xyzLength = Math.sqrt(relativeVector.x * relativeVector.x + relativeVector.y * relativeVector.y + relativeVector.z * relativeVector.z);
             var k = speed / xyzLength * 0.33;
             var dx = relativeVector.x * k;

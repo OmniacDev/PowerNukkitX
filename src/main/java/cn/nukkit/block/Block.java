@@ -17,6 +17,7 @@ import cn.nukkit.level.MovingObjectPosition;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.BlockFace;
+import cn.nukkit.math.GetVector3;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.metadata.MetadataValue;
 import cn.nukkit.metadata.Metadatable;
@@ -41,7 +42,7 @@ import java.util.function.Predicate;
  * @author MagicDroidX (Nukkit Project)
  */
 @Slf4j
-public abstract class Block extends Position implements Metadatable, AxisAlignedBB, BlockID {
+public abstract class Block extends Position implements Metadatable, AxisAlignedBB, BlockID, GetVector3 {
     public static final Block[] EMPTY_ARRAY = new Block[0];
     public static final double DEFAULT_FRICTION_FACTOR = 0.6;
     public static final double DEFAULT_AIR_FLUID_FRICTION = 0.95;

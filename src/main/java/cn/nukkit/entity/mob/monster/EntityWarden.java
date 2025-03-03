@@ -91,7 +91,7 @@ public class EntityWarden extends EntityMonster implements EntityWalkable, Vibra
                             //为玩家附加黑暗效果
                             for (var player : entity.level.getPlayers().values()) {
                                 if (!player.isCreative() && !player.isSpectator()
-                                        && entity.distanceSquared(player) <= 400) {
+                                        && entity.pos.distanceSquared(player.pos) <= 400) {
                                     var effect = player.getEffect(EffectType.DARKNESS);
                                     if (effect == null) {
                                         effect = Effect.get(EffectType.DARKNESS);
@@ -222,8 +222,8 @@ public class EntityWarden extends EntityMonster implements EntityWalkable, Vibra
         }
 
         if (this.getMemoryStorage().notEmpty(CoreMemoryTypes.ATTACK_TARGET))
-            this.level.addSound(this, Sound.MOB_WARDEN_LISTENING_ANGRY);
-        else this.level.addSound(this, Sound.MOB_WARDEN_LISTENING);
+            this.level.addSound(this.pos, Sound.MOB_WARDEN_LISTENING_ANGRY);
+        else this.level.addSound(this.pos, Sound.MOB_WARDEN_LISTENING);
     }
 
     @Override
@@ -304,25 +304,25 @@ public class EntityWarden extends EntityMonster implements EntityWalkable, Vibra
     }
 
     public boolean isInSniffRange(Entity entity) {
-        double deltaX = this.x - entity.x;
-        double deltaZ = this.z - entity.z;
+        double deltaX = this.pos.x - entity.pos.x;
+        double deltaZ = this.pos.z - entity.pos.z;
         var distanceXZSqrt = deltaX * deltaX + deltaZ * deltaZ;
-        var deltaY = Math.abs(this.y - entity.y);
+        var deltaY = Math.abs(this.pos.y - entity.pos.y);
         return distanceXZSqrt <= 36
                 && deltaY <= 400;
     }
 
     public boolean isInRangedAttackRange(Entity entity) {
-        double deltaX = this.x - entity.x;
-        double deltaZ = this.z - entity.z;
+        double deltaX = this.pos.x - entity.pos.x;
+        double deltaZ = this.pos.z - entity.pos.z;
         var distanceXZSqrt = deltaX * deltaX + deltaZ * deltaZ;
-        var deltaY = Math.abs(this.y - entity.y);
+        var deltaY = Math.abs(this.pos.y - entity.pos.y);
         return distanceXZSqrt <= 225
                 && deltaY <= 400;
     }
 
     public boolean isInAngerRange(Entity entity) {
-        var distanceSqrt = this.distanceSquared(entity);
+        var distanceSqrt = this.pos.distanceSquared(entity.pos);
         return distanceSqrt <= 625;
     }
 

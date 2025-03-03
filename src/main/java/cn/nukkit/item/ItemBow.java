@@ -82,7 +82,7 @@ public class ItemBow extends ItemTool {
         Location arrowLocation = player.getLocation();
         Vector3 directionVector = player.getDirectionVector().multiply(1.1);
         arrowLocation = arrowLocation.add(directionVector.getX(), 0, directionVector.getZ());
-        arrowLocation.setY(player.y + player.getEyeHeight() + directionVector.getY());
+        arrowLocation.setY(player.pos.y + player.getEyeHeight() + directionVector.getY());
 
         ItemArrow itemArrow = (ItemArrow) (offhandOptional.isPresent() ?  offhandOptional.get().getValue() : inventoryOptional.get().getValue());
 
@@ -92,12 +92,12 @@ public class ItemBow extends ItemTool {
                         .add(new FloatTag(arrowLocation.y))
                         .add(new FloatTag(arrowLocation.z)))
                 .putList("Motion", new ListTag<FloatTag>()
-                        .add(new FloatTag(-Math.sin(player.yaw / 180 * Math.PI) * Math.cos(player.pitch / 180 * Math.PI)))
-                        .add(new FloatTag(-Math.sin(player.pitch / 180 * Math.PI)))
-                        .add(new FloatTag(Math.cos(player.yaw / 180 * Math.PI) * Math.cos(player.pitch / 180 * Math.PI))))
+                        .add(new FloatTag(-Math.sin(player.rotation.yaw / 180 * Math.PI) * Math.cos(player.rotation.pitch / 180 * Math.PI)))
+                        .add(new FloatTag(-Math.sin(player.rotation.pitch / 180 * Math.PI)))
+                        .add(new FloatTag(Math.cos(player.rotation.yaw / 180 * Math.PI) * Math.cos(player.rotation.pitch / 180 * Math.PI))))
                 .putList("Rotation", new ListTag<FloatTag>()
-                        .add(new FloatTag((player.yaw > 180 ? 360 : 0) - (float) player.yaw))
-                        .add(new FloatTag((float) -player.pitch)))
+                        .add(new FloatTag((player.rotation.yaw > 180 ? 360 : 0) - (float) player.rotation.yaw))
+                        .add(new FloatTag((float) -player.rotation.pitch)))
                 .putShort("Fire", flame ? 45 * 60 : 0)
                 .putDouble("damage", damage);
 
@@ -153,7 +153,7 @@ public class ItemBow extends ItemTool {
                     if (!(durability != null && durability.getLevel() > 0 && (100 / (durability.getLevel() + 1)) <= new Random().nextInt(100))) {
                         this.setDamage(this.getDamage() + 1);
                         if (this.getDamage() >= getMaxDurability()) {
-                            player.getLevel().addSound(player, Sound.RANDOM_BREAK);
+                            player.getLevel().addSound(player.pos, Sound.RANDOM_BREAK);
                             this.count--;
                         }
                         player.getInventory().setItemInHand(this);
@@ -167,7 +167,7 @@ public class ItemBow extends ItemTool {
                     entityShootBowEvent.getProjectile().kill();
                 } else {
                     entityShootBowEvent.getProjectile().spawnToAll();
-                    player.getLevel().addSound(player, Sound.RANDOM_BOW);
+                    player.getLevel().addSound(player.pos, Sound.RANDOM_BOW);
                 }
             }
         }

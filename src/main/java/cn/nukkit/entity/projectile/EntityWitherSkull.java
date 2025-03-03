@@ -78,7 +78,7 @@ public class EntityWitherSkull extends EntityProjectile implements EntityExplosi
         boolean affect = false;
         for (Block collisionBlock : level.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1)))
             affect = onCollideWithBlock(position, motion, collisionBlock);
-        if (!affect && this.getLevelBlock().isAir()) {
+        if (!affect && this.getPosition().getLevelBlock().isAir()) {
             explode();
         }
     }
@@ -103,7 +103,7 @@ public class EntityWitherSkull extends EntityProjectile implements EntityExplosi
         ev.setFireChance(0);
         this.server.getPluginManager().callEvent(ev);
         if (!ev.isCancelled()) {
-            Explosion explosion = new Explosion(this, (float) ev.getForce(), this.shootingEntity);
+            Explosion explosion = new Explosion(this.getPosition(), (float) ev.getForce(), this.shootingEntity);
             explosion.setFireChance(ev.getFireChance());
             if (ev.isBlockBreaking() && this.level.getGameRules().getBoolean(GameRule.MOB_GRIEFING)) {
                 explosion.explodeA();

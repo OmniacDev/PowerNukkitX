@@ -114,22 +114,22 @@ public class ItemCrossbow extends ItemTool {
             double mZ;
             CompoundTag nbt = (new CompoundTag())
                     .putList("Pos", new ListTag<>()
-                            .add(new FloatTag(player.x))
-                            .add(new FloatTag(player.y + (double) player.getEyeHeight()))
-                            .add(new FloatTag(player.z)))
+                            .add(new FloatTag(player.pos.x))
+                            .add(new FloatTag(player.pos.y + (double) player.getEyeHeight()))
+                            .add(new FloatTag(player.pos.z)))
                     .putList("Motion", new ListTag<>()
-                            .add(new FloatTag(mX = -Math.sin(player.yaw / 180.0D * 3.141592653589793D) * Math.cos(player.pitch / 180.0D * 3.141592653589793D)))
-                            .add(new FloatTag(mY = -Math.sin(player.pitch / 180.0D * 3.141592653589793D)))
-                            .add(new FloatTag(mZ = Math.cos(player.yaw / 180.0D * 3.141592653589793D) * Math.cos(player.pitch / 180.0D * 3.141592653589793D))))
+                            .add(new FloatTag(mX = -Math.sin(player.rotation.yaw / 180.0D * 3.141592653589793D) * Math.cos(player.rotation.pitch / 180.0D * 3.141592653589793D)))
+                            .add(new FloatTag(mY = -Math.sin(player.rotation.pitch / 180.0D * 3.141592653589793D)))
+                            .add(new FloatTag(mZ = Math.cos(player.rotation.yaw / 180.0D * 3.141592653589793D) * Math.cos(player.rotation.pitch / 180.0D * 3.141592653589793D))))
                     .putList("Rotation", new ListTag<>()
-                            .add(new FloatTag((float) (player.yaw > 180.0D ? 360 : 0) - (float) player.yaw))
-                            .add(new FloatTag((float) (-player.pitch))));
+                            .add(new FloatTag((float) (player.rotation.yaw > 180.0D ? 360 : 0) - (float) player.rotation.yaw))
+                            .add(new FloatTag((float) (-player.rotation.pitch))));
             Item item = Item.get(this.getNamedTag().getCompound("chargedItem").getString("Name"));
             if (Objects.equals(item.getId(), Item.FIREWORK_ROCKET)) {
                 EntityCrossbowFirework entity = new EntityCrossbowFirework(player.chunk, nbt);
                 entity.setMotion(new Vector3(mX, mY, mZ));
                 entity.spawnToAll();
-                player.getLevel().addSound(player, Sound.CROSSBOW_SHOOT);
+                player.getLevel().addSound(player.pos, Sound.CROSSBOW_SHOOT);
                 removeChargedItem(player);
             } else {
                 EntityArrow entity = new EntityArrow(player.chunk, nbt, player, true);
@@ -150,7 +150,7 @@ public class ItemCrossbow extends ItemTool {
                             proj.close();
                         } else {
                             proj.spawnToAll();
-                            player.getLevel().addSound(player, Sound.CROSSBOW_SHOOT);
+                            player.getLevel().addSound(player.pos, Sound.CROSSBOW_SHOOT);
                             removeChargedItem(player);
                         }
                     }
@@ -181,7 +181,7 @@ public class ItemCrossbow extends ItemTool {
             );
             this.setCompoundTag(tag);
             player.getInventory().setItemInHand(this);
-            player.getLevel().addSound(player, Sound.CROSSBOW_LOADING_END);
+            player.getLevel().addSound(player.pos, Sound.CROSSBOW_LOADING_END);
         }
     }
 

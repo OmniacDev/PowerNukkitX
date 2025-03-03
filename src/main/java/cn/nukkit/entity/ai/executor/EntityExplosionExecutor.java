@@ -42,7 +42,7 @@ public class EntityExplosionExecutor implements IBehaviorExecutor {
 
         currentTick++;
         if (explodeTime > currentTick) {
-            entity.level.addSound(entity, Sound.RANDOM_FUSE);
+            entity.level.addSound(entity.pos, Sound.RANDOM_FUSE);
             entity.setDataProperty(FUSE_TIME, currentTick);
             entity.setDataFlag(EntityFlag.IGNITED, true);
             return true;
@@ -74,14 +74,14 @@ public class EntityExplosionExecutor implements IBehaviorExecutor {
         Server.getInstance().getPluginManager().callEvent(ev);
 
         if (!ev.isCancelled()) {
-            Explosion explosion = new Explosion(entity, (float) ev.getForce(), entity);
+            Explosion explosion = new Explosion(entity.getPosition(), (float) ev.getForce(), entity);
 
             if (ev.isBlockBreaking() && entity.level.getGameRules().getBoolean(GameRule.MOB_GRIEFING)) {
                 explosion.explodeA();
             }
 
             explosion.explodeB();
-            entity.level.addParticle(new HugeExplodeSeedParticle(entity));
+            entity.level.addParticle(new HugeExplodeSeedParticle(entity.pos));
         }
 
         entity.close();

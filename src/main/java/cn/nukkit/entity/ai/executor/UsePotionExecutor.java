@@ -105,7 +105,7 @@ public class UsePotionExecutor implements EntityControl, IBehaviorExecutor {
             if(intelligent.getMemoryStorage().notEmpty(CoreMemoryTypes.BE_ATTACKED_EVENT)) {
                 EntityDamageEvent event = intelligent.getMemoryStorage().get(CoreMemoryTypes.BE_ATTACKED_EVENT);
                 if(event instanceof EntityDamageByEntityEvent e) {
-                    if(e.getDamager().distance(entity) > 11) {
+                    if(e.getDamager().pos.distance(entity.pos) > 11) {
                         return ItemPotion.fromPotion(PotionType.SWIFTNESS);
                     }
                 }

@@ -28,12 +28,12 @@ public class StrafeExecutor implements EntityControl, IBehaviorExecutor {
 
         Player player = entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER);
         if(player == null) return false;
-        setLookTarget(entity, player);
-        setRouteTarget(entity, player);
+        setLookTarget(entity, player.pos);
+        setRouteTarget(entity, player.pos);
 
-        if(entity.distance(player) <= 64) {
+        if(entity.pos.distance(player.pos) <= 64) {
 
-            Vector3 toPlayerVector = new Vector3(player.x - entity.x, player.y - entity.y, player.z - entity.z).normalize();
+            Vector3 toPlayerVector = new Vector3(player.pos.x - entity.pos.x, player.pos.y - entity.pos.y, player.pos.z - entity.pos.z).normalize();
 
             Location fireballLocation = entity.getLocation().add(toPlayerVector.multiply(5));
             double yaw = BVector3.getYawFromVector(toPlayerVector);
@@ -51,7 +51,7 @@ public class StrafeExecutor implements EntityControl, IBehaviorExecutor {
                             .add(new FloatTag(0))
                             .add(new FloatTag(0)));
 
-            Entity projectile = Entity.createEntity(EntityID.DRAGON_FIREBALL, entity.level.getChunk(entity.getChunkX(), entity.getChunkZ()), nbt);
+            Entity projectile = Entity.createEntity(EntityID.DRAGON_FIREBALL, entity.level.getChunk(entity.pos.getChunkX(), entity.pos.getChunkZ()), nbt);
             projectile.spawnToAll();
             this.fired = true;
             return false;
@@ -64,8 +64,8 @@ public class StrafeExecutor implements EntityControl, IBehaviorExecutor {
     public void onStart(EntityIntelligent entity) {
         Player player = entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER);
         if(player == null) return;
-        setLookTarget(entity, player);
-        setRouteTarget(entity, player);
+        setLookTarget(entity, player.pos);
+        setRouteTarget(entity, player.pos);
         this.fired = false;
     }
 

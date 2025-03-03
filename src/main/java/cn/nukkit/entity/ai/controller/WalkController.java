@@ -47,8 +47,8 @@ public class WalkController implements IController {
                 entity.setDataFlag(EntityFlag.MOVING, false);
                 return false;
             }
-            var relativeVector = direction.clone().setComponents(direction.x - entity.x,
-                    direction.y - entity.y, direction.z - entity.z);
+            var relativeVector = direction.clone().setComponents(direction.x - entity.pos.x,
+                    direction.y - entity.pos.y, direction.z - entity.pos.z);
             var xzLengthSquared = relativeVector.x * relativeVector.x + relativeVector.z * relativeVector.z;
             if (Math.abs(xzLengthSquared) < EntityPhysical.PRECISION) {
                 entity.setDataFlag(EntityFlag.MOVING, false);

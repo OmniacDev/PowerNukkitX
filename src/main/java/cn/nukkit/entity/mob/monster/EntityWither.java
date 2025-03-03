@@ -153,7 +153,7 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
     public void kill() {
         if(deathTicks == -1) {
             deathTicks = 190;
-            getLevel().addLevelSoundEvent(this, LevelSoundEventPacket.SOUND_DEATH, -1, Entity.WITHER, false, false);
+            getLevel().addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_DEATH, -1, Entity.WITHER, false, false);
             EntityEventPacket packet = new EntityEventPacket();
             packet.event = EntityEventPacket.DEATH_ANIMATION;
             packet.eid = getId();
@@ -214,12 +214,12 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
         addEntity.type = getNetworkId();
         addEntity.entityUniqueId = this.getId();
         addEntity.entityRuntimeId = this.getId();
-        addEntity.yaw = (float) this.yaw;
-        addEntity.headYaw = (float) this.yaw;
-        addEntity.pitch = (float) this.pitch;
-        addEntity.x = (float) this.x;
-        addEntity.y = (float) this.y;
-        addEntity.z = (float) this.z;
+        addEntity.yaw = (float) this.rotation.yaw;
+        addEntity.headYaw = (float) this.rotation.yaw;
+        addEntity.pitch = (float) this.rotation.pitch;
+        addEntity.x = (float) this.pos.x;
+        addEntity.y = (float) this.pos.y;
+        addEntity.z = (float) this.pos.z;
         addEntity.speedX = (float) this.motionX;
         addEntity.speedY = (float) this.motionY;
         addEntity.speedZ = (float) this.motionZ;
@@ -262,7 +262,7 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
             if (this.age == 200) {
                 this.explode();
                 setHealth(getMaxHealth());
-                getLevel().addSound(this, Sound.MOB_WITHER_SPAWN);
+                getLevel().addSound(this.pos, Sound.MOB_WITHER_SPAWN);
             } else if(age < 200) {
                 heal(getMaxHealth()/200f);
             }
@@ -323,7 +323,7 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
         if((age%40==0 || getDataFlag(EntityFlag.CAN_DASH) && age > 200)) {
             Block[] blocks = level.getCollisionBlocks(getBoundingBox().grow(1, 1, 1));
             if(blocks.length > 0) {
-                if(blockBreakSound != null) level.addSound(this, blockBreakSound);
+                if(blockBreakSound != null) level.addSound(this.pos, blockBreakSound);
                 for (Block collisionBlock : blocks) {
                     if(!(collisionBlock instanceof BlockBedrock)) {
                         level.breakBlock(collisionBlock);
@@ -414,7 +414,7 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
         EntityExplosionPrimeEvent ev = new EntityExplosionPrimeEvent(this, 7);
         this.server.getPluginManager().callEvent(ev);
         if (!ev.isCancelled()) {
-            Explosion explosion = new Explosion(this, (float) ev.getForce(), this);
+            Explosion explosion = new Explosion(this.getPosition(), (float) ev.getForce(), this);
             if (ev.isBlockBreaking() && this.level.getGameRules().getBoolean(GameRule.MOB_GRIEFING)) {
                 explosion.explodeA();
             }

@@ -70,12 +70,12 @@ public class GuardianAttackExecutor implements EntityControl, IBehaviorExecutor 
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Location clone = this.target.clone();
+        Location clone = this.target.getLocation();
 
         setLookTarget(entity, clone);
 
         if (tick2 == 0 && tick1 > coolDownTick) {
-            if (entity.distanceSquared(target) <= maxShootDistanceSquared) {
+            if (entity.pos.distanceSquared(target.pos) <= maxShootDistanceSquared) {
                 this.tick1 = 0;
                 this.tick2++;
                 startSequence(entity);
@@ -125,7 +125,7 @@ public class GuardianAttackExecutor implements EntityControl, IBehaviorExecutor 
 
     private void startSequence(Entity entity) {
         entity.setDataProperty(EntityDataTypes.TARGET_EID, this.target.getId());
-        entity.level.addLevelSoundEvent(entity, LevelSoundEventPacketV2.SOUND_MOB_WARNING, -1, entity.getIdentifier(), false, false);
+        entity.level.addLevelSoundEvent(entity.pos, LevelSoundEventPacketV2.SOUND_MOB_WARNING, -1, entity.getIdentifier(), false, false);
     }
 
     private void endSequence(Entity entity) {

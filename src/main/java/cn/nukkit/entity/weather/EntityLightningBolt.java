@@ -61,7 +61,7 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
         this.liveTime = ThreadLocalRandom.current().nextInt(3) + 1;
 
         if (isEffect && this.level.gameRules.getBoolean(GameRule.DO_FIRE_TICK) && (this.server.getDifficulty() >= 2)) {
-            Block block = this.getLevelBlock();
+            Block block = this.getPosition().getLevelBlock();
             if (block.isAir() || block.getId().equals(BlockID.TALL_GRASS)) {
                 BlockFire fire = (BlockFire) Block.get(BlockID.FIRE);
                 fire.x = block.x;
@@ -117,10 +117,10 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
         this.entityBaseTick(tickDiff);
 
         if (this.state == 2) {
-            this.level.addSound(this, Sound.AMBIENT_WEATHER_THUNDER);
-            this.level.addSound(this, Sound.RANDOM_EXPLODE);
+            this.level.addSound(this.pos, Sound.AMBIENT_WEATHER_THUNDER);
+            this.level.addSound(this.pos, Sound.RANDOM_EXPLODE);
 
-            Block down = getLevel().getBlock(down());
+            Block down = getLevel().getBlock(this.pos.down());
             if (isVulnerableOxidizable(down)) {
                 Map<Position, OxidizationLevel> changes = new LinkedHashMap<>();
                 changes.put(new Position().setComponents(down).setLevel(level), OxidizationLevel.UNAFFECTED);
@@ -192,7 +192,7 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
                 this.state = 1;
 
                 if (this.isEffect && this.level.gameRules.getBoolean(GameRule.DO_FIRE_TICK)) {
-                    Block block = this.getLevelBlock();
+                    Block block = this.getPosition().getLevelBlock();
 
                     if (block.isAir() || block.getId().equals(Block.TALL_GRASS)) {
                         BlockIgniteEvent event = new BlockIgniteEvent(block, null, this, BlockIgniteEvent.BlockIgniteCause.LIGHTNING);

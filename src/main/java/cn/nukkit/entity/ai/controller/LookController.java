@@ -27,21 +27,21 @@ public class LookController implements IController {
             //clone防止异步导致的NPE
             Vector3 moveDirectionEnd = entity.getMoveDirectionEnd().clone();
             //构建路径方向向量
-            var routeDirectionVector = new Vector3(moveDirectionEnd.x - entity.x, moveDirectionEnd.y - entity.y, moveDirectionEnd.z - entity.z);
+            var routeDirectionVector = new Vector3(moveDirectionEnd.x - entity.pos.x, moveDirectionEnd.y - entity.pos.y, moveDirectionEnd.z - entity.pos.z);
             var yaw = BVector3.getYawFromVector(routeDirectionVector);
-            entity.setYaw(yaw);
+            entity.rotation.yaw = (yaw);
             if (!lookAtTarget) {
-                entity.setHeadYaw(yaw);
-                if (entity.isEnablePitch()) entity.setPitch(BVector3.getPitchFromVector(routeDirectionVector));
+                entity.headYaw = (yaw);
+                if (entity.isEnablePitch()) entity.rotation.pitch = (BVector3.getPitchFromVector(routeDirectionVector));
             }
         }
         if (lookAtTarget && lookTarget != null) {
             //构建指向玩家的向量
-            var toPlayerVector = new Vector3(lookTarget.x - entity.x, lookTarget.y - entity.y, lookTarget.z - entity.z);
-            if (entity.isEnablePitch()) entity.setPitch(BVector3.getPitchFromVector(toPlayerVector));
-            entity.setHeadYaw(BVector3.getYawFromVector(toPlayerVector));
+            var toPlayerVector = new Vector3(lookTarget.x - entity.pos.x, lookTarget.y - entity.pos.y, lookTarget.z - entity.pos.z);
+            if (entity.isEnablePitch()) entity.rotation.pitch = (BVector3.getPitchFromVector(toPlayerVector));
+            entity.headYaw = (BVector3.getYawFromVector(toPlayerVector));
         }
-        if (!entity.isEnablePitch()) entity.setPitch(0);
+        if (!entity.isEnablePitch()) entity.rotation.pitch = (0);
         return true;
     }
 }

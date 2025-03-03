@@ -145,15 +145,15 @@ public class EntityIntelligentHuman extends EntityIntelligent implements IHuman 
     @Override
     public void updateMovement() {
         // 检测自由落体时间
-        if (!this.onGround && this.y < this.highestPosition) {
+        if (!this.onGround && this.pos.y < this.highestPosition) {
             this.fallingTick++;
         }
         //这样做是为了向后兼容旧插件
         if (!enableHeadYaw()) {
-            this.headYaw = this.yaw;
+            this.headYaw = this.rotation.yaw;
         }
-        double diffPosition = (this.x - this.lastX) * (this.x - this.lastX) + (this.y - this.lastY) * (this.y - this.lastY) + (this.z - this.lastZ) * (this.z - this.lastZ);
-        double diffRotation = enableHeadYaw() ? (this.headYaw - this.lastHeadYaw) * (this.headYaw - this.lastHeadYaw) : 0 + (this.yaw - this.lastYaw) * (this.yaw - this.lastYaw) + (this.pitch - this.lastPitch) * (this.pitch - this.lastPitch);
+        double diffPosition = (this.pos.x - this.lastX) * (this.pos.x - this.lastX) + (this.pos.y - this.lastY) * (this.pos.y - this.lastY) + (this.pos.z - this.lastZ) * (this.pos.z - this.lastZ);
+        double diffRotation = enableHeadYaw() ? (this.headYaw - this.lastHeadYaw) * (this.headYaw - this.lastHeadYaw) : 0 + (this.rotation.yaw - this.lastYaw) * (this.rotation.yaw - this.lastYaw) + (this.rotation.pitch - this.lastPitch) * (this.rotation.pitch - this.lastPitch);
         double diffMotion = (this.motionX - this.lastMotionX) * (this.motionX - this.lastMotionX) + (this.motionY - this.lastMotionY) * (this.motionY - this.lastMotionY) + (this.motionZ - this.lastMotionZ) * (this.motionZ - this.lastMotionZ);
         if (diffPosition > 0.0001 || diffRotation > 1.0) { //0.2 ** 2, 1.5 ** 2
             if (diffPosition > 0.0001) {
@@ -164,11 +164,11 @@ public class EntityIntelligentHuman extends EntityIntelligent implements IHuman 
                 }
             }
             this.broadcastMovement(false);
-            this.lastX = this.x;
-            this.lastY = this.y;
-            this.lastZ = this.z;
-            this.lastPitch = this.pitch;
-            this.lastYaw = this.yaw;
+            this.lastX = this.pos.x;
+            this.lastY = this.pos.y;
+            this.lastZ = this.pos.z;
+            this.lastPitch = this.rotation.pitch;
+            this.lastYaw = this.rotation.yaw;
             this.lastHeadYaw = this.headYaw;
             this.positionChanged = true;
         } else {
@@ -308,7 +308,7 @@ public class EntityIntelligentHuman extends EntityIntelligent implements IHuman 
                 armor.setDamage(armor.getDamage() + Math.max(1, (int) (event.getDamage() / 4.0f)));
 
             if (armor.getDamage() >= armor.getMaxDurability()) {
-                getLevel().addSound(this, Sound.RANDOM_BREAK);
+                getLevel().addSound(this.pos, Sound.RANDOM_BREAK);
                 return Item.get(BlockID.AIR, 0, 0);
             }
         }
@@ -348,14 +348,14 @@ public class EntityIntelligentHuman extends EntityIntelligent implements IHuman 
             pk.username = this.getName();
             pk.entityUniqueId = this.getId();
             pk.entityRuntimeId = this.getId();
-            pk.x = (float) this.x;
-            pk.y = (float) this.y;
-            pk.z = (float) this.z;
+            pk.x = (float) this.pos.x;
+            pk.y = (float) this.pos.y;
+            pk.z = (float) this.pos.z;
             pk.speedX = (float) this.motionX;
             pk.speedY = (float) this.motionY;
             pk.speedZ = (float) this.motionZ;
-            pk.yaw = (float) this.yaw;
-            pk.pitch = (float) this.pitch;
+            pk.yaw = (float) this.rotation.yaw;
+            pk.pitch = (float) this.rotation.pitch;
             pk.item = this.getInventory().getItemInHand();
             pk.entityData = this.entityDataMap;
             player.dataPacket(pk);

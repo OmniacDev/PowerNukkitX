@@ -21,7 +21,7 @@ public class WardenViolentAnimationExecutor implements IBehaviorExecutor {
         else {
             //更新视线target
             if (entity.getMemoryStorage().notEmpty(CoreMemoryTypes.ATTACK_TARGET))
-                entity.setLookTarget(entity.getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET));
+                entity.setLookTarget(entity.getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET).pos);
             return true;
         }
     }

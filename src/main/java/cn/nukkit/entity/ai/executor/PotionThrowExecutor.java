@@ -77,9 +77,9 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Location clone = this.target.clone();
+        Location clone = this.target.getLocation();
 
-        if (entity.distanceSquared(target) > maxShootDistanceSquared) {
+        if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
             setRouteTarget(entity, clone);
         } else {
             setRouteTarget(entity, null);
@@ -87,7 +87,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
         setLookTarget(entity, clone);
 
         if (tick2 == 0 && tick1 > coolDownTick) {
-            if (entity.distanceSquared(target) <= maxShootDistanceSquared) {
+            if (entity.pos.distanceSquared(target.pos) <= maxShootDistanceSquared) {
                 this.tick1 = 0;
                 this.tick2++;
                 startShootSequence(entity);
@@ -134,22 +134,22 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
 
         Location potionLocation = entity.getLocation();
         Vector3 directionVector = entity.getDirectionVector();
-        potionLocation.setY(entity.y + entity.getEyeHeight() + directionVector.getY());
+        potionLocation.setY(entity.pos.y + entity.getEyeHeight() + directionVector.getY());
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
                         .add(new FloatTag(potionLocation.x))
                         .add(new FloatTag(potionLocation.y))
                         .add(new FloatTag(potionLocation.z)))
                 .putList("Motion", new ListTag<FloatTag>()
-                        .add(new FloatTag(-Math.sin(entity.headYaw / 180 * Math.PI) * Math.cos(entity.pitch / 180 * Math.PI)))
-                        .add(new FloatTag(-Math.sin(entity.pitch / 180 * Math.PI)))
-                        .add(new FloatTag(Math.cos(entity.headYaw / 180 * Math.PI) * Math.cos(entity.pitch / 180 * Math.PI))))
+                        .add(new FloatTag(-Math.sin(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI)))
+                        .add(new FloatTag(-Math.sin(entity.rotation.pitch / 180 * Math.PI)))
+                        .add(new FloatTag(Math.cos(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI))))
                 .putList("Rotation", new ListTag<FloatTag>()
                         .add(new FloatTag((entity.headYaw > 180 ? 360 : 0) - (float) entity.headYaw))
-                        .add(new FloatTag((float) -entity.pitch)))
+                        .add(new FloatTag((float) -entity.rotation.pitch)))
                 .putInt("PotionId", getPotionEffect(entity));
 
-        Entity projectile = Entity.createEntity(EntityID.SPLASH_POTION, entity.level.getChunk(entity.getChunkX(), entity.getChunkZ()), nbt);
+        Entity projectile = Entity.createEntity(EntityID.SPLASH_POTION, entity.level.getChunk(entity.pos.getChunkX(), entity.pos.getChunkZ()), nbt);
 
         if (projectile == null) {
             return;
@@ -180,7 +180,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
         if(entity instanceof EntityIntelligent intelligent) {
             if(intelligent.getMemoryStorage().notEmpty(memory)) {
                 Entity target = intelligent.getMemoryStorage().get(memory);
-                double distance = target.distance(entity);
+                double distance = target.pos.distance(entity.pos);
                 if(distance > 8 && !target.hasEffect(EffectType.SLOWNESS)) {
                     return 17; //SLOWNESS
                 } else if(distance < 3 && !target.hasEffect(EffectType.WEAKNESS) && ThreadLocalRandom.current().nextInt(4) == 0) {

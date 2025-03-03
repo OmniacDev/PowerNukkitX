@@ -2,17 +2,18 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.math.GetVector3;
 import cn.nukkit.math.Vector3;
 
 
 public class LookAtTargetExecutor implements EntityControl, IBehaviorExecutor {
 
     //指示执行器应该从哪个Memory获取目标位置
-    protected MemoryType<? extends Vector3> memory;
+    protected MemoryType<? extends GetVector3> memory;
     protected int duration;
     protected int currentTick;
 
-    public LookAtTargetExecutor(MemoryType<? extends Vector3> memory, int duration) {
+    public LookAtTargetExecutor(MemoryType<? extends GetVector3> memory, int duration) {
         this.memory = memory;
         this.duration = duration;
     }
@@ -21,7 +22,7 @@ public class LookAtTargetExecutor implements EntityControl, IBehaviorExecutor {
     public boolean execute(EntityIntelligent entity) {
         currentTick++;
         if (!entity.isEnablePitch()) entity.setEnablePitch(true);
-        var vector3Memory = entity.getMemoryStorage().get(memory);
+        var vector3Memory = entity.getMemoryStorage().get(memory).getVector3();
         if (vector3Memory != null) {
             setLookTarget(entity, vector3Memory);
         }

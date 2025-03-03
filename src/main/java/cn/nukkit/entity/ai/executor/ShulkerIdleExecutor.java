@@ -26,7 +26,7 @@ public class ShulkerIdleExecutor implements IBehaviorExecutor {
         stayTicks = Utils.rand(20, 61);
         if(entity instanceof EntityShulker shulker) {
             shulker.setPeeking(30);
-            shulker.getLevel().addSound(shulker, Sound.MOB_SHULKER_OPEN);
+            shulker.getLevel().addSound(shulker.pos, Sound.MOB_SHULKER_OPEN);
         }
     }
 
@@ -34,7 +34,7 @@ public class ShulkerIdleExecutor implements IBehaviorExecutor {
     public void onStop(EntityIntelligent entity) {
         if(entity instanceof EntityShulker shulker) {
             shulker.setPeeking(0);
-            shulker.getLevel().addSound(shulker, Sound.MOB_SHULKER_CLOSE);
+            shulker.getLevel().addSound(shulker.pos, Sound.MOB_SHULKER_CLOSE);
         }
     }
 

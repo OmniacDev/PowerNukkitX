@@ -85,17 +85,17 @@ public class EntityXpBottle extends EntityThrowable {
     }
 
     public void dropXp() {
-        Particle particle2 = new SpellParticle(this, 0x00385dc6);
+        Particle particle2 = new SpellParticle(this.pos, 0x00385dc6);
         this.getLevel().addParticle(particle2);
 
-        this.getLevel().addLevelSoundEvent(this, LevelSoundEventPacket.SOUND_GLASS);
+        this.getLevel().addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_GLASS);
 
-        this.getLevel().dropExpOrb(this, ThreadLocalRandom.current().nextInt(3, 12));
+        this.getLevel().dropExpOrb(this.pos, ThreadLocalRandom.current().nextInt(3, 12));
     }
 
     @Override
     protected void addHitEffect() {
-        this.getLevel().addSound(this, Sound.RANDOM_GLASS);
+        this.getLevel().addSound(this.pos, Sound.RANDOM_GLASS);
     }
 
     @Override

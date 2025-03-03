@@ -81,12 +81,12 @@ public class ExecutorCommandSender implements CommandSender {
 
     @Override
     @NotNull public Position getPosition() {
-        return (executeLocation == null ? entity : executeLocation).clone();
+        return (executeLocation == null ? entity.getPosition() : executeLocation).clone();
     }
 
     @Override
     @NotNull public Location getLocation() {
-        return (executeLocation == null ? entity : executeLocation).clone();
+        return (executeLocation == null ? entity.getLocation() : executeLocation).clone();
     }
 
     @Override

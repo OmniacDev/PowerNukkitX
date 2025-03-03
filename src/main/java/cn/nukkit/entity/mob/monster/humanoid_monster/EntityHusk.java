@@ -122,10 +122,10 @@ public class EntityHusk extends EntityZombie {
     @Override
     protected void transform() {
         this.close();
-        EntityZombie drowned = new EntityZombie(this.getChunk(), this.namedTag);
-        drowned.setPosition(this);
-        drowned.setRotation(this.yaw, this.pitch);
+        EntityZombie drowned = new EntityZombie(this.getPosition().getChunk(), this.namedTag);
+        drowned.setPosition(this.pos);
+        drowned.setRotation(this.rotation.yaw, this.rotation.pitch);
         drowned.spawnToAll();
-        drowned.level.addSound(drowned, Sound.MOB_HUSK_CONVERT_TO_ZOMBIE);
+        drowned.level.addSound(drowned.pos, Sound.MOB_HUSK_CONVERT_TO_ZOMBIE);
     }
 }

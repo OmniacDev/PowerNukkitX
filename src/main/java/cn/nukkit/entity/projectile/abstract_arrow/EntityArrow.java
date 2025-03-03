@@ -126,7 +126,7 @@ public class EntityArrow extends EntityAbstractArrow {
             hasUpdate = true;
         }
 
-        if (this.level.isRaining() && this.fireTicks > 0 && this.level.canBlockSeeSky(this)) {
+        if (this.level.isRaining() && this.fireTicks > 0 && this.level.canBlockSeeSky(this.pos)) {
             extinguish();
 
             hasUpdate = true;
@@ -156,7 +156,7 @@ public class EntityArrow extends EntityAbstractArrow {
 
     @Override
     protected void addHitEffect() {
-        this.level.addSound(this, Sound.RANDOM_BOWHIT);
+        this.level.addSound(this.pos, Sound.RANDOM_BOWHIT);
         EntityEventPacket packet = new EntityEventPacket();
         packet.eid = getId();
         packet.event = EntityEventPacket.ARROW_SHAKE;

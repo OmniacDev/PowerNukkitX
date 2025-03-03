@@ -34,8 +34,8 @@ public class WitherShootExecutor implements EntityControl, IBehaviorExecutor {
             if (tick % 10 == 0) {
                 spawn(entity, tick == 40);
             }
-            setRouteTarget(entity, entity);
-            setLookTarget(entity, target);
+            setRouteTarget(entity, entity.pos);
+            setLookTarget(entity, target.pos);
             return true;
         } else {
             entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_TIME, entity.getLevel().getTick());
@@ -59,15 +59,15 @@ public class WitherShootExecutor implements EntityControl, IBehaviorExecutor {
                         .add(new FloatTag(fireballLocation.y))
                         .add(new FloatTag(fireballLocation.z)))
                 .putList("Motion", new ListTag<FloatTag>()
-                        .add(new FloatTag(-Math.sin(entity.headYaw / 180 * Math.PI) * Math.cos(entity.pitch / 180 * Math.PI)))
-                        .add(new FloatTag(-Math.sin(entity.pitch / 180 * Math.PI)))
-                        .add(new FloatTag(Math.cos(entity.headYaw / 180 * Math.PI) * Math.cos(entity.pitch / 180 * Math.PI))))
+                        .add(new FloatTag(-Math.sin(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI)))
+                        .add(new FloatTag(-Math.sin(entity.rotation.pitch / 180 * Math.PI)))
+                        .add(new FloatTag(Math.cos(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI))))
                 .putList("Rotation", new ListTag<FloatTag>()
                         .add(new FloatTag((entity.headYaw > 180 ? 360 : 0) - (float) entity.headYaw))
-                        .add(new FloatTag((float) -entity.pitch)))
+                        .add(new FloatTag((float) -entity.rotation.pitch)))
                 .putDouble("damage", 2);
 
-        Entity projectile = Entity.createEntity(charged ? EntityID.WITHER_SKULL_DANGEROUS : EntityID.WITHER_SKULL, entity.level.getChunk(entity.getChunkX(), entity.getChunkZ()), nbt);
+        Entity projectile = Entity.createEntity(charged ? EntityID.WITHER_SKULL_DANGEROUS : EntityID.WITHER_SKULL, entity.level.getChunk(entity.pos.getChunkX(), entity.pos.getChunkZ()), nbt);
         if (projectile == null) {
             return;
         }
@@ -81,7 +81,7 @@ public class WitherShootExecutor implements EntityControl, IBehaviorExecutor {
             projectile.kill();
         } else {
             projectile.spawnToAll();
-            entity.level.addSound(entity, Sound.MOB_WITHER_SHOOT);
+            entity.level.addSound(entity.pos, Sound.MOB_WITHER_SHOOT);
         }
     }
 }

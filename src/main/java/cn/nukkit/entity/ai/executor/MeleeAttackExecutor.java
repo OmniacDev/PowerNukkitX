@@ -101,12 +101,12 @@ public class MeleeAttackExecutor implements EntityControl, IBehaviorExecutor {
             this.target = newTarget;
         }
         if (this.lookTarget == null) {
-            this.lookTarget = target.clone();
+            this.lookTarget = target.pos.clone();
         }
 
         //some check
         if (!target.isAlive()) return false;
-        else if (entity.distanceSquared(target) > maxSenseRangeSquared) return false;
+        else if (entity.pos.distanceSquared(target.pos) > maxSenseRangeSquared) return false;
         else if (target instanceof Player player) {
             if (player.isCreative() || player.isSpectator() || !player.isOnline() || !entity.level.getName().equals(player.level.getName())) {
                 return false;
@@ -126,15 +126,15 @@ public class MeleeAttackExecutor implements EntityControl, IBehaviorExecutor {
         if (!entity.isEnablePitch()) entity.setEnablePitch(true);
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
         //set target and look target
-        setRouteTarget(entity, this.target.clone());
+        setRouteTarget(entity, this.target.pos.clone());
         setLookTarget(entity, this.lookTarget.clone());
 
-        var floor = target.floor();
+        var floor = target.pos.floor();
         if (oldTarget == null || !oldTarget.equals(floor)) entity.getBehaviorGroup().setForceUpdateRoute(true);
         oldTarget = floor;
 
         //attack logic
-        if (entity.distanceSquared(target) <= attackRange && attackTick > coolDown) {
+        if (entity.pos.distanceSquared(target.pos) <= attackRange && attackTick > coolDown) {
             Item item = entity instanceof EntityInventoryHolder holder ? holder.getItemInHand() : Item.AIR;
 
             float defaultDamage = 0;

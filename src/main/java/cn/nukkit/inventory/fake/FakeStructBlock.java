@@ -21,8 +21,8 @@ public class FakeStructBlock extends SingleFakeBlock {
 
     @Override
     public Vector3 getOffset(Player player) {
-        int floorX = player.getFloorX();
-        int floorZ = player.getFloorZ();
+        int floorX = player.pos.getFloorX();
+        int floorZ = player.pos.getFloorZ();
         return new Vector3(floorX, player.getLevel().getMinHeight() + 1, floorZ);
     }
 

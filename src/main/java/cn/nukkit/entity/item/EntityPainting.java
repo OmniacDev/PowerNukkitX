@@ -144,7 +144,7 @@ public class EntityPainting extends EntityHanging {
         if (currentTick % 20 == 0) {
             Block[] tickCachedCollisionBlocks = level.getTickCachedCollisionBlocks(this.getBoundingBox(), false, false, bl -> !bl.isAir());
             if (tickCachedCollisionBlocks.length < (this.getMotive().height * this.getMotive().width)) {
-                this.level.dropItem(this, new ItemPainting());
+                this.level.dropItem(this.pos, new ItemPainting());
                 this.close();
                 return false;
             }
@@ -172,12 +172,12 @@ public class EntityPainting extends EntityHanging {
             this.height = (float) size.y;
 
             this.boundingBox = new SimpleAxisAlignedBB(
-                    this.x - size.x,
-                    this.y - size.y,
-                    this.z - size.z,
-                    this.x + size.x,
-                    this.y + size.y,
-                    this.z + size.z
+                    this.pos.x - size.x,
+                    this.pos.y - size.y,
+                    this.pos.z - size.z,
+                    this.pos.x + size.x,
+                    this.pos.y + size.y,
+                    this.pos.z + size.z
             );
         } else {
             this.width = 0;
@@ -193,9 +193,9 @@ public class EntityPainting extends EntityHanging {
         AddPaintingPacket addPainting = new AddPaintingPacket();
         addPainting.entityUniqueId = this.getId();
         addPainting.entityRuntimeId = this.getId();
-        addPainting.x = (float) this.x;
-        addPainting.y = (float) this.y;
-        addPainting.z = (float) this.z;
+        addPainting.x = (float) this.pos.x;
+        addPainting.y = (float) this.pos.y;
+        addPainting.z = (float) this.pos.z;
         addPainting.direction = this.getDirection().getHorizontalIndex();
         addPainting.title = this.namedTag.getString("Motive");
         return addPainting;
@@ -207,7 +207,7 @@ public class EntityPainting extends EntityHanging {
             if (source instanceof EntityDamageByEntityEvent) {
                 Entity damager = ((EntityDamageByEntityEvent) source).getDamager();
                 if (damager instanceof Player && (((Player) damager).isAdventure() || ((Player) damager).isSurvival()) && this.level.getGameRules().getBoolean(GameRule.DO_ENTITY_DROPS)) {
-                    this.level.dropItem(this, new ItemPainting());
+                    this.level.dropItem(this.pos, new ItemPainting());
                 }
             }
             this.close();
@@ -226,7 +226,7 @@ public class EntityPainting extends EntityHanging {
     @Override
     public void onPushByPiston(BlockEntityPistonArm piston) {
         if (this.level.getGameRules().getBoolean(GameRule.DO_ENTITY_DROPS)) {
-            this.level.dropItem(this, new ItemPainting());
+            this.level.dropItem(this.pos, new ItemPainting());
         }
 
         this.close();

@@ -101,14 +101,14 @@ public class EntityEnderPearl extends EntityThrowable {
             return;
         }
 
-        this.level.addLevelEvent(this.shootingEntity.add(0.5, 0.5, 0.5), LevelEventPacket.EVENT_SOUND_TELEPORT_ENDERPEARL);
-        Vector3 destination = new Vector3(NukkitMath.floorDouble(this.x) + 0.5, this.y+1, NukkitMath.floorDouble(this.z) + 0.5);
+        this.level.addLevelEvent(this.shootingEntity.pos.add(0.5, 0.5, 0.5), LevelEventPacket.EVENT_SOUND_TELEPORT_ENDERPEARL);
+        Vector3 destination = new Vector3(NukkitMath.floorDouble(this.pos.x) + 0.5, this.pos.y+1, NukkitMath.floorDouble(this.pos.z) + 0.5);
         this.shootingEntity.teleport(destination, TeleportCause.ENDER_PEARL);
         if ((((Player) this.shootingEntity).getGamemode() & 0x01) == 0) {
             this.shootingEntity.attack(new EntityDamageByEntityEvent(this, shootingEntity, EntityDamageEvent.DamageCause.PROJECTILE, 5f, 0f));
         }
-        this.level.addLevelEvent(this, LevelEventPacket.EVENT_PARTICLE_TELEPORT);
-        this.level.addLevelEvent(this.shootingEntity.add(0.5, 0.5, 0.5), LevelEventPacket.EVENT_SOUND_TELEPORT_ENDERPEARL);
+        this.level.addLevelEvent(this.pos, LevelEventPacket.EVENT_PARTICLE_TELEPORT);
+        this.level.addLevelEvent(this.shootingEntity.pos.add(0.5, 0.5, 0.5), LevelEventPacket.EVENT_SOUND_TELEPORT_ENDERPEARL);
         if(this.level.getGameRules().getBoolean(GameRule.DO_MOB_SPAWNING)) {
             if(ThreadLocalRandom.current().nextInt(1,20) == 1) {
                 EntityEndermite endermite = (EntityEndermite) Entity.createEntity(Entity.ENDERMITE,

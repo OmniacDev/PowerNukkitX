@@ -22,7 +22,7 @@ public class C extends CachedFilterSelectorArgument {
         final var c = Integer.parseInt(arguments[0]);
         if (c == 0) throw new SelectorSyntaxException("C cannot be zero!");
         return entities -> {
-            entities.sort(Comparator.comparingDouble(e -> e.distanceSquared(basePos)));
+            entities.sort(Comparator.comparingDouble(e -> e.pos.distanceSquared(basePos)));
             if (c < 0)
                 Collections.reverse(entities);
             return entities.subList(0, Math.abs(c));

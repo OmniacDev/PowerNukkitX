@@ -109,7 +109,7 @@ public class ItemBoat extends Item {
                                 .add(new FloatTag(0))
                                 .add(new FloatTag(0)))
                         .putList("Rotation", new ListTag<FloatTag>()
-                                .add(new FloatTag((float) ((player.yaw + 90f) % 360)))
+                                .add(new FloatTag((float) ((player.rotation.yaw + 90f) % 360)))
                                 .add(new FloatTag(0)))
                         .putInt("Variant", getBoatId())
         );

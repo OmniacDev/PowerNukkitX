@@ -158,7 +158,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                 entity -> {
                                     Block block = getMemoryStorage().get(CoreMemoryTypes.NEAREST_BLOCK_2);
                                     if(block == null || getMoveDirectionEnd() == null) return false;
-                                    return getLevel().raycastBlocks(this, getMoveDirectionEnd(), true, false, 0.5d).contains(block);
+                                    return getLevel().raycastBlocks(this.pos, getMoveDirectionEnd(), true, false, 0.5d).contains(block);
                                 }
                         ), 4, 1),
                         new Behavior(
@@ -181,12 +181,12 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                         new Behavior(new PlaySoundExecutor(Sound.MOB_VILLAGER_IDLE, isBaby() ? 1.3f : 0.8f, isBaby() ? 1.7f : 1.2f, 1, 1), new RandomSoundEvaluator(), 1, 1)
                         ),
                 Set.of(
-                        new Behavior(entity -> {setMoveTarget(null); setLookTarget(getTradeInventory().getViewers().stream().findFirst().get()); return true;}, entity -> getTradeInventory() != null && !getTradeInventory().getViewers().isEmpty(), 9, 1),
+                        new Behavior(entity -> {setMoveTarget(null); setLookTarget(getTradeInventory().getViewers().stream().findFirst().get().pos); return true;}, entity -> getTradeInventory() != null && !getTradeInventory().getViewers().isEmpty(), 9, 1),
                         new Behavior(new FleeFromTargetExecutor(CoreMemoryTypes.NEAREST_ZOMBIE, 0.5f, true, 8), all(
                                 new EntityCheckEvaluator(CoreMemoryTypes.NEAREST_ZOMBIE),
                                 new DistanceEvaluator(CoreMemoryTypes.NEAREST_ZOMBIE, 8),
                                 entity -> getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_ZOMBIE) && getMemoryStorage().get(CoreMemoryTypes.NEAREST_ZOMBIE) instanceof EntityIntelligent i && i.getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET) && i.getMemoryStorage().get(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET) == this,
-                                entity -> getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_ZOMBIE) && getLevel().raycastBlocks(this, getMemoryStorage().get(CoreMemoryTypes.NEAREST_ZOMBIE)).isEmpty()
+                                entity -> getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_ZOMBIE) && getLevel().raycastBlocks(this.pos, getMemoryStorage().get(CoreMemoryTypes.NEAREST_ZOMBIE).pos).isEmpty()
                         ), 8, 1),
                         new Behavior(new SleepExecutor(), all(
                                 new MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.OCCUPIED_BED),
@@ -232,7 +232,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                     for (int x = -range; x <= range; x++) {
                                         for (int z = -range; z <= range; z++) {
                                             for (int y = -lookY; y <= lookY; y++) {
-                                                Location lookLocation = entity.add(x, y, z);
+                                                Location lookLocation = entity.getLocation().add(x, y, z);
                                                 Block lookBlock = lookLocation.getLevelBlock();
                                                 if (lookBlock instanceof BlockBed bed) {
                                                     if (!bed.isHeadPiece() && Arrays.stream(getLevel().getEntities()).noneMatch(entity1 -> entity1 instanceof EntityVillagerV2 v && v.getMemoryStorage().notEmpty(CoreMemoryTypes.OCCUPIED_BED) && v.getBed().equals(bed))) {
@@ -257,7 +257,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                         double minDistance = Float.MAX_VALUE;
                                         EntityVillagerV2 nearest = null;
                                         for(EntityVillagerV2 entity1 : entities.toList()) {
-                                            double distance = entity1.distance(this);
+                                            double distance = entity1.pos.distance(this.pos);
                                             if(distance < minDistance) {
                                                 minDistance = distance;
                                                 nearest = entity1;
@@ -269,7 +269,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                     }
                                 } else {
                                     if(shouldShareFood()) {
-                                        entities.filter(entity1 -> entity1.isHungry() && entity1.distance(this) < 16).findAny().ifPresentOrElse(entity1 ->  {
+                                        entities.filter(entity1 -> entity1.isHungry() && entity1.pos.distance(this.pos) < 16).findAny().ifPresentOrElse(entity1 ->  {
                                             getMemoryStorage().put(CoreMemoryTypes.GOSSIP_TARGET, entity1);
                                             entity1.getMemoryStorage().put(CoreMemoryTypes.GOSSIP_TARGET, this);
                                         }, () -> getMemoryStorage().clear(CoreMemoryTypes.GOSSIP_TARGET));
@@ -301,7 +301,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                     var maxDistanceSquared = -1d;
                                     EntityVillagerV2 nearestInLove = null;
                                     for (Entity e : entities) {
-                                        double newDistance = e.distanceSquared(entity);
+                                        double newDistance = e.pos.distanceSquared(entity.pos);
                                         if (e instanceof EntityVillagerV2 another && e != entity) {
                                             if (!another.isBaby() && another.getMemoryStorage().get(CoreMemoryTypes.WILLING) && another.getMemoryStorage().isEmpty(CoreMemoryTypes.ENTITY_SPOUSE) && (maxDistanceSquared == -1 || newDistance < maxDistanceSquared)) {
                                                 maxDistanceSquared = newDistance;
@@ -363,7 +363,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                 float randX = Utils.rand(0f, 0.5f);
                 float randY = Utils.rand(0f, 0.3f);
                 float randZ = Utils.rand(0f, 0.5f);
-                this.getLevel().addParticleEffect(this.add(randX, this.getEyeHeight() + randY, randZ), ParticleEffect.VILLAGER_HAPPY);
+                this.getLevel().addParticleEffect(this.pos.add(randX, this.getEyeHeight() + randY, randZ), ParticleEffect.VILLAGER_HAPPY);
                 this.getLevel().addParticleEffect(bed.add(randX, 0.5625f + randY, randZ), ParticleEffect.VILLAGER_HAPPY);
             }
         }
@@ -459,7 +459,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
         if(this.namedTag.containsInt("clothing")) {
             this.setDataProperty(EntityDataTypes.MARK_VARIANT, this.namedTag.getInt("clothing"));
         } else {
-            BlockVector3 bv = asBlockVector3();
+            BlockVector3 bv = this.pos.asBlockVector3();
             this.setDataProperty(EntityDataTypes.MARK_VARIANT, Clothing.getClothing(getLevel().getBiomeId(bv.x, bv.y, bv.z)).ordinal());
         }
         if(this.namedTag.containsCompound("bed")) {

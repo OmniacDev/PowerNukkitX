@@ -59,11 +59,11 @@ public class ItemFireworkRocket extends Item {
     public boolean onClickAir(Player player, Vector3 directionVector) {
         if (player.getInventory().getChestplate() instanceof ItemElytra && player.isGliding()) {
             player.setMotion(new Vector3(
-                    -Math.sin(Math.toRadians(player.yaw)) * Math.cos(Math.toRadians(player.pitch)) * 2,
-                    -Math.sin(Math.toRadians(player.pitch)) * 2,
-                    Math.cos(Math.toRadians(player.yaw)) * Math.cos(Math.toRadians(player.pitch)) * 2));
+                    -Math.sin(Math.toRadians(player.rotation.yaw)) * Math.cos(Math.toRadians(player.rotation.pitch)) * 2,
+                    -Math.sin(Math.toRadians(player.rotation.pitch)) * 2,
+                    Math.cos(Math.toRadians(player.rotation.yaw)) * Math.cos(Math.toRadians(player.rotation.pitch)) * 2));
 
-            spawnElytraFirework(player, player);
+            spawnElytraFirework(player.pos, player);
             if (!player.isCreative()) {
                 this.count--;
             }
@@ -142,7 +142,7 @@ public class ItemFireworkRocket extends Item {
                         .add(new FloatTag(0)))
                 .putCompound("FireworkItem", NBTIO.putItemHelper(this));
 
-        EntityElytraFirework entity = new EntityElytraFirework(player.getChunk(), nbt, player);
+        EntityElytraFirework entity = new EntityElytraFirework(player.getPosition().getChunk(), nbt, player);
         entity.spawnToAll();
     }
 

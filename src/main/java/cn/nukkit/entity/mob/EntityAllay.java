@@ -71,7 +71,7 @@ public class EntityAllay extends EntityMob implements EntityFlyable, EntityOwnab
                         new Behavior(new EntityMoveToOwnerExecutor(0.4f, true, 64, -1), entity -> {
                             if (this.hasOwner()) {
                                 var player = getOwner();
-                                var distanceSquared = this.distanceSquared(player);
+                                var distanceSquared = this.pos.distanceSquared(player.pos);
                                 return distanceSquared >= 100;
                             } else return false;
                         }, 4, 1),
@@ -144,7 +144,7 @@ public class EntityAllay extends EntityMob implements EntityFlyable, EntityOwnab
         if(currentTick%10 == 0) {
             EntityItem nearestItem = getMemoryStorage().get(CoreMemoryTypes.NEAREST_ITEM);
             if(nearestItem != null && !nearestItem.closed) {
-                if(nearestItem.distance(this) < 1 && currentTick-lastItemDropTick > dropCollectCooldown) {
+                if(nearestItem.pos.distance(this.pos) < 1 && currentTick-lastItemDropTick > dropCollectCooldown) {
                     Item item = nearestItem.getItem();
                     Item currentItem = getInventory().getItem(0).clone();
                     if(getInventory().canAddItem(item)) {
@@ -154,13 +154,13 @@ public class EntityAllay extends EntityMob implements EntityFlyable, EntityOwnab
                             item.setCount(item.getCount() + currentItem.getCount());
                             getInventory().setItem(0, item);
                         }
-                        this.level.addSound(this, Sound.RANDOM_POP);
+                        this.level.addSound(this.pos, Sound.RANDOM_POP);
                         nearestItem.close();
                     }
                 }
             } else {
                 if(hasOwner()) {
-                    if(distance(getOwner()) < 2){
+                    if(this.pos.distance(getOwner().pos) < 2){
                         dropItem(currentTick);
                     }
                 }
@@ -176,7 +176,7 @@ public class EntityAllay extends EntityMob implements EntityFlyable, EntityOwnab
         Item item = getInventory().getItem(0);
         if(item.isNull()) return true;
         Vector3 motion = this.getDirectionVector().multiply(0.4);
-        this.level.dropItem(this.add(0, 1.3, 0), item, motion, 40);
+        this.level.dropItem(this.pos.add(0, 1.3, 0), item, motion, 40);
         getInventory().clearAll();
         this.lastItemDropTick = currentTick;
         return true;

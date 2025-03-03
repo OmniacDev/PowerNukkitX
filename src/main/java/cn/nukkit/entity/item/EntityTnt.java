@@ -92,7 +92,7 @@ public class EntityTnt extends Entity implements EntityExplosive {
         this.setDataFlag(EntityFlag.IGNITED, true);
         this.setDataProperty(FUSE_TIME, fuse);
 
-        this.getLevel().addSound(this, Sound.RANDOM_FUSE);
+        this.getLevel().addSound(this.pos, Sound.RANDOM_FUSE);
     }
 
     @Override
@@ -167,7 +167,7 @@ public class EntityTnt extends Entity implements EntityExplosive {
         if (event.isCancelled()) {
             return;
         }
-        Explosion explosion = new Explosion(this, event.getForce(), this);
+        Explosion explosion = new Explosion(this.getPosition(), event.getForce(), this);
         explosion.setFireChance(event.getFireChance());
         if (event.isBlockBreaking()) {
             explosion.explodeA();

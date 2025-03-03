@@ -44,7 +44,7 @@ public class BlockSensor implements ISensor {
         for(int x = -range; x<=range; x++) {
             for(int z = -range; z<=range; z++) {
                 for(int y = -lookY; y<=lookY; y++) {
-                    Location lookLocation = entity.add(x, y, z);
+                    Location lookLocation = entity.getLocation().add(x, y, z);
                     Block lookBlock = lookLocation.getLevelBlock();
                     if(blockClass.isAssignableFrom(lookBlock.getClass())) {
                         block = lookBlock;

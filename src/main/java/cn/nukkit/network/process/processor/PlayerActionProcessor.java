@@ -61,7 +61,7 @@ public class PlayerActionProcessor extends DataPacketProcessor<PlayerActionPacke
             case PlayerActionPacket.ACTION_CREATIVE_PLAYER_DESTROY_BLOCK -> {
                 // Used by client to get book from lecterns and items from item frame in creative mode since 1.20.70
                 Block blockLectern = playerHandle.player.getLevel().getBlock(pos);
-                if (blockLectern instanceof BlockLectern blockLecternI && blockLectern.distance(playerHandle.player) <= 6) {
+                if (blockLectern instanceof BlockLectern blockLecternI && blockLectern.distance(playerHandle.player.pos) <= 6) {
                     blockLecternI.dropBook(playerHandle.player);
                 }
                 if (blockLectern instanceof BlockFrame blockFrame && blockFrame.getBlockEntity() != null) {
@@ -151,7 +151,7 @@ public class PlayerActionProcessor extends DataPacketProcessor<PlayerActionPacke
                 }
             }
             case PlayerActionPacket.ACTION_DIMENSION_CHANGE_ACK ->
-                    player.sendPosition(player, player.yaw, player.pitch, MovePlayerPacket.MODE_NORMAL);
+                    player.sendPosition(player.pos, player.rotation.yaw, player.rotation.pitch, MovePlayerPacket.MODE_NORMAL);
             case PlayerActionPacket.ACTION_START_GLIDE -> {
                 if (Server.getInstance().getServerAuthoritativeMovement() > 0) {
                     return;
@@ -208,18 +208,18 @@ public class PlayerActionProcessor extends DataPacketProcessor<PlayerActionPacke
             }
             case PlayerActionPacket.ACTION_START_SPIN_ATTACK -> {
                 if (!Objects.equals(player.getInventory().getItemInHand().getId(), ItemID.TRIDENT)) {
-                    player.sendPosition(player, player.yaw, player.pitch, MovePlayerPacket.MODE_RESET);
+                    player.sendPosition(player.pos, player.rotation.yaw, player.rotation.pitch, MovePlayerPacket.MODE_RESET);
                     break;
                 }
 
                 int riptideLevel = player.getInventory().getItemInHand().getEnchantmentLevel(Enchantment.ID_TRIDENT_RIPTIDE);
                 if (riptideLevel < 1) {
-                    player.sendPosition(player, player.yaw, player.pitch, MovePlayerPacket.MODE_RESET);
+                    player.sendPosition(player.pos, player.rotation.yaw, player.rotation.pitch, MovePlayerPacket.MODE_RESET);
                     break;
                 }
 
-                if (!(player.isTouchingWater() || (player.getLevel().isRaining() && player.getLevel().canBlockSeeSky(player)))) {
-                    player.sendPosition(player, player.yaw, player.pitch, MovePlayerPacket.MODE_RESET);
+                if (!(player.isTouchingWater() || (player.getLevel().isRaining() && player.getLevel().canBlockSeeSky(player.pos)))) {
+                    player.sendPosition(player.pos, player.rotation.yaw, player.rotation.pitch, MovePlayerPacket.MODE_RESET);
                     break;
                 }
 
@@ -227,7 +227,7 @@ public class PlayerActionProcessor extends DataPacketProcessor<PlayerActionPacke
                 player.getServer().getPluginManager().callEvent(playerToggleSpinAttackEvent);
 
                 if (playerToggleSpinAttackEvent.isCancelled()) {
-                    player.sendPosition(player, player.yaw, player.pitch, MovePlayerPacket.MODE_RESET);
+                    player.sendPosition(player.pos, player.rotation.yaw, player.rotation.pitch, MovePlayerPacket.MODE_RESET);
                 } else {
                     player.setSpinAttacking(true);
 
@@ -239,7 +239,7 @@ public class PlayerActionProcessor extends DataPacketProcessor<PlayerActionPacke
                     } else {
                         riptideSound = Sound.ITEM_TRIDENT_RIPTIDE_1;
                     }
-                    player.level.addSound(player, riptideSound);
+                    player.level.addSound(player.pos, riptideSound);
                 }
             }
             case PlayerActionPacket.ACTION_STOP_SPIN_ATTACK -> {

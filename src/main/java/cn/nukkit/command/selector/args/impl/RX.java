@@ -19,7 +19,7 @@ public class RX extends CachedSimpleSelectorArgument {
         final var rx = Double.parseDouble(arguments[0]);
         if (!ParseUtils.checkBetween(-90d, 90d, rx))
             throw new SelectorSyntaxException("RX out of bound (-90 - 90): " + rx);
-        return entity -> entity.getPitch() <= rx;
+        return entity -> entity.rotation.pitch <= rx;
     }
 
     @Override

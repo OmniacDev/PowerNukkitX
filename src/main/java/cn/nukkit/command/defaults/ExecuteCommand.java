@@ -207,7 +207,7 @@ public class ExecuteCommand extends VanillaCommand {
                     return 0;
                 }
                 String chainCommand = list.getResult(2);
-                for (Location location : locations) {
+                for (Location location : locations.stream().map(Entity::getLocation).toList()) {
                     ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), location);
                     num += executorCommandSender.getServer().executeCommand(executorCommandSender, chainCommand);
                 }
@@ -246,7 +246,7 @@ public class ExecuteCommand extends VanillaCommand {
                 String chainCommand = list.getResult(4);
                 for (Entity target : targets) {
                     Location source = sender.getLocation();
-                    BVector3 bv = BVector3.fromPos(target.x - source.x, target.y + (anchorAtEyes ? target.getEyeHeight() : 0) - source.y, target.z - source.z);
+                    BVector3 bv = BVector3.fromPos(target.pos.x - source.x, target.pos.y + (anchorAtEyes ? target.getEyeHeight() : 0) - source.y, target.pos.z - source.z);
                     source.setPitch(bv.getPitch());
                     source.setYaw(bv.getYaw());
                     ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), source);
@@ -275,8 +275,8 @@ public class ExecuteCommand extends VanillaCommand {
                 String chainCommand = list.getResult(3);
                 for (Entity executor : executors) {
                     Location location = sender.getLocation();
-                    location.setYaw(executor.getYaw());
-                    location.setPitch(executor.getPitch());
+                    location.setYaw(executor.rotation.yaw);
+                    location.setPitch(executor.rotation.pitch);
                     ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), location);
                     num += executorCommandSender.getServer().executeCommand(executorCommandSender, chainCommand);
                 }
@@ -327,7 +327,7 @@ public class ExecuteCommand extends VanillaCommand {
                     return 0;
                 }
                 String chainCommand = list.getResult(3);
-                for (Vector3 vec : targets) {
+                for (Vector3 vec : targets.stream().map(e -> e.pos).toList()) {
                     Location newLoc = sender.getLocation();
                     newLoc.setX(vec.getX());
                     newLoc.setY(vec.getY());

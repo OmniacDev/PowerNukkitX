@@ -4,6 +4,7 @@ import cn.nukkit.block.Block;
 import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.level.Position;
+import cn.nukkit.math.GetVector3;
 import cn.nukkit.math.Vector3;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class MoveToTargetExecutor implements EntityControl, IBehaviorExecutor {
 
     //指示执行器应该从哪个Memory获取目标位置
-    protected MemoryType<? extends Vector3> memory;
+    protected MemoryType<? extends GetVector3> memory;
     protected float speed;
     protected Vector3 oldTarget;
     protected boolean updateRouteImmediatelyWhenTargetChange;
@@ -22,19 +23,19 @@ public class MoveToTargetExecutor implements EntityControl, IBehaviorExecutor {
     protected float minFollowRangeSquared;
     protected boolean clearDataWhenLose;
 
-    public MoveToTargetExecutor(MemoryType<? extends Vector3> memory, float speed) {
+    public MoveToTargetExecutor(MemoryType<? extends GetVector3> memory, float speed) {
         this(memory, speed, false);
     }
 
-    public MoveToTargetExecutor(MemoryType<? extends Vector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange) {
+    public MoveToTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange) {
         this(memory, speed, updateRouteImmediatelyWhenTargetChange, -1, -1);
     }
 
-    public MoveToTargetExecutor(MemoryType<? extends Vector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float maxFollowRange, float minFollowRange) {
+    public MoveToTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float maxFollowRange, float minFollowRange) {
         this(memory, speed, updateRouteImmediatelyWhenTargetChange, maxFollowRange, minFollowRange, false);
     }
 
-    public MoveToTargetExecutor(MemoryType<? extends Vector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float maxFollowRange, float minFollowRange, boolean clearDataWhenLose) {
+    public MoveToTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float maxFollowRange, float minFollowRange, boolean clearDataWhenLose) {
         this.memory = memory;
         this.speed = speed;
         this.updateRouteImmediatelyWhenTargetChange = updateRouteImmediatelyWhenTargetChange;
@@ -53,7 +54,7 @@ public class MoveToTargetExecutor implements EntityControl, IBehaviorExecutor {
             return false;
         }
         //获取目标位置（这个clone很重要）
-        Vector3 target = entity.getBehaviorGroup().getMemoryStorage().get(memory).clone();
+        Vector3 target = entity.getBehaviorGroup().getMemoryStorage().get(memory).getVector3();
 
         if (target instanceof Position position && !position.level.getName().equals(entity.level.getName()))
             return false;
@@ -63,7 +64,7 @@ public class MoveToTargetExecutor implements EntityControl, IBehaviorExecutor {
         }
 
         if (enableRangeTest) {
-            var distanceSquared = target.distanceSquared(entity);
+            var distanceSquared = target.distanceSquared(entity.pos);
             if (distanceSquared > maxFollowRangeSquared || distanceSquared < minFollowRangeSquared) {
                 return false;
             }

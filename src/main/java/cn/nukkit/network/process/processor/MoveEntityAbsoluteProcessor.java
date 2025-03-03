@@ -25,8 +25,8 @@ public class MoveEntityAbsoluteProcessor extends DataPacketProcessor<MoveEntityA
 
         player.temporalVector.setComponents(pk.x, pk.y - ((EntityBoat) movedEntity).getBaseOffset(), pk.z);
         if (!movedEntity.equals(player.getRiding()) || !movedEntity.isControlling(player)
-                || player.temporalVector.distanceSquared(movedEntity) > 10 * 10) {
-            movedEntity.addMovement(movedEntity.x, movedEntity.y, movedEntity.z, movedEntity.yaw, movedEntity.pitch, movedEntity.yaw);
+                || player.temporalVector.distanceSquared(movedEntity.pos) > 10 * 10) {
+            movedEntity.addMovement(movedEntity.pos.x, movedEntity.pos.y, movedEntity.pos.z, movedEntity.rotation.yaw, movedEntity.rotation.pitch, movedEntity.rotation.yaw);
             return;
         }
 

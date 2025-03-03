@@ -74,9 +74,9 @@ public class NearestTargetEntitySensor<T extends Entity> implements ISensor {
             if (current != null && current.isAlive()) return;
 
             //寻找范围内最近的实体
-            var entities = Collections.synchronizedList(new SortedList<>(Comparator.comparingDouble((Entity e) -> e.distanceSquared(entity))));
+            var entities = Collections.synchronizedList(new SortedList<>(Comparator.comparingDouble((Entity e) -> e.pos.distanceSquared(entity.pos))));
             for (Entity p : entity.getLevel().getEntities()) {
-                if (entity.distanceSquared(p) <= maxRangeSquared && entity.distanceSquared(p) >= minRangeSquared && !p.equals(entity)) {
+                if (entity.pos.distanceSquared(p.pos) <= maxRangeSquared && entity.pos.distanceSquared(p.pos) >= minRangeSquared && !p.equals(entity)) {
                     entities.add(p);
                 }
             }
@@ -90,11 +90,11 @@ public class NearestTargetEntitySensor<T extends Entity> implements ISensor {
             List<List<Entity>> sortEntities = new ArrayList<>(memories.size());
 
             for (int i = 0, len = memories.size(); i < len; ++i) {
-                sortEntities.add(new SortedList<>(Comparator.comparingDouble((Entity e) -> e.distanceSquared(entity))));
+                sortEntities.add(new SortedList<>(Comparator.comparingDouble((Entity e) -> e.pos.distanceSquared(entity.pos))));
             }
 
             for (Entity p : entity.getLevel().getEntities()) {
-                if (entity.distanceSquared(p) <= maxRangeSquared && entity.distanceSquared(p) >= minRangeSquared && !p.equals(entity)) {
+                if (entity.pos.distanceSquared(p.pos) <= maxRangeSquared && entity.pos.distanceSquared(p.pos) >= minRangeSquared && !p.equals(entity)) {
                     int i = 0;
                     for (var targetFunction : allTargetFunction) {
                         if (targetFunction.apply((T) p)) {

@@ -39,9 +39,9 @@ public abstract class EntityHanging extends Entity {
         super.saveNBT();
 
         this.namedTag.putByte("Direction", this.getDirection().getHorizontalIndex());
-        this.namedTag.putInt("TileX", (int) this.x);
-        this.namedTag.putInt("TileY", (int) this.y);
-        this.namedTag.putInt("TileZ", (int) this.z);
+        this.namedTag.putInt("TileX", (int) this.pos.x);
+        this.namedTag.putInt("TileY", (int) this.pos.y);
+        this.namedTag.putInt("TileZ", (int) this.pos.z);
     }
 
     @Override
@@ -70,13 +70,13 @@ public abstract class EntityHanging extends Entity {
 
         this.checkBlockCollision();
 
-        if (this.lastYaw != this.yaw || this.lastX != this.x || this.lastY != this.y || this.lastZ != this.z) {
+        if (this.lastYaw != this.rotation.yaw || this.lastX != this.pos.x || this.lastY != this.pos.y || this.lastZ != this.pos.z) {
             this.despawnFromAll();
-            this.direction = (int) (this.yaw / 90);
-            this.lastYaw = this.yaw;
-            this.lastX = this.x;
-            this.lastY = this.y;
-            this.lastZ = this.z;
+            this.direction = (int) (this.rotation.yaw / 90);
+            this.lastYaw = this.rotation.yaw;
+            this.lastX = this.pos.x;
+            this.lastY = this.pos.y;
+            this.lastZ = this.pos.z;
             this.spawnToAll();
             return true;
         }

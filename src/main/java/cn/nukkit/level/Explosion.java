@@ -109,8 +109,8 @@ public class Explosion {
     public boolean explodeA() {
         if (what instanceof EntityExplosive) {
             Entity entity = (Entity) what;
-            Block blockLayer0 = level.getBlock(entity.floor());
-            Block blockLayer1 = level.getBlock(entity.floor(), 1);
+            Block blockLayer0 = level.getBlock(entity.pos.floor());
+            Block blockLayer1 = level.getBlock(entity.pos.floor(), 1);
             if (BlockID.FLOWING_WATER.equals(blockLayer0.getId())
                     || BlockID.WATER.equals(blockLayer0.getId())
                     || BlockID.FLOWING_WATER.equals(blockLayer1.getId())
@@ -245,14 +245,14 @@ public class Explosion {
         AxisAlignedBB explosionBB = new SimpleAxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
         Entity[] list = this.level.getNearbyEntities(explosionBB, this.what instanceof Entity ? (Entity) this.what : null);
         for (Entity entity : list) {
-            double distance = entity.distance(this.source) / explosionSize;
+            double distance = entity.pos.distance(this.source) / explosionSize;
 
             if (distance <= 1) {
-                Vector3 motion = entity.subtract(this.source).normalize();
+                Vector3 motion = entity.pos.subtract(this.source).normalize();
 
                 float blockDensity = level.getBlockDensity(this.source, entity.boundingBox);
                 double force = this.size * 2.0F;
-                double d = entity.distance(source) / force;
+                double d = entity.pos.distance(source) / force;
                 double impact = (1.0D - d) * blockDensity;
                 float entityDamageAmount = (float) ((float) (impact * impact + impact) / 2.0D * 7.0D * force + 1.0D);
                 float damage = this.doesDamage ? entityDamageAmount : 0f;

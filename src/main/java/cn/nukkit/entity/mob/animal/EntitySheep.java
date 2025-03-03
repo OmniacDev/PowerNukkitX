@@ -176,9 +176,9 @@ public class EntitySheep extends EntityAnimal implements EntityWalkable, EntityS
 
         Item woolItem = this.getWoolItem();
         woolItem.setCount(ThreadLocalRandom.current().nextInt(2) + 1);
-        this.level.dropItem(this, woolItem);
+        this.level.dropItem(this.pos, woolItem);
 
-        level.addSound(this, Sound.MOB_SHEEP_SHEAR);
+        level.addSound(this.pos, Sound.MOB_SHEEP_SHEAR);
         level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.getVector3(), VibrationType.SHEAR));
         return true;
     }

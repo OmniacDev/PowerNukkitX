@@ -54,7 +54,7 @@ public class EntityChestMinecart extends EntityMinecartAbstract implements Inven
     @Override
     public void dropItem() {
         for (Item item : this.inventory.getContents().values()) {
-            this.level.dropItem(this, item);
+            this.level.dropItem(this.pos, item);
         }
 
         if (this.lastDamageCause instanceof EntityDamageByEntityEvent entityDamageByEntityEvent) {
@@ -63,7 +63,7 @@ public class EntityChestMinecart extends EntityMinecartAbstract implements Inven
                 return;
             }
         }
-        this.level.dropItem(this, Item.get(Item.CHEST_MINECART));
+        this.level.dropItem(this.pos, Item.get(Item.CHEST_MINECART));
     }
 
     @Override

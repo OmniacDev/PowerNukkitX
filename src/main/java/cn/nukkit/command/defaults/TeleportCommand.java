@@ -102,7 +102,10 @@ public class TeleportCommand extends VanillaCommand {
                     return 0;
                 }
                 Location victim = sender.getLocation();
-                Location target = destination.get(0).setYaw(victim.getYaw()).setPitch(victim.getPitch());
+                Entity entity = destination.get(0);
+                entity.rotation.yaw = (victim.getYaw());
+                entity.rotation.pitch = (victim.getPitch());
+                Location target = entity.getLocation();
                 boolean checkForBlocks = false;
                 if (list.hasResult(1)) {
                     checkForBlocks = list.getResult(1);
@@ -146,9 +149,9 @@ public class TeleportCommand extends VanillaCommand {
                     sb.append(victim.getName()).append(" ");
                 }
                 if (checkForBlocks) {
-                    if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {
+                    if (!target.getPosition().getLevelBlock().isSolid() && !target.getPosition().add(0, 1, 0).getLevelBlock().isSolid()) {
                         for (Entity victim : victims) {
-                            victim.teleport(target.getLocation().setYaw(victim.getYaw()).setPitch(victim.getPitch()));
+                            victim.teleport(target.getLocation().setYaw(victim.rotation.yaw).setPitch(victim.rotation.pitch));
                         }
                         log.addSuccess("commands.tp.success", sb.toString(), target.getName());
                     } else {
@@ -157,7 +160,7 @@ public class TeleportCommand extends VanillaCommand {
                     }
                 } else {
                     for (Entity victim : victims) {
-                        victim.teleport(target.getLocation().setYaw(victim.getYaw()).setPitch(victim.getPitch()));
+                        victim.teleport(target.getLocation().setYaw(victim.rotation.yaw).setPitch(victim.rotation.pitch));
                     }
                     log.addSuccess("commands.tp.success", sb.toString(), target.getName());
                 }
@@ -259,7 +262,7 @@ public class TeleportCommand extends VanillaCommand {
                     log.addTooManyTargets().output();
                     return 0;
                 }
-                Position lookAtPosition = lookAtEntity.get(0);
+                Vector3 lookAtPosition = lookAtEntity.get(0).pos;
                 boolean checkForBlocks = false;
                 if (list.hasResult(4)) {
                     checkForBlocks = list.getResult(4);
@@ -268,7 +271,7 @@ public class TeleportCommand extends VanillaCommand {
                 for (Entity victim : victims) {
                     sb.append(victim.getName()).append(" ");
                 }
-                BVector3 bv = BVector3.fromPos(new Vector3(lookAtPosition.x - pos.x, lookAtPosition.y - pos.y, lookAtPosition.z - pos.z));
+                BVector3 bv = BVector3.fromPos(lookAtPosition.subtract(pos));
                 Location target = Location.fromObject(pos, pos.level, bv.getYaw(), bv.getPitch());
                 if (checkForBlocks) {
                     if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {
@@ -366,12 +369,12 @@ public class TeleportCommand extends VanillaCommand {
                     log.addTooManyTargets().output();
                     return 0;
                 }
-                Position lookAtPosition = lookAtEntity.get(0);
+                Vector3 lookAtPosition = lookAtEntity.get(0).pos;
                 boolean checkForBlocks = false;
                 if (list.hasResult(3)) {
                     checkForBlocks = list.getResult(3);
                 }
-                BVector3 bv = BVector3.fromPos(new Vector3(lookAtPosition.x - pos.x, lookAtPosition.y - pos.y, lookAtPosition.z - pos.z));
+                BVector3 bv = BVector3.fromPos(lookAtPosition.subtract(pos));
                 Location target = Location.fromObject(pos, pos.level, bv.getYaw(), bv.getPitch());
                 if (checkForBlocks) {
                     if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {

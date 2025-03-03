@@ -56,7 +56,7 @@ public class EntityCat extends EntityAnimal implements EntityWalkable, EntityOwn
     @Override
     public void updateMovement() {
         //猫猫流线运动怎么可能会摔落造成伤害呢~
-        this.highestPosition = this.y;
+        this.highestPosition = this.pos.y;
         super.updateMovement();
     }
 
@@ -121,12 +121,12 @@ public class EntityCat extends EntityAnimal implements EntityWalkable, EntityOwn
                             if (this.hasOwner()) {
                                 var player = getOwner();
                                 if (!player.isOnGround()) return false;
-                                var distanceSquared = entity.distanceSquared(player);
+                                var distanceSquared = entity.pos.distanceSquared(player.pos);
                                 return distanceSquared >= 100;
                             } else return false;
                         }, 4),
                         //猫在主人身边随机移动 优先级3
-                        new Behavior(new FlatRandomRoamExecutor(0.1f, 4, 100, false, -1, true, 20), entity -> this.hasOwner() && this.getOwner().distanceSquared(this) < 100, 3),
+                        new Behavior(new FlatRandomRoamExecutor(0.1f, 4, 100, false, -1, true, 20), entity -> this.hasOwner() && this.getOwner().pos.distanceSquared(this.pos) < 100, 3),
                         //猫咪看向食物 优先级3
                         new Behavior(new LookAtFeedingPlayerExecutor(), new MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.NEAREST_FEEDING_PLAYER), 3),
                         //猫咪随机目标点移动 优先级1
@@ -211,7 +211,7 @@ public class EntityCat extends EntityAnimal implements EntityWalkable, EntityOwn
         }
         int healable = this.getHealingAmount(item);
         if (this.isBreedingItem(item)) {
-            this.getLevel().addSound(this, Sound.MOB_CAT_EAT);
+            this.getLevel().addSound(this.pos, Sound.MOB_CAT_EAT);
             if (!this.hasOwner()) {
                 player.getInventory().decreaseCount(player.getInventory().getHeldItemIndex());
                 if (Utils.rand(1, 3) == 3) {
@@ -226,7 +226,7 @@ public class EntityCat extends EntityAnimal implements EntityWalkable, EntityOwn
                     this.setColor(DyeColor.RED);
                     this.saveNBT();
 
-                    this.getLevel().dropExpOrb(this, Utils.rand(1, 7));
+                    this.getLevel().dropExpOrb(this.pos, Utils.rand(1, 7));
 
                     return true;
                 } else {
@@ -237,8 +237,8 @@ public class EntityCat extends EntityAnimal implements EntityWalkable, EntityOwn
                 }
             } else {
                 player.getInventory().decreaseCount(player.getInventory().getHeldItemIndex());
-                this.getLevel().addSound(this, Sound.MOB_CAT_EAT);
-                this.getLevel().addParticle(new ItemBreakParticle(this.add(0, getHeight() * 0.75F, 0), Item.get(item.getId(), 0, 1)));
+                this.getLevel().addSound(this.pos, Sound.MOB_CAT_EAT);
+                this.getLevel().addParticle(new ItemBreakParticle(this.pos.add(0, getHeight() * 0.75F, 0), Item.get(item.getId(), 0, 1)));
 
                 if (healable != 0) {
                     this.setHealth(Math.max(this.getMaxHealth(), this.getHealth() + healable));

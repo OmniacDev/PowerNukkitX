@@ -5,6 +5,7 @@ import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.level.Position;
+import cn.nukkit.math.GetVector3;
 import cn.nukkit.math.Vector3;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class FleeFromTargetExecutor implements EntityControl, IBehaviorExecutor {
 
     //指示执行器应该从哪个Memory获取目标位置
-    protected MemoryType<? extends Vector3> memory;
+    protected MemoryType<? extends GetVector3> memory;
     protected float speed;
     protected Vector3 oldTarget;
     protected boolean updateRouteImmediatelyWhenTargetChange;
@@ -22,19 +23,19 @@ public class FleeFromTargetExecutor implements EntityControl, IBehaviorExecutor 
     protected float minDistance;
     protected boolean clearDataWhenLose;
 
-    public FleeFromTargetExecutor(MemoryType<? extends Vector3> memory, float speed) {
+    public FleeFromTargetExecutor(MemoryType<? extends GetVector3> memory, float speed) {
         this(memory, speed, false);
     }
 
-    public FleeFromTargetExecutor(MemoryType<? extends Vector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange) {
+    public FleeFromTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange) {
         this(memory, speed, updateRouteImmediatelyWhenTargetChange, -1);
     }
 
-    public FleeFromTargetExecutor(MemoryType<? extends Vector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float minDistance) {
+    public FleeFromTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float minDistance) {
         this(memory, speed, updateRouteImmediatelyWhenTargetChange, minDistance, false);
     }
 
-    public FleeFromTargetExecutor(MemoryType<? extends Vector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float minDistance, boolean clearDataWhenLose) {
+    public FleeFromTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float minDistance, boolean clearDataWhenLose) {
         this.memory = memory;
         this.speed = speed;
         this.updateRouteImmediatelyWhenTargetChange = updateRouteImmediatelyWhenTargetChange;
@@ -49,13 +50,13 @@ public class FleeFromTargetExecutor implements EntityControl, IBehaviorExecutor 
             return false;
         }
 
-        Vector3 target = entity.getBehaviorGroup().getMemoryStorage().get(memory).clone();
-        Vector3 moveTarget = target.add(new Vector3(entity.x-target.x, entity.y-target.y, entity.z-target.z).normalize().multiply(minDistance));
+        Vector3 target = entity.getBehaviorGroup().getMemoryStorage().get(memory).getVector3();
+        Vector3 moveTarget = target.add(new Vector3(entity.pos.x-target.x, entity.pos.y-target.y, entity.pos.z-target.z).normalize().multiply(minDistance));
 
         if (moveTarget instanceof Position position && !position.level.getName().equals(entity.level.getName()))
             return false;
 
-        if (target.distance(entity) > minDistance) {
+        if (target.distance(entity.pos) > minDistance) {
             setLookTarget(entity, target);
             return false;
         }

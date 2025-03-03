@@ -69,7 +69,7 @@ public class EntityElderGuardian extends EntityMonster implements EntitySwimmabl
                         new Behavior(new GuardianAttackExecutor(CoreMemoryTypes.NEAREST_PLAYER, 0.3f, 15, true, 60, 40), all(
                                 new EntityCheckEvaluator(CoreMemoryTypes.NEAREST_PLAYER),
                                 entity -> entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER) != null && !entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER).isBlocking(),
-                                entity -> entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER) != null && getLevel().raycastBlocks(entity, entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER)).stream().allMatch(Block::isTransparent)
+                                entity -> entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER) != null && getLevel().raycastBlocks(entity.pos, entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER).pos).stream().allMatch(Block::isTransparent)
                         ), 3, 1),
                         new Behavior(new GuardianAttackExecutor(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET, 0.3f, 15, true, 60, 40), new EntityCheckEvaluator(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET), 2, 1),
                         new Behavior(new SpaceRandomRoamExecutor(0.36f, 12, 1, 80, false, -1, false, 10), none(), 1, 1)
@@ -144,13 +144,13 @@ public class EntityElderGuardian extends EntityMonster implements EntitySwimmabl
     public boolean onUpdate(int currentTick) {
         if (!this.closed && this.isAlive()) {
             for (Player p : this.getViewers().values()) {
-                if (p.locallyInitialized && p.getGamemode() % 2 == 0 && p.distance(this) < 50 && !p.hasEffect(EffectType.MINING_FATIGUE)) {
+                if (p.locallyInitialized && p.getGamemode() % 2 == 0 && p.pos.distance(this.pos) < 50 && !p.hasEffect(EffectType.MINING_FATIGUE)) {
                     p.addEffect(Effect.get(EffectType.MINING_FATIGUE).setAmplifier(2).setDuration(6000));
                     LevelEventPacket pk = new LevelEventPacket();
                     pk.evid = LevelEventPacket.EVENT_PARTICLE_SOUND_GUARDIAN_GHOST;
-                    pk.x = (float) this.x;
-                    pk.y = (float) this.y;
-                    pk.z = (float) this.z;
+                    pk.x = (float) this.pos.x;
+                    pk.y = (float) this.pos.y;
+                    pk.z = (float) this.pos.z;
                     p.dataPacket(pk);
                 }
             }

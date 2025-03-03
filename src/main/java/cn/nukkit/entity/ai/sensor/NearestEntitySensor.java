@@ -44,11 +44,11 @@ public class NearestEntitySensor implements ISensor {
         //寻找范围内最近的玩家
         for (Entity e : entity.getLevel().getEntities()) {
             if(entityClass.isAssignableFrom(e.getClass())) {
-                if (entity.distanceSquared(e) <= rangeSquared && entity.distanceSquared(e) >= minRangeSquared) {
+                if (entity.pos.distanceSquared(e.pos) <= rangeSquared && entity.pos.distanceSquared(e.pos) >= minRangeSquared) {
                     if (ent == null) {
                         ent = e;
                     } else {
-                        if (entity.distanceSquared(e) < entity.distanceSquared(ent)) {
+                        if (entity.pos.distanceSquared(e.pos) < entity.pos.distanceSquared(ent.pos)) {
                             ent = e;
                         }
                     }

@@ -60,17 +60,17 @@ public class EntityHopperMinecart extends EntityMinecartAbstract implements Inve
 
         this.updatePickupArea();
 
-        Block blockSide = this.getSide(BlockFace.UP).getTickCachedLevelBlock();
-        BlockEntity blockEntity = this.level.getBlockEntity(temporalVector.setComponentsAdding(this, BlockFace.UP));
+        Block blockSide = this.getPosition().getSide(BlockFace.UP).getTickCachedLevelBlock();
+        BlockEntity blockEntity = this.level.getBlockEntity(temporalVector.setComponentsAdding(this.pos, BlockFace.UP));
 
         boolean changed;
 
         if (blockEntity instanceof InventoryHolder || blockSide instanceof BlockComposter) {
             //从容器中拉取物品
-            changed = pullItems(this, this);
+            changed = pullItems(this, this.getPosition());
         } else {
             //收集掉落物
-            changed = pickupItems(this, this, pickupArea);
+            changed = pickupItems(this, this.getPosition(), pickupArea);
         }
 
         if (changed) {
@@ -106,7 +106,7 @@ public class EntityHopperMinecart extends EntityMinecartAbstract implements Inve
     @Override
     public void dropItem() {
         for (Item item : this.inventory.getContents().values()) {
-            this.level.dropItem(this, item);
+            this.level.dropItem(this.pos, item);
         }
         if (this.lastDamageCause instanceof EntityDamageByEntityEvent entityDamageByEntityEvent) {
             Entity damager = entityDamageByEntityEvent.getDamager();
@@ -114,7 +114,7 @@ public class EntityHopperMinecart extends EntityMinecartAbstract implements Inve
                 return;
             }
         }
-        this.level.dropItem(this, Item.get(Item.HOPPER_MINECART));
+        this.level.dropItem(this.pos, Item.get(Item.HOPPER_MINECART));
     }
 
     @Override
@@ -163,11 +163,11 @@ public class EntityHopperMinecart extends EntityMinecartAbstract implements Inve
     }
 
     public void updatePickupArea() {
-        this.pickupArea = new SimpleAxisAlignedBB(this.x - 0.5, this.y - 0.5, this.z - 0.5, this.x + 1, this.y + 2.5, this.z + 1).expand(0.25, 0, 0.25);
+        this.pickupArea = new SimpleAxisAlignedBB(this.pos.x - 0.5, this.pos.y - 0.5, this.pos.z - 0.5, this.pos.x + 1, this.pos.y + 2.5, this.pos.z + 1).expand(0.25, 0, 0.25);
     }
 
     public void checkDisabled() {
-        if (getLevelBlock() instanceof BlockActivatorRail rail) {
+        if (this.getPosition().getLevelBlock() instanceof BlockActivatorRail rail) {
             setDisabled(rail.isActive());
         }
     }

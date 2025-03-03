@@ -82,9 +82,9 @@ public class TridentThrowExecutor implements EntityControl, IBehaviorExecutor {
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Location clone = this.target.clone();
+        Location clone = this.target.getLocation();
 
-        if (entity.distanceSquared(target) > maxShootDistanceSquared) {
+        if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
             //更新寻路target
             setRouteTarget(entity, clone);
         } else {
@@ -94,7 +94,7 @@ public class TridentThrowExecutor implements EntityControl, IBehaviorExecutor {
         setLookTarget(entity, clone);
 
         if (tick2 == 0 && tick1 > coolDownTick) {
-            if (entity.distanceSquared(target) <= maxShootDistanceSquared) {
+            if (entity.pos.distanceSquared(target.pos) <= maxShootDistanceSquared) {
                 this.tick1 = 0;
                 this.tick2++;
                 playTridentAnimation(entity);
@@ -144,25 +144,25 @@ public class TridentThrowExecutor implements EntityControl, IBehaviorExecutor {
 
         Location fireballLocation = entity.getLocation();
         Vector3 directionVector = entity.getDirectionVector().multiply(1 + ThreadLocalRandom.current().nextFloat(0.2f));
-        fireballLocation.setY(entity.y + entity.getEyeHeight() + directionVector.getY());
+        fireballLocation.setY(entity.pos.y + entity.getEyeHeight() + directionVector.getY());
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
                         .add(new FloatTag(fireballLocation.x))
                         .add(new FloatTag(fireballLocation.y))
                         .add(new FloatTag(fireballLocation.z)))
                 .putList("Motion", new ListTag<FloatTag>()
-                        .add(new FloatTag(-Math.sin(entity.headYaw / 180 * Math.PI) * Math.cos(entity.pitch / 180 * Math.PI)))
-                        .add(new FloatTag(-Math.sin(entity.pitch / 180 * Math.PI)))
-                        .add(new FloatTag(Math.cos(entity.headYaw / 180 * Math.PI) * Math.cos(entity.pitch / 180 * Math.PI))))
+                        .add(new FloatTag(-Math.sin(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI)))
+                        .add(new FloatTag(-Math.sin(entity.rotation.pitch / 180 * Math.PI)))
+                        .add(new FloatTag(Math.cos(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI))))
                 .putList("Rotation", new ListTag<FloatTag>()
                         .add(new FloatTag((entity.headYaw > 180 ? 360 : 0) - (float) entity.headYaw))
-                        .add(new FloatTag((float) -entity.pitch)))
+                        .add(new FloatTag((float) -entity.rotation.pitch)))
                 .putDouble("damage", 2);
 
         double p = 1;
         double f = Math.min((p * p + p * 2) / 3, 1) * 3;
 
-        Entity projectile = Entity.createEntity(EntityID.THROWN_TRIDENT, entity.level.getChunk(entity.getChunkX(), entity.getChunkZ()), nbt);
+        Entity projectile = Entity.createEntity(EntityID.THROWN_TRIDENT, entity.level.getChunk(entity.pos.getChunkX(), entity.pos.getChunkZ()), nbt);
 
         if (projectile == null) {
             return;
@@ -177,7 +177,7 @@ public class TridentThrowExecutor implements EntityControl, IBehaviorExecutor {
         if (projectev.isCancelled()) {
             projectile.kill();
         } else {
-            entity.level.addSound(entity, Sound.MOB_BREEZE_SHOOT);
+            entity.level.addSound(entity.pos, Sound.MOB_BREEZE_SHOOT);
             projectile.spawnToAll();
         }
     }

@@ -33,10 +33,10 @@ public class EntityCrossbowFirework extends EntityFireworksRocket {
                     this.move(this.motionX, this.motionY, this.motionZ);
                     this.updateMovement();
                     float f = (float) Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
-                    this.yaw = (float) (Math.atan2(this.motionX, this.motionZ) * 57.29577951308232D);
-                    this.pitch = (float) (Math.atan2(this.motionY, f) * 57.29577951308232D);
+                    this.rotation.yaw = (float) (Math.atan2(this.motionX, this.motionZ) * 57.29577951308232D);
+                    this.rotation.pitch = (float) (Math.atan2(this.motionY, f) * 57.29577951308232D);
                     if (this.fireworkAge == 0) {
-                        this.getLevel().addLevelSoundEvent(this, 56);
+                        this.getLevel().addLevelSoundEvent(this.pos, 56);
                     }
 
                     ++this.fireworkAge;
@@ -46,7 +46,7 @@ public class EntityCrossbowFirework extends EntityFireworksRocket {
                         pk.data = 0;
                         pk.event = 25;
                         pk.eid = this.getId();
-                        this.level.addLevelSoundEvent(this, 58, -1, 72);
+                        this.level.addLevelSoundEvent(this.pos, 58, -1, 72);
                         Server.broadcastPacket(this.getViewers().values(), pk);
                         this.kill();
                     }

@@ -123,13 +123,13 @@ public class EntityFireworksRocket extends Entity {
 
 
             float f = (float) Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
-            this.yaw = (float) (Math.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
+            this.rotation.yaw = (float) (Math.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
 
-            this.pitch = (float) (Math.atan2(this.motionY, f) * (180D / Math.PI));
+            this.rotation.pitch = (float) (Math.atan2(this.motionY, f) * (180D / Math.PI));
 
 
             if (this.fireworkAge == 0) {
-                this.getLevel().addSound(this, Sound.FIREWORK_LAUNCH);
+                this.getLevel().addSound(this.pos, Sound.FIREWORK_LAUNCH);
             }
 
             this.fireworkAge++;
@@ -141,7 +141,7 @@ public class EntityFireworksRocket extends Entity {
                 pk.event = EntityEventPacket.FIREWORK_EXPLOSION;
                 pk.eid = this.getId();
 
-                level.addLevelSoundEvent(this, LevelSoundEventPacket.SOUND_LARGE_BLAST, -1, getNetworkId());
+                level.addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_LARGE_BLAST, -1, getNetworkId());
 
                 Server.broadcastPacket(getViewers().values(), pk);
 

@@ -43,12 +43,12 @@ public class HoglinTransformExecutor implements EntityControl, IBehaviorExecutor
     private void transform(EntityIntelligent entity) {
         entity.saveNBT();
         entity.close();
-        EntityZoglin zoglin = new EntityZoglin(entity.getChunk(), entity.namedTag);
-        zoglin.setPosition(entity);
-        zoglin.setRotation(entity.yaw, entity.pitch);
+        EntityZoglin zoglin = new EntityZoglin(entity.getPosition().getChunk(), entity.namedTag);
+        zoglin.setPosition(entity.pos);
+        zoglin.setRotation(entity.rotation.yaw, entity.rotation.pitch);
         zoglin.setBaby(entity.isBaby());
         zoglin.spawnToAll();
-        zoglin.level.addSound(zoglin, Sound.MOB_HOGLIN_CONVERTED_TO_ZOMBIFIED);
+        zoglin.level.addSound(zoglin.pos, Sound.MOB_HOGLIN_CONVERTED_TO_ZOMBIFIED);
         zoglin.addEffect(Effect.get(EffectType.NAUSEA).setDuration(15));
     }
 

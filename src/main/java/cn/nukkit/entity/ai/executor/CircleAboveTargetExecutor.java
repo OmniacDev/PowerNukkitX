@@ -5,6 +5,7 @@ import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.level.Location;
+import cn.nukkit.math.GetVector3;
 import cn.nukkit.math.Vector3;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class CircleAboveTargetExecutor implements EntityControl, IBehaviorExecutor {
 
     //指示执行器应该从哪个Memory获取目标位置
-    protected MemoryType<? extends Vector3> memory;
+    protected MemoryType<? extends GetVector3> memory;
     protected float speed;
     protected Vector3 oldTarget;
     protected boolean updateRouteImmediatelyWhenTargetChange;
@@ -26,15 +27,15 @@ public class CircleAboveTargetExecutor implements EntityControl, IBehaviorExecut
     private int circleLoc = 0;
 
 
-    public CircleAboveTargetExecutor(MemoryType<? extends Vector3> memory, float speed) {
+    public CircleAboveTargetExecutor(MemoryType<? extends GetVector3> memory, float speed) {
         this(memory, speed, false);
     }
 
-    public CircleAboveTargetExecutor(MemoryType<? extends Vector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange) {
+    public CircleAboveTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange) {
         this(memory, speed, updateRouteImmediatelyWhenTargetChange, false);
     }
 
-    public CircleAboveTargetExecutor(MemoryType<? extends Vector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange,boolean clearDataWhenLose) {
+    public CircleAboveTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange,boolean clearDataWhenLose) {
         this.memory = memory;
         this.speed = speed;
         this.updateRouteImmediatelyWhenTargetChange = updateRouteImmediatelyWhenTargetChange;
@@ -47,14 +48,14 @@ public class CircleAboveTargetExecutor implements EntityControl, IBehaviorExecut
         if (entity.getBehaviorGroup().getMemoryStorage().isEmpty(memory)) {
             return false;
         }
-        Vector3 target = entity.getBehaviorGroup().getMemoryStorage().get(memory).clone();
-        Location origin = entity.getBehaviorGroup().getMemoryStorage().get(CoreMemoryTypes.LAST_ATTACK_ENTITY).add(0, 24, 0);
+        Vector3 target = entity.getBehaviorGroup().getMemoryStorage().get(memory).getVector3();
+        Location origin = entity.getBehaviorGroup().getMemoryStorage().get(CoreMemoryTypes.LAST_ATTACK_ENTITY).getLocation().add(0, 24, 0);
         double angleIncrement = 360.0 / sections;
         double angle = Math.toRadians((circleLoc * angleIncrement));
         double particleX = origin.getX() + Math.cos(angle) * 20;
         double particleZ = origin.getZ() + Math.sin(angle) * 20;
         Location loc = new Location(particleX, origin.y, particleZ, angle, 0, origin.level);
-        if(entity.distance(loc) < 3) {
+        if(entity.pos.distance(loc) < 3) {
             circleLoc++;
             circleLoc%=8;
         }

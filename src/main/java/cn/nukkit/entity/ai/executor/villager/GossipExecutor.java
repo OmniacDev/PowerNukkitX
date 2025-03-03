@@ -29,7 +29,7 @@ public class GossipExecutor implements EntityControl, IBehaviorExecutor {
     public boolean execute(EntityIntelligent entity) {
         EntityVillagerV2 entity1 = entity.getMemoryStorage().get(type);
         if(entity1 != null) {
-            if(entity1.toHorizontal().distance(entity.toHorizontal()) < 2) {
+            if(entity1.pos.toHorizontal().distance(entity.pos.toHorizontal()) < 2) {
                 if(!spread) {
                     removeRouteTarget(entity);
                     if(entity instanceof EntityVillagerV2 villager) {
@@ -43,14 +43,14 @@ public class GossipExecutor implements EntityControl, IBehaviorExecutor {
                             Item item = villager.getInventory().getUnclonedItem(i);
                             item.setCount(item.getCount()/2);
                             if(item.getId() == Block.WHEAT) item = Item.get(Block.WHEAT, 0, item.getCount()/3);
-                            villager.getLevel().dropItem(villager.getPosition().add(0, villager.getEyeHeight(), 0), item, new Vector3(entity1.x - entity.x, entity1.y - entity.y, entity1.z - entity.z).normalize().multiply(0.4));
+                            villager.getLevel().dropItem(villager.getPosition().add(0, villager.getEyeHeight(), 0), item, new Vector3(entity1.pos.x - entity.pos.x, entity1.pos.y - entity.pos.y, entity1.pos.z - entity.pos.z).normalize().multiply(0.4));
                         }
                     }
                 }
             }
             if(tick % 100 == 0) {
                 if(Utils.rand(0, 10) == 0) {
-                    Arrays.stream(entity.getLevel().getCollidingEntities(entity.getBoundingBox().grow(2, 0, 2))).filter(entity2 -> entity2 instanceof EntityVillagerV2 && entity2 != entity).map(entity2 -> ((EntityVillagerV2) entity2)).forEach(entity2 -> entity2.setLookTarget(entity));
+                    Arrays.stream(entity.getLevel().getCollidingEntities(entity.getBoundingBox().grow(2, 0, 2))).filter(entity2 -> entity2 instanceof EntityVillagerV2 && entity2 != entity).map(entity2 -> ((EntityVillagerV2) entity2)).forEach(entity2 -> entity2.setLookTarget(entity.pos));
                 }
             }
         }
@@ -59,8 +59,8 @@ public class GossipExecutor implements EntityControl, IBehaviorExecutor {
 
     @Override
     public void onStart(EntityIntelligent entity) {
-        entity.setMoveTarget(entity.getMemoryStorage().get(type));
-        entity.setLookTarget(entity.getMemoryStorage().get(type));
+        entity.setMoveTarget(entity.getMemoryStorage().get(type).pos);
+        entity.setLookTarget(entity.getMemoryStorage().get(type).pos);
         this.tick = 0;
         this.spread = false;
         entity.getMemoryStorage().put(CoreMemoryTypes.LAST_GOSSIP, entity.getLevel().getTick());

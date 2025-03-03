@@ -51,15 +51,7 @@ import cn.nukkit.level.format.IChunk;
 import cn.nukkit.level.particle.ExplodeParticle;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
-import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.MathHelper;
-import cn.nukkit.math.NukkitMath;
-import cn.nukkit.math.Rotator2;
-import cn.nukkit.math.SimpleAxisAlignedBB;
-import cn.nukkit.math.Vector2;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.math.Vector3f;
+import cn.nukkit.math.*;
 import cn.nukkit.metadata.MetadataValue;
 import cn.nukkit.metadata.Metadatable;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -91,7 +83,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @author MagicDroidX
  */
-public abstract class Entity implements Metadatable, EntityID, EntityDataTypes {
+public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, GetVector3 {
     public static final String TAG_CHESTED = "Chested";
     public static final String TAG_COLOR = "Color";
     public static final String TAG_COLOR2 = "Color2";
@@ -188,6 +180,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes {
     @NotNull public Integer variant = 0;
 
     @Nullable public Level level;
+    @NotNull public double headYaw;
 
 
     public static final Entity[] EMPTY_ARRAY = new Entity[0];
@@ -1554,6 +1547,10 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes {
     }
 
     public void updateMovement() {
+        if (!enableHeadYaw()) {
+            this.headYaw = this.rotation.yaw;
+        }
+
         double diffPosition =
                 (this.pos.x - this.lastX) *
                         (this.pos.x - this.lastX) +
@@ -1561,7 +1558,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes {
                                 (this.pos.y - this.lastY) +
                         (this.pos.z - this.lastZ) *
                                 (this.pos.z - this.lastZ);
-        double diffRotation = (this.rotation.yaw - this.lastYaw) * (this.rotation.yaw - this.lastYaw) + (this.rotation.pitch - this.lastPitch) * (this.rotation.pitch - this.lastPitch);
+        double diffRotation = (enableHeadYaw() ? (this.headYaw - this.lastHeadYaw) * (this.headYaw - this.lastHeadYaw) : 0) + (this.rotation.yaw - this.lastYaw) * (this.rotation.yaw - this.lastYaw) + (this.rotation.pitch - this.lastPitch) * (this.rotation.pitch - this.lastPitch);
 
         double diffMotion = (this.motionX - this.lastMotionX) * (this.motionX - this.lastMotionX) + (this.motionY - this.lastMotionY) * (this.motionY - this.lastMotionY) + (this.motionZ - this.lastMotionZ) * (this.motionZ - this.lastMotionZ);
 
@@ -1582,7 +1579,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes {
 
             this.lastPitch = this.rotation.pitch;
             this.lastYaw = this.rotation.yaw;
-            this.lastHeadYaw = 0; // TODO
+            this.lastHeadYaw = this.headYaw;
 
             this.positionChanged = true;
         } else {
@@ -2053,12 +2050,16 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes {
 
     @NotNull
     public Location getLocation() {
-        return new Location(this.pos.x, this.pos.y, this.pos.z, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw, this.level);
+        return new Location(this.pos.x, this.pos.y, this.pos.z, this.rotation.yaw, this.rotation.pitch, this.headYaw, this.level);
     }
 
     @NotNull
     public Position getPosition() {
         return new Position(this.pos.x, this.pos.y, this.pos.z, this.level);
+    }
+
+    public boolean isValid() {
+        return this.level != null;
     }
 
 
@@ -2521,6 +2522,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes {
     public void setRotation(double yaw, double pitch, double headYaw) {
         this.rotation.yaw = yaw;
         this.rotation.pitch = pitch;
+        this.headYaw = headYaw;
         this.scheduleUpdate();
     }
 
@@ -2640,7 +2642,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes {
     }
 
     public boolean teleport(Vector3 pos, PlayerTeleportEvent.TeleportCause cause) {
-        return this.teleport(Location.fromObject(pos, this.level, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw), cause);
+        return this.teleport(Location.fromObject(pos, this.level, this.rotation.yaw, this.rotation.pitch, this.headYaw), cause);
     }
 
     public boolean teleport(Position pos) {
@@ -2648,7 +2650,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes {
     }
 
     public boolean teleport(Position pos, PlayerTeleportEvent.TeleportCause cause) {
-        return this.teleport(Location.fromObject(pos, pos.level, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw), cause);
+        return this.teleport(Location.fromObject(pos, pos.level, this.rotation.yaw, this.rotation.pitch, this.headYaw), cause);
     }
 
     public boolean teleport(Location location) {
@@ -3256,10 +3258,10 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes {
     }
 
     public Vector3 getVector3() {
-        return this.pos;
+        return this.pos.clone();
     }
 
-    protected void setLevel(@Nullable Level level) {
+    public void setLevel(@Nullable Level level) {
         this.level = level;
     }
 }

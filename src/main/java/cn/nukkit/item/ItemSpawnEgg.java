@@ -106,7 +106,7 @@ public class ItemSpawnEgg extends Item {
             }
             entity.spawnToAll();
 
-            level.getVibrationManager().callVibrationEvent(new VibrationEvent(player, entity.clone(), VibrationType.ENTITY_PLACE));
+            level.getVibrationManager().callVibrationEvent(new VibrationEvent(player, entity.pos.clone(), VibrationType.ENTITY_PLACE));
 
             return true;
         }

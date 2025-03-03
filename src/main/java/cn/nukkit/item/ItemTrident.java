@@ -56,16 +56,16 @@ public class ItemTrident extends ItemTool {
 
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(player.x))
-                        .add(new FloatTag(player.y + player.getEyeHeight()))
-                        .add(new FloatTag(player.z)))
+                        .add(new FloatTag(player.pos.x))
+                        .add(new FloatTag(player.pos.y + player.getEyeHeight()))
+                        .add(new FloatTag(player.pos.z)))
                 .putList("Motion", new ListTag<FloatTag>()
-                        .add(new FloatTag(-Math.sin(player.yaw / 180 * Math.PI) * Math.cos(player.pitch / 180 * Math.PI)))
-                        .add(new FloatTag(-Math.sin(player.pitch / 180 * Math.PI)))
-                        .add(new FloatTag(Math.cos(player.yaw / 180 * Math.PI) * Math.cos(player.pitch / 180 * Math.PI))))
+                        .add(new FloatTag(-Math.sin(player.rotation.yaw / 180 * Math.PI) * Math.cos(player.rotation.pitch / 180 * Math.PI)))
+                        .add(new FloatTag(-Math.sin(player.rotation.pitch / 180 * Math.PI)))
+                        .add(new FloatTag(Math.cos(player.rotation.yaw / 180 * Math.PI) * Math.cos(player.rotation.pitch / 180 * Math.PI))))
                 .putList("Rotation", new ListTag<FloatTag>()
-                        .add(new FloatTag((player.yaw > 180 ? 360 : 0) - (float) player.yaw))
-                        .add(new FloatTag((float) -player.pitch)));
+                        .add(new FloatTag((player.rotation.yaw > 180 ? 360 : 0) - (float) player.rotation.yaw))
+                        .add(new FloatTag((float) -player.rotation.pitch)));
 
         EntityThrownTrident trident = new EntityThrownTrident(player.chunk, nbt, player);
         trident.setItem(this);
@@ -96,7 +96,7 @@ public class ItemTrident extends ItemTool {
                 entityShootBowEvent.getProjectile().close();
             } else {
                 entityShootBowEvent.getProjectile().spawnToAll();
-                player.getLevel().addSound(player, Sound.ITEM_TRIDENT_THROW);
+                player.getLevel().addSound(player.pos, Sound.ITEM_TRIDENT_THROW);
                 if (!player.isCreative()) {
                     this.count--;
                     player.getInventory().setItemInHand(this);

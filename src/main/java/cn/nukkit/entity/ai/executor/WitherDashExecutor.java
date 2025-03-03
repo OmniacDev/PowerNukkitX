@@ -5,14 +5,13 @@ import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.math.GetVector3;
 import cn.nukkit.math.Vector3;
 
 public class WitherDashExecutor extends MoveToTargetExecutor {
-
     protected int tick = 0;
-    protected MemoryType<? extends Entity> targetMemory;
 
-    public WitherDashExecutor(MemoryType<? extends Vector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float maxFollowRange, float minFollowRange) {
+    public WitherDashExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float maxFollowRange, float minFollowRange) {
         super(memory, speed, updateRouteImmediatelyWhenTargetChange, maxFollowRange, minFollowRange, false);
     }
 

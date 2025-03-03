@@ -58,8 +58,8 @@ public class EntityTntMinecart extends EntityMinecartAbstract implements EntityE
     @Override
     public boolean onUpdate(int currentTick) {
         // 记录最大高度，用于计算坠落伤害
-        if (!this.onGround && this.y > highestPosition) {
-            this.highestPosition = this.y;
+        if (!this.onGround && this.pos.y > highestPosition) {
+            this.highestPosition = this.pos.y;
         }
         if (fuse < 80) {
             int tickDiff = currentTick - lastUpdate;
@@ -87,7 +87,7 @@ public class EntityTntMinecart extends EntityMinecartAbstract implements EntityE
     @Override
     protected void updateFallState(boolean onGround) {
         if (onGround) {
-            fallDistance = (float) (this.highestPosition - this.y);
+            fallDistance = (float) (this.highestPosition - this.pos.y);
 
             if (fallDistance > 4) {
                 if (this.level.getGameRules().getBoolean(GameRule.TNT_EXPLODES)) {
@@ -101,7 +101,7 @@ public class EntityTntMinecart extends EntityMinecartAbstract implements EntityE
 
     @Override
     public void activate(int x, int y, int z, boolean flag) {
-        level.addSound(this, Sound.FIRE_IGNITE);
+        level.addSound(this.pos, Sound.FIRE_IGNITE);
         this.fuse = 79;
     }
 
@@ -122,7 +122,7 @@ public class EntityTntMinecart extends EntityMinecartAbstract implements EntityE
         if (event.isCancelled()) {
             return;
         }
-        Explosion explosion = new Explosion(this, event.getForce(), this);
+        Explosion explosion = new Explosion(this.getPosition(), event.getForce(), this);
         explosion.setFireChance(event.getFireChance());
         if (event.isBlockBreaking()) {
             explosion.explodeA();
@@ -139,7 +139,7 @@ public class EntityTntMinecart extends EntityMinecartAbstract implements EntityE
                 return;
             }
         }
-        level.dropItem(this, new ItemTntMinecart());
+        level.dropItem(this.pos, new ItemTntMinecart());
     }
 
     @Override
@@ -164,7 +164,7 @@ public class EntityTntMinecart extends EntityMinecartAbstract implements EntityE
     public boolean onInteract(Player player, Item item, Vector3 clickedPos) {
         boolean interact = super.onInteract(player, item, clickedPos);
         if (item.getId().equals(Item.FLINT_AND_STEEL) || item.getId().equals(Item.FIRE_CHARGE)) {
-            level.addSound(this, Sound.FIRE_IGNITE);
+            level.addSound(this.pos, Sound.FIRE_IGNITE);
             this.fuse = 79;
             return true;
         }

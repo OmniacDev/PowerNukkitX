@@ -71,11 +71,11 @@ public class EntityDragonFireball extends EntityProjectile {
 
     protected void onCollide() {
         this.close();
-        EntityAreaEffectCloud entity = (EntityAreaEffectCloud) Entity.createEntity(Entity.AREA_EFFECT_CLOUD, getChunk(),
+        EntityAreaEffectCloud entity = (EntityAreaEffectCloud) Entity.createEntity(Entity.AREA_EFFECT_CLOUD, this.getPosition().getChunk(),
                 new CompoundTag().putList("Pos", new ListTag<>()
-                                .add(new FloatTag(x))
-                                .add(new FloatTag(y))
-                                .add(new FloatTag(z))
+                                .add(new FloatTag(this.pos.x))
+                                .add(new FloatTag(this.pos.y))
+                                .add(new FloatTag(this.pos.z))
                         )
                         .putList("Rotation", new ListTag<>()
                                 .add(new FloatTag(0))

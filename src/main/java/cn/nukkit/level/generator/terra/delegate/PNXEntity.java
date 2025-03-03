@@ -20,9 +20,9 @@ public class PNXEntity implements Entity {
 
     @Override
     public void position(Vector3 vector3) {
-        nukkitEntity.setX(vector3.getX());
-        nukkitEntity.setY(vector3.getY());
-        nukkitEntity.setZ(vector3.getZ());
+        nukkitEntity.pos.setX(vector3.getX());
+        nukkitEntity.pos.setY(vector3.getY());
+        nukkitEntity.pos.setZ(vector3.getZ());
     }
 
     @Override

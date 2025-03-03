@@ -143,14 +143,14 @@ public class InventoryTransactionProcessor extends DataPacketProcessor<Inventory
                     return;
                 }
                 if (!(target instanceof EntityArmorStand)) {
-                    player.level.getVibrationManager().callVibrationEvent(new VibrationEvent(target, target.clone(), VibrationType.ENTITY_INTERACT));
+                    player.level.getVibrationManager().callVibrationEvent(new VibrationEvent(target, target.pos.clone(), VibrationType.ENTITY_INTERACT));
                 } else {
-                    player.level.getVibrationManager().callVibrationEvent(new VibrationEvent(target, target.clone(), VibrationType.EQUIP));
+                    player.level.getVibrationManager().callVibrationEvent(new VibrationEvent(target, target.pos.clone(), VibrationType.EQUIP));
                 }
                 if (target.onInteract(player, item, useItemOnEntityData.clickPos) && (player.isSurvival() || player.isAdventure())) {
                     if (item.isTool()) {
                         if (item.useOn(target) && item.getDamage() >= item.getMaxDurability()) {
-                            player.getLevel().addSound(player, Sound.RANDOM_BREAK);
+                            player.getLevel().addSound(player.pos, Sound.RANDOM_BREAK);
                             item = new ItemBlock(Block.get(BlockID.AIR));
                         }
                     } else {
@@ -185,7 +185,7 @@ public class InventoryTransactionProcessor extends DataPacketProcessor<Inventory
                     log.warn(player.getName() + " tried to attack oneself");
                     return;
                 }
-                if (!player.canInteract(target, player.isCreative() ? 8 : 5)) {
+                if (!player.canInteract(target.pos, player.isCreative() ? 8 : 5)) {
                     return;
                 } else if (target instanceof Player) {
                     if ((((Player) target).getGamemode() & 0x01) > 0) {
@@ -238,7 +238,7 @@ public class InventoryTransactionProcessor extends DataPacketProcessor<Inventory
                 }
                 if (item.isTool() && (player.isSurvival() || player.isAdventure())) {
                     if (item.useOn(target) && item.getDamage() >= item.getMaxDurability()) {
-                        player.getLevel().addSound(player, Sound.RANDOM_BREAK);
+                        player.getLevel().addSound(player.pos, Sound.RANDOM_BREAK);
                         player.getInventory().setItemInHand(Item.AIR);
                     } else {
                         if (item.isNull() || player.getInventory().getItemInHand().getId() == item.getId()) {
@@ -293,7 +293,7 @@ public class InventoryTransactionProcessor extends DataPacketProcessor<Inventory
                     }
                 }
                 player.getInventory().sendHeldItem(player);
-                if (blockVector.distanceSquared(player) > 10000) {
+                if (blockVector.distanceSquared(player.pos) > 10000) {
                     return;
                 }
                 Block target = player.level.getBlock(blockVector.asVector3());
@@ -325,7 +325,7 @@ public class InventoryTransactionProcessor extends DataPacketProcessor<Inventory
                 }
                 player.getInventory().sendContents(player);
                 player.getInventory().sendHeldItem(player);
-                if (blockVector.distanceSquared(player) < 10000) {
+                if (blockVector.distanceSquared(player.pos) < 10000) {
                     Block target = player.level.getBlock(blockVector.asVector3());
                     player.level.sendBlocks(new Player[]{player}, new Block[]{target}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0);
 

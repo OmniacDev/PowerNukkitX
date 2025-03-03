@@ -53,7 +53,7 @@ public class ItemArmorStand extends Item {
             }
         }
 
-        CompassRoseDirection direction = CompassRoseDirection.getClosestFromYaw(player.yaw, PRIMARY_INTER_CARDINAL).getOppositeFace();
+        CompassRoseDirection direction = CompassRoseDirection.getClosestFromYaw(player.rotation.yaw, PRIMARY_INTER_CARDINAL).getOppositeFace();
         CompoundTag nbt = Entity.getDefaultNBT(block.add(0.5, 0, 0.5), new Vector3(), direction.getYaw(), 0f);
         if (this.hasCustomName()) {
             nbt.putString("CustomName", this.getCustomName());
@@ -73,7 +73,7 @@ public class ItemArmorStand extends Item {
         }
 
         entity.spawnToAll();
-        player.getLevel().addSound(entity, Sound.MOB_ARMOR_STAND_PLACE);
+        player.getLevel().addSound(entity.pos, Sound.MOB_ARMOR_STAND_PLACE);
         return true;
     }
 

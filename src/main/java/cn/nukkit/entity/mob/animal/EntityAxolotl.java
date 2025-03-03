@@ -167,7 +167,7 @@ public class EntityAxolotl extends EntityAnimal implements EntitySwimmable, Enti
 
     @Override
     public boolean attack(EntityDamageEvent source) {
-        if(source.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION && getLevelBlock().canPassThrough()) {
+        if(source.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION && this.getPosition().getLevelBlock().canPassThrough()) {
             if(getAirTicks() > -5600 || getLevel().isRaining() || getLevel().isThundering()) return false;
         }
         return super.attack(source);

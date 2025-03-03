@@ -162,12 +162,12 @@ public class EntityBoat extends EntityVehicle {
         addEntity.id = "minecraft:boat";
         addEntity.entityUniqueId = this.getId();
         addEntity.entityRuntimeId = this.getId();
-        addEntity.yaw = (float) this.yaw;
-        addEntity.headYaw = (float) this.yaw;
-        addEntity.pitch = (float) this.pitch;
-        addEntity.x = (float) this.x;
-        addEntity.y = (float) this.y + getBaseOffset();
-        addEntity.z = (float) this.z;
+        addEntity.yaw = (float) this.rotation.yaw;
+        addEntity.headYaw = (float) this.rotation.yaw;
+        addEntity.pitch = (float) this.rotation.pitch;
+        addEntity.x = (float) this.pos.x;
+        addEntity.y = (float) this.pos.y + getBaseOffset();
+        addEntity.z = (float) this.pos.z;
         addEntity.speedX = (float) this.motionX;
         addEntity.speedY = (float) this.motionY;
         addEntity.speedZ = (float) this.motionZ;
@@ -212,11 +212,11 @@ public class EntityBoat extends EntityVehicle {
 
         // A killer task
         if (this.level != null) {
-            if (y < this.level.getMinHeight() - 16) {
+            if (this.pos.y < this.level.getMinHeight() - 16) {
                 kill();
                 return false;
             }
-        } else if (y < -16) {
+        } else if (this.pos.y < -16) {
             kill();
             return false;
         }
@@ -269,13 +269,13 @@ public class EntityBoat extends EntityVehicle {
     }
 
     private void moveBoat(double waterDiff) {
-        checkObstruction(this.x, this.y, this.z);
+        checkObstruction(this.pos.x, this.pos.y, this.pos.z);
         move(this.motionX, this.motionY, this.motionZ);
 
         double friction = 1 - this.getDrag();
 
         if (this.onGround && (Math.abs(this.motionX) > 0.00001 || Math.abs(this.motionZ) > 0.00001)) {
-            friction *= this.getLevel().getBlock(this.temporalVector.setComponents((int) Math.floor(this.x), (int) Math.floor(this.y - 1), (int) Math.floor(this.z))).getFrictionFactor();
+            friction *= this.getLevel().getBlock(this.temporalVector.setComponents((int) Math.floor(this.pos.x), (int) Math.floor(this.pos.y - 1), (int) Math.floor(this.pos.z))).getFrictionFactor();
         }
 
         this.motionX *= friction;
@@ -287,7 +287,7 @@ public class EntityBoat extends EntityVehicle {
         this.motionZ *= friction;
 
         Location from = new Location(lastX, lastY, lastZ, lastYaw, lastPitch, level);
-        Location to = new Location(this.x, this.y, this.z, this.yaw, this.pitch, level);
+        Location to = new Location(this.pos.x, this.pos.y, this.pos.z, this.rotation.yaw, this.rotation.pitch, level);
 
         if (!from.equals(to)) {
             this.getServer().getPluginManager().callEvent(new VehicleMoveEvent(this, from, to));
@@ -447,7 +447,7 @@ public class EntityBoat extends EntityVehicle {
             entity.setDataProperty(SEAT_LOCK_RIDER_ROTATION_DEGREES, 90);
             entity.setDataProperty(SEAT_HAS_ROTATION, this.passengers.indexOf(entity) != 1);
             entity.setDataProperty(SEAT_ROTATION_OFFSET_DEGREES, -90);
-            entity.setRotation(yaw, entity.pitch);
+            entity.setRotation(this.rotation.yaw, entity.rotation.pitch);
             entity.updateMovement();
         }
         return r;
@@ -508,8 +508,8 @@ public class EntityBoat extends EntityVehicle {
                 return;
             }
 
-            double diffX = entity.x - this.x;
-            double diffZ = entity.z - this.z;
+            double diffX = entity.pos.x - this.pos.x;
+            double diffZ = entity.pos.z - this.pos.z;
 
             double direction = NukkitMath.getDirection(diffX, diffZ);
 
@@ -561,7 +561,7 @@ public class EntityBoat extends EntityVehicle {
     }
 
     protected void dropItem() {
-        this.level.dropItem(this, Item.get(ItemID.BOAT, this.woodID));
+        this.level.dropItem(this.pos, Item.get(ItemID.BOAT, this.woodID));
     }
 
     @Override
@@ -586,8 +586,8 @@ public class EntityBoat extends EntityVehicle {
     }
 
     public void onInput(Location loc) {
-        this.move(loc.x - this.x, loc.y - this.y, loc.z - this.z);
-        this.yaw = loc.yaw;
+        this.move(loc.x - this.pos.x, loc.y - this.pos.y, loc.z - this.pos.z);
+        this.rotation.yaw = loc.yaw;
         this.headYaw = loc.headYaw;
         broadcastMovement(false);
     }

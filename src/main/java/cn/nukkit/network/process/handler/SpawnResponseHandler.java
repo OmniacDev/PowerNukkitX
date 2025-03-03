@@ -121,11 +121,11 @@ public class SpawnResponseHandler extends BedrockSessionPacketHandler {
         startPk.entityRuntimeId = player.getId();
         startPk.playerGamemode = Player.toNetworkGamemode(player.getGamemode());
 
-        startPk.x = (float) player.x;
-        startPk.y = (float) (player.isOnGround() ? player.y + player.getEyeHeight() : player.y);//防止在地上生成容易陷进地里
-        startPk.z = (float) player.z;
-        startPk.yaw = (float) player.yaw;
-        startPk.pitch = (float) player.pitch;
+        startPk.x = (float) player.pos.x;
+        startPk.y = (float) (player.isOnGround() ? player.pos.y + player.getEyeHeight() : player.pos.y);//防止在地上生成容易陷进地里
+        startPk.z = (float) player.pos.z;
+        startPk.yaw = (float) player.rotation.yaw;
+        startPk.pitch = (float) player.rotation.pitch;
         startPk.seed = -1L;
         startPk.dimension = (byte) (player.level.getDimension() & 0xff);
         startPk.worldGamemode = Player.toNetworkGamemode(server.getDefaultGamemode());

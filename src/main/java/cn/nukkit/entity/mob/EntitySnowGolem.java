@@ -78,9 +78,9 @@ public class EntitySnowGolem extends EntityGolem {
         if(item instanceof ItemShears) {
             if(!isSheared()) {
                 this.setSheared(true);
-                this.level.addLevelSoundEvent(this, LevelSoundEventPacket.SOUND_SHEAR);
+                this.level.addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_SHEAR);
                 if(player.getGamemode() != Player.CREATIVE) player.getInventory().getItemInHand().setDamage(item.getDamage() + 1);
-                this.level.dropItem(this.add(0, this.getEyeHeight(), 0), Item.get(Block.CARVED_PUMPKIN));
+                this.level.dropItem(this.pos.add(0, this.getEyeHeight(), 0), Item.get(Block.CARVED_PUMPKIN));
             }
         }
         return super.onInteract(player, item);
@@ -120,15 +120,15 @@ public class EntitySnowGolem extends EntityGolem {
     public boolean onUpdate(int currentTick) {
         this.waterTicks++;
         if(this.level.getGameRules().getBoolean(GameRule.MOB_GRIEFING)) {
-            if(this.getLevelBlock().isAir()) {
-                Block support = this.getLevelBlock().down();
+            if(this.getPosition().getLevelBlock().isAir()) {
+                Block support = this.getPosition().getLevelBlock().down();
                 if(support.isFullBlock() && !support.isAir()){
-                    this.getLevel().setBlock(this.getLevelBlock(), Block.get(Block.SNOW_LAYER));
+                    this.getLevel().setBlock(this.getPosition().getLevelBlock(), Block.get(Block.SNOW_LAYER));
                 }
             }
         }
         if(this.waterTicks >= 20) {
-            if((this.level.isRaining() && !this.isUnderBlock()) || this.getLevelBlock() instanceof BlockLiquid || Registries.BIOME.get(getLevel().getBiomeId(getFloorX(), this.getFloorY(), getFloorZ())).temperature() > 1.0) {
+            if((this.level.isRaining() && !this.isUnderBlock()) || this.getPosition().getLevelBlock() instanceof BlockLiquid || Registries.BIOME.get(getLevel().getBiomeId(this.pos.getFloorX(), this.pos.getFloorY(), this.pos.getFloorZ())).temperature() > 1.0) {
                 this.attack(new EntityDamageEvent(this, EntityDamageEvent.DamageCause.WEATHER, 1));
             }
             this.waterTicks = 0;

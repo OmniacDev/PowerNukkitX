@@ -26,7 +26,7 @@ public class FangCircleExecutor extends FangLineExecutor {
     public boolean execute(EntityIntelligent entity) {
         EntityEvocationIllager illager = (EntityEvocationIllager) entity;
         if(tick == CAST_DURATION) {
-            entity.setYaw(entity.getHeadYaw());
+            entity.rotation.yaw = (entity.headYaw);
             summon(illager, SPAWN_RADIUS_INNER, SPAWN_COUNT_INNER);
         } else if(tick == CAST_DURATION + DELAY_BETWEEN) {
             summon(illager, SPAWN_RADIUS_OUTER, SPAWN_COUNT_OUTER);
@@ -43,10 +43,10 @@ public class FangCircleExecutor extends FangLineExecutor {
     private void summon(EntityEvocationIllager origin, float size, int amount) {
         double angleIncrement = 360.0 / amount;
         for (int i = 0; i < amount; i++) {
-            double angle = Math.toRadians((i * angleIncrement) + origin.getHeadYaw());
+            double angle = Math.toRadians((i * angleIncrement) + origin.headYaw);
             double particleX = origin.getX() + Math.cos(angle) * size;
             double particleZ = origin.getZ() + Math.sin(angle) * size;
-            spawn(origin, new Location(particleX, origin.y, particleZ, angle, 0, origin.level));
+            spawn(origin, new Location(particleX, origin.pos.y, particleZ, angle, 0, origin.level));
         }
     }
 

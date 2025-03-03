@@ -41,7 +41,7 @@ public class WardenMeleeAttackExecutor implements EntityControl, IBehaviorExecut
         Entity target = entity.getBehaviorGroup().getMemoryStorage().get(memory);
         if (!target.isAlive()) return false;
         this.coolDown = calCoolDown(entity, target);
-        Vector3 clonedTarget = target.clone();
+        Vector3 clonedTarget = target.pos.clone();
         //更新寻路target
         setRouteTarget(entity, clonedTarget);
         //更新视线target
@@ -54,7 +54,7 @@ public class WardenMeleeAttackExecutor implements EntityControl, IBehaviorExecut
 
         oldTarget = floor;
 
-        if (entity.distanceSquared(target) <= 4 && attackTick > coolDown) {
+        if (entity.pos.distanceSquared(target.pos) <= 4 && attackTick > coolDown) {
             Map<EntityDamageEvent.DamageModifier, Float> damages = new EnumMap<>(EntityDamageEvent.DamageModifier.class);
             damages.put(EntityDamageEvent.DamageModifier.BASE, this.damage);
 
@@ -63,7 +63,7 @@ public class WardenMeleeAttackExecutor implements EntityControl, IBehaviorExecut
             ev.setBreakShield(true);
             target.attack(ev);
             playAttackAnimation(entity);
-            entity.level.addSound(target, Sound.MOB_WARDEN_ATTACK);
+            entity.level.addSound(target.pos, Sound.MOB_WARDEN_ATTACK);
             attackTick = 0;
             return target.isUndead();
         }

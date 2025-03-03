@@ -286,7 +286,7 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
             return;
         }
 
-        Location floorLocation = this.floor();
+        Vector3 floorLocation = this.pos.floor();
         Block down = this.level.getBlock(floorLocation.down());
 
         EntityFallEvent event = new EntityFallEvent(this, down, fallDistance);
@@ -324,7 +324,7 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
                 if (onPhysicalInteraction(floor, ThreadLocalRandom.current().nextInt(10) >= 3)) {
                     return;
                 }
-                this.level.useBreakOn(this, null, null, true);
+                this.level.useBreakOn(this.pos, null, null, true);
             }
         }
     }
@@ -354,8 +354,8 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
         this.motionZ = 0;
         this.setMoveTarget(null);
         this.setLookTarget(null);
-        this.move(clientLoc.x - this.x, clientLoc.y - this.y, clientLoc.z - this.z);
-        this.yaw = clientLoc.yaw;
+        this.move(clientLoc.x - this.pos.x, clientLoc.y - this.pos.y, clientLoc.z - this.pos.z);
+        this.rotation.yaw = clientLoc.yaw;
         this.headYaw = clientLoc.headYaw;
         broadcastMovement(false);
     }
@@ -448,7 +448,7 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
      * Play an animation of a failed tamer
      */
     public void playTameFailAnimation() {
-        this.getLevel().addLevelSoundEvent(this, LevelSoundEventPacket.SOUND_MAD, -1, "minecraft:horse", this.isBaby(), false);
+        this.getLevel().addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_MAD, -1, "minecraft:horse", this.isBaby(), false);
         this.setDataFlag(EntityFlag.STANDING);
     }
 
@@ -507,12 +507,12 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
             addEntity.id = this.getIdentifier();
         }
         addEntity.entityRuntimeId = this.getId();
-        addEntity.yaw = (float) this.yaw;
-        addEntity.headYaw = (float) this.yaw;
-        addEntity.pitch = (float) this.pitch;
-        addEntity.x = (float) this.x;
-        addEntity.y = (float) this.y + this.getBaseOffset();
-        addEntity.z = (float) this.z;
+        addEntity.yaw = (float) this.rotation.yaw;
+        addEntity.headYaw = (float) this.rotation.yaw;
+        addEntity.pitch = (float) this.rotation.pitch;
+        addEntity.x = (float) this.pos.x;
+        addEntity.y = (float) this.pos.y + this.getBaseOffset();
+        addEntity.z = (float) this.pos.z;
         addEntity.speedX = (float) this.motionX;
         addEntity.speedY = (float) this.motionY;
         addEntity.speedZ = (float) this.motionZ;

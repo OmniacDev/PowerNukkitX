@@ -188,12 +188,12 @@ public class EntityZombie extends EntityHumanoidMonster implements EntityWalkabl
 
     protected void transform() {
         this.close();
-        getEquipment().getContents().values().forEach(i -> getLevel().dropItem(this, i));
-        EntityDrowned drowned = new EntityDrowned(this.getChunk(), this.namedTag);
-        drowned.setPosition(this);
-        drowned.setRotation(this.yaw, this.pitch);
+        getEquipment().getContents().values().forEach(i -> getLevel().dropItem(this.pos, i));
+        EntityDrowned drowned = new EntityDrowned(this.getPosition().getChunk(), this.namedTag);
+        drowned.setPosition(this.pos);
+        drowned.setRotation(this.rotation.yaw, this.rotation.pitch);
         drowned.spawnToAll();
         drowned.namedTag.putBoolean("Transformed", true);
-        drowned.level.addSound(drowned, Sound.ENTITY_ZOMBIE_CONVERTED_TO_DROWNED);
+        drowned.level.addSound(drowned.pos, Sound.ENTITY_ZOMBIE_CONVERTED_TO_DROWNED);
     }
 }

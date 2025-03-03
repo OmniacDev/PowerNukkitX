@@ -88,9 +88,9 @@ public class BowShootExecutor implements EntityControl, IBehaviorExecutor {
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Location clone = this.target.clone();
+        Location clone = this.target.getLocation();
 
-        if (entity.distanceSquared(target) > maxShootDistanceSquared) {
+        if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
             //更新寻路target
             setRouteTarget(entity, clone);
         } else {
@@ -100,7 +100,7 @@ public class BowShootExecutor implements EntityControl, IBehaviorExecutor {
         setLookTarget(entity, clone);
 
         if (tick2 == 0 && tick1 > coolDownTick) {
-            if (entity.distanceSquared(target) <= maxShootDistanceSquared) {
+            if (entity.pos.distanceSquared(target.pos) <= maxShootDistanceSquared) {
                 this.tick1 = 0;
                 this.tick2++;
                 playBowAnimation(entity);
@@ -160,16 +160,16 @@ public class BowShootExecutor implements EntityControl, IBehaviorExecutor {
 
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(entity.x))
-                        .add(new FloatTag(entity.y + entity.getCurrentHeight() / 2 + 0.2f))
-                        .add(new FloatTag(entity.z)))
+                        .add(new FloatTag(entity.pos.x))
+                        .add(new FloatTag(entity.pos.y + entity.getCurrentHeight() / 2 + 0.2f))
+                        .add(new FloatTag(entity.pos.z)))
                 .putList("Motion", new ListTag<FloatTag>()
-                        .add(new FloatTag(-Math.sin(entity.headYaw / 180 * Math.PI) * Math.cos(entity.pitch / 180 * Math.PI)))
-                        .add(new FloatTag(-Math.sin(entity.pitch / 180 * Math.PI)))
-                        .add(new FloatTag(Math.cos(entity.headYaw / 180 * Math.PI) * Math.cos(entity.pitch / 180 * Math.PI))))
+                        .add(new FloatTag(-Math.sin(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI)))
+                        .add(new FloatTag(-Math.sin(entity.rotation.pitch / 180 * Math.PI)))
+                        .add(new FloatTag(Math.cos(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI))))
                 .putList("Rotation", new ListTag<FloatTag>()
                         .add(new FloatTag((entity.headYaw > 180 ? 360 : 0) - (float) entity.headYaw))
-                        .add(new FloatTag((float) -entity.pitch)))
+                        .add(new FloatTag((float) -entity.rotation.pitch)))
                 .putShort("Fire", flame ? 45 * 60 : 0)
                 .putDouble("damage", damage);
 
@@ -208,7 +208,7 @@ public class BowShootExecutor implements EntityControl, IBehaviorExecutor {
                     entityShootBowEvent.getProjectile().kill();
                 } else {
                     entityShootBowEvent.getProjectile().spawnToAll();
-                    entity.getLevel().addSound(entity, Sound.RANDOM_BOW);
+                    entity.getLevel().addSound(entity.pos, Sound.RANDOM_BOW);
                 }
             }
         }

@@ -96,7 +96,7 @@ public class EntityShulker extends EntityMob implements EntityVariant {
 
     @Override
     public boolean onUpdate(int currentTick) {
-        Block block = getLevelBlock();
+        Block block = this.getPosition().getLevelBlock();
         if(!block.isAir() || block.down().isAir()) teleport();
         return super.onUpdate(currentTick);
     }
@@ -131,7 +131,7 @@ public class EntityShulker extends EntityMob implements EntityVariant {
         this.setMaxHealth(30);
         super.initEntity();
         if(getMemoryStorage().get(CoreMemoryTypes.VARIANT) == null) setVariant(16);
-        setDataProperty(EntityDataTypes.SHULKER_ATTACH_POS, getLevelBlock().getSide(BlockFace.UP).asBlockVector3());
+        setDataProperty(EntityDataTypes.SHULKER_ATTACH_POS, this.getPosition().getLevelBlock().getSide(BlockFace.UP).asBlockVector3());
     }
 
     @Override
@@ -158,7 +158,7 @@ public class EntityShulker extends EntityMob implements EntityVariant {
         Arrays.stream(getLevel().getCollisionBlocks(getBoundingBox().grow(7, 7, 7))).filter(block -> block.isFullBlock() && block.up().isAir()).findAny().ifPresent(
                 block -> {
                     Location location = block.up().getLocation();
-                    getLevel().addLevelSoundEvent(this, LevelSoundEventPacket.SOUND_TELEPORT, -1, getIdentifier(), false, false);
+                    getLevel().addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_TELEPORT, -1, getIdentifier(), false, false);
                     teleport(location, PlayerTeleportEvent.TeleportCause.SHULKER);
                     getLevel().addLevelSoundEvent(location, LevelSoundEventPacket.SOUND_SPAWN, -1, getIdentifier(), false, false);
                 }

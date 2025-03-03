@@ -133,7 +133,7 @@ public class EntityWolf extends EntityAnimal implements EntityWalkable, EntityOw
                             if (this.hasOwner()) {
                                 var player = getOwner();
                                 if (!player.isOnGround()) return false;
-                                var distanceSquared = this.distanceSquared(player);
+                                var distanceSquared = this.pos.distanceSquared(player.pos);
                                 return distanceSquared >= 100;
                             } else return false;
                         }, 4, 1),
@@ -225,7 +225,7 @@ public class EntityWolf extends EntityAnimal implements EntityWalkable, EntityOw
                     this.setColor(DyeColor.RED);
                     this.saveNBT();
 
-                    this.getLevel().dropExpOrb(this, Utils.rand(1, 7));
+                    this.getLevel().dropExpOrb(this.pos, Utils.rand(1, 7));
 
                     return true;
                 } else {
@@ -243,8 +243,8 @@ public class EntityWolf extends EntityAnimal implements EntityWalkable, EntityOw
             }
         } else if (this.isBreedingItem(item)) {
             player.getInventory().decreaseCount(player.getInventory().getHeldItemIndex());
-            this.getLevel().addSound(this, Sound.RANDOM_EAT);
-            this.getLevel().addParticle(new ItemBreakParticle(this.add(0, getHeight() * 0.75F, 0), Item.get(item.getId(), 0, 1)));
+            this.getLevel().addSound(this.pos, Sound.RANDOM_EAT);
+            this.getLevel().addParticle(new ItemBreakParticle(this.pos.add(0, getHeight() * 0.75F, 0), Item.get(item.getId(), 0, 1)));
 
             if (healable != 0) {
                 this.setHealth(Math.max(this.getMaxHealth(), this.getHealth() + healable));
