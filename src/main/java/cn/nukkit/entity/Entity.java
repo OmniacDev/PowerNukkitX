@@ -1571,7 +1571,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
                 }
             }
 
-            this.addMovement(this.pos.x, this.isPlayer ? this.pos.y : this.pos.y + this.getBaseOffset(), this.pos.z, this.rotation.yaw, this.rotation.pitch, this.lastHeadYaw);
+            this.addMovement(this.pos.x, this.isPlayer ? this.pos.y : this.pos.y + this.getBaseOffset(), this.pos.z, this.rotation.yaw, this.rotation.pitch, this.headYaw);
 
             this.lastX = this.pos.x;
             this.lastY = this.pos.y;
