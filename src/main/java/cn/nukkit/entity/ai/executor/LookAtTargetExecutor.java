@@ -22,9 +22,9 @@ public class LookAtTargetExecutor implements EntityControl, IBehaviorExecutor {
     public boolean execute(EntityIntelligent entity) {
         currentTick++;
         if (!entity.isEnablePitch()) entity.setEnablePitch(true);
-        var vector3Memory = entity.getMemoryStorage().get(memory).getVector3();
+        var vector3Memory = entity.getMemoryStorage().get(memory);
         if (vector3Memory != null) {
-            setLookTarget(entity, vector3Memory);
+            setLookTarget(entity, vector3Memory.getVector3());
         }
         return currentTick <= duration;
     }
