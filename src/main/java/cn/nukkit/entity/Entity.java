@@ -776,7 +776,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     }
 
     public boolean hasControllingPassenger() {
-        return !this.passengers.isEmpty() && isControlling(this.passengers.get(0));
+        return !this.passengers.isEmpty() && isControlling(this.passengers.getFirst());
     }
 
     public Entity getRiding() {
@@ -1760,7 +1760,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
 
     protected void broadcastLinkPacket(Entity rider, EntityLink.Type type) {
         SetEntityLinkPacket pk = new SetEntityLinkPacket();
-        pk.vehicleUniqueId = getId();         // To the?
+        pk.vehicleUniqueId = getId();         // To what?
         pk.riderUniqueId = rider.getId(); // From who?
         pk.type = type;
         pk.riderInitiated = type != EntityLink.Type.REMOVE;
@@ -2209,7 +2209,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
             dy = this.getStepHeight();
             dz = movZ;
 
-            AxisAlignedBB axisalignedbb1 = this.boundingBox.clone();
+            AxisAlignedBB axisAlignedBB1 = this.boundingBox.clone();
 
             this.boundingBox.setBB(axisalignedbb);
 
@@ -2239,7 +2239,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
                 dx = cx;
                 dy = cy;
                 dz = cz;
-                this.boundingBox.setBB(axisalignedbb1);
+                this.boundingBox.setBB(axisAlignedBB1);
             } else {
                 this.ySize += 0.5F;
             }
@@ -2376,9 +2376,9 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
             return;
         }
 
-        boolean needsRecalcCurrent = true;
+        boolean needsReCalcCurrent = true;
         if (this instanceof EntityPhysical entityPhysical) {
-            needsRecalcCurrent = entityPhysical.needsRecalcMovement;
+            needsReCalcCurrent = entityPhysical.needsRecalcMovement;
         }
 
         Vector3 vector = new Vector3(0, 0, 0);
@@ -2394,7 +2394,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
 
             block.onEntityCollide(this);
             block.getTickCachedLevelBlockAtLayer(1).onEntityCollide(this);
-            if (needsRecalcCurrent)
+            if (needsReCalcCurrent)
                 block.addVelocityToEntity(this, vector);
         }
 
@@ -2468,7 +2468,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
             this.inPortalTicks = 0;
         }
 
-        if (needsRecalcCurrent)
+        if (needsReCalcCurrent)
             if (vector.lengthSquared() > 0) {
                 vector = vector.normalize();
                 double d = 0.018d;
