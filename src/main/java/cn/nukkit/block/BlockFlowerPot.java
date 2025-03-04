@@ -89,6 +89,7 @@ public class BlockFlowerPot extends BlockFlowable implements BlockEntityHolder<B
             return Item.AIR;
         }
         var plantBlockTag = blockEntity.namedTag.getCompound("PlantBlock");
+        // TODO: Vanilla uses a Block NBT, not an Item
         var id = plantBlockTag.getString("itemId");
         var meta = plantBlockTag.getInt("itemMeta");
         return Item.get(id, meta);
