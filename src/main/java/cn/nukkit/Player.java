@@ -397,7 +397,6 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     protected Entity lastBeAttackEntity = null;
     private final @NotNull PlayerHandle playerHandle = new PlayerHandle(this);
     protected final PlayerChunkManager playerChunkManager;
-    private boolean needDimensionChangeACK = false;
     private Boolean openSignFront = null;
     protected Boolean flySneaking = false;
     /// lastUseItem System and item cooldown
@@ -669,7 +668,12 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
 
         this.dataPacket(pk);
 
-        this.needDimensionChangeACK = true;
+        this.level.sendChunks(this);
+
+        PlayerActionPacket playerActionPacket = new PlayerActionPacket();
+        playerActionPacket.action = PlayerActionPacket.ACTION_DIMENSION_CHANGE_ACK;
+        playerActionPacket.entityId = this.getId();
+        this.dataPacket(playerActionPacket);
     }
 
     private void updateBlockingFlag() {
@@ -2296,15 +2300,6 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
                     entity.spawnTo(this);
                 }
             }
-        }
-
-        if (this.needDimensionChangeACK) {
-            this.needDimensionChangeACK = false;
-
-            PlayerActionPacket playerActionPacket = new PlayerActionPacket();
-            playerActionPacket.action = PlayerActionPacket.ACTION_DIMENSION_CHANGE_ACK;
-            playerActionPacket.entityId = this.getId();
-            this.dataPacket(playerActionPacket);
         }
     }
 

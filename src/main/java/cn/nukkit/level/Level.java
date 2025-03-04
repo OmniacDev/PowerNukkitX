@@ -79,6 +79,7 @@ import cn.nukkit.utils.Utils;
 import cn.nukkit.utils.collection.nb.Int2ObjectNonBlockingMap;
 import cn.nukkit.utils.collection.nb.Long2ObjectNonBlockingMap;
 import com.google.common.base.Preconditions;
+import io.netty.util.internal.EmptyArrays;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -3502,6 +3503,34 @@ public class Level implements Metadatable {
                     }
                 }
                 this.chunkSendQueue.remove(index);
+            }
+        }
+    }
+
+    public void sendChunks(Player player) {
+        int chunkPositionX = player.pos.getChunkX();
+        int chunkPositionZ = player.pos.getChunkZ();
+        int chunkRadius = player.getViewDistance();
+
+        NetworkChunkPublisherUpdatePacket ncp = new NetworkChunkPublisherUpdatePacket();
+        ncp.position = player.pos.asBlockVector3();
+        ncp.radius = player.getViewDistance() << 4;
+        player.dataPacket(ncp);
+
+        for (int x = -chunkRadius; x < chunkRadius; x++) {
+            for (int z = -chunkRadius; z < chunkRadius; z++) {
+                int chunkX = chunkPositionX + x;
+                int chunkZ = chunkPositionZ + z;
+
+                final var pair = this.requireProvider().requestChunkData(chunkX, chunkZ);
+
+                LevelChunkPacket pk = new LevelChunkPacket();
+                pk.chunkX = chunkX;
+                pk.chunkZ = chunkZ;
+                pk.dimension = getDimensionData().getDimensionId();
+                pk.subChunkCount = pair.right();
+                pk.data = pair.left();
+                player.sendChunk(chunkX, chunkZ, pk);
             }
         }
     }
