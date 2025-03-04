@@ -1,9 +1,11 @@
 package cn.nukkit.math;
 
+import lombok.SneakyThrows;
+
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public class Rotator2 {
+public class Rotator2 implements Cloneable {
     public double pitch;
     public double yaw;
 
@@ -138,4 +140,7 @@ public class Rotator2 {
         return "Rotator2(x=" + this.pitch + ",y=" + this.yaw + ")";
     }
 
+    @SneakyThrows
+    @Override
+    public Rotator2 clone() { return (Rotator2) super.clone();}
 }

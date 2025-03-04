@@ -402,12 +402,16 @@ public abstract class EntityMob extends EntityPhysical implements EntityInventor
         return true;
     }
 
-    @Override
     public void setRotation(double yaw, double pitch, double headYaw) {
         this.rotation.yaw = yaw;
         this.rotation.pitch = pitch;
         this.headYaw = headYaw;
         this.scheduleUpdate();
+    }
+
+    public boolean setPositionAndRotation(Vector3 pos, double yaw, double pitch, double headYaw) {
+        this.setRotation(yaw, pitch, headYaw);
+        return this.setPosition(pos);
     }
 
     @Override

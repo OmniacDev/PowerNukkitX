@@ -181,9 +181,9 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
 
     @Nullable public Level level;
 
-    @NotNull public Vector3 prevPos = pos;
-    @NotNull public Vector3 prevMotion = motion;
-    @NotNull public Rotator2 prevRotation = rotation;
+    @NotNull public Vector3 prevPos = pos.clone();
+    @NotNull public Vector3 prevMotion = motion.clone();
+    @NotNull public Rotator2 prevRotation = rotation.clone();
 
     public static final Entity[] EMPTY_ARRAY = new Entity[0];
     protected final EntityDataMap entityDataMap = new EntityDataMap();
@@ -2086,7 +2086,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     public boolean isInsideOfSolid() {
         double y = this.pos.y + this.getEyeHeight();
         Block block = this.level.getBlock(
-                this.pos.add(0, y, 0).floor()
+                this.pos.clone().setY(y).floor()
         );
 
         AxisAlignedBB bb = block.getBoundingBox();
@@ -2469,28 +2469,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
         return this.setPosition(pos);
     }
 
-    /**
-     * Sets position and rotation.
-     *
-     * @param pos     the pos
-     * @param yaw     the yaw
-     * @param pitch   the pitch
-     * @param headYaw the head yaw
-     * @return 切换地图失败会返回false
-     */
-    public boolean setPositionAndRotation(Vector3 pos, double yaw, double pitch, double headYaw) {
-        this.setRotation(yaw, pitch, headYaw);
-        return this.setPosition(pos);
-    }
-
     public void setRotation(double yaw, double pitch) {
-        this.rotation.yaw = yaw;
-        this.rotation.pitch = pitch;
-        this.scheduleUpdate();
-    }
-
-
-    public void setRotation(double yaw, double pitch, double headYaw) {
         this.rotation.yaw = yaw;
         this.rotation.pitch = pitch;
         this.scheduleUpdate();

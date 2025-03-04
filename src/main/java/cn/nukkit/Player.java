@@ -352,7 +352,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     private final AtomicReference<Locale> locale = new AtomicReference<>(null);
     private int timeSinceRest;
     private String buttonText = "Button";
-    private PermissibleBase perm = null;
+    private PermissibleBase perm;
     private int hash;
     private int exp = 0;
     private int expLevel = 0;
@@ -685,7 +685,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     @Override
     protected void initEntity() {
         super.initEntity();
-        Level level = null;
+        Level level;
         if (this.namedTag.containsString("SpawnLevel")) {
             level = this.server.getLevelByName(this.namedTag.getString("SpawnLevel"));
         } else level = Server.getInstance().getDefaultLevel();

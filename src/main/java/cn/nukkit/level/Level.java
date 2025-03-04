@@ -76,6 +76,7 @@ import cn.nukkit.utils.BlockUpdateEntry;
 import cn.nukkit.utils.GameLoop;
 import cn.nukkit.utils.Hash;
 import cn.nukkit.utils.LevelException;
+import cn.nukkit.utils.MainLogger;
 import cn.nukkit.utils.TextFormat;
 import cn.nukkit.utils.Utils;
 import cn.nukkit.utils.collection.nb.Int2ObjectNonBlockingMap;

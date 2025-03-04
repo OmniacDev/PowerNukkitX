@@ -66,6 +66,9 @@ public abstract class EntityHumanType extends EntityMob implements IHuman {
     }
 
     @Override
+    public void asyncPrepare(int currentTick) {}
+
+    @Override
     public boolean attack(EntityDamageEvent source) {
         if (this.isClosed() || !this.isAlive()) {
             return false;
