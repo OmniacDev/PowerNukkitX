@@ -4937,7 +4937,6 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
 
     @Override
     public boolean switchLevel(Level level) {
-        Level oldLevel = this.level;
         if (super.switchLevel(level)) {
             this.clientMovements.clear();
             SetSpawnPositionPacket spawnPosition = new SetSpawnPositionPacket();
