@@ -84,7 +84,12 @@ public class ItemBow extends ItemTool {
         arrowLocation = arrowLocation.add(directionVector.getX(), 0, directionVector.getZ());
         arrowLocation.setY(player.pos.y + player.getEyeHeight() + directionVector.getY());
 
-        ItemArrow itemArrow = (ItemArrow) (offhandOptional.isPresent() ?  offhandOptional.get().getValue() : inventoryOptional.get().getValue());
+        ItemArrow itemArrow = (ItemArrow) (offhandOptional.isPresent() ?
+                offhandOptional.get().getValue() :
+                inventoryOptional.isPresent() ?
+                        inventoryOptional.get().getValue() :
+                new ItemArrow());
+
 
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()

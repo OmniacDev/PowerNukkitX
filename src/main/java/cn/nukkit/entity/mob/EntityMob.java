@@ -396,6 +396,11 @@ public abstract class EntityMob extends EntityPhysical implements EntityInventor
 
             this.addMotion(this.motion.x, this.motion.y, this.motion.z);
         }
+
+        if (isFalling()) {
+            this.fallingTick++;
+        }
+        this.move(this.motion.x, this.motion.y, this.motion.z);
     }
 
     public boolean enableHeadYaw() {
