@@ -69,9 +69,9 @@ public class EntityChestBoat extends EntityBoat implements InventoryHolder {
         addEntity.x = (float) this.pos.x;
         addEntity.y = (float) this.pos.y + getBaseOffset();
         addEntity.z = (float) this.pos.z;
-        addEntity.speedX = (float) this.motionX;
-        addEntity.speedY = (float) this.motionY;
-        addEntity.speedZ = (float) this.motionZ;
+        addEntity.speedX = (float) this.motion.x;
+        addEntity.speedY = (float) this.motion.y;
+        addEntity.speedZ = (float) this.motion.z;
         addEntity.entityData = this.entityDataMap;
 
         addEntity.links = new EntityLink[this.passengers.size()];

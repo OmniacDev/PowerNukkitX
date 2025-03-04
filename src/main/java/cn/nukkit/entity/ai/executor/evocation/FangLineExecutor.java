@@ -2,13 +2,14 @@ package cn.nukkit.entity.ai.executor.evocation;
 
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityID;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.executor.EntityControl;
 import cn.nukkit.entity.ai.executor.IBehaviorExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityEvocationFang;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager;
 import cn.nukkit.level.Location;
@@ -38,7 +39,7 @@ public class FangLineExecutor implements EntityControl, IBehaviorExecutor {
 
     public FangLineExecutor() {}
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if(tick == CAST_DURATION) {
             entity.rotation.yaw = (entity.headYaw);
         } else if(tick > CAST_DURATION) {
@@ -55,24 +56,24 @@ public class FangLineExecutor implements EntityControl, IBehaviorExecutor {
 
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         removeLookTarget(entity);
         startSpell(entity);
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED);
         entity.setEnablePitch(false);
         stopSpell(entity);
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         stopSpell(entity);
     }
 
-    protected void startSpell(EntityIntelligent entity) {
+    protected void startSpell(EntityMob entity) {
         tick = 0;
         entity.level.addSound(entity.pos, Sound.MOB_EVOCATION_ILLAGER_PREPARE_SUMMON);
         entity.setDataProperty(EntityDataTypes.EVOKER_SPELL_CASTING_COLOR, BlockColor.PURPLE_BLOCK_COLOR.getARGB());
@@ -80,7 +81,7 @@ public class FangLineExecutor implements EntityControl, IBehaviorExecutor {
         entity.setDataFlag(EntityFlag.CASTING);
     }
 
-    protected void stopSpell(EntityIntelligent entity) {
+    protected void stopSpell(EntityMob entity) {
         entity.getMemoryStorage().clear(LAST_MAGIC);
         entity.setDataFlag(EntityFlag.CASTING, false);
     }

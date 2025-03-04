@@ -4,18 +4,17 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityID;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.projectile.EntityFireball;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
 import cn.nukkit.level.Location;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.network.protocol.LevelEventPacket;
@@ -58,7 +57,7 @@ public class GhastShootExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if (tick2 == 0) {
             tick1++;
         }
@@ -107,7 +106,7 @@ public class GhastShootExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED);
@@ -120,7 +119,7 @@ public class GhastShootExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED);
@@ -132,7 +131,7 @@ public class GhastShootExecutor implements EntityControl, IBehaviorExecutor {
         this.target = null;
     }
 
-    protected void shootFireball(EntityLiving entity) {
+    protected void shootFireball(EntityMob entity) {
 
         Location fireballLocation = entity.getLocation();
         Vector3 directionVector = entity.getDirectionVector().multiply(1 + ThreadLocalRandom.current().nextFloat(0.2f));
@@ -147,7 +146,7 @@ public class GhastShootExecutor implements EntityControl, IBehaviorExecutor {
                         .add(new FloatTag(-Math.sin(entity.rotation.pitch / 180 * Math.PI)))
                         .add(new FloatTag(Math.cos(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI))))
                 .putList("Rotation", new ListTag<FloatTag>()
-                        .add(new FloatTag((entity.headYaw > 180 ? 360 : 0) - (float) entity.headYaw))
+                        .add(new FloatTag((float) (entity.headYaw > 180 ? 360 : 0) - entity.headYaw))
                         .add(new FloatTag((float) -entity.rotation.pitch)))
                 .putDouble("damage", 2);
 

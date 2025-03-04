@@ -163,7 +163,7 @@ public class EntityXpOrb extends Entity {
                 }
             }*/
 
-            this.motionY -= this.getGravity();
+            this.motion.y -= this.getGravity();
 
             if (this.checkObstruction(this.pos.x, this.pos.y, this.pos.z)) {
                 hasUpdate = true;
@@ -196,26 +196,26 @@ public class EntityXpOrb extends Entity {
 
                 if (diff > 0.0D) {
                     diff = diff * diff;
-                    this.motionX += dX / d * diff * 0.1D;
-                    this.motionY += dY / d * diff * 0.1D;
-                    this.motionZ += dZ / d * diff * 0.1D;
+                    this.motion.x += dX / d * diff * 0.1D;
+                    this.motion.y += dY / d * diff * 0.1D;
+                    this.motion.z += dZ / d * diff * 0.1D;
                 }
             }
 
-            this.move(this.motionX, this.motionY, this.motionZ);
+            this.move(this.motion.x, this.motion.y, this.motion.z);
 
             double friction = 1d - this.getDrag();
 
-            if (this.onGround && (Math.abs(this.motionX) > 0.00001 || Math.abs(this.motionZ) > 0.00001)) {
-                friction = this.getLevel().getBlock(this.temporalVector.setComponents((int) Math.floor(this.pos.x), (int) Math.floor(this.pos.y - 1), (int) Math.floor(this.pos.z))).getFrictionFactor() * friction;
+            if (this.onGround && (Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.z) > 0.00001)) {
+                friction = this.getLevel().getBlock(this.pos.add(0, -1, 0).floor()).getFrictionFactor() * friction;
             }
 
-            this.motionX *= friction;
-            this.motionY *= 1 - this.getDrag();
-            this.motionZ *= friction;
+            this.motion.x *= friction;
+            this.motion.y *= 1 - this.getDrag();
+            this.motion.z *= friction;
 
             if (this.onGround) {
-                this.motionY *= -0.5;
+                this.motion.y *= -0.5;
             }
 
             this.updateMovement();
@@ -227,7 +227,7 @@ public class EntityXpOrb extends Entity {
 
         }
 
-        return hasUpdate || !this.onGround || Math.abs(this.motionX) > 0.00001 || Math.abs(this.motionY) > 0.00001 || Math.abs(this.motionZ) > 0.00001;
+        return hasUpdate || !this.onGround || Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.y) > 0.00001 || Math.abs(this.motion.z) > 0.00001;
     }
 
     @Override

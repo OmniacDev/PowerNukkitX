@@ -170,7 +170,7 @@ public abstract class EntityLiving extends Entity implements EntityDamageable {
 
         f = 1 / f;
 
-        Vector3 motion = new Vector3(this.motionX, this.motionY, this.motionZ);
+        Vector3 motion = new Vector3(this.motion.x, this.motion.y, this.motion.z);
 
         motion.x /= 2d;
         motion.y /= 2d;

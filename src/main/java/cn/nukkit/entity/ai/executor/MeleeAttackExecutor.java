@@ -4,11 +4,11 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCanAttack;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
-import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.inventory.EntityInventoryHolder;
@@ -91,7 +91,7 @@ public class MeleeAttackExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         attackTick++;
         if (entity.getBehaviorGroup().getMemoryStorage().isEmpty(memory)) return false;
         Entity newTarget = entity.getBehaviorGroup().getMemoryStorage().get(memory);
@@ -183,7 +183,7 @@ public class MeleeAttackExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
         //重置速度
@@ -197,7 +197,7 @@ public class MeleeAttackExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
         //重置速度
@@ -210,7 +210,7 @@ public class MeleeAttackExecutor implements EntityControl, IBehaviorExecutor {
         this.lookTarget = null;
     }
 
-    protected void playAttackAnimation(EntityIntelligent entity) {
+    protected void playAttackAnimation(EntityMob entity) {
         EntityEventPacket pk = new EntityEventPacket();
         pk.eid = entity.getId();
         pk.event = EntityEventPacket.ARM_SWING;

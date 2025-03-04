@@ -267,9 +267,9 @@ public class Explosion {
 
                 if (!(entity instanceof EntityItem || entity instanceof EntityXpOrb)) {
                     var multipliedMotion = motion.multiply(impact);
-                    entity.motionX += multipliedMotion.x;
-                    entity.motionY += multipliedMotion.y;
-                    entity.motionZ += multipliedMotion.z;
+                    entity.motion.x += multipliedMotion.x;
+                    entity.motion.y += multipliedMotion.y;
+                    entity.motion.z += multipliedMotion.z;
                 }
             }
         }

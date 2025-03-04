@@ -3,7 +3,6 @@ package cn.nukkit.entity.mob.monster;
 import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityFlyable;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.behavior.Behavior;
 import cn.nukkit.entity.ai.behaviorgroup.BehaviorGroup;
 import cn.nukkit.entity.ai.behaviorgroup.IBehaviorGroup;
@@ -23,6 +22,7 @@ import cn.nukkit.entity.ai.route.posevaluator.FlyingPosEvaluator;
 import cn.nukkit.entity.ai.sensor.NearestPlayerSensor;
 import cn.nukkit.entity.ai.sensor.NearestTargetEntitySensor;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager;
 import cn.nukkit.entity.mob.villagers.EntityVillager;
 import cn.nukkit.event.entity.EntityDamageEvent;
@@ -174,20 +174,20 @@ public class EntityVex extends EntityMonster implements EntityFlyable {
         }
 
         @Override
-        public void onStart(EntityIntelligent entity) {
+        public void onStart(EntityMob entity) {
             super.onStart(entity);
             entity.setDataFlag(EntityFlag.CHARGING);
             entity.level.addSound(entity.pos, Sound.MOB_VEX_CHARGE);
         }
 
         @Override
-        public void onStop(EntityIntelligent entity) {
+        public void onStop(EntityMob entity) {
             super.onStop(entity);
             entity.setDataFlag(EntityFlag.CHARGING, false);
         }
 
         @Override
-        public void onInterrupt(EntityIntelligent entity) {
+        public void onInterrupt(EntityMob entity) {
             super.onInterrupt(entity);
             entity.setDataFlag(EntityFlag.CHARGING, false);
         }

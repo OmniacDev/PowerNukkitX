@@ -3,6 +3,7 @@ package cn.nukkit.entity;
 import cn.nukkit.Player;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.entity.data.Skin;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.inventory.EntityArmorInventory;
@@ -41,7 +42,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 
 
-public class EntityIntelligentHuman extends EntityIntelligent implements IHuman {
+public class EntityMobHuman extends EntityMob implements IHuman {
     @Override
     public @NotNull String getIdentifier() {
         return PLAYER;
@@ -54,7 +55,7 @@ public class EntityIntelligentHuman extends EntityIntelligent implements IHuman 
     protected HumanEnderChestInventory enderChestInventory;
     protected HumanOffHandInventory offhandInventory;
 
-    public EntityIntelligentHuman(IChunk chunk, CompoundTag nbt) {
+    public EntityMobHuman(IChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
     }
 
@@ -152,9 +153,9 @@ public class EntityIntelligentHuman extends EntityIntelligent implements IHuman 
         if (!enableHeadYaw()) {
             this.headYaw = this.rotation.yaw;
         }
-        double diffPosition = (this.pos.x - this.lastX) * (this.pos.x - this.lastX) + (this.pos.y - this.lastY) * (this.pos.y - this.lastY) + (this.pos.z - this.lastZ) * (this.pos.z - this.lastZ);
-        double diffRotation = enableHeadYaw() ? (this.headYaw - this.lastHeadYaw) * (this.headYaw - this.lastHeadYaw) : 0 + (this.rotation.yaw - this.lastYaw) * (this.rotation.yaw - this.lastYaw) + (this.rotation.pitch - this.lastPitch) * (this.rotation.pitch - this.lastPitch);
-        double diffMotion = (this.motionX - this.lastMotionX) * (this.motionX - this.lastMotionX) + (this.motionY - this.lastMotionY) * (this.motionY - this.lastMotionY) + (this.motionZ - this.lastMotionZ) * (this.motionZ - this.lastMotionZ);
+        double diffPosition = (this.pos.x - this.prevPos.x) * (this.pos.x - this.prevPos.x) + (this.pos.y - this.prevPos.y) * (this.pos.y - this.prevPos.y) + (this.pos.z - this.prevPos.z) * (this.pos.z - this.prevPos.z);
+        double diffRotation = enableHeadYaw() ? (this.headYaw - this.prevHeadYaw) * (this.headYaw - this.prevHeadYaw) : 0 + (this.rotation.yaw - this.prevRotation.yaw) * (this.rotation.yaw - this.prevRotation.yaw) + (this.rotation.pitch - this.prevRotation.pitch) * (this.rotation.pitch - this.prevRotation.pitch);
+        double diffMotion = (this.motion.x - this.prevMotion.x) * (this.motion.x - this.prevMotion.x) + (this.motion.y - this.prevMotion.y) * (this.motion.y - this.prevMotion.y) + (this.motion.z - this.prevMotion.z) * (this.motion.z - this.prevMotion.z);
         if (diffPosition > 0.0001 || diffRotation > 1.0) { //0.2 ** 2, 1.5 ** 2
             if (diffPosition > 0.0001) {
                 if (this.isOnGround()) {
@@ -164,23 +165,23 @@ public class EntityIntelligentHuman extends EntityIntelligent implements IHuman 
                 }
             }
             this.broadcastMovement(false);
-            this.lastX = this.pos.x;
-            this.lastY = this.pos.y;
-            this.lastZ = this.pos.z;
-            this.lastPitch = this.rotation.pitch;
-            this.lastYaw = this.rotation.yaw;
-            this.lastHeadYaw = this.headYaw;
+            this.prevPos.x = this.pos.x;
+            this.prevPos.y = this.pos.y;
+            this.prevPos.z = this.pos.z;
+            this.prevRotation.pitch = this.rotation.pitch;
+            this.prevRotation.yaw = this.rotation.yaw;
+            this.prevHeadYaw = this.headYaw;
             this.positionChanged = true;
         } else {
             this.positionChanged = false;
         }
         if (diffMotion > 0.0025 || (diffMotion > 0.0001 && this.getMotion().lengthSquared() <= 0.0001)) { //0.05 ** 2
-            this.lastMotionX = this.motionX;
-            this.lastMotionY = this.motionY;
-            this.lastMotionZ = this.motionZ;
-            this.addMotion(this.motionX, this.motionY, this.motionZ);
+            this.prevMotion.x = this.motion.x;
+            this.prevMotion.y = this.motion.y;
+            this.prevMotion.z = this.motion.z;
+            this.addMotion(this.motion.x, this.motion.y, this.motion.z);
         }
-        this.move(this.motionX, this.motionY, this.motionZ);
+        this.move(this.motion.x, this.motion.y, this.motion.z);
     }
 
     @Override
@@ -318,7 +319,7 @@ public class EntityIntelligentHuman extends EntityIntelligent implements IHuman 
 
     @Override
     public String getOriginalName() {
-        return "EntityIntelligentHuman";
+        return "EntityMobHuman";
     }
 
     @Override
@@ -351,9 +352,9 @@ public class EntityIntelligentHuman extends EntityIntelligent implements IHuman 
             pk.x = (float) this.pos.x;
             pk.y = (float) this.pos.y;
             pk.z = (float) this.pos.z;
-            pk.speedX = (float) this.motionX;
-            pk.speedY = (float) this.motionY;
-            pk.speedZ = (float) this.motionZ;
+            pk.speedX = (float) this.motion.x;
+            pk.speedY = (float) this.motion.y;
+            pk.speedZ = (float) this.motion.z;
             pk.yaw = (float) this.rotation.yaw;
             pk.pitch = (float) this.rotation.pitch;
             pk.item = this.getInventory().getItemInHand();

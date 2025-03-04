@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.executor;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +24,7 @@ public class MultipleExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         var tasks = new ArrayList<CompletableFuture<?>>();
         for (IBehaviorExecutor executor : executors) {
             tasks.add(CompletableFuture.supplyAsync(() -> executor.execute(entity)));
@@ -47,12 +47,12 @@ public class MultipleExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         IBehaviorExecutor.super.onInterrupt(entity);
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         IBehaviorExecutor.super.onStop(entity);
     }
 }

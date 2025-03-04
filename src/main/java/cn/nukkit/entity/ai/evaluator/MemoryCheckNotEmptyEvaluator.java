@@ -1,7 +1,7 @@
 package cn.nukkit.entity.ai.evaluator;
 
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.entity.mob.EntityMob;
 
 
 public class MemoryCheckNotEmptyEvaluator implements IBehaviorEvaluator {
@@ -13,7 +13,7 @@ public class MemoryCheckNotEmptyEvaluator implements IBehaviorEvaluator {
     }
 
     @Override
-    public boolean evaluate(EntityIntelligent entity) {
+    public boolean evaluate(EntityMob entity) {
         return entity.getBehaviorGroup().getMemoryStorage().notEmpty(type);
     }
 }

@@ -3,7 +3,6 @@ package cn.nukkit.entity.mob.monster;
 import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityFlyable;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntitySmite;
 import cn.nukkit.entity.ai.behavior.Behavior;
 import cn.nukkit.entity.ai.behaviorgroup.BehaviorGroup;
@@ -25,6 +24,7 @@ import cn.nukkit.entity.ai.route.finder.impl.SimpleSpaceAStarRouteFinder;
 import cn.nukkit.entity.ai.route.posevaluator.FlyingPosEvaluator;
 import cn.nukkit.entity.ai.sensor.NearestPlayerSensor;
 import cn.nukkit.entity.ai.sensor.NearestTargetEntitySensor;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.level.Sound;
@@ -138,7 +138,7 @@ public class EntityPhantom extends EntityMonster implements EntityFlyable, Entit
         }
 
         @Override
-        public void onStart(EntityIntelligent entity) {
+        public void onStart(EntityMob entity) {
             super.onStart(entity);
             entity.level.addSound(entity.pos, Sound.MOB_PHANTOM_SWOOP);
         }

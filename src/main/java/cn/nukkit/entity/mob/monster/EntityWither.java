@@ -10,7 +10,7 @@ import cn.nukkit.entity.Attribute;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityFlyable;
 import cn.nukkit.entity.EntityID;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntitySmite;
 import cn.nukkit.entity.ai.behavior.Behavior;
 import cn.nukkit.entity.ai.behaviorgroup.BehaviorGroup;
@@ -220,9 +220,9 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
         addEntity.x = (float) this.pos.x;
         addEntity.y = (float) this.pos.y;
         addEntity.z = (float) this.pos.z;
-        addEntity.speedX = (float) this.motionX;
-        addEntity.speedY = (float) this.motionY;
-        addEntity.speedZ = (float) this.motionZ;
+        addEntity.speedX = (float) this.motion.x;
+        addEntity.speedY = (float) this.motion.y;
+        addEntity.speedZ = (float) this.motion.z;
         addEntity.entityData = this.entityDataMap;
         addEntity.attributes = new Attribute[]{Attribute.getAttribute(Attribute.MAX_HEALTH).setMaxValue(getMaxDiffHealth()).setValue(getMaxDiffHealth())};
         return addEntity;
@@ -273,7 +273,7 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
     @Override
     public boolean attackTarget(Entity entity) {
         if(entity instanceof EntityWither) return false;
-        return entity instanceof EntityIntelligent;
+        return entity instanceof EntityMob;
     }
 
     @Override

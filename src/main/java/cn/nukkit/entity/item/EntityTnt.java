@@ -128,22 +128,22 @@ public class EntityTnt extends Entity implements EntityExplosive {
 
         if (isAlive()) {
 
-            motionY -= getGravity();
+            this.motion.y -= getGravity();
 
-            move(motionX, motionY, motionZ);
+            move(this.motion.x, this.motion.y, this.motion.z);
 
             float friction = 1 - getDrag();
 
-            motionX *= friction;
-            motionY *= friction;
-            motionZ *= friction;
+            this.motion.x *= friction;
+            this.motion.y *= friction;
+            this.motion.z *= friction;
 
             updateMovement();
 
             if (onGround) {
-                motionY *= -0.5;
-                motionX *= 0.7;
-                motionZ *= 0.7;
+                this.motion.y *= -0.5;
+                this.motion.x *= 0.7;
+                this.motion.z *= 0.7;
             }
 
             fuse -= tickDiff;
@@ -157,7 +157,7 @@ public class EntityTnt extends Entity implements EntityExplosive {
 
         }
 
-        return hasUpdate || fuse >= 0 || Math.abs(motionX) > 0.00001 || Math.abs(motionY) > 0.00001 || Math.abs(motionZ) > 0.00001;
+        return hasUpdate || fuse >= 0 || Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.y) > 0.00001 || Math.abs(this.motion.z) > 0.00001;
     }
 
     @Override

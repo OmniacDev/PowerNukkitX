@@ -1,8 +1,8 @@
 package cn.nukkit.entity.ai.executor.armadillo;
 
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.executor.EntityControl;
 import cn.nukkit.entity.ai.executor.IBehaviorExecutor;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.animal.EntityArmadillo;
 
 public class PeekExecutor implements EntityControl, IBehaviorExecutor {
@@ -14,7 +14,7 @@ public class PeekExecutor implements EntityControl, IBehaviorExecutor {
 
     public PeekExecutor() {}
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if(tick < STAY_TICKS) {
             tick++;
             return true;
@@ -23,12 +23,12 @@ public class PeekExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         this.tick = 0;
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         if(entity instanceof EntityArmadillo armadillo) {
             if(!new EntityArmadillo.RollupEvaluator().evaluate(entity)) {
                 armadillo.setRollState(EntityArmadillo.RollState.ROLLED_UP_UNROLLING);
@@ -37,7 +37,7 @@ public class PeekExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         onStop(entity);
     }
 }

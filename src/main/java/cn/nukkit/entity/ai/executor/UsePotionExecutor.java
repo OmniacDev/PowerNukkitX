@@ -2,11 +2,12 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.block.BlockMagma;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.effect.EffectType;
 import cn.nukkit.entity.effect.PotionType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityMonster;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
@@ -38,7 +39,7 @@ public class UsePotionExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if (tick2 == 0) {
             tick1++;
         }
@@ -64,14 +65,14 @@ public class UsePotionExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED);
         entity.setEnablePitch(false);
         endShootSequence(entity);
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED);
         entity.setEnablePitch(false);
         endShootSequence(entity);
@@ -101,7 +102,7 @@ public class UsePotionExecutor implements EntityControl, IBehaviorExecutor {
             return ItemPotion.fromPotion(PotionType.FIRE_RESISTANCE);
         } else if(entity.getHealth() < entity.getMaxHealth()) {
             return ItemPotion.fromPotion(PotionType.HEALING);
-        } else if(entity instanceof EntityIntelligent intelligent) {
+        } else if(entity instanceof EntityMob intelligent) {
             if(intelligent.getMemoryStorage().notEmpty(CoreMemoryTypes.BE_ATTACKED_EVENT)) {
                 EntityDamageEvent event = intelligent.getMemoryStorage().get(CoreMemoryTypes.BE_ATTACKED_EVENT);
                 if(event instanceof EntityDamageByEntityEvent e) {

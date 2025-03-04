@@ -203,7 +203,7 @@ public class EntityItem extends Entity {
                     || bid == BlockID.WATER
             ) {
                 //item is fully in water or in still water
-                this.motionY -= this.getGravity() * -0.015;
+                this.motion.y -= this.getGravity() * -0.015;
             } else if (lavaResistant && (
                     this.level.getBlockIdAt((int) this.pos.x, (int) this.boundingBox.getMaxY(), (int) this.pos.z, 0) == BlockID.FLOWING_LAVA
                             || this.level.getBlockIdAt((int) this.pos.x, (int) this.boundingBox.getMaxY(), (int) this.pos.z, 0) == BlockID.LAVA
@@ -211,31 +211,31 @@ public class EntityItem extends Entity {
                             || this.level.getBlockIdAt((int) this.pos.x, (int) this.boundingBox.getMaxY(), (int) this.pos.z, 1) == BlockID.LAVA
             )) {
                 //item is fully in lava or in still lava
-                this.motionY -= this.getGravity() * -0.015;
+                this.motion.y -= this.getGravity() * -0.015;
             } else if (this.isInsideOfWater() || lavaResistant && this.isInsideOfLava()) {
-                this.motionY = this.getGravity() - 0.06; //item is going up in water, don't let it go back down too fast
+                this.motion.y = this.getGravity() - 0.06; //item is going up in water, don't let it go back down too fast
             } else {
-                this.motionY -= this.getGravity(); //item is not in water
+                this.motion.y -= this.getGravity(); //item is not in water
             }
 
             if (this.checkObstruction(this.pos.x, this.pos.y, this.pos.z)) {
                 hasUpdate = true;
             }
 
-            this.move(this.motionX, this.motionY, this.motionZ);
+            this.move(this.motion.x, this.motion.y, this.motion.z);
 
             double friction = 1 - this.getDrag();
 
-            if (this.onGround && (Math.abs(this.motionX) > 0.00001 || Math.abs(this.motionZ) > 0.00001)) {
-                friction *= this.getLevel().getBlock(this.temporalVector.setComponents((int) Math.floor(this.pos.x), (int) Math.floor(this.pos.y - 1), (int) Math.floor(this.pos.z))).getFrictionFactor();
+            if (this.onGround && (Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.z) > 0.00001)) {
+                friction *= this.getLevel().getBlock(this.pos.add(0, -1, 0).floor()).getFrictionFactor();
             }
 
-            this.motionX *= friction;
-            this.motionY *= 1 - this.getDrag();
-            this.motionZ *= friction;
+            this.motion.x *= friction;
+            this.motion.y *= 1 - this.getDrag();
+            this.motion.z *= friction;
 
             if (this.onGround) {
-                this.motionY *= -0.5;
+                this.motion.y *= -0.5;
             }
 
             this.updateMovement();
@@ -252,7 +252,7 @@ public class EntityItem extends Entity {
             }
         }
 
-        return hasUpdate || !this.onGround || Math.abs(this.motionX) > 0.00001 || Math.abs(this.motionY) > 0.00001 || Math.abs(this.motionZ) > 0.00001;
+        return hasUpdate || !this.onGround || Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.y) > 0.00001 || Math.abs(this.motion.z) > 0.00001;
     }
 
     @Override
@@ -339,9 +339,9 @@ public class EntityItem extends Entity {
         addEntity.x = (float) this.pos.x;
         addEntity.y = (float) this.pos.y + this.getBaseOffset();
         addEntity.z = (float) this.pos.z;
-        addEntity.speedX = (float) this.motionX;
-        addEntity.speedY = (float) this.motionY;
-        addEntity.speedZ = (float) this.motionZ;
+        addEntity.speedX = (float) this.motion.x;
+        addEntity.speedY = (float) this.motion.y;
+        addEntity.speedZ = (float) this.motion.z;
         addEntity.entityData = this.entityDataMap;
         addEntity.item = this.getItem();
         return addEntity;

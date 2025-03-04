@@ -1,9 +1,10 @@
 package cn.nukkit.entity.ai.executor;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.effect.Effect;
 import cn.nukkit.entity.effect.EffectType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.EntityZoglin;
 import cn.nukkit.level.Sound;
 
@@ -14,7 +15,7 @@ public class HoglinTransformExecutor implements EntityControl, IBehaviorExecutor
     public HoglinTransformExecutor() {}
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         tick++;
         if(tick >= 300) {
             transform(entity);
@@ -25,22 +26,22 @@ public class HoglinTransformExecutor implements EntityControl, IBehaviorExecutor
 
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         tick = -1;
         entity.setDataFlag(EntityFlag.SHAKING);
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         entity.setDataFlag(EntityFlag.SHAKING, false);
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         onStop(entity);
     }
 
-    private void transform(EntityIntelligent entity) {
+    private void transform(EntityMob entity) {
         entity.saveNBT();
         entity.close();
         EntityZoglin zoglin = new EntityZoglin(entity.getPosition().getChunk(), entity.namedTag);

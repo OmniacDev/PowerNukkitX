@@ -2,14 +2,13 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.animal.EntityHorse;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.EntityEventPacket;
 import cn.nukkit.utils.Utils;
 import com.google.common.base.Preconditions;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 代表玩家驯服马时，马的行为
@@ -50,7 +49,7 @@ public class TameHorseExecutor extends FlatRandomRoamExecutor {
     }
 
     @Override
-    public boolean execute(@NotNull EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         //Fail Animation
         if (tick1 != 0) {
             if (tick1 > 13) {
@@ -120,13 +119,13 @@ public class TameHorseExecutor extends FlatRandomRoamExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         super.onStop(entity);
         tick1 = 0;
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         super.onStart(entity);
         tick1 = 0;
     }

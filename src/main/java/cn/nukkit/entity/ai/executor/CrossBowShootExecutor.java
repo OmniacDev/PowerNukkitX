@@ -3,11 +3,11 @@ package cn.nukkit.entity.ai.executor;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.EntityShootBowEvent;
@@ -65,7 +65,7 @@ public class CrossBowShootExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if (tick2 == 0) {
             tick1++;
         }
@@ -122,7 +122,7 @@ public class CrossBowShootExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
         //重置速度
@@ -136,7 +136,7 @@ public class CrossBowShootExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
         //重置速度
@@ -149,7 +149,7 @@ public class CrossBowShootExecutor implements EntityControl, IBehaviorExecutor {
         this.target = null;
     }
 
-    protected void bowShoot(ItemCrossbow bow, EntityLiving entity) {
+    protected void bowShoot(ItemCrossbow bow, EntityMob entity) {
         double damage = 2;
         Enchantment bowDamage = bow.getEnchantment(Enchantment.ID_BOW_POWER);
         if (bowDamage != null && bowDamage.getLevel() > 0) {
@@ -168,7 +168,7 @@ public class CrossBowShootExecutor implements EntityControl, IBehaviorExecutor {
                         .add(new FloatTag(-Math.sin(entity.rotation.pitch / 180 * Math.PI)))
                         .add(new FloatTag(Math.cos(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI))))
                 .putList("Rotation", new ListTag<FloatTag>()
-                        .add(new FloatTag((entity.headYaw > 180 ? 360 : 0) - (float) entity.headYaw))
+                        .add(new FloatTag((float) (entity.headYaw > 180 ? 360 : 0) - entity.headYaw))
                         .add(new FloatTag((float) -entity.rotation.pitch)))
                 .putShort("Fire", flame ? 45 * 60 : 0)
                 .putDouble("damage", damage);

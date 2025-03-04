@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.executor;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.Vector3;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,19 +13,19 @@ import org.jetbrains.annotations.NotNull;
 
 public interface EntityControl {
 
-    default void setRouteTarget(@NotNull EntityIntelligent entity, Vector3 vector3) {
+    default void setRouteTarget(@NotNull EntityMob entity, Vector3 vector3) {
         entity.setMoveTarget(vector3);
     }
 
-    default void setLookTarget(@NotNull EntityIntelligent entity, Vector3 vector3) {
+    default void setLookTarget(@NotNull EntityMob entity, Vector3 vector3) {
         entity.setLookTarget(vector3);
     }
 
-    default void removeRouteTarget(@NotNull EntityIntelligent entity) {
+    default void removeRouteTarget(@NotNull EntityMob entity) {
         entity.setMoveTarget(null);
     }
 
-    default void removeLookTarget(@NotNull EntityIntelligent entity) {
+    default void removeLookTarget(@NotNull EntityMob entity) {
         entity.setLookTarget(null);
     }
 }

@@ -1,7 +1,7 @@
 package cn.nukkit.entity.ai.memory;
 
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.codec.IMemoryCodec;
+import cn.nukkit.entity.mob.EntityMob;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -20,9 +20,9 @@ public class MemoryStorage implements IMemoryStorage {
 
     protected Map<MemoryType<?>, Object> memoryMap = new ConcurrentHashMap<>();
     @Getter
-    protected EntityIntelligent entity;
+    protected EntityMob entity;
 
-    public MemoryStorage(EntityIntelligent entity) {
+    public MemoryStorage(EntityMob entity) {
         this.entity = entity;
     }
 

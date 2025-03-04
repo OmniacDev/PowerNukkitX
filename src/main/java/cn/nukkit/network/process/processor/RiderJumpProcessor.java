@@ -18,9 +18,9 @@ public class RiderJumpProcessor extends DataPacketProcessor<RiderJumpPacket> {
             horse.getJumping().set(true);
             horse.move(0, motion, 0);
             //避免onGround不更新
-            horse.motionX = 0;
-            horse.motionY = 0;
-            horse.motionZ = 0;
+            horse.motion.x = 0;
+            horse.motion.y = 0;
+            horse.motion.z = 0;
             horse.setDataFlag(EntityFlag.STANDING);
         }
     }

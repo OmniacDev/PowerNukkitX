@@ -1,7 +1,7 @@
 package cn.nukkit.entity.ai.evaluator;
 
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
@@ -19,7 +19,7 @@ public class ConditionalProbabilityEvaluator extends ProbabilityEvaluator {
     }
 
     @Override
-    public boolean evaluate(EntityIntelligent entity) {
+    public boolean evaluate(EntityMob entity) {
         if (condition.apply(entity)) {
             return ThreadLocalRandom.current().nextInt(total) < probability2;
         } else return ThreadLocalRandom.current().nextInt(total) < probability;

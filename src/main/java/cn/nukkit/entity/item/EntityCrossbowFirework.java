@@ -28,13 +28,13 @@ public class EntityCrossbowFirework extends EntityFireworksRocket {
                 this.lastUpdate = currentTick;
                 boolean hasUpdate = this.entityBaseTick(tickDiff);
                 if (this.isAlive()) {
-                    this.motionX *= 1.15D;
-                    this.motionZ *= 1.15D;
-                    this.move(this.motionX, this.motionY, this.motionZ);
+                    this.motion.x *= 1.15D;
+                    this.motion.z *= 1.15D;
+                    this.move(this.motion.x, this.motion.y, this.motion.z);
                     this.updateMovement();
-                    float f = (float) Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
-                    this.rotation.yaw = (float) (Math.atan2(this.motionX, this.motionZ) * 57.29577951308232D);
-                    this.rotation.pitch = (float) (Math.atan2(this.motionY, f) * 57.29577951308232D);
+                    float f = (float) Math.sqrt(this.motion.x * this.motion.x + this.motion.z * this.motion.z);
+                    this.rotation.yaw = (float) (Math.atan2(this.motion.x, this.motion.z) * 57.29577951308232D);
+                    this.rotation.pitch = (float) (Math.atan2(this.motion.y, f) * 57.29577951308232D);
                     if (this.fireworkAge == 0) {
                         this.getLevel().addLevelSoundEvent(this.pos, 56);
                     }
@@ -51,7 +51,7 @@ public class EntityCrossbowFirework extends EntityFireworksRocket {
                         this.kill();
                     }
                 }
-                return hasUpdate || !this.onGround || Math.abs(this.motionX) > 1.0E-5D || Math.abs(this.motionY) > 1.0E-5D || Math.abs(this.motionZ) > 1.0E-5D;
+                return hasUpdate || !this.onGround || Math.abs(this.motion.x) > 1.0E-5D || Math.abs(this.motion.y) > 1.0E-5D || Math.abs(this.motion.z) > 1.0E-5D;
             }
         }
     }

@@ -1,13 +1,13 @@
 package cn.nukkit.entity.ai.controller;
 
-import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockCarpet;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.block.BlockLiquid;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityPhysical;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.Vector3;
 
 import java.util.Arrays;
@@ -31,7 +31,7 @@ public class WalkController implements IController {
     }
 
     @Override
-    public boolean control(EntityIntelligent entity) {
+    public boolean control(EntityMob entity) {
 
         currentJumpCoolDown++;
 
@@ -43,7 +43,7 @@ public class WalkController implements IController {
             //clone防止异步导致的NPE
             Vector3 direction = entity.getMoveDirectionEnd().clone();
             var speed = entity.getMovementSpeed();
-            if (entity.motionX * entity.motionX + entity.motionZ * entity.motionZ > speed * speed * 0.4756) {
+            if (entity.motion.x * entity.motion.x + entity.motion.z * entity.motion.z > speed * speed * 0.4756) {
                 entity.setDataFlag(EntityFlag.MOVING, false);
                 return false;
             }
@@ -82,12 +82,12 @@ public class WalkController implements IController {
         }
     }
 
-    protected void needNewDirection(EntityIntelligent entity) {
+    protected void needNewDirection(EntityMob entity) {
         //通知需要新的移动目标
         entity.setShouldUpdateMoveDirection(true);
     }
 
-    protected boolean collidesBlocks(EntityIntelligent entity, double dx, double dy, double dz) {
+    protected boolean collidesBlocks(EntityMob entity, double dx, double dy, double dz) {
         return entity.level.getTickCachedCollisionBlocks(entity.getOffsetBoundingBox().getOffsetBoundingBox(dx, dy, dz), true,
                 false, this::canJump).length > 0;
     }

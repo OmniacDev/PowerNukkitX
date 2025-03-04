@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.evaluator;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.Vector3;
 
 
@@ -15,7 +15,7 @@ public class BlockCheckEvaluator implements IBehaviorEvaluator {
     }
 
     @Override
-    public boolean evaluate(EntityIntelligent entity) {
+    public boolean evaluate(EntityMob entity) {
         return entity.level.getTickCachedBlock(entity.pos.add(offsetVec)).getId().equals(blockId);
     }
 }

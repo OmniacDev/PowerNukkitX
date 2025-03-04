@@ -7,7 +7,7 @@ import cn.nukkit.block.BlockEndGateway;
 import cn.nukkit.entity.Attribute;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityFlyable;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.behavior.Behavior;
 import cn.nukkit.entity.ai.behaviorgroup.BehaviorGroup;
 import cn.nukkit.entity.ai.behaviorgroup.IBehaviorGroup;
@@ -30,6 +30,7 @@ import cn.nukkit.entity.ai.route.posevaluator.IPosEvaluator;
 import cn.nukkit.entity.ai.sensor.NearestEntitySensor;
 import cn.nukkit.entity.ai.sensor.NearestPlayerSensor;
 import cn.nukkit.entity.item.EntityEnderCrystal;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Sound;
@@ -108,9 +109,9 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
         addEntity.x = (float) this.pos.x;
         addEntity.y = (float) this.pos.y;
         addEntity.z = (float) this.pos.z;
-        addEntity.speedX = (float) this.motionX;
-        addEntity.speedY = (float) this.motionY;
-        addEntity.speedZ = (float) this.motionZ;
+        addEntity.speedX = (float) this.motion.x;
+        addEntity.speedY = (float) this.motion.y;
+        addEntity.speedZ = (float) this.motion.z;
         addEntity.entityData = this.entityDataMap;
         addEntity.attributes = new Attribute[]{Attribute.getAttribute(Attribute.MAX_HEALTH).setMaxValue(200).setValue(200)};
         return addEntity;
@@ -252,7 +253,7 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
 
     private class EnderDragonRouteFinder extends SimpleSpaceAStarRouteFinder {
 
-        public EnderDragonRouteFinder(IPosEvaluator blockEvaluator, EntityIntelligent entity) {
+        public EnderDragonRouteFinder(IPosEvaluator blockEvaluator, EntityMob entity) {
             super(blockEvaluator, entity);
         }
 
@@ -268,7 +269,7 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
     }
 
     private class EnderDragonPosEvaluator extends FlyingPosEvaluator {
-        protected boolean isPassable(EntityIntelligent entity, Vector3 vector3) {
+        protected boolean isPassable(EntityMob entity, Vector3 vector3) {
             return true;
         }
     }
@@ -290,7 +291,7 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
 
     protected class LookController implements IController {
         @Override
-        public boolean control(EntityIntelligent entity) {
+        public boolean control(EntityMob entity) {
             Vector3 target = entity.getMemoryStorage().get(CoreMemoryTypes.LOOK_TARGET);
             if(target == null) return false;
             var toPlayerVector = new Vector3(entity.pos.x - target.x, entity.pos.y - target.y, entity.pos.z - target.z).normalize();

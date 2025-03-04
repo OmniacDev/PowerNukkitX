@@ -2,9 +2,9 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.EntityEventPacket;
 
@@ -15,7 +15,7 @@ public class BreezeJumpExecutor implements EntityControl, IBehaviorExecutor {
     private long prepareTick = -1;
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         long tick = entity.getLevel().getTick();
         if(tick % 80 == 0) {
             startSequence(entity);
@@ -32,14 +32,14 @@ public class BreezeJumpExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED);
         entity.setEnablePitch(false);
         stopSequence(entity);
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED);
         entity.setEnablePitch(false);
         stopSequence(entity);

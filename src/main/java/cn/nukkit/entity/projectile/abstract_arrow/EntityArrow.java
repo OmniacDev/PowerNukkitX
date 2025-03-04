@@ -66,12 +66,12 @@ public class EntityArrow extends EntityAbstractArrow {
 
         float drag = 1 - this.getDrag() * 20;
 
-        motionY -= getGravity() * 2;
-        if (motionY < 0) {
-            motionY *= drag / 1.5;
+        this.motion.y -= getGravity() * 2;
+        if (this.motion.y < 0) {
+            this.motion.y *= drag / 1.5;
         }
-        motionX *= drag;
-        motionZ *= drag;
+        this.motion.x *= drag;
+        this.motion.z *= drag;
     }
 
     @Override

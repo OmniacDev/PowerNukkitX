@@ -10,12 +10,13 @@ import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityAsyncPrepare;
 import cn.nukkit.entity.EntityID;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.item.EntityAreaEffectCloud;
 import cn.nukkit.entity.item.EntityFireworksRocket;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.entity.item.EntityPainting;
 import cn.nukkit.entity.item.EntityXpOrb;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.entity.weather.EntityLightningBolt;
 import cn.nukkit.event.block.BlockBreakEvent;
@@ -1066,7 +1067,7 @@ public class Level implements Metadatable {
                         }), Server.getInstance().getComputeThreadPool()).join();
                 for (long id : this.updateEntities.keySetLong()) {
                     Entity entity = this.updateEntities.get(id);
-                    if (entity instanceof EntityIntelligent intelligent) {
+                    if (entity instanceof EntityMob intelligent) {
                         if (intelligent.getBehaviorGroup() == null) {
                             this.updateEntities.remove(id);
                             continue;
@@ -4127,29 +4128,31 @@ public class Level implements Metadatable {
     public void addEntityMovement(Entity entity, double x, double y, double z, double yaw, double pitch, double headYaw) {
         MoveEntityDeltaPacket pk = new MoveEntityDeltaPacket();
         pk.runtimeEntityId = entity.getId();
-        if (entity.lastX != x) {
+        if (entity.prevPos.x != x) {
             pk.x = (float) x;
             pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_X;
         }
-        if (entity.lastY != y) {
+        if (entity.prevPos.y != y) {
             pk.y = (float) y;
             pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_Y;
         }
-        if (entity.lastZ != z) {
+        if (entity.prevPos.z != z) {
             pk.z = (float) z;
             pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_Z;
         }
-        if (entity.lastPitch != pitch) {
+        if (entity.prevRotation.pitch != pitch) {
             pk.pitch = (float) pitch;
             pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_PITCH;
         }
-        if (entity.lastYaw != yaw) {
+        if (entity.prevRotation.yaw != yaw) {
             pk.yaw = (float) yaw;
             pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_YAW;
         }
-        if (entity.lastHeadYaw != headYaw) {
-            pk.headYaw = (float) headYaw;
-            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_HEAD_YAW;
+        if (entity instanceof EntityMob mob) {
+            if (mob.prevHeadYaw != headYaw) {
+                pk.headYaw = (float) headYaw;
+                pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_HEAD_YAW;
+            }
         }
         if (entity.onGround) {
             pk.flags |= MoveEntityDeltaPacket.FLAG_ON_GROUND;

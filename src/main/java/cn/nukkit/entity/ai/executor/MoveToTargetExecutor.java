@@ -1,13 +1,12 @@
 package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.block.Block;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.GetVector3;
 import cn.nukkit.math.Vector3;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 
 
 @Getter
@@ -48,7 +47,7 @@ public class MoveToTargetExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(@NotNull EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if (!entity.isEnablePitch()) entity.setEnablePitch(true);
         if (entity.getBehaviorGroup().getMemoryStorage().isEmpty(memory)) {
             return false;
@@ -91,7 +90,7 @@ public class MoveToTargetExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         //目标丢失
         removeRouteTarget(entity);
         removeLookTarget(entity);
@@ -103,7 +102,7 @@ public class MoveToTargetExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         //目标丢失
         removeRouteTarget(entity);
         removeLookTarget(entity);

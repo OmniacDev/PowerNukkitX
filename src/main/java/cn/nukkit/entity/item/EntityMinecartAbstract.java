@@ -149,10 +149,10 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
             }
 
             // Entity variables
-            lastX = this.pos.x;
-            lastY = this.pos.y;
-            lastZ = this.pos.z;
-            motionY -= 0.03999999910593033D;
+            this.prevPos.x = this.pos.x;
+            this.prevPos.y = this.pos.y;
+            this.prevPos.z = this.pos.z;
+            this.motion.y -= 0.03999999910593033D;
             int dx = MathHelper.floor(this.pos.x);
             int dy = MathHelper.floor(this.pos.y);
             int dz = MathHelper.floor(this.pos.z);
@@ -184,8 +184,8 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
 
             // Minecart head
             this.rotation.pitch = 0;
-            double diffX = this.lastX - this.pos.x;
-            double diffZ = this.lastZ - this.pos.z;
+            double diffX = this.prevPos.x - this.pos.x;
+            double diffZ = this.prevPos.z - this.pos.z;
             double yawToChange = this.rotation.yaw;
             if (diffX * diffX + diffZ * diffZ > 0.001D) {
                 yawToChange = (Math.atan2(diffZ, diffX) * 180 / Math.PI);
@@ -199,7 +199,7 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
 
             setRotation(yawToChange, this.rotation.pitch);
 
-            Location from = new Location(lastX, lastY, lastZ, lastYaw, lastPitch, level);
+            Location from = new Location(this.prevPos.x, this.prevPos.y, this.prevPos.z, this.prevRotation.yaw, this.prevRotation.pitch, level);
             Location to = new Location(this.pos.x, this.pos.y, this.pos.z, this.rotation.yaw, this.rotation.pitch, level);
 
             this.getServer().getPluginManager().callEvent(new VehicleUpdateEvent(this));
@@ -314,7 +314,7 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
         if (entity != riding && !(entity instanceof Player && ((Player) entity).isSpectator())) {
             if (entity instanceof EntityLiving
                     && !(entity instanceof EntityHuman)
-                    && motionX * motionX + motionZ * motionZ > 0.01D
+                    && this.motion.x * this.motion.x + this.motion.z * this.motion.z > 0.01D
                     && passengers.isEmpty()
                     && entity.riding == null
                     && displayBlock == null) {
@@ -356,38 +356,38 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
                         return;
                     }
 
-                    double motX = mine.motionX + motionX;
-                    double motZ = mine.motionZ + motionZ;
+                    double motX = mine.motion.x + this.motion.x;
+                    double motZ = mine.motion.z + this.motion.z;
 
                     if (mine.getType().getId() == 2 && getType().getId() != 2) {
-                        motionX *= 0.20000000298023224D;
-                        motionZ *= 0.20000000298023224D;
-                        motionX += mine.motionX - motiveX;
-                        motionZ += mine.motionZ - motiveZ;
-                        mine.motionX *= 0.949999988079071D;
-                        mine.motionZ *= 0.949999988079071D;
+                        this.motion.x *= 0.20000000298023224D;
+                        this.motion.z *= 0.20000000298023224D;
+                        this.motion.x += mine.motion.x - motiveX;
+                        this.motion.z += mine.motion.z - motiveZ;
+                        mine.motion.x *= 0.949999988079071D;
+                        mine.motion.z *= 0.949999988079071D;
                     } else if (mine.getType().getId() != 2 && getType().getId() == 2) {
-                        mine.motionX *= 0.20000000298023224D;
-                        mine.motionZ *= 0.20000000298023224D;
-                        motionX += mine.motionX + motiveX;
-                        motionZ += mine.motionZ + motiveZ;
-                        motionX *= 0.949999988079071D;
-                        motionZ *= 0.949999988079071D;
+                        mine.motion.x *= 0.20000000298023224D;
+                        mine.motion.z *= 0.20000000298023224D;
+                        this.motion.x += mine.motion.x + motiveX;
+                        this.motion.z += mine.motion.z + motiveZ;
+                        this.motion.x *= 0.949999988079071D;
+                        this.motion.z *= 0.949999988079071D;
                     } else {
                         motX /= 2;
                         motZ /= 2;
-                        motionX *= 0.20000000298023224D;
-                        motionZ *= 0.20000000298023224D;
-                        motionX += motX - motiveX;
-                        motionZ += motZ - motiveZ;
-                        mine.motionX *= 0.20000000298023224D;
-                        mine.motionZ *= 0.20000000298023224D;
-                        mine.motionX += motX + motiveX;
-                        mine.motionZ += motZ + motiveZ;
+                        this.motion.x *= 0.20000000298023224D;
+                        this.motion.z *= 0.20000000298023224D;
+                        this.motion.x += motX - motiveX;
+                        this.motion.z += motZ - motiveZ;
+                        mine.motion.x *= 0.20000000298023224D;
+                        mine.motion.z *= 0.20000000298023224D;
+                        mine.motion.x += motX + motiveX;
+                        mine.motion.z += motZ + motiveZ;
                     }
                 } else {
-                    motionX -= motiveX;
-                    motionZ -= motiveZ;
+                    this.motion.x -= motiveX;
+                    this.motion.z -= motiveZ;
                 }
             }
         }
@@ -474,8 +474,8 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
     }
 
     private void setFalling() {
-        motionX = NukkitMath.clamp(motionX, -getMaxSpeed(), getMaxSpeed());
-        motionZ = NukkitMath.clamp(motionZ, -getMaxSpeed(), getMaxSpeed());
+        this.motion.x = NukkitMath.clamp(this.motion.x, -getMaxSpeed(), getMaxSpeed());
+        this.motion.z = NukkitMath.clamp(this.motion.z, -getMaxSpeed(), getMaxSpeed());
 
         if (!hasUpdated) {
             for (cn.nukkit.entity.Entity linked : passengers) {
@@ -487,16 +487,16 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
         }
 
         if (onGround) {
-            motionX *= derailedX;
-            motionY *= derailedY;
-            motionZ *= derailedZ;
+            this.motion.x *= derailedX;
+            this.motion.y *= derailedY;
+            this.motion.z *= derailedZ;
         }
 
-        move(motionX, motionY, motionZ);
+        move(this.motion.x, this.motion.y, this.motion.z);
         if (!onGround) {
-            motionX *= flyingX;
-            motionY *= flyingY;
-            motionZ *= flyingZ;
+            this.motion.x *= flyingX;
+            this.motion.y *= flyingY;
+            this.motion.z *= flyingZ;
         }
     }
 
@@ -515,19 +515,19 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
 
         switch (Orientation.byMetadata(block.getRealMeta())) {
             case ASCENDING_NORTH:
-                motionX -= 0.0078125D;
+                this.motion.x -= 0.0078125D;
                 this.pos.y += 1;
                 break;
             case ASCENDING_SOUTH:
-                motionX += 0.0078125D;
+                this.motion.x += 0.0078125D;
                 this.pos.y += 1;
                 break;
             case ASCENDING_EAST:
-                motionZ += 0.0078125D;
+                this.motion.z += 0.0078125D;
                 this.pos.y += 1;
                 break;
             case ASCENDING_WEST:
-                motionZ -= 0.0078125D;
+                this.motion.z -= 0.0078125D;
                 this.pos.y += 1;
                 break;
         }
@@ -536,21 +536,21 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
         double facing1 = facing[1][0] - facing[0][0];
         double facing2 = facing[1][2] - facing[0][2];
         double speedOnTurns = Math.sqrt(facing1 * facing1 + facing2 * facing2);
-        double realFacing = motionX * facing1 + motionZ * facing2;
+        double realFacing = this.motion.x * facing1 + this.motion.z * facing2;
 
         if (realFacing < 0) {
             facing1 = -facing1;
             facing2 = -facing2;
         }
 
-        double squareOfFame = Math.sqrt(motionX * motionX + motionZ * motionZ);
+        double squareOfFame = Math.sqrt(this.motion.x * this.motion.x + this.motion.z * this.motion.z);
 
         if (squareOfFame > 2) {
             squareOfFame = 2;
         }
 
-        motionX = squareOfFame * facing1 / speedOnTurns;
-        motionZ = squareOfFame * facing2 / speedOnTurns;
+        this.motion.x = squareOfFame * facing1 / speedOnTurns;
+        this.motion.z = squareOfFame * facing2 / speedOnTurns;
         double expectedSpeed;
         double playerYawNeg; // PlayerYawNegative
         double playerYawPos; // PlayerYawPositive
@@ -564,10 +564,10 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
                 // This is a trajectory (Angle of elevation)
                 playerYawNeg = -Math.sin(linked.rotation.yaw * Math.PI / 180.0F);
                 playerYawPos = Math.cos(linked.rotation.yaw * Math.PI / 180.0F);
-                motion = motionX * motionX + motionZ * motionZ;
+                motion = this.motion.x * this.motion.x + this.motion.z * this.motion.z;
                 if (motion < 0.01D) {
-                    motionX += playerYawNeg * 0.1D;
-                    motionZ += playerYawPos * 0.1D;
+                    this.motion.x += playerYawNeg * 0.1D;
+                    this.motion.z += playerYawPos * 0.1D;
 
                     isSlowed = false;
                 }
@@ -576,15 +576,15 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
 
         //http://minecraft.wiki/w/Powered_Rail#Rail
         if (isSlowed) {
-            expectedSpeed = Math.sqrt(motionX * motionX + motionZ * motionZ);
+            expectedSpeed = Math.sqrt(this.motion.x * this.motion.x + this.motion.z * this.motion.z);
             if (expectedSpeed < 0.03D) {
-                motionX *= 0;
-                motionY *= 0;
-                motionZ *= 0;
+                this.motion.x *= 0;
+                this.motion.y *= 0;
+                this.motion.z *= 0;
             } else {
-                motionX *= 0.5D;
-                motionY *= 0;
-                motionZ *= 0.5D;
+                this.motion.x *= 0.5D;
+                this.motion.y *= 0;
+                this.motion.z *= 0.5D;
             }
         }
 
@@ -614,8 +614,8 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
         this.pos.z = playerYawPos + facing2 * expectedSpeed;
         setPosition(this.pos.clone()); // Hehe, my minstake :3
 
-        motX = motionX;
-        motZ = motionZ;
+        motX = this.motion.x;
+        motZ = this.motion.z;
         if (!passengers.isEmpty()) {
             motX *= 0.75D;
             motZ *= 0.75D;
@@ -636,10 +636,10 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
         if (vector1 != null && vector != null) {
             double d14 = (vector.y - vector1.y) * 0.05D;
 
-            squareOfFame = Math.sqrt(motionX * motionX + motionZ * motionZ);
+            squareOfFame = Math.sqrt(this.motion.x * this.motion.x + this.motion.z * this.motion.z);
             if (squareOfFame > 0) {
-                motionX = motionX / squareOfFame * (squareOfFame + d14);
-                motionZ = motionZ / squareOfFame * (squareOfFame + d14);
+                this.motion.x = this.motion.x / squareOfFame * (squareOfFame + d14);
+                this.motion.z = this.motion.z / squareOfFame * (squareOfFame + d14);
             }
 
             setPosition(new Vector3(this.pos.x, vector1.y, this.pos.z));
@@ -649,30 +649,30 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
         int floorZ = MathHelper.floor(this.pos.z);
 
         if (floorX != dx || floorZ != dz) {
-            squareOfFame = Math.sqrt(motionX * motionX + motionZ * motionZ);
-            motionX = squareOfFame * (double) (floorX - dx);
-            motionZ = squareOfFame * (double) (floorZ - dz);
+            squareOfFame = Math.sqrt(this.motion.x * this.motion.x + this.motion.z * this.motion.z);
+            this.motion.x = squareOfFame * (double) (floorX - dx);
+            this.motion.z = squareOfFame * (double) (floorZ - dz);
         }
 
         if (isPowered) {
-            double newMovie = Math.sqrt(motionX * motionX + motionZ * motionZ);
+            double newMovie = Math.sqrt(this.motion.x * this.motion.x + this.motion.z * this.motion.z);
 
             if (newMovie > 0.01D) {
                 double nextMovie = 0.06D;
 
-                motionX += motionX / newMovie * nextMovie;
-                motionZ += motionZ / newMovie * nextMovie;
+                this.motion.x += this.motion.x / newMovie * nextMovie;
+                this.motion.z += this.motion.z / newMovie * nextMovie;
             } else if (block.getOrientation() == Orientation.STRAIGHT_NORTH_SOUTH) {
                 if (level.getBlock(new Vector3(dx - 1, dy, dz)).isNormalBlock()) {
-                    motionX = 0.02D;
+                    this.motion.x = 0.02D;
                 } else if (level.getBlock(new Vector3(dx + 1, dy, dz)).isNormalBlock()) {
-                    motionX = -0.02D;
+                    this.motion.x = -0.02D;
                 }
             } else if (block.getOrientation() == Orientation.STRAIGHT_EAST_WEST) {
                 if (level.getBlock(new Vector3(dx, dy, dz - 1)).isNormalBlock()) {
-                    motionZ = 0.02D;
+                    this.motion.z = 0.02D;
                 } else if (level.getBlock(new Vector3(dx, dy, dz + 1)).isNormalBlock()) {
-                    motionZ = -0.02D;
+                    this.motion.z = -0.02D;
                 }
             }
         }
@@ -681,13 +681,13 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
 
     private void applyDrag() {
         if (!passengers.isEmpty() || !slowWhenEmpty) {
-            motionX *= 0.996999979019165D;
-            motionY *= 0.0D;
-            motionZ *= 0.996999979019165D;
+            this.motion.x *= 0.996999979019165D;
+            this.motion.y *= 0.0D;
+            this.motion.z *= 0.996999979019165D;
         } else {
-            motionX *= 0.9599999785423279D;
-            motionY *= 0.0D;
-            motionZ *= 0.9599999785423279D;
+            this.motion.x *= 0.9599999785423279D;
+            this.motion.y *= 0.0D;
+            this.motion.z *= 0.9599999785423279D;
         }
     }
 

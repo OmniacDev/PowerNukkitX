@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.evaluator;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -23,7 +23,7 @@ public class AllMatchEvaluator extends MultiBehaviorEvaluator {
     }
 
     @Override
-    public boolean evaluate(EntityIntelligent entity) {
+    public boolean evaluate(EntityMob entity) {
         for (IBehaviorEvaluator evaluator : evaluators) {
             if (!evaluator.evaluate(entity)) return false;
         }

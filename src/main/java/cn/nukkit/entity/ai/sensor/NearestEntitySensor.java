@@ -1,11 +1,8 @@
 package cn.nukkit.entity.ai.sensor;
 
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
-import cn.nukkit.entity.item.EntityItem;
-import cn.nukkit.item.Item;
+import cn.nukkit.entity.mob.EntityMob;
 import lombok.Getter;
 
 //存储最近的玩家的Memory
@@ -37,7 +34,7 @@ public class NearestEntitySensor implements ISensor {
     }
 
     @Override
-    public void sense(EntityIntelligent entity) {
+    public void sense(EntityMob entity) {
         Entity ent = null;
         double rangeSquared = this.range * this.range;
         double minRangeSquared = this.minRange * this.minRange;

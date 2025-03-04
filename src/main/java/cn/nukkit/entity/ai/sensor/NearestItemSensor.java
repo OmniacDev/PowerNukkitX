@@ -1,12 +1,9 @@
 package cn.nukkit.entity.ai.sensor;
 
-import cn.nukkit.Player;
-import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.item.EntityItem;
-import cn.nukkit.inventory.EntityInventoryHolder;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.item.Item;
 import lombok.Getter;
 
@@ -33,7 +30,7 @@ public class NearestItemSensor implements ISensor {
     }
 
     @Override
-    public void sense(EntityIntelligent entity) {
+    public void sense(EntityMob entity) {
 
         Class<? extends Item> itemClass = entity.getMemoryStorage().get(CoreMemoryTypes.LOOKING_ITEM);
         if(itemClass == null) return;

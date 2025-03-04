@@ -1,7 +1,7 @@
 package cn.nukkit.entity.ai.route.posevaluator;
 
 import cn.nukkit.block.Block;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.Vector3;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +26,7 @@ public interface IPosEvaluator {
      * @param pos    评估坐标
      * @return 是否可以作为路径点
      */
-    default boolean evalPos(@NotNull EntityIntelligent entity, @NotNull Vector3 pos) {
+    default boolean evalPos(@NotNull EntityMob entity, @NotNull Vector3 pos) {
         return true;
     }
 
@@ -41,7 +41,7 @@ public interface IPosEvaluator {
      * @param block  评估方块
      * @return 是否可以作为脚下站立的方块
      */
-    default boolean evalStandingBlock(@NotNull EntityIntelligent entity, @NotNull Block block) {
+    default boolean evalStandingBlock(@NotNull EntityMob entity, @NotNull Block block) {
         return true;
     }
 }

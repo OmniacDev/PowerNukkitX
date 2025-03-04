@@ -3,15 +3,15 @@ package cn.nukkit.entity.ai.executor.villager;
 
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockCrops;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.executor.NearbyFlatRandomRoamExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.profession.Profession;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.villagers.EntityVillagerV2;
 import cn.nukkit.item.Item;
 import cn.nukkit.math.Vector2;
 import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -26,7 +26,7 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
     }
 
     @Override
-    public boolean execute(@NotNull EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if(entity instanceof EntityVillagerV2 villager) {
             Block site = villager.getMemoryStorage().get(CoreMemoryTypes.SITE_BLOCK);
             if(stayTick < 100) {
@@ -82,7 +82,7 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
         return true;
     }
 
-    public void setTarget(EntityIntelligent entity) {
+    public void setTarget(EntityMob entity) {
         Block site = entity.getMemoryStorage().get(CoreMemoryTypes.SITE_BLOCK);
         Vector2 horizontal = new Vector2(site.x - entity.pos.x, site.z - entity.pos.z);
         horizontal = horizontal.multiply(1 - 1/horizontal.length());
@@ -92,7 +92,7 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         if(entity instanceof EntityVillagerV2 villager) {
             int shift = getShiftLength(entity.getLevel().getDayTime());
             if(entity.getMemoryStorage().get(CoreMemoryTypes.LAST_REFILL_SHIFT) != shift) {

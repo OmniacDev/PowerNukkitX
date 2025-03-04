@@ -1,7 +1,8 @@
 package cn.nukkit.entity.ai.behavior;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.behaviorgroup.IBehaviorGroup;
+import cn.nukkit.entity.mob.EntityMob;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,13 +12,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 由多个行为{@link IBehavior}组成的组（注意和行为组{@link IBehaviorGroup}区分）<br>
- * 调用方法{@link #execute(EntityIntelligent)}前，必须调用此对象的评估函数以确认激活的是哪个行为<br>
+ * 调用方法{@link cn.nukkit.entity.ai.executor.IBehaviorExecutor#execute(EntityMob)}前，必须调用此对象的评估函数以确认激活的是哪个行为<br>
  * 在评估时，会评估所有包含的子行为<br>
  * 筛选出返回成功的行为后，会选取最高优先级的那一组<br>
  * 如果到这一步依然存在多个行为，则会根据行为的{@link IBehavior#getWeight()}方法的返回值随机选取其中一个作为执行行为
  * <p>
  * A group consisting of multiple behaviors {@link IBehavior} (note the distinction with behavior groups {@link IBehaviorGroup})<br>
- * Before calling the method {@link #execute(EntityIntelligent)}, the evaluation function of this object must be called to confirm which behavior is activated<br>
+ * Before calling the method {@link cn.nukkit.entity.ai.executor.IBehaviorExecutor#execute(EntityMob)}, the evaluation function of this object must be called to confirm which behavior is activated<br>
  * During evaluation, all contained child behaviors are evaluated<br>
  * After filtering out the behaviors that return success, the group with the highest priority is selected<br>
  * If there are still multiple behaviors at this point, one of them is randomly selected for execution based on the return value of the {@link IBehavior#getWeight()} method of the behavior
@@ -47,7 +48,7 @@ public class WeightedMultiBehavior extends AbstractBehavior {
     }
 
     @Override
-    public boolean evaluate(EntityIntelligent entity) {
+    public boolean evaluate(EntityMob entity) {
         var result = evaluateBehaviors(entity);
         if (result.isEmpty()) {
             return false;
@@ -73,7 +74,7 @@ public class WeightedMultiBehavior extends AbstractBehavior {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if (currentBehavior == null) {
             return false;
         }
@@ -81,7 +82,7 @@ public class WeightedMultiBehavior extends AbstractBehavior {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         if (currentBehavior == null) {
             return;
         }
@@ -90,7 +91,7 @@ public class WeightedMultiBehavior extends AbstractBehavior {
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         if (currentBehavior == null) {
             return;
         }
@@ -99,7 +100,7 @@ public class WeightedMultiBehavior extends AbstractBehavior {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         if (currentBehavior == null) {
             return;
         }
@@ -111,7 +112,7 @@ public class WeightedMultiBehavior extends AbstractBehavior {
      * @param entity 实体
      * @return 最高优先级且评估成功的一组行为（包含评估结果）
      */
-    protected Set<IBehavior> evaluateBehaviors(EntityIntelligent entity) {
+    protected Set<IBehavior> evaluateBehaviors(EntityMob entity) {
         //存储评估成功的行为（未过滤优先级）
         var evalSucceed = new HashSet<IBehavior>();
         int highestPriority = Integer.MIN_VALUE;

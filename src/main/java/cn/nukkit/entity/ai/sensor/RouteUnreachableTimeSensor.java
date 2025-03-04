@@ -1,7 +1,7 @@
 package cn.nukkit.entity.ai.sensor;
 
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.entity.mob.EntityMob;
 
 
 public class RouteUnreachableTimeSensor implements ISensor {
@@ -13,7 +13,7 @@ public class RouteUnreachableTimeSensor implements ISensor {
     }
 
     @Override
-    public void sense(EntityIntelligent entity) {
+    public void sense(EntityMob entity) {
         var old = entity.getMemoryStorage().get(type);
         if (!entity.getBehaviorGroup().getRouteFinder().isReachable()) {
             entity.getMemoryStorage().put(type, old + 1);

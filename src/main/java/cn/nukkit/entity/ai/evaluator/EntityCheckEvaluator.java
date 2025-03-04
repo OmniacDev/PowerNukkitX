@@ -2,8 +2,8 @@ package cn.nukkit.entity.ai.evaluator;
 
 import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.entity.mob.EntityMob;
 
 public class EntityCheckEvaluator implements IBehaviorEvaluator {
 
@@ -14,7 +14,7 @@ public class EntityCheckEvaluator implements IBehaviorEvaluator {
         this.memoryType = type;
     }
     @Override
-    public boolean evaluate(EntityIntelligent entity) {
+    public boolean evaluate(EntityMob entity) {
         if (entity.getMemoryStorage().isEmpty(memoryType)) {
             return false;
         } else {

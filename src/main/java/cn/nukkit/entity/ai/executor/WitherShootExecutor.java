@@ -3,16 +3,15 @@ package cn.nukkit.entity.ai.executor;
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityID;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.entity.projectile.EntitySmallFireball;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
 import cn.nukkit.level.Location;
 import cn.nukkit.level.Sound;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 
@@ -26,7 +25,7 @@ public class WitherShootExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         Entity target = entity.getMemoryStorage().get(targetMemory);
         if(target == null) return false;
         tick++;
@@ -45,12 +44,12 @@ public class WitherShootExecutor implements EntityControl, IBehaviorExecutor {
 
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         removeRouteTarget(entity);
         tick = 0;
     }
 
-    protected void spawn(Entity entity, boolean charged) {
+    protected void spawn(EntityMob entity, boolean charged) {
         Location fireballLocation = entity.getLocation();
         fireballLocation.add(entity.getDirectionVector());
         CompoundTag nbt = new CompoundTag()
@@ -63,7 +62,7 @@ public class WitherShootExecutor implements EntityControl, IBehaviorExecutor {
                         .add(new FloatTag(-Math.sin(entity.rotation.pitch / 180 * Math.PI)))
                         .add(new FloatTag(Math.cos(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI))))
                 .putList("Rotation", new ListTag<FloatTag>()
-                        .add(new FloatTag((entity.headYaw > 180 ? 360 : 0) - (float) entity.headYaw))
+                        .add(new FloatTag((float) (entity.headYaw > 180 ? 360 : 0) - entity.headYaw))
                         .add(new FloatTag((float) -entity.rotation.pitch)))
                 .putDouble("damage", 2);
 

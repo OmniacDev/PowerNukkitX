@@ -1,9 +1,10 @@
 package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.Player;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityOwnable;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 
 /**
  * 使有主人的生物在主人睡觉时睡到主人床上<br/>
@@ -12,7 +13,7 @@ import cn.nukkit.entity.data.EntityFlag;
  */
 public class SleepOnOwnerBedExecutor implements IBehaviorExecutor {
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         Player owner = ((EntityOwnable) entity).getOwner();
         if (entity.pos.distanceSquared(owner.pos) <= 4) {
             setSleeping(entity, true);
@@ -21,27 +22,27 @@ public class SleepOnOwnerBedExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         Player owner = ((EntityOwnable) entity).getOwner();
         entity.setMoveTarget(owner.pos);
         entity.setLookTarget(owner.pos);
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         stop(entity);
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         stop(entity);
     }
 
-    protected void stop(EntityIntelligent entity) {
+    protected void stop(EntityMob entity) {
         setSleeping(entity, false);
     }
 
-    protected void setSleeping(EntityIntelligent entity, boolean sleeping) {
+    protected void setSleeping(EntityMob entity, boolean sleeping) {
         entity.setDataFlag(EntityFlag.RESTING, sleeping);
         entity.setDataFlagExtend(EntityFlag.RESTING, sleeping);
     }

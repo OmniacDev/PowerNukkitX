@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.route.posevaluator;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class FlyingPosEvaluator implements IPosEvaluator {
     @Override
-    public boolean evalPos(@NotNull EntityIntelligent entity, @NotNull Vector3 vec) {
+    public boolean evalPos(@NotNull EntityMob entity, @NotNull Vector3 vec) {
         //检查是否可到达
         return isPassable(entity, vec);
     }
@@ -19,7 +19,7 @@ public class FlyingPosEvaluator implements IPosEvaluator {
      * 指定实体在指定坐标上能否不发生碰撞
      * 对于空间中的移动做了特别的优化
      */
-    protected boolean isPassable(EntityIntelligent entity, Vector3 vector3) {
+    protected boolean isPassable(EntityMob entity, Vector3 vector3) {
         double radius = (entity.getWidth() * entity.getScale()) * 0.5 + 0.1;
         float height = entity.getHeight() * entity.getScale();
         // 原版中不会贴地飞行

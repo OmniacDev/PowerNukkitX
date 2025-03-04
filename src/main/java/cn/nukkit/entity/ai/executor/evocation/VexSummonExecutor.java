@@ -2,11 +2,12 @@ package cn.nukkit.entity.ai.executor.evocation;
 
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityID;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager;
 import cn.nukkit.entity.mob.monster.EntityVex;
 import cn.nukkit.level.Location;
@@ -28,7 +29,7 @@ public class VexSummonExecutor extends FangLineExecutor {
 
     public VexSummonExecutor() {}
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         tick++;
         if(tick == CAST_DURATION) {
             for(int i = 0; i < VEX_COUNT; i++) {
@@ -50,7 +51,7 @@ public class VexSummonExecutor extends FangLineExecutor {
     }
 
     @Override
-    protected void startSpell(EntityIntelligent entity) {
+    protected void startSpell(EntityMob entity) {
         tick = 0;
         entity.level.addSound(entity.pos, Sound.MOB_EVOCATION_ILLAGER_PREPARE_SUMMON);
         entity.setDataProperty(EntityDataTypes.EVOKER_SPELL_CASTING_COLOR, BlockColor.WHITE_BLOCK_COLOR.getARGB());
@@ -58,7 +59,7 @@ public class VexSummonExecutor extends FangLineExecutor {
         entity.setDataFlag(EntityFlag.CASTING);
     }
 
-    protected void summon(EntityLiving entity) {
+    protected void summon(EntityMob entity) {
         if(!entity.getDataFlag(EntityFlag.CASTING)) return;
         Location vexLocation = entity.getLocation();
         vexLocation.x += ThreadLocalRandom.current().nextFloat(2);
@@ -74,7 +75,7 @@ public class VexSummonExecutor extends FangLineExecutor {
                         .add(new FloatTag(0))
                         .add(new FloatTag(0)))
                 .putList("Rotation", new ListTag<FloatTag>()
-                        .add(new FloatTag((entity.headYaw > 180 ? 360 : 0) - (float) entity.headYaw))
+                        .add(new FloatTag((float) (entity.headYaw > 180 ? 360 : 0) - entity.headYaw))
                         .add(new FloatTag(0f)));
 
         Entity vexEntity = Entity.createEntity(EntityID.VEX, entity.level.getChunk(entity.pos.getChunkX(), entity.pos.getChunkZ()), nbt);

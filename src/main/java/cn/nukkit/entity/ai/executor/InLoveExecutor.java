@@ -1,8 +1,9 @@
 package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.Server;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.network.protocol.EntityEventPacket;
 
 
@@ -16,7 +17,7 @@ public class InLoveExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if (currentTick == 0) {
             entity.getMemoryStorage().put(CoreMemoryTypes.LAST_IN_LOVE_TIME, entity.getLevel().getTick());
             entity.getMemoryStorage().put(CoreMemoryTypes.IS_IN_LOVE, true);
@@ -34,12 +35,12 @@ public class InLoveExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         entity.getMemoryStorage().put(CoreMemoryTypes.IS_IN_LOVE, false);
         currentTick = 0;
     }
 
-    protected void sendLoveParticle(EntityIntelligent entity) {
+    protected void sendLoveParticle(EntityMob entity) {
         EntityEventPacket pk = new EntityEventPacket();
         pk.eid = entity.getId();
         pk.event = EntityEventPacket.LOVE_PARTICLES;

@@ -1,8 +1,8 @@
 package cn.nukkit.entity.ai.executor;
 
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 
 /**
  * 实体看向最近携带食物的玩家<br/>
@@ -15,7 +15,7 @@ import cn.nukkit.entity.data.EntityFlag;
 
 public class LookAtFeedingPlayerExecutor implements EntityControl, IBehaviorExecutor {
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if (!entity.isEnablePitch()) entity.setEnablePitch(true);
         var vector3 = entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_FEEDING_PLAYER);
         if (vector3 != null) {
@@ -26,7 +26,7 @@ public class LookAtFeedingPlayerExecutor implements EntityControl, IBehaviorExec
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         entity.setEnablePitch(false);
         if (entity.getMemoryStorage().isEmpty(CoreMemoryTypes.NEAREST_FEEDING_PLAYER)) {
             entity.setDataFlag(EntityFlag.INTERESTED, false);
@@ -35,7 +35,7 @@ public class LookAtFeedingPlayerExecutor implements EntityControl, IBehaviorExec
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         entity.setEnablePitch(false);
         if (entity.getMemoryStorage().isEmpty(CoreMemoryTypes.NEAREST_FEEDING_PLAYER)) {
             entity.setDataFlag(EntityFlag.INTERESTED, false);

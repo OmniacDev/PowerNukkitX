@@ -2,9 +2,10 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.Server;
 import cn.nukkit.entity.EntityCanAttack;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.Sound;
@@ -30,7 +31,7 @@ public class WardenRangedAttackExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         currentTick++;
         if (entity.getMemoryStorage().isEmpty(CoreMemoryTypes.ATTACK_TARGET))
             return false;
@@ -79,7 +80,7 @@ public class WardenRangedAttackExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         this.currentTick = 0;
 
         entity.setDataFlag(EntityFlag.SONIC_BOOM, false);
@@ -87,7 +88,7 @@ public class WardenRangedAttackExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         entity.setDataFlag(EntityFlag.SONIC_BOOM, true);
         entity.setDataFlagExtend(EntityFlag.SONIC_BOOM, true);
 
@@ -103,14 +104,14 @@ public class WardenRangedAttackExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         this.currentTick = 0;
 
         entity.setDataFlag(EntityFlag.SONIC_BOOM, false);
         entity.setDataFlagExtend(EntityFlag.SONIC_BOOM, false);
     }
 
-    protected void sendAttackParticle(EntityIntelligent entity, Vector3 from, Vector3 to) {
+    protected void sendAttackParticle(EntityMob entity, Vector3 from, Vector3 to) {
         var length = from.distance(to);
         var relativeVector = new Vector3(to.x - from.x, to.y - from.y, to.z - from.z);
         for (int i = 1; i <= (length + 4); i++) {

@@ -1,8 +1,8 @@
 package cn.nukkit.entity.ai.sensor;
 
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.utils.SortedList;
 
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class NearestTargetEntitySensor<T extends Entity> implements ISensor {
     }
 
     @Override
-    public void sense(EntityIntelligent entity) {
+    public void sense(EntityMob entity) {
         double minRangeSquared = this.minRange * this.minRange;
         double maxRangeSquared = this.maxRange * this.maxRange;
 

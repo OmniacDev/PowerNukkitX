@@ -4,7 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.block.BlockFlowingWater;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCanAttack;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntitySwimmable;
 import cn.nukkit.entity.EntityVariant;
 import cn.nukkit.entity.ai.behavior.Behavior;
@@ -106,7 +106,7 @@ public class EntityAxolotl extends EntityAnimal implements EntitySwimmable, Enti
                         new Behavior(new MoveToTargetExecutor(CoreMemoryTypes.NEAREST_FEEDING_PLAYER, 0.4f, true), new MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.NEAREST_FEEDING_PLAYER), 2, 1),
                         new Behavior(new LookAtTargetExecutor(CoreMemoryTypes.NEAREST_PLAYER, 100), new ProbabilityEvaluator(4, 10), 1, 1, 100),
                         new Behavior(new FlatRandomRoamExecutor(0.2f, 12, 100, false, -1, false, 10), entity -> !entity.isInsideOfWater(), 1, 1),
-                        new Behavior(new SpaceRandomRoamExecutor(0.36f, 12, 1, 80, false, -1, false, 10), Entity::isInsideOfWater, 1, 1)
+                        new Behavior(new SpaceRandomRoamExecutor(0.36f, 12, 1, 80, false, -1, false, 10), EntityMob -> EntityMob.isInsideOfWater(), 1, 1)
                 ),
                 Set.of(
                         new NearestFeedingPlayerSensor(8, 0),
@@ -119,7 +119,7 @@ public class EntityAxolotl extends EntityAnimal implements EntitySwimmable, Enti
                                 Entity lastAttack = getMemoryStorage().get(CoreMemoryTypes.LAST_ATTACK_ENTITY);
                                 if(lastAttack != null) {
                                     if(!lastAttack.isAlive()) {
-                                        if(lastAttack instanceof EntityIntelligent intelligent) {
+                                        if(lastAttack instanceof EntityMob intelligent) {
                                             if(intelligent.getLastDamageCause() instanceof EntityDamageByEntityEvent event) {
                                                 if(event.getDamager() instanceof Player player) {
                                                     player.removeEffect(EffectType.MINING_FATIGUE);

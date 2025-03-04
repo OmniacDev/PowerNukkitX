@@ -1,7 +1,7 @@
 package cn.nukkit.entity.ai.evaluator;
 
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.GetVector3;
 import cn.nukkit.math.Vector3;
 
@@ -23,7 +23,7 @@ public class DistanceEvaluator implements IBehaviorEvaluator {
     }
 
     @Override
-    public boolean evaluate(EntityIntelligent entity) {
+    public boolean evaluate(EntityMob entity) {
         if (entity.getMemoryStorage().isEmpty(type)) {
             return false;
         } else {

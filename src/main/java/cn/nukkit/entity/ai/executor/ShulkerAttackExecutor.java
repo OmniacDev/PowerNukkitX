@@ -2,7 +2,6 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityID;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.evaluator.AllMatchEvaluator;
 import cn.nukkit.entity.ai.evaluator.DistanceEvaluator;
 import cn.nukkit.entity.ai.evaluator.EntityCheckEvaluator;
@@ -11,6 +10,7 @@ import cn.nukkit.entity.ai.evaluator.PassByTimeEvaluator;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityDataTypes;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.EntityShulker;
 import cn.nukkit.entity.projectile.EntityShulkerBullet;
 import cn.nukkit.level.Location;
@@ -30,7 +30,7 @@ public class ShulkerAttackExecutor implements IBehaviorExecutor {
     private int nextAttack = 0;
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         Entity target = entity.getMemoryStorage().get(this.target);
         if(target == null) return false;
         tick++;
@@ -64,7 +64,7 @@ public class ShulkerAttackExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         tick = 0;
         nextAttack = 0;
         if(entity instanceof EntityShulker shulker) {
@@ -76,7 +76,7 @@ public class ShulkerAttackExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         if(entity instanceof EntityShulker shulker) {
             shulker.setDataProperty(EntityDataTypes.TARGET_EID, 0);
             shulker.setPeeking(0);
@@ -84,7 +84,7 @@ public class ShulkerAttackExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         onStop(entity);
     }
 }

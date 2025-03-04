@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.executor;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 
 /**
  * 行为执行器<br>
@@ -25,7 +25,7 @@ public interface IBehaviorExecutor {
      * @param entity 执行目标实体
      * @return boolean
      */
-    boolean execute(EntityIntelligent entity);
+    boolean execute(EntityMob entity);
 
     /**
      * 行为非正常中断时(例如被更高级行为覆盖)调用
@@ -34,7 +34,7 @@ public interface IBehaviorExecutor {
      *
      * @param entity 目标实体
      */
-    default void onInterrupt(EntityIntelligent entity) {
+    default void onInterrupt(EntityMob entity) {
     }
 
     /**
@@ -44,7 +44,7 @@ public interface IBehaviorExecutor {
      *
      * @param entity 目标实体
      */
-    default void onStart(EntityIntelligent entity) {
+    default void onStart(EntityMob entity) {
     }
 
     /**
@@ -54,6 +54,6 @@ public interface IBehaviorExecutor {
      *
      * @param entity 目标实体
      */
-    default void onStop(EntityIntelligent entity) {
+    default void onStop(EntityMob entity) {
     }
 }

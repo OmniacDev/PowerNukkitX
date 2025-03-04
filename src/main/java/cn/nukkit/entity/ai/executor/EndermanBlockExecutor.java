@@ -2,8 +2,8 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.block.Block;
 import cn.nukkit.block.Natural;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.data.EntityDataTypes;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityEnderman;
 import cn.nukkit.item.Item;
 
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class EndermanBlockExecutor implements IBehaviorExecutor {
 
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if(entity instanceof EntityEnderman enderman) {
             if(enderman.getItemInHand().isNull()) {
                 Optional<Block> optionalBlock = Arrays.stream(entity.level.getCollisionBlocks(entity.getBoundingBox().grow(3.7f, 0, 3.7f))).filter(block -> block instanceof Natural natural && natural.canBePickedUp()).findAny();

@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.executor;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.Vector3;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -28,7 +28,7 @@ public class SpaceRandomRoamExecutor extends FlatRandomRoamExecutor {
     }
 
     @Override
-    protected Vector3 next(EntityIntelligent entity) {
+    protected Vector3 next(EntityMob entity) {
         var random = ThreadLocalRandom.current();
         int x = random.nextInt(maxRoamRange * 2) - maxRoamRange + entity.pos.getFloorX();
         int z = random.nextInt(maxRoamRange * 2) - maxRoamRange + entity.pos.getFloorZ();

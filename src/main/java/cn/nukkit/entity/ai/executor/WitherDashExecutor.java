@@ -1,12 +1,10 @@
 package cn.nukkit.entity.ai.executor;
 
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.GetVector3;
-import cn.nukkit.math.Vector3;
 
 public class WitherDashExecutor extends MoveToTargetExecutor {
     protected int tick = 0;
@@ -16,20 +14,20 @@ public class WitherDashExecutor extends MoveToTargetExecutor {
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         super.onStart(entity);
         entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_DASH, entity.getLevel().getTick());
         entity.setDataFlag(EntityFlag.CAN_DASH);
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         super.onStop(entity);
         entity.setDataFlag(EntityFlag.CAN_DASH, false);
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         super.onInterrupt(entity);
         entity.setDataFlag(EntityFlag.CAN_DASH, false);
     }

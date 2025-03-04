@@ -1,8 +1,8 @@
 package cn.nukkit.entity.ai.sensor;
 
 import cn.nukkit.block.Block;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.level.Location;
 import lombok.Getter;
 
@@ -29,7 +29,7 @@ public class MemorizedBlockSensor implements ISensor {
     }
 
     @Override
-    public void sense(EntityIntelligent entity) {
+    public void sense(EntityMob entity) {
         Class<? extends Block> blockClass = entity.getMemoryStorage().get(CoreMemoryTypes.LOOKING_BLOCK);
         if(blockClass == null) return;
         Block block = null;

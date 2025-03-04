@@ -1,9 +1,8 @@
 package cn.nukkit.entity.ai.executor;
 
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.GetVector3;
-import cn.nukkit.math.Vector3;
 
 
 public class LookAtTargetExecutor implements EntityControl, IBehaviorExecutor {
@@ -19,7 +18,7 @@ public class LookAtTargetExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         currentTick++;
         if (!entity.isEnablePitch()) entity.setEnablePitch(true);
         var vector3Memory = entity.getMemoryStorage().get(memory);
@@ -30,13 +29,13 @@ public class LookAtTargetExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         currentTick = 0;
         entity.setEnablePitch(false);
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         currentTick = 0;
         entity.setEnablePitch(false);
     }

@@ -6,7 +6,6 @@ import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockDoor;
 import cn.nukkit.block.BlockSoulFire;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityWalkable;
 import cn.nukkit.entity.ai.behavior.Behavior;
 import cn.nukkit.entity.ai.behaviorgroup.BehaviorGroup;
@@ -37,10 +36,10 @@ import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.entity.mob.EntityHoglin;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityWither;
 import cn.nukkit.entity.mob.EntityZoglin;
 import cn.nukkit.inventory.EntityInventoryHolder;
-import cn.nukkit.inventory.InventorySlice;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemArmor;
 import cn.nukkit.item.ItemCrossbow;
@@ -320,7 +319,7 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
         }
 
         @Override
-        public void onStart(EntityIntelligent entity) {
+        public void onStart(EntityMob entity) {
             super.onStart(entity);
             if(entity.pos.distance(entity.getMemoryStorage().get(getMemory()).getVector3()) < 8) {
                 entity.getLevel().addSound(entity.pos, Sound.MOB_PIGLIN_RETREAT);
@@ -335,7 +334,7 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
         }
 
         @Override
-        public void onStart(EntityIntelligent entity) {
+        public void onStart(EntityMob entity) {
             super.onStart(entity);
             entity.setDataProperty(EntityDataTypes.TARGET_EID, entity.getMemoryStorage().get(memory).getId());
             entity.setDataFlag(EntityFlag.ANGRY);
@@ -347,14 +346,14 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
         }
 
         @Override
-        public void onStop(EntityIntelligent entity) {
+        public void onStop(EntityMob entity) {
             super.onStop(entity);
             entity.setDataFlag(EntityFlag.ANGRY, false);
             entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L);
         }
 
         @Override
-        public void onInterrupt(EntityIntelligent entity) {
+        public void onInterrupt(EntityMob entity) {
             super.onInterrupt(entity);
             entity.setDataFlag(EntityFlag.ANGRY, false);
             entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L);

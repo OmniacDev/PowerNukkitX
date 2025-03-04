@@ -1,7 +1,8 @@
 package cn.nukkit.entity.ai.controller;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.Vector3;
 
 /**
@@ -11,11 +12,11 @@ import cn.nukkit.math.Vector3;
 
 public class SpaceMoveController implements IController {
     @Override
-    public boolean control(EntityIntelligent entity) {
+    public boolean control(EntityMob entity) {
         if (entity.hasMoveDirection() && !entity.isShouldUpdateMoveDirection()) {
             Vector3 direction = entity.getMoveDirectionEnd();
             var speed = entity.getMovementSpeed();
-            if (entity.motionX * entity.motionX + entity.motionY * entity.motionY + entity.motionZ * entity.motionZ > speed * speed * 0.4756) {
+            if (entity.motion.x * entity.motion.x + entity.motion.y * entity.motion.y + entity.motion.z * entity.motion.z > speed * speed * 0.4756) {
                 return false;
             }
             var relativeVector = direction.clone().setComponents(direction.x - entity.pos.x,
@@ -38,7 +39,7 @@ public class SpaceMoveController implements IController {
         }
     }
 
-    protected void needNewDirection(EntityIntelligent entity) {
+    protected void needNewDirection(EntityMob entity) {
         //通知需要新的移动目标
         entity.setShouldUpdateMoveDirection(true);
     }

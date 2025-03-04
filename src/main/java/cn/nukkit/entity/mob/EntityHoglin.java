@@ -7,7 +7,6 @@ import cn.nukkit.block.BlockPortal;
 import cn.nukkit.block.BlockRespawnAnchor;
 import cn.nukkit.block.BlockWarpedFungus;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityWalkable;
 import cn.nukkit.entity.ai.behavior.Behavior;
 import cn.nukkit.entity.ai.behaviorgroup.BehaviorGroup;
@@ -200,7 +199,7 @@ public class EntityHoglin extends EntityMob implements EntityWalkable {
         }
 
         @Override
-        public void onStart(EntityIntelligent entity) {
+        public void onStart(EntityMob entity) {
             super.onStart(entity);
             if(entity.pos.distance(entity.getMemoryStorage().get(getMemory()).getVector3()) < 8) {
                 entity.getLevel().addSound(entity.pos, Sound.MOB_HOGLIN_RETREAT);
@@ -215,7 +214,7 @@ public class EntityHoglin extends EntityMob implements EntityWalkable {
         }
 
         @Override
-        public void onStart(EntityIntelligent entity) {
+        public void onStart(EntityMob entity) {
             super.onStart(entity);
             entity.setDataProperty(EntityDataTypes.TARGET_EID, entity.getMemoryStorage().get(memory).getId());
             entity.setDataFlag(EntityFlag.ANGRY);
@@ -223,14 +222,14 @@ public class EntityHoglin extends EntityMob implements EntityWalkable {
         }
 
         @Override
-        public void onStop(EntityIntelligent entity) {
+        public void onStop(EntityMob entity) {
             super.onStop(entity);
             entity.setDataFlag(EntityFlag.ANGRY, false);
             entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L);
         }
 
         @Override
-        public void onInterrupt(EntityIntelligent entity) {
+        public void onInterrupt(EntityMob entity) {
             super.onInterrupt(entity);
             entity.setDataFlag(EntityFlag.ANGRY, false);
             entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L);

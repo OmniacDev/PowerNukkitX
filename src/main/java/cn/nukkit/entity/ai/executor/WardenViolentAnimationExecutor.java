@@ -1,8 +1,8 @@
 package cn.nukkit.entity.ai.executor;
 
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 
 
 public class WardenViolentAnimationExecutor implements IBehaviorExecutor {
@@ -15,7 +15,7 @@ public class WardenViolentAnimationExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         currentTick++;
         if (currentTick > duration) return false;
         else {
@@ -27,14 +27,14 @@ public class WardenViolentAnimationExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         this.currentTick = 0;
         entity.setDataFlag(EntityFlag.ROARING, false);
         entity.setDataFlagExtend(EntityFlag.ROARING, false);
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         entity.getMemoryStorage().put(CoreMemoryTypes.IS_ATTACK_TARGET_CHANGED, false);
         entity.setMoveTarget(null);
 
@@ -43,7 +43,7 @@ public class WardenViolentAnimationExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         this.currentTick = 0;
         entity.setDataFlag(EntityFlag.ROARING, false);
         entity.setDataFlagExtend(EntityFlag.ROARING, false);

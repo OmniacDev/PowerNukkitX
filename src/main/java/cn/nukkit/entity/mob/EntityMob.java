@@ -5,19 +5,33 @@ import cn.nukkit.block.BlockID;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCanAttack;
 import cn.nukkit.entity.EntityEquipment;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
+import cn.nukkit.entity.EntityPhysical;
+import cn.nukkit.entity.ai.EntityAI;
+import cn.nukkit.entity.ai.behaviorgroup.EmptyBehaviorGroup;
+import cn.nukkit.entity.ai.behaviorgroup.IBehaviorGroup;
+import cn.nukkit.entity.ai.controller.EntityControlUtils;
+import cn.nukkit.entity.ai.evaluator.LogicalUtils;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
+import cn.nukkit.entity.ai.memory.IMemoryStorage;
+import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.mob.monster.EntityCreeper;
+import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
+import cn.nukkit.form.window.SimpleForm;
 import cn.nukkit.inventory.EntityInventoryHolder;
 import cn.nukkit.inventory.Inventory;
 import cn.nukkit.inventory.InventoryHolder;
 import cn.nukkit.item.Item;
+import cn.nukkit.item.ItemID;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
+import cn.nukkit.level.vibration.VibrationEvent;
+import cn.nukkit.level.vibration.VibrationType;
 import cn.nukkit.math.NukkitMath;
+import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
@@ -30,10 +44,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
-public abstract class EntityMob extends EntityIntelligent implements EntityInventoryHolder, EntityCanAttack {
+public abstract class EntityMob extends EntityPhysical implements EntityInventoryHolder, EntityCanAttack, LogicalUtils, EntityControlUtils {
     private static final String TAG_ACTIVE_EFFECTS = "ActiveEffects";
     private static final String TAG_AIR = "Air";
     private static final String TAG_ARMOR = "Armor";
@@ -66,7 +81,7 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
     @Nullable public List<CompoundTag> activeEffects;
     @NotNull public Short air = 0;
     @NotNull public Short attackTime = 0;
-    @NotNull public List<CompoundTag> attributes = new ArrayList<>();
+//    @NotNull public List<CompoundTag> attributes = new ArrayList<>();
     @Nullable public Float bodyRot;
     @NotNull public Integer boundX = 0;
     @NotNull public Integer boundY = 0;
@@ -89,6 +104,8 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
     @Nullable public Integer tradeTier;
     @Nullable public Boolean wantsToBeJockey;
 
+    @NotNull public Double headYaw;
+    public Double prevHeadYaw;
     /**
      * 不同难度下实体空手能造成的伤害.
      * <p>
@@ -99,15 +116,30 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
     @Getter
     private final EntityEquipment equipment;
 
+
     public EntityMob(IChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
+
+        var storage = getMemoryStorage();
+        if (storage != null) {
+            storage.put(CoreMemoryTypes.ENTITY_SPAWN_TIME, getLevel().getTick());
+            MemoryType.getPersistentMemories().forEach(memory -> {
+                var mem = (MemoryType<Object>) memory;
+                var codec = mem.getCodec();
+                var data = Objects.requireNonNull(codec).getDecoder().apply(this.namedTag);
+                if (data != null) {
+                    storage.put(mem, data);
+                }
+            });
+        }
+
         this.equipment = new EntityEquipment(this);
 
         if (nbt.contains(TAG_ACTIVE_EFFECTS)) this.activeEffects = nbt.getList(TAG_ACTIVE_EFFECTS, CompoundTag.class).getAll();
         this.air = nbt.getShort(TAG_AIR);
         this.equipment.setArmor(Stream.concat(nbt.getList(TAG_ARMOR, CompoundTag.class).getAll().stream(), Stream.generate(() -> null)).limit(4).map(NBTIO::getItemHelper).toList());
         this.attackTime = nbt.getShort(TAG_ATTACK_TIME);
-        this.attributes = nbt.getList(TAG_ATTRIBUTES, CompoundTag.class).getAll();
+//        this.attributes = nbt.getList(TAG_ATTRIBUTES, CompoundTag.class).getAll();
         if (nbt.contains(TAG_BODY_ROT)) this.bodyRot = nbt.getFloat(TAG_BODY_ROT);
         this.boundX = nbt.getInt(TAG_BOUND_X);
         this.boundY = nbt.getInt(TAG_BOUND_Y);
@@ -131,11 +163,14 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
         if (nbt.contains(TAG_TRADE_EXPERIENCE)) this.tradeExperience = nbt.getInt(TAG_TRADE_EXPERIENCE);
         if (nbt.contains(TAG_TRADE_TIER)) this.tradeTier = nbt.getInt(TAG_TRADE_TIER);
         if (nbt.contains(TAG_WANTS_TO_BE_JOCKEY)) this.wantsToBeJockey = nbt.getBoolean(TAG_WANTS_TO_BE_JOCKEY);
+
+        this.headYaw = this.rotation.yaw;
     }
 
     @Override
     protected void initEntity() {
         super.initEntity();
+        this.behaviorGroup = requireBehaviorGroup();
     }
 
     public void spawnToAll() {
@@ -156,12 +191,13 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
     @Override
     public void saveNBT() {
         super.saveNBT();
+        getBehaviorGroup().save(this);
 
         if (activeEffects != null) this.namedTag.putList(TAG_ACTIVE_EFFECTS, new ListTag<>(activeEffects));
         this.namedTag.putShort(TAG_AIR, air);
         this.namedTag.putList(TAG_ARMOR, new ListTag<>(Tag.TAG_Compound, this.equipment.getArmor().stream().map(NBTIO::putItemHelper).toList()));
         this.namedTag.putShort(TAG_ATTACK_TIME, attackTime);
-        this.namedTag.putList(TAG_ATTRIBUTES, new ListTag<>(Tag.TAG_Compound, this.attributes));
+//        this.namedTag.putList(TAG_ATTRIBUTES, new ListTag<>(Tag.TAG_Compound, this.attributes));
         if (bodyRot != null) this.namedTag.putFloat(TAG_BODY_ROT, bodyRot);
         this.namedTag.putInt(TAG_BOUND_X, boundX);
         this.namedTag.putInt(TAG_BOUND_Y, boundY);
@@ -193,6 +229,12 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
 
     @Override
     public boolean attack(EntityDamageEvent source) {
+        var storage = getMemoryStorage();
+        if (storage != null) {
+            storage.put(CoreMemoryTypes.BE_ATTACKED_EVENT, source);
+            storage.put(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, getLevel().getTick());
+        }
+
         if (this.isClosed() || !this.isAlive()) {
             return false;
         }
@@ -308,7 +350,167 @@ public abstract class EntityMob extends EntityIntelligent implements EntityInven
     }
 
     @Override
+    public void updateMovement() {
+        if (!enableHeadYaw()) {
+            this.headYaw = this.rotation.yaw;
+        }
+
+        double diffPosition =
+                (this.pos.x - this.prevPos.x) *
+                        (this.pos.x - this.prevPos.x) +
+                        (this.pos.y - this.prevPos.y) *
+                                (this.pos.y - this.prevPos.y) +
+                        (this.pos.z - this.prevPos.z) *
+                                (this.pos.z - this.prevPos.z);
+        double diffRotation = (enableHeadYaw() ? (this.headYaw - this.prevHeadYaw) * (this.headYaw - this.prevHeadYaw) : 0) + (this.rotation.yaw - this.prevRotation.yaw) * (this.rotation.yaw - this.prevRotation.yaw) + (this.rotation.pitch - this.prevRotation.pitch) * (this.rotation.pitch - this.prevRotation.pitch);
+
+        double diffMotion = (this.motion.x - this.prevMotion.x) * (this.motion.x - this.prevMotion.x) + (this.motion.y - this.prevMotion.y) * (this.motion.y - this.prevMotion.y) + (this.motion.z - this.prevMotion.z) * (this.motion.z - this.prevMotion.z);
+
+        if (diffPosition > 0.0001 || diffRotation > 1.0) { //0.2 ** 2, 1.5 ** 2
+            if (diffPosition > 0.0001) {
+                if (this.isOnGround()) {
+                    this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.pos.clone(), VibrationType.STEP));
+                } else if (this.isTouchingWater()) {
+                    this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.pos.clone(), VibrationType.SWIM));
+                }
+            }
+
+            this.addMovement(this.pos.x, this.isPlayer ? this.pos.y : this.pos.y + this.getBaseOffset(), this.pos.z, this.rotation.yaw, this.rotation.pitch, this.headYaw);
+
+            this.prevPos.x = this.pos.x;
+            this.prevPos.y = this.pos.y;
+            this.prevPos.z = this.pos.z;
+
+            this.prevRotation.pitch = this.rotation.pitch;
+            this.prevRotation.yaw = this.rotation.yaw;
+            this.prevHeadYaw = this.headYaw;
+
+            this.positionChanged = true;
+        } else {
+            this.positionChanged = false;
+        }
+
+        if (diffMotion > 0.0025 || (diffMotion > 0.0001 && this.getMotion().lengthSquared() <= 0.0001)) { //0.05 ** 2
+            this.prevMotion.x = this.motion.x;
+            this.prevMotion.y = this.motion.y;
+            this.prevMotion.z = this.motion.z;
+
+            this.addMotion(this.motion.x, this.motion.y, this.motion.z);
+        }
+    }
+
+    public boolean enableHeadYaw() {
+        return true;
+    }
+
+    @Override
+    public void setRotation(double yaw, double pitch, double headYaw) {
+        this.rotation.yaw = yaw;
+        this.rotation.pitch = pitch;
+        this.headYaw = headYaw;
+        this.scheduleUpdate();
+    }
+
+    @Override
     public Integer getExperienceDrops() {
         return 5;
+    }
+
+    protected IBehaviorGroup behaviorGroup;
+
+    /**
+     * 是否为活跃实体，如果实体不活跃，就应当降低AI运行频率
+     */
+    @Getter
+    protected boolean isActive = true;
+
+    /**
+     * 返回此实体持有的行为组{@link IBehaviorGroup} <br/>
+     * 默认实现只会返回一个空行为{@link EmptyBehaviorGroup}常量，若你想让实体具有AI，你需要覆写此方法
+     *
+     * @return 此实体持有的行为组
+     */
+    public IBehaviorGroup getBehaviorGroup() {
+        return behaviorGroup;
+    }
+
+    /**
+     * 请求一个行为组实例，此方法在实体初始化行为组时调用
+     *
+     * @return 新创建的行为组
+     */
+    protected IBehaviorGroup requireBehaviorGroup() {
+        return new EmptyBehaviorGroup(this);
+    }
+
+    @Override
+    public void asyncPrepare(int currentTick) {
+        if (!isAlive()) return;
+        // 计算是否活跃
+        isActive = level.isHighLightChunk(getChunkX(), getChunkZ());
+        if (!this.isImmobile()) { // immobile会禁用实体AI
+            var behaviorGroup = getBehaviorGroup();
+            if (behaviorGroup == null) return;
+            behaviorGroup.collectSensorData(this);
+            behaviorGroup.evaluateCoreBehaviors(this);
+            behaviorGroup.evaluateBehaviors(this);
+            behaviorGroup.tickRunningCoreBehaviors(this);
+            behaviorGroup.tickRunningBehaviors(this);
+            behaviorGroup.updateRoute(this);
+            behaviorGroup.applyController(this);
+            if (EntityAI.hasDebugOptions()) behaviorGroup.debugTick(this);
+        }
+        super.asyncPrepare(currentTick);
+    }
+
+    @Override
+    public boolean onInteract(Player player, Item item, Vector3 clickedPos) {
+        if (!EntityAI.checkDebugOption(EntityAI.DebugOption.MEMORY)) {
+            return super.onInteract(player, item, clickedPos);
+        } else {
+            if (player.isOp() && Objects.equals(item.getId(), ItemID.STICK)) {
+                var strBuilder = new StringBuilder();
+
+                //Build memory information
+                strBuilder.append("§eMemory:§f\n");
+                var all = getMemoryStorage().getAll();
+                all.forEach((memory, value) -> {
+                    strBuilder.append(memory.getIdentifier());
+                    strBuilder.append(" = §b");
+                    strBuilder.append(value);
+                    strBuilder.append("§f\n");
+                });
+
+                var form = new SimpleForm("§f" + getOriginalName(), strBuilder.toString());
+                form.send(player);
+                return true;
+            } else return super.onInteract(player, item, clickedPos);
+        }
+    }
+
+    public IMemoryStorage getMemoryStorage() {
+        return getBehaviorGroup().getMemoryStorage();
+    }
+
+    /**
+     * 返回实体在跳跃时要增加的motion y
+     *
+     * @param jumpY 跳跃的高度
+     * @return 实体要增加的motion y
+     */
+    public double getJumpingMotion(double jumpY) {
+        if (this.isTouchingWater()) {
+            return 0.1d;
+        } else {
+            if (jumpY > 0 && jumpY < 0.2) {
+                return 0.15;
+            } else if (jumpY < 0.51) {
+                return 0.35;
+            } else if (jumpY < 1.01) {
+                return 0.5;
+            } else {
+                return 0.6;
+            }
+        }
     }
 }

@@ -8,7 +8,6 @@ import cn.nukkit.block.BlockPaleOakLog;
 import cn.nukkit.block.BlockResinClump;
 import cn.nukkit.block.property.CommonBlockProperties;
 import cn.nukkit.blockentity.BlockEntityCreakingHeart;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.behavior.Behavior;
 import cn.nukkit.entity.ai.behaviorgroup.BehaviorGroup;
 import cn.nukkit.entity.ai.behaviorgroup.IBehaviorGroup;
@@ -25,6 +24,7 @@ import cn.nukkit.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder;
 import cn.nukkit.entity.ai.route.posevaluator.WalkingPosEvaluator;
 import cn.nukkit.entity.ai.sensor.NearestPlayerSensor;
 import cn.nukkit.entity.ai.sensor.PlayerStaringSensor;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.Sound;
@@ -216,7 +216,7 @@ public class EntityCreaking extends EntityMonster {
         }
 
         @Override
-        public void sense(EntityIntelligent entity) {
+        public void sense(EntityMob entity) {
             Player before = entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER);
             super.sense(entity);
             Player after = entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER);
@@ -237,7 +237,7 @@ public class EntityCreaking extends EntityMonster {
         }
 
         @Override
-        public void sense(EntityIntelligent entity) {
+        public void sense(EntityMob entity) {
             Player before = entity.getMemoryStorage().get(CoreMemoryTypes.STARING_PLAYER);
             super.sense(entity);
             Player after = entity.getMemoryStorage().get(CoreMemoryTypes.STARING_PLAYER);

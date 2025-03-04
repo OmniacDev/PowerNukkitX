@@ -1,7 +1,7 @@
 package cn.nukkit.entity.ai.evaluator;
 
-import cn.nukkit.Server;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
+import cn.nukkit.entity.mob.EntityMob;
 import lombok.Getter;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -20,7 +20,7 @@ public class RandomTimeRangeEvaluator implements IBehaviorEvaluator {
     }
 
     @Override
-    public boolean evaluate(EntityIntelligent entity) {
+    public boolean evaluate(EntityMob entity) {
         if (this.nextTargetTime == -1) {
             this.updateNextTargetTime(entity);
             return false;
@@ -34,7 +34,7 @@ public class RandomTimeRangeEvaluator implements IBehaviorEvaluator {
         }
     }
 
-    protected void updateNextTargetTime(EntityIntelligent entity) {
+    protected void updateNextTargetTime(EntityMob entity) {
         this.nextTargetTime = entity.getLevel().getTick() + ThreadLocalRandom.current().nextInt(minTime, maxTime + 1);
     }
 }

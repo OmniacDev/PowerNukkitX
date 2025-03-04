@@ -3,7 +3,7 @@ package cn.nukkit.entity.ai.route.posevaluator;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockFence;
 import cn.nukkit.block.BlockFenceGate;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class WalkingPosEvaluator implements IPosEvaluator {
     @Override
-    public boolean evalStandingBlock(@NotNull EntityIntelligent entity, @NotNull Block block) {
+    public boolean evalStandingBlock(@NotNull EntityMob entity, @NotNull Block block) {
         //居中坐标
         var blockCenter = block.add(0.5, 1, 0.5);
         //检查是否可到达
@@ -43,7 +43,7 @@ public class WalkingPosEvaluator implements IPosEvaluator {
      * 指定实体在指定坐标上能否不发生碰撞
      */
     //todo: 此方法会造成大量开销，原因是碰撞检查，有待优化
-    protected boolean isPassable(EntityIntelligent entity, Vector3 vector3) {
+    protected boolean isPassable(EntityMob entity, Vector3 vector3) {
         double radius = (entity.getWidth() * entity.getScale()) / 2;
         float height = entity.getHeight() * entity.getScale();
         AxisAlignedBB bb = new SimpleAxisAlignedBB(vector3.getX() - radius, vector3.getY(), vector3.getZ() - radius, vector3.getX() + radius, vector3.getY() + height, vector3.getZ() + radius);

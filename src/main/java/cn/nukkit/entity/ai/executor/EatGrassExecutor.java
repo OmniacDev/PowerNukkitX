@@ -3,7 +3,8 @@ package cn.nukkit.entity.ai.executor;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockID;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.animal.EntitySheep;
 import cn.nukkit.level.GameRule;
 import cn.nukkit.level.particle.DestroyBlockParticle;
@@ -19,7 +20,7 @@ public class EatGrassExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if (currentTick == 0) {
             playEatGrassAnimation(entity);
         }
@@ -48,11 +49,11 @@ public class EatGrassExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         currentTick = 0;
     }
 
-    protected void playEatGrassAnimation(EntityIntelligent entity) {
+    protected void playEatGrassAnimation(EntityMob entity) {
         EntityEventPacket pk = new EntityEventPacket();
         pk.eid = entity.getId();
         pk.event = EntityEventPacket.EAT_GRASS_ANIMATION;

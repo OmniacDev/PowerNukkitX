@@ -171,9 +171,9 @@ public class EntityHuman extends EntityHumanType {
             pk.x = (float) this.pos.x;
             pk.y = (float) this.pos.y;
             pk.z = (float) this.pos.z;
-            pk.speedX = (float) this.motionX;
-            pk.speedY = (float) this.motionY;
-            pk.speedZ = (float) this.motionZ;
+            pk.speedX = (float) this.motion.x;
+            pk.speedY = (float) this.motion.y;
+            pk.speedZ = (float) this.motion.z;
             pk.yaw = (float) this.rotation.yaw;
             pk.pitch = (float) this.rotation.pitch;
             pk.item = this.getInventory().getItemInHand();

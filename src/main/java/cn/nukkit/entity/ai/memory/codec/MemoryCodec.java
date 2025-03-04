@@ -1,6 +1,7 @@
 package cn.nukkit.entity.ai.memory.codec;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.nbt.tag.CompoundTag;
 import lombok.Getter;
 
@@ -14,7 +15,7 @@ public class MemoryCodec<Data> implements IMemoryCodec<Data> {
     private final Function<CompoundTag, Data> decoder;
     private final BiConsumer<Data, CompoundTag> encoder;
     @Nullable
-    private BiConsumer<Data, EntityIntelligent> onInit = null;
+    private BiConsumer<Data, EntityMob> onInit = null;
 
     public MemoryCodec(
             Function<CompoundTag, Data> decoder,
@@ -25,15 +26,15 @@ public class MemoryCodec<Data> implements IMemoryCodec<Data> {
     }
 
     /**
-     * BiConsumer<Data, EntityIntelligent> Data can be Null
+     * BiConsumer<Data, EntityMob> Data can be Null
      */
-    public MemoryCodec<Data> onInit(BiConsumer<Data, EntityIntelligent> onInit) {
+    public MemoryCodec<Data> onInit(BiConsumer<Data, EntityMob> onInit) {
         this.onInit = onInit;
         return this;
     }
 
     @Override
-    public void init(@Nullable Data data, EntityIntelligent entity) {
+    public void init(@Nullable Data data, EntityMob entity) {
         if (onInit != null) {
             onInit.accept(data, entity);
         }

@@ -199,7 +199,6 @@ public class GameMockExtension extends MockitoExtension {
         player.loggedIn = true;
         player.spawned = true;
         TestUtils.setField(Player.class, player, "info", new PlayerInfo("test", UUID.nameUUIDFromBytes(new byte[]{1, 2, 3}), mock(Skin.class), mock(ClientChainData.class)));
-        player.temporalVector = new Vector3(0, 100, 0);
         player.setInventories(new Inventory[]{
                 new HumanInventory(player),
                 new HumanOffHandInventory(player),

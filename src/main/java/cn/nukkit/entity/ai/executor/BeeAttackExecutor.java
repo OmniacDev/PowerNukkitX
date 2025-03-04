@@ -1,11 +1,12 @@
 package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.effect.Effect;
 import cn.nukkit.entity.effect.EffectType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.animal.EntityBee;
 
 import static cn.nukkit.Server.getInstance;
@@ -17,7 +18,7 @@ public class BeeAttackExecutor extends MeleeAttackExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if(entity instanceof EntityBee bee) {
             if (entity.getMemoryStorage().notEmpty(CoreMemoryTypes.ATTACK_TARGET)) {
                 if (!entity.isEnablePitch()) entity.setEnablePitch(true);
@@ -41,18 +42,18 @@ public class BeeAttackExecutor extends MeleeAttackExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         stop(entity);
         super.onStop(entity);
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         stop(entity);
         super.onInterrupt(entity);
     }
 
-    private void stop(EntityIntelligent entity) {
+    private void stop(EntityMob entity) {
         var bee = (EntityBee) entity;
         entity.getLevel().getScheduler().scheduleDelayedTask(null, () -> bee.setAngry(false), 5);
     }

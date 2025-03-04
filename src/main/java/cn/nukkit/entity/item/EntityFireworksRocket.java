@@ -46,9 +46,9 @@ public class EntityFireworksRocket extends Entity {
         Random rand = ThreadLocalRandom.current();
         this.lifetime = 30 + rand.nextInt(12);
 
-        this.motionX = rand.nextGaussian() * 0.001D;
-        this.motionZ = rand.nextGaussian() * 0.001D;
-        this.motionY = 0.05D;
+        this.motion.x = rand.nextGaussian() * 0.001D;
+        this.motion.z = rand.nextGaussian() * 0.001D;
+        this.motion.y = 0.05D;
 
         if (nbt.contains("FireworkItem")) {
             firework = NBTIO.getItemHelper(nbt.getCompound("FireworkItem"));
@@ -101,12 +101,12 @@ public class EntityFireworksRocket extends Entity {
 
         if (this.isAlive()) {
 
-            this.motionX *= 1.15D;
-            this.motionZ *= 1.15D;
-            this.motionY += 0.04D;
+            this.motion.x *= 1.15D;
+            this.motion.z *= 1.15D;
+            this.motion.y += 0.04D;
             Position position = getPosition();
             Vector3 motion = getMotion();
-            this.move(this.motionX, this.motionY, this.motionZ);
+            this.move(this.motion.x, this.motion.y, this.motion.z);
 
             if (this.isCollided && !this.hadCollision) { //collide with block
                 this.hadCollision = true;
@@ -122,10 +122,10 @@ public class EntityFireworksRocket extends Entity {
             this.updateMovement();
 
 
-            float f = (float) Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
-            this.rotation.yaw = (float) (Math.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
+            float f = (float) Math.sqrt(this.motion.x * this.motion.x + this.motion.z * this.motion.z);
+            this.rotation.yaw = (float) (Math.atan2(this.motion.x, this.motion.z) * (180D / Math.PI));
 
-            this.rotation.pitch = (float) (Math.atan2(this.motionY, f) * (180D / Math.PI));
+            this.rotation.pitch = (float) (Math.atan2(this.motion.y, f) * (180D / Math.PI));
 
 
             if (this.fireworkAge == 0) {
@@ -150,7 +150,7 @@ public class EntityFireworksRocket extends Entity {
             }
         }
 
-        return hasUpdate || !this.onGround || Math.abs(this.motionX) > 0.00001 || Math.abs(this.motionY) > 0.00001 || Math.abs(this.motionZ) > 0.00001;
+        return hasUpdate || !this.onGround || Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.y) > 0.00001 || Math.abs(this.motion.z) > 0.00001;
     }
 
     @Override

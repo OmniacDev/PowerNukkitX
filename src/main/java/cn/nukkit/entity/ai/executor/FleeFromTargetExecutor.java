@@ -1,14 +1,14 @@
 package cn.nukkit.entity.ai.executor;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.GetVector3;
 import cn.nukkit.math.Vector3;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 
 
 @Getter
@@ -44,7 +44,7 @@ public class FleeFromTargetExecutor implements EntityControl, IBehaviorExecutor 
     }
 
     @Override
-    public boolean execute(@NotNull EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if (!entity.isEnablePitch()) entity.setEnablePitch(true);
         if (entity.getBehaviorGroup().getMemoryStorage().isEmpty(memory)) {
             return false;
@@ -83,17 +83,17 @@ public class FleeFromTargetExecutor implements EntityControl, IBehaviorExecutor 
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
-        entity.setMovementSpeed(EntityIntelligent.DEFAULT_SPEED);
+        entity.setMovementSpeed(EntityMob.DEFAULT_SPEED);
         entity.setEnablePitch(false);
         if (clearDataWhenLose)
             entity.getBehaviorGroup().getMemoryStorage().clear(memory);
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED);

@@ -1,8 +1,8 @@
 package cn.nukkit.entity.ai.sensor;
 
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityOwnable;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
+import cn.nukkit.entity.mob.EntityMob;
 
 public class EntityAttackedByOwnerSensor implements ISensor {
     protected int period;
@@ -14,7 +14,7 @@ public class EntityAttackedByOwnerSensor implements ISensor {
     }
 
     @Override
-    public void sense(EntityIntelligent entity) {
+    public void sense(EntityMob entity) {
         if (entity instanceof EntityOwnable entityTamable) {
             var player = entityTamable.getOwner();
             if (player != null) {

@@ -995,14 +995,14 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
         }
 
         //update server-side position and rotation and aabb
-        Location last = new Location(this.lastX, this.lastY, this.lastZ, this.lastYaw, this.lastPitch, this.lastHeadYaw, this.level);
+        Location last = new Location(this.prevPos.x, this.prevPos.y, this.prevPos.z, this.prevRotation.yaw, this.prevRotation.pitch, this.prevHeadYaw, this.level);
         Location now = this.getLocation();
-        this.lastX = now.x;
-        this.lastY = now.y;
-        this.lastZ = now.z;
-        this.lastYaw = now.yaw;
-        this.lastPitch = now.pitch;
-        this.lastHeadYaw = now.headYaw;
+        this.prevPos.x = now.x;
+        this.prevPos.y = now.y;
+        this.prevPos.z = now.z;
+        this.prevRotation.yaw = now.yaw;
+        this.prevRotation.pitch = now.pitch;
+        this.prevHeadYaw = now.headYaw;
 
         List<Block> blocksAround = null;
         List<Block> collidingBlocks = null;
@@ -1162,11 +1162,11 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     }
 
     protected void revertClientMotion(Location originalPos) {
-        this.lastX = originalPos.getX();
-        this.lastY = originalPos.getY();
-        this.lastZ = originalPos.getZ();
-        this.lastYaw = originalPos.getYaw();
-        this.lastPitch = originalPos.getPitch();
+        this.prevPos.x = originalPos.getX();
+        this.prevPos.y = originalPos.getY();
+        this.prevPos.z = originalPos.getZ();
+        this.prevRotation.yaw = originalPos.getYaw();
+        this.prevRotation.pitch = originalPos.getPitch();
 
         Vector3 syncPos = originalPos.add(0, 0.00001, 0);
         this.sendPosition(syncPos, originalPos.getYaw(), originalPos.getPitch(), MovePlayerPacket.MODE_RESET);
@@ -2623,7 +2623,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     public boolean setMotion(Vector3 motion) {
         if (super.setMotion(motion)) {
             if (this.chunk != null) {
-                this.addMotion(this.motionX, this.motionY, this.motionZ);  //Send to others
+                this.addMotion(this.motion.x, this.motion.y, this.motion.z);  //Send to others
                 SetEntityMotionPacket pk = new SetEntityMotionPacket();
                 pk.eid = this.getId();
                 pk.motionX = (float) motion.x;
@@ -2631,9 +2631,9 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
                 pk.motionZ = (float) motion.z;
                 this.dataPacket(pk);  //Send to self
             }
-            if (this.motionY > 0) {
+            if (this.motion.y > 0) {
                 //todo: check this
-                this.startAirTicks = (int) ((-(Math.log(this.getGravity() / (this.getGravity() + this.getDrag() * this.motionY))) / this.getDrag()) * 2 + 5);
+                this.startAirTicks = (int) ((-(Math.log(this.getGravity() / (this.getGravity() + this.getDrag() * this.motion.y))) / this.getDrag()) * 2 + 5);
             }
 
             return true;
@@ -2725,9 +2725,9 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
         }
 
         if (this.spawned) {
-            if (this.motionX != 0 || this.motionY != 0 || this.motionZ != 0) {
-                this.setMotion(new Vector3(motionX, motionY, motionZ));
-                motionX = motionY = motionZ = 0;
+            if (this.motion.x != 0 || this.motion.y != 0 || this.motion.z != 0) {
+                this.setMotion(this.motion);
+                this.motion.setComponents(0, 0, 0);
             }
 
             while (!this.clientMovements.isEmpty()) {
@@ -2913,27 +2913,26 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     public EntityInteractable getEntityPlayerLookingAt(int maxDistance) {
         EntityInteractable entity = null;
 
-        // just a fix because player MAY not be fully initialized
-        if (temporalVector != null) {
-            Entity[] nearbyEntities = level.getNearbyEntities(boundingBox.grow(maxDistance, maxDistance, maxDistance), this);
 
-            // get all blocks in looking direction until the max interact distance is reached (it's possible that startblock isn't found!)
-            try {
-                BlockIterator itr = new BlockIterator(level, getPosition(), getDirectionVector(), getEyeHeight(), maxDistance);
-                if (itr.hasNext()) {
-                    Block block;
-                    while (itr.hasNext()) {
-                        block = itr.next();
-                        entity = getEntityAtPosition(nearbyEntities, block.getFloorX(), block.getFloorY(), block.getFloorZ());
-                        if (entity != null) {
-                            break;
-                        }
+        Entity[] nearbyEntities = level.getNearbyEntities(boundingBox.grow(maxDistance, maxDistance, maxDistance), this);
+
+        // get all blocks in looking direction until the max interact distance is reached (it's possible that startblock isn't found!)
+        try {
+            BlockIterator itr = new BlockIterator(level, getPosition(), getDirectionVector(), getEyeHeight(), maxDistance);
+            if (itr.hasNext()) {
+                Block block;
+                while (itr.hasNext()) {
+                    block = itr.next();
+                    entity = getEntityAtPosition(nearbyEntities, block.getFloorX(), block.getFloorY(), block.getFloorZ());
+                    if (entity != null) {
+                        break;
                     }
                 }
-            } catch (Exception ex) {
-                // nothing to log here!
             }
+        } catch (Exception ex) {
+            // nothing to log here!
         }
+
         return entity;
     }
 
@@ -4382,7 +4381,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
         }
         setOpenSignFront(null);
 
-        this.setMotion(this.temporalVector.setComponents(0, 0, 0));
+        this.setMotion(new Vector3());
 
         boolean switchLevel = false;
         if (!to.getLevel().equals(from.getLevel())) {

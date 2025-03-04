@@ -106,9 +106,9 @@ public class EntityFishingHook extends SlenderProjectile {
 
         boolean inWater = this.isInsideOfWater();
         if (inWater) {//防止鱼钩沉底 水中的阻力
-            this.motionX = 0;
-            this.motionY -= getGravity() * -0.04;
-            this.motionZ = 0;
+            this.motion.x = 0;
+            this.motion.y -= getGravity() * -0.04;
+            this.motion.z = 0;
             hasUpdate = true;
         }
 
@@ -157,13 +157,13 @@ public class EntityFishingHook extends SlenderProjectile {
     protected void updateMotion() {
         //正确的浮力
         if (this.isInsideOfWater() && this.getY() < this.getWaterHeight() - 2) {
-            this.motionX = 0;
-            this.motionY += getGravity();
-            this.motionZ = 0;
+            this.motion.x = 0;
+            this.motion.y += getGravity();
+            this.motion.z = 0;
         } else if (this.isInsideOfWater() && this.getY() >= this.getWaterHeight() - 2) {//防止鱼钩上浮超出水面
-            this.motionX = 0;
-            this.motionZ = 0;
-            this.motionY = 0;
+            this.motion.x = 0;
+            this.motion.z = 0;
+            this.motion.y = 0;
         } else {//处理不在水中的情况
             super.updateMotion();
         }
@@ -277,9 +277,9 @@ public class EntityFishingHook extends SlenderProjectile {
         pk.x = (float) this.pos.x;
         pk.y = (float) this.pos.y;
         pk.z = (float) this.pos.z;
-        pk.speedX = (float) this.motionX;
-        pk.speedY = (float) this.motionY;
-        pk.speedZ = (float) this.motionZ;
+        pk.speedX = (float) this.motion.x;
+        pk.speedY = (float) this.motion.y;
+        pk.speedZ = (float) this.motion.z;
         pk.yaw = (float) this.rotation.yaw;
         pk.pitch = (float) this.rotation.pitch;
 

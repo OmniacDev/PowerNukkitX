@@ -16,8 +16,7 @@ public class LecternUpdateProcessor extends DataPacketProcessor<LecternUpdatePac
     @Override
     public void handle(@NotNull PlayerHandle playerHandle, @NotNull LecternUpdatePacket pk) {
         BlockVector3 blockPosition = pk.blockPosition;
-        playerHandle.player.temporalVector.setComponents(blockPosition.x, blockPosition.y, blockPosition.z);
-        BlockEntity blockEntityLectern = playerHandle.player.level.getBlockEntity(playerHandle.player.temporalVector);
+        BlockEntity blockEntityLectern = playerHandle.player.level.getBlockEntity(blockPosition);
         if (blockEntityLectern instanceof BlockEntityLectern lectern) {
             LecternPageChangeEvent lecternPageChangeEvent = new LecternPageChangeEvent(playerHandle.player, lectern, pk.page);
             playerHandle.player.getServer().getPluginManager().callEvent(lecternPageChangeEvent);

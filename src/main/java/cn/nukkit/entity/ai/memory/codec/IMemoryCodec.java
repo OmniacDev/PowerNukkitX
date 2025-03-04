@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.memory.codec;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.nbt.tag.CompoundTag;
 
 import javax.annotation.Nullable;
@@ -39,7 +39,7 @@ public interface IMemoryCodec<Data> {
      * @param data   the data
      * @param entity the entity
      */
-    void init(@Nullable Data data, EntityIntelligent entity);
+    void init(@Nullable Data data, EntityMob entity);
 
     @Nullable
     default Data decode(CompoundTag tag) {

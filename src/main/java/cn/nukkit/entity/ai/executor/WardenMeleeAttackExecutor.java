@@ -2,9 +2,10 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityWarden;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
@@ -32,7 +33,7 @@ public class WardenMeleeAttackExecutor implements EntityControl, IBehaviorExecut
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         attackTick++;
         if (entity.getBehaviorGroup().getMemoryStorage().isEmpty(memory)) return false;
         if (entity.getMovementSpeed() != speed)
@@ -70,7 +71,7 @@ public class WardenMeleeAttackExecutor implements EntityControl, IBehaviorExecut
         return true;
     }
 
-    protected int calCoolDown(EntityIntelligent entity, Entity target) {
+    protected int calCoolDown(EntityMob entity, Entity target) {
         if (entity instanceof EntityWarden warden) {
             var anger = warden.getMemoryStorage().get(CoreMemoryTypes.WARDEN_ANGER_VALUE).getOrDefault(target, 0);
             return anger >= 145 ? 18 : 36;
@@ -80,12 +81,12 @@ public class WardenMeleeAttackExecutor implements EntityControl, IBehaviorExecut
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         if (!entity.isEnablePitch()) entity.setEnablePitch(true);
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
         //重置速度
@@ -94,7 +95,7 @@ public class WardenMeleeAttackExecutor implements EntityControl, IBehaviorExecut
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
         //重置速度
@@ -102,7 +103,7 @@ public class WardenMeleeAttackExecutor implements EntityControl, IBehaviorExecut
         entity.setEnablePitch(false);
     }
 
-    protected void playAttackAnimation(EntityIntelligent entity) {
+    protected void playAttackAnimation(EntityMob entity) {
         EntityEventPacket pk = new EntityEventPacket();
         pk.eid = entity.getId();
         pk.event = EntityEventPacket.ARM_SWING;

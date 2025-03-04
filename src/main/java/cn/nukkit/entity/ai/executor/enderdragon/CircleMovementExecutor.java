@@ -1,17 +1,17 @@
 package cn.nukkit.entity.ai.executor.enderdragon;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.executor.EntityControl;
 import cn.nukkit.entity.ai.executor.IBehaviorExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.item.EntityEnderCrystal;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityEnderDragon;
 import cn.nukkit.math.Vector2;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.Utils;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -51,7 +51,7 @@ public class CircleMovementExecutor implements EntityControl, IBehaviorExecutor 
     }
 
     @Override
-    public boolean execute(@NotNull EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if (entity.isEnablePitch()) entity.setEnablePitch(false);
         if (needUpdateTarget(entity)) {
             this.circleLoc++;
@@ -67,18 +67,18 @@ public class CircleMovementExecutor implements EntityControl, IBehaviorExecutor 
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         startLoc = Utils.rand(0, sections);
         circleLoc = 0;
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         stop(entity);
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         stop(entity);
         if(entity instanceof EntityEnderDragon) {
             if(Utils.rand(0, 3 + (int) Arrays.stream(entity.getLevel().getEntities()).filter(entity1 -> entity1 instanceof EntityEnderCrystal && entity1.pos.toHorizontal().distance(Vector2.ZERO) < 128).count()) < 1) {
@@ -87,18 +87,18 @@ public class CircleMovementExecutor implements EntityControl, IBehaviorExecutor 
         }
     }
 
-    protected void stop(EntityIntelligent entity) {
+    protected void stop(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
         entity.setEnablePitch(true);
     }
 
-    protected boolean needUpdateTarget(EntityIntelligent entity) {
+    protected boolean needUpdateTarget(EntityMob entity) {
         entity.recalculateBoundingBox(false);
         return lastLocation == null || entity.getBoundingBox().grow(10, 10, 10).isVectorInside(lastLocation);
     }
 
-    protected Vector3 next(EntityIntelligent entity) {
+    protected Vector3 next(EntityMob entity) {
         Vector3 origin = entity.getBehaviorGroup().getMemoryStorage().get(memory);
         double angleIncrement = 360.0 / sections;
         double angle = Math.toRadians(((circleLoc + startLoc) * angleIncrement));

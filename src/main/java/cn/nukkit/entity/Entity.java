@@ -161,7 +161,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     @Nullable public CompoundTag linksTag;
     @NotNull public Boolean lootDropped = true;
     @NotNull public Integer markVariant= 0;
-    @Nullable public Vector3 motion;
+    @NotNull public Vector3 motion = new Vector3();
     @NotNull public Boolean onGround = true;
     @NotNull public Long ownerNew = -1L;
     @NotNull public Boolean persistent = false;
@@ -180,8 +180,10 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     @NotNull public Integer variant = 0;
 
     @Nullable public Level level;
-    @NotNull public double headYaw;
 
+    public Vector3 prevPos;
+    public Vector3 prevMotion;
+    public Rotator2 prevRotation;
 
     public static final Entity[] EMPTY_ARRAY = new Entity[0];
     protected final EntityDataMap entityDataMap = new EntityDataMap();
@@ -199,27 +201,10 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     public IChunk chunk;
     public List<Block> blocksAround = new ArrayList<>();
     public List<Block> collisionBlocks = new ArrayList<>();
-    public double lastX;
-    public double lastY;
-    public double lastZ;
+
     public boolean firstMove = true;
-    public double motionX;
-    public double motionY;
-    public double motionZ;
     public int deadTicks = 0;
-    /**
-     * temporalVector，its value has no meaning
-     */
-    public Vector3 temporalVector;
-    public double lastMotionX;
-    public double lastMotionY;
-    public double lastMotionZ;
-    public double lastPitch;
-    public double lastYaw;
-    public double lastHeadYaw;
-    public double pitchDelta;
-    public double yawDelta;
-    public double headYawDelta;
+
     public double entityCollisionReduction = 0; // Higher than 0.9 will result a fast collisions
     public AxisAlignedBB boundingBox;
     public boolean positionChanged;
@@ -563,7 +548,6 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
         }
         this.id = Entity.entityCount.getAndIncrement();
         this.isPlayer = this instanceof Player;
-        this.temporalVector = new Vector3();
         this.justCreated = true;
         this.namedTag = nbt;
         this.chunk = chunk;
@@ -961,9 +945,9 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
         );
 
         this.namedTag.putList(TAG_MOTION, new ListTag<FloatTag>()
-                .add(new FloatTag((float) this.motionX))
-                .add(new FloatTag((float) this.motionY))
-                .add(new FloatTag((float) this.motionZ))
+                .add(new FloatTag((float) this.motion.x))
+                .add(new FloatTag((float) this.motion.y))
+                .add(new FloatTag((float) this.motion.z))
         );
 
         this.namedTag.putList(TAG_ROTATION, new ListTag<FloatTag>()
@@ -1049,9 +1033,9 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
         addEntity.x = (float) this.pos.x;
         addEntity.y = (float) this.pos.y + this.getBaseOffset();
         addEntity.z = (float) this.pos.z;
-        addEntity.speedX = (float) this.motionX;
-        addEntity.speedY = (float) this.motionY;
-        addEntity.speedZ = (float) this.motionZ;
+        addEntity.speedX = (float) this.motion.x;
+        addEntity.speedY = (float) this.motion.y;
+        addEntity.speedZ = (float) this.motion.z;
         addEntity.entityData = this.entityDataMap;
 
         addEntity.links = new EntityLink[this.passengers.size()];
@@ -1378,37 +1362,37 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
             double force = ThreadLocalRandom.current().nextDouble() * 0.2 + 0.1;
 
             if (direction == 0) {
-                this.motionX = -force;
+                this.motion.x = -force;
 
                 return true;
             }
 
             if (direction == 1) {
-                this.motionX = force;
+                this.motion.x = force;
 
                 return true;
             }
 
             if (direction == 2) {
-                this.motionY = -force;
+                this.motion.y = -force;
 
                 return true;
             }
 
             if (direction == 3) {
-                this.motionY = force;
+                this.motion.y = force;
 
                 return true;
             }
 
             if (direction == 4) {
-                this.motionZ = -force;
+                this.motion.z = -force;
 
                 return true;
             }
 
             if (direction == 5) {
-                this.motionZ = force;
+                this.motion.z = force;
 
                 return true;
             }
@@ -1547,20 +1531,16 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     }
 
     public void updateMovement() {
-        if (!enableHeadYaw()) {
-            this.headYaw = this.rotation.yaw;
-        }
-
         double diffPosition =
-                (this.pos.x - this.lastX) *
-                        (this.pos.x - this.lastX) +
-                        (this.pos.y - this.lastY) *
-                                (this.pos.y - this.lastY) +
-                        (this.pos.z - this.lastZ) *
-                                (this.pos.z - this.lastZ);
-        double diffRotation = (enableHeadYaw() ? (this.headYaw - this.lastHeadYaw) * (this.headYaw - this.lastHeadYaw) : 0) + (this.rotation.yaw - this.lastYaw) * (this.rotation.yaw - this.lastYaw) + (this.rotation.pitch - this.lastPitch) * (this.rotation.pitch - this.lastPitch);
+                (this.pos.x - this.prevPos.x) *
+                        (this.pos.x - this.prevPos.x) +
+                        (this.pos.y - this.prevPos.y) *
+                                (this.pos.y - this.prevPos.y) +
+                        (this.pos.z - this.prevPos.z) *
+                                (this.pos.z - this.prevPos.z);
+        double diffRotation = (this.rotation.yaw - this.prevRotation.yaw) * (this.rotation.yaw - this.prevRotation.yaw) + (this.rotation.pitch - this.prevRotation.pitch) * (this.rotation.pitch - this.prevRotation.pitch);
 
-        double diffMotion = (this.motionX - this.lastMotionX) * (this.motionX - this.lastMotionX) + (this.motionY - this.lastMotionY) * (this.motionY - this.lastMotionY) + (this.motionZ - this.lastMotionZ) * (this.motionZ - this.lastMotionZ);
+        double diffMotion = (this.motion.x - this.prevMotion.x) * (this.motion.x - this.prevMotion.x) + (this.motion.y - this.prevMotion.y) * (this.motion.y - this.prevMotion.y) + (this.motion.z - this.prevMotion.z) * (this.motion.z - this.prevMotion.z);
 
         if (diffPosition > 0.0001 || diffRotation > 1.0) { //0.2 ** 2, 1.5 ** 2
             if (diffPosition > 0.0001) {
@@ -1571,15 +1551,14 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
                 }
             }
 
-            this.addMovement(this.pos.x, this.isPlayer ? this.pos.y : this.pos.y + this.getBaseOffset(), this.pos.z, this.rotation.yaw, this.rotation.pitch, this.headYaw);
+            this.addMovement(this.pos.x, this.isPlayer ? this.pos.y : this.pos.y + this.getBaseOffset(), this.pos.z, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw);
 
-            this.lastX = this.pos.x;
-            this.lastY = this.pos.y;
-            this.lastZ = this.pos.z;
+            this.prevPos.x = this.pos.x;
+            this.prevPos.y = this.pos.y;
+            this.prevPos.z = this.pos.z;
 
-            this.lastPitch = this.rotation.pitch;
-            this.lastYaw = this.rotation.yaw;
-            this.lastHeadYaw = this.headYaw;
+            this.prevRotation.pitch = this.rotation.pitch;
+            this.prevRotation.yaw = this.rotation.yaw;
 
             this.positionChanged = true;
         } else {
@@ -1587,17 +1566,12 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
         }
 
         if (diffMotion > 0.0025 || (diffMotion > 0.0001 && this.getMotion().lengthSquared() <= 0.0001)) { //0.05 ** 2
-            this.lastMotionX = this.motionX;
-            this.lastMotionY = this.motionY;
-            this.lastMotionZ = this.motionZ;
+            this.prevMotion.x = this.motion.x;
+            this.prevMotion.y = this.motion.y;
+            this.prevMotion.z = this.motion.z;
 
-            this.addMotion(this.motionX, this.motionY, this.motionZ);
+            this.addMotion(this.motion.x, this.motion.y, this.motion.z);
         }
-    }
-
-
-    public boolean enableHeadYaw() {
-        return false;
     }
 
     /**
@@ -1992,8 +1966,8 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
                 dx *= 1F + entityCollisionReduction;
 
                 if (this.riding == null) {
-                    motionX -= dx;
-                    motionZ -= dy;
+                    this.motion.x -= dx;
+                    this.motion.y -= dy;
                 }
             }
         }
@@ -2050,7 +2024,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
 
     @NotNull
     public Location getLocation() {
-        return new Location(this.pos.x, this.pos.y, this.pos.z, this.rotation.yaw, this.rotation.pitch, this.headYaw, this.level);
+        return new Location(this.pos.x, this.pos.y, this.pos.z, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw, this.level);
     }
 
     @NotNull
@@ -2093,8 +2067,8 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     protected boolean hasWaterAt(float height, boolean tickCached) {
         double y = this.pos.y + height;
         Block block = tickCached ?
-                this.level.getTickCachedBlock(this.temporalVector.setComponents(NukkitMath.floorDouble(this.pos.x), NukkitMath.floorDouble(y), NukkitMath.floorDouble(this.pos.z))) :
-                this.level.getBlock(this.temporalVector.setComponents(NukkitMath.floorDouble(this.pos.x), NukkitMath.floorDouble(y), NukkitMath.floorDouble(this.pos.z)));
+                this.level.getTickCachedBlock(this.pos.floor()) :
+                this.level.getBlock(this.pos.floor());
 
         boolean layer1 = false;
         Block block1 = tickCached ? block.getTickCachedLevelBlockAtLayer(1) : block.getLevelBlockAtLayer(1);
@@ -2112,10 +2086,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     public boolean isInsideOfSolid() {
         double y = this.pos.y + this.getEyeHeight();
         Block block = this.level.getBlock(
-                this.temporalVector.setComponents(
-                        NukkitMath.floorDouble(this.pos.x),
-                        NukkitMath.floorDouble(y),
-                        NukkitMath.floorDouble(this.pos.z))
+                this.pos.add(0, y, 0).floor()
         );
 
         AxisAlignedBB bb = block.getBoundingBox();
@@ -2256,15 +2227,15 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
         this.updateFallState(this.onGround);
 
         if (movX != dx) {
-            this.motionX = 0;
+            this.motion.x = 0;
         }
 
         if (movY != dy) {
-            this.motionY = 0;
+            this.motion.y = 0;
         }
 
         if (movZ != dz) {
-            this.motionZ = 0;
+            this.motion.z = 0;
         }
 
         // TODO: vehicle collision events (first we need to spawn them!)
@@ -2299,7 +2270,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
             for (int z = minZ; z <= maxZ; ++z) {
                 for (int x = minX; x <= maxX; ++x) {
                     for (int y = minY; y <= maxY; ++y) {
-                        Block block = this.level.getBlock(this.temporalVector.setComponents(x, y, z));
+                        Block block = this.level.getBlock(new Vector3(x, y, z));
                         this.blocksAround.add(block);
                     }
                 }
@@ -2324,7 +2295,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
             for (int z = minZ; z <= maxZ; ++z) {
                 for (int x = minX; x <= maxX; ++x) {
                     for (int y = minY; y <= maxY; ++y) {
-                        this.blocksAround.add(this.level.getTickCachedBlock(this.temporalVector.setComponents(x, y, z)));
+                        this.blocksAround.add(this.level.getTickCachedBlock(new Vector3(x, y, z)));
                     }
                 }
             }
@@ -2475,9 +2446,9 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
                 var dx = vector.x * d;
                 var dy = vector.y * d;
                 var dz = vector.z * d;
-                this.motionX += dx;
-                this.motionY += dy;
-                this.motionZ += dz;
+                this.motion.x += dx;
+                this.motion.y += dy;
+                this.motion.z += dz;
                 if (this instanceof EntityPhysical entityPhysical) {
                     entityPhysical.previousCurrentMotion.x = dx;
                     entityPhysical.previousCurrentMotion.y = dy;
@@ -2522,7 +2493,6 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     public void setRotation(double yaw, double pitch, double headYaw) {
         this.rotation.yaw = yaw;
         this.rotation.pitch = pitch;
-        this.headYaw = headYaw;
         this.scheduleUpdate();
     }
 
@@ -2593,7 +2563,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     }
 
     public Vector3 getMotion() {
-        return new Vector3(this.motionX, this.motionY, this.motionZ);
+        return new Vector3(this.motion.x, this.motion.y, this.motion.z);
     }
 
     /**
@@ -2613,9 +2583,9 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
             }
         }
 
-        this.motionX = motion.x;
-        this.motionY = motion.y;
-        this.motionZ = motion.z;
+        this.motion.x = motion.x;
+        this.motion.y = motion.y;
+        this.motion.z = motion.z;
 
         if (!this.justCreated && !this.isImmobile()) {
             this.updateMovement();
@@ -2642,7 +2612,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     }
 
     public boolean teleport(Vector3 pos, PlayerTeleportEvent.TeleportCause cause) {
-        return this.teleport(Location.fromObject(pos, this.level, this.rotation.yaw, this.rotation.pitch, this.headYaw), cause);
+        return this.teleport(Location.fromObject(pos, this.level, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw), cause);
     }
 
     public boolean teleport(Position pos) {
@@ -2650,7 +2620,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     }
 
     public boolean teleport(Position pos, PlayerTeleportEvent.TeleportCause cause) {
-        return this.teleport(Location.fromObject(pos, pos.level, this.rotation.yaw, this.rotation.pitch, this.headYaw), cause);
+        return this.teleport(Location.fromObject(pos, pos.level, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw), cause);
     }
 
     public boolean teleport(Location location) {
@@ -2687,7 +2657,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
         this.positionChanged = true;
         this.ySize = 0;
 
-        this.setMotion(this.temporalVector.setComponents(0, 0, 0));
+        this.setMotion(new Vector3());
 
         if (this.setPositionAndRotation(to, yaw, pitch)) {
             this.resetFallDistance();

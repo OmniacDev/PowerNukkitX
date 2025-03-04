@@ -1,11 +1,11 @@
 package cn.nukkit.entity.ai.executor.villager;
 
 import cn.nukkit.block.Block;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.executor.EntityControl;
 import cn.nukkit.entity.ai.executor.IBehaviorExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.villagers.EntityVillagerV2;
 import cn.nukkit.item.Item;
 import cn.nukkit.math.Vector3;
@@ -13,8 +13,6 @@ import cn.nukkit.utils.Utils;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class GossipExecutor implements EntityControl, IBehaviorExecutor {
@@ -26,7 +24,7 @@ public class GossipExecutor implements EntityControl, IBehaviorExecutor {
     private final MemoryType<? extends EntityVillagerV2> type;
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         EntityVillagerV2 entity1 = entity.getMemoryStorage().get(type);
         if(entity1 != null) {
             if(entity1.pos.toHorizontal().distance(entity.pos.toHorizontal()) < 2) {
@@ -58,7 +56,7 @@ public class GossipExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         entity.setMoveTarget(entity.getMemoryStorage().get(type).pos);
         entity.setLookTarget(entity.getMemoryStorage().get(type).pos);
         this.tick = 0;
@@ -67,12 +65,12 @@ public class GossipExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         entity.getMemoryStorage().clear(type);
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         onStop(entity);
     }
 }

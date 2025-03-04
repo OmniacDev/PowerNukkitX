@@ -168,9 +168,9 @@ public class EntityBoat extends EntityVehicle {
         addEntity.x = (float) this.pos.x;
         addEntity.y = (float) this.pos.y + getBaseOffset();
         addEntity.z = (float) this.pos.z;
-        addEntity.speedX = (float) this.motionX;
-        addEntity.speedY = (float) this.motionY;
-        addEntity.speedZ = (float) this.motionZ;
+        addEntity.speedX = (float) this.motion.x;
+        addEntity.speedY = (float) this.motion.y;
+        addEntity.speedZ = (float) this.motion.z;
         addEntity.entityData = this.entityDataMap;
 
         addEntity.links = new EntityLink[this.passengers.size()];
@@ -201,7 +201,7 @@ public class EntityBoat extends EntityVehicle {
             hasUpdate = this.updateBoat(tickDiff) || hasUpdate;
         }
 
-        return hasUpdate || !this.onGround || Math.abs(this.motionX) > 0.00001 || Math.abs(this.motionY) > 0.00001 || Math.abs(this.motionZ) > 0.00001;
+        return hasUpdate || !this.onGround || Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.y) > 0.00001 || Math.abs(this.motion.z) > 0.00001;
     }
 
     private boolean updateBoat(int tickDiff) {
@@ -270,23 +270,23 @@ public class EntityBoat extends EntityVehicle {
 
     private void moveBoat(double waterDiff) {
         checkObstruction(this.pos.x, this.pos.y, this.pos.z);
-        move(this.motionX, this.motionY, this.motionZ);
+        move(this.motion.x, this.motion.y, this.motion.z);
 
         double friction = 1 - this.getDrag();
 
-        if (this.onGround && (Math.abs(this.motionX) > 0.00001 || Math.abs(this.motionZ) > 0.00001)) {
-            friction *= this.getLevel().getBlock(this.temporalVector.setComponents((int) Math.floor(this.pos.x), (int) Math.floor(this.pos.y - 1), (int) Math.floor(this.pos.z))).getFrictionFactor();
+        if (this.onGround && (Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.z) > 0.00001)) {
+            friction *= this.getLevel().getBlock(this.pos.add(0, -1, 0).floor()).getFrictionFactor();
         }
 
-        this.motionX *= friction;
+        this.motion.x *= friction;
 
         if (!onGround || waterDiff > SINKING_DEPTH/* || sinking*/) {
-            this.motionY = waterDiff > 0.5 ? this.motionY - this.getGravity() : (this.motionY - SINKING_SPEED < -SINKING_MAX_SPEED ? this.motionY : this.motionY - SINKING_SPEED);
+            this.motion.y = waterDiff > 0.5 ? this.motion.y - this.getGravity() : (this.motion.y - SINKING_SPEED < -SINKING_MAX_SPEED ? this.motion.y : this.motion.y - SINKING_SPEED);
         }
 
-        this.motionZ *= friction;
+        this.motion.z *= friction;
 
-        Location from = new Location(lastX, lastY, lastZ, lastYaw, lastPitch, level);
+        Location from = new Location(this.prevPos.x, this.prevPos.y, this.prevPos.z, this.prevRotation.yaw, this.prevRotation.pitch, level);
         Location to = new Location(this.pos.x, this.pos.y, this.pos.z, this.rotation.yaw, this.rotation.pitch, level);
 
         if (!from.equals(to)) {
@@ -327,10 +327,10 @@ public class EntityBoat extends EntityVehicle {
         }
 
         if (waterDiff < -SINKING_DEPTH / 1.7) {
-            this.motionY = Math.min(0.05 / 10, this.motionY + 0.005);
+            this.motion.y = Math.min(0.05 / 10, this.motion.y + 0.005);
             hasUpdated = true;
         } else if (waterDiff < 0 || !sinking) {
-            this.motionY = this.motionY > (SINKING_MAX_SPEED / 2) ? Math.max(this.motionY - 0.02, (SINKING_MAX_SPEED / 2)) : this.motionY + SINKING_SPEED;
+            this.motion.y = this.motion.y > (SINKING_MAX_SPEED / 2) ? Math.max(this.motion.y - 0.02, (SINKING_MAX_SPEED / 2)) : this.motion.y + SINKING_SPEED;
             hasUpdated = true;
         }
         return hasUpdated;
@@ -405,7 +405,7 @@ public class EntityBoat extends EntityVehicle {
 
             @Override
             public void accept(int x, int y, int z) {
-                Block block = EntityBoat.this.level.getBlock(EntityBoat.this.temporalVector.setComponents(x, y, z));
+                Block block = EntityBoat.this.level.getBlock(new Vector3(x, y, z));
 
                 if (block instanceof BlockFlowingWater || ((block = block.getLevelBlockAtLayer(1)) instanceof BlockFlowingWater)) {
                     double level = block.getMaxY();
@@ -528,8 +528,8 @@ public class EntityBoat extends EntityVehicle {
                 diffZ *= 1 + entityCollisionReduction;
 
                 if (this.riding == null) {
-                    motionX -= diffX;
-                    motionZ -= diffZ;
+                    this.motion.x -= diffX;
+                    this.motion.z -= diffZ;
                 }
             }
         }
@@ -588,7 +588,6 @@ public class EntityBoat extends EntityVehicle {
     public void onInput(Location loc) {
         this.move(loc.x - this.pos.x, loc.y - this.pos.y, loc.z - this.pos.z);
         this.rotation.yaw = loc.yaw;
-        this.headYaw = loc.headYaw;
         broadcastMovement(false);
     }
 }

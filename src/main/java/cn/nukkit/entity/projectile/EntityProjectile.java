@@ -72,7 +72,7 @@ public abstract class EntityProjectile extends Entity {
     }
 
     public int getResultDamage() {
-        return NukkitMath.ceilDouble(Math.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ) * getDamage());
+        return NukkitMath.ceilDouble(Math.sqrt(this.motion.x * this.motion.x + this.motion.y * this.motion.y + this.motion.z * this.motion.z) * getDamage());
     }
 
     @Override
@@ -146,9 +146,9 @@ public abstract class EntityProjectile extends Entity {
     }
 
     protected void updateMotion() {
-        this.motionY -= this.getGravity();
-        this.motionX *= 1 - this.getDrag();
-        this.motionZ *= 1 - this.getDrag();
+        this.motion.y -= this.getGravity();
+        this.motion.x *= 1 - this.getDrag();
+        this.motion.z *= 1 - this.getDrag();
     }
 
     /**
@@ -187,9 +187,9 @@ public abstract class EntityProjectile extends Entity {
                 updateMotion();
             }
 
-            Vector3 moveVector = new Vector3(this.pos.x + this.motionX, this.pos.y + this.motionY, this.pos.z + this.motionZ);
+            Vector3 moveVector = new Vector3(this.pos.x + this.motion.x, this.pos.y + this.motion.y, this.pos.z + this.motion.z);
 
-            Entity[] list = this.getLevel().getCollidingEntities(this.getBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expand(1, 1, 1), this);
+            Entity[] list = this.getLevel().getCollidingEntities(this.getBoundingBox().addCoord(this.motion.x, this.motion.y, this.motion.z).expand(1, 1, 1), this);
 
             double nearDistance = Integer.MAX_VALUE;
             Entity nearEntity = null;
@@ -230,14 +230,14 @@ public abstract class EntityProjectile extends Entity {
 
             Position position = getPosition();
             Vector3 motion = getMotion();
-            this.move(this.motionX, this.motionY, this.motionZ);
+            this.move(this.motion.x, this.motion.y, this.motion.z);
 
             if (this.isCollided && !this.hadCollision) { //collide with block
                 this.hadCollision = true;
 
-                this.motionX = 0;
-                this.motionY = 0;
-                this.motionZ = 0;
+                this.motion.x = 0;
+                this.motion.y = 0;
+                this.motion.z = 0;
 
                 this.server.getPluginManager().callEvent(new ProjectileHitEvent(this, MovingObjectPosition.fromBlock(this.pos.getFloorX(), this.pos.getFloorY(), this.pos.getFloorZ(), BlockFace.UP, this.pos)));
                 onCollideWithBlock(position, motion);
@@ -247,7 +247,7 @@ public abstract class EntityProjectile extends Entity {
                 this.hadCollision = false;
             }
 
-            if (!this.hadCollision || Math.abs(this.motionX) > 0.00001 || Math.abs(this.motionY) > 0.00001 || Math.abs(this.motionZ) > 0.00001) {
+            if (!this.hadCollision || Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.y) > 0.00001 || Math.abs(this.motion.z) > 0.00001) {
                 updateRotation();
                 hasUpdate = true;
             }
@@ -259,17 +259,17 @@ public abstract class EntityProjectile extends Entity {
     }
 
     public void updateRotation() {
-        double f = Math.sqrt((this.motionX * this.motionX) + (this.motionZ * this.motionZ));
-        this.rotation.yaw = Math.atan2(this.motionX, this.motionZ) * 180 / Math.PI;
-        this.rotation.pitch = Math.atan2(this.motionY, f) * 180 / Math.PI;
+        double f = Math.sqrt((this.motion.x * this.motion.x) + (this.motion.z * this.motion.z));
+        this.rotation.yaw = Math.atan2(this.motion.x, this.motion.z) * 180 / Math.PI;
+        this.rotation.pitch = Math.atan2(this.motion.y, f) * 180 / Math.PI;
     }
 
     public void inaccurate(float modifier) {
         Random rand = ThreadLocalRandom.current();
 
-        this.motionX += rand.nextGaussian() * 0.007499999832361937 * modifier;
-        this.motionY += rand.nextGaussian() * 0.007499999832361937 * modifier;
-        this.motionZ += rand.nextGaussian() * 0.007499999832361937 * modifier;
+        this.motion.x += rand.nextGaussian() * 0.007499999832361937 * modifier;
+        this.motion.y += rand.nextGaussian() * 0.007499999832361937 * modifier;
+        this.motion.z += rand.nextGaussian() * 0.007499999832361937 * modifier;
     }
 
     protected void onCollideWithBlock(Position position, Vector3 motion) {

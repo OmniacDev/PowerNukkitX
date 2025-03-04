@@ -1,12 +1,13 @@
 package cn.nukkit.entity.ai.behaviorgroup;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.behavior.IBehavior;
 import cn.nukkit.entity.ai.controller.IController;
 import cn.nukkit.entity.ai.memory.IMemoryStorage;
 import cn.nukkit.entity.ai.memory.MemoryStorage;
 import cn.nukkit.entity.ai.route.finder.IRouteFinder;
 import cn.nukkit.entity.ai.sensor.ISensor;
+import cn.nukkit.entity.mob.EntityMob;
 
 import java.util.Collections;
 import java.util.Set;
@@ -18,42 +19,42 @@ import java.util.Set;
 
 public class EmptyBehaviorGroup implements IBehaviorGroup {
 
-    protected EntityIntelligent entity;
+    protected EntityMob entity;
     protected IMemoryStorage memoryStorage;
 
-    public EmptyBehaviorGroup(EntityIntelligent entity) {
+    public EmptyBehaviorGroup(EntityMob entity) {
         this.entity = entity;
         this.memoryStorage = new MemoryStorage(entity);
     }
     
     
     @Override
-    public void evaluateBehaviors(EntityIntelligent entity) {
+    public void evaluateBehaviors(EntityMob entity) {
 
     }
 
     @Override
-    public void evaluateCoreBehaviors(EntityIntelligent entity) {
+    public void evaluateCoreBehaviors(EntityMob entity) {
 
     }
 
     @Override
-    public void collectSensorData(EntityIntelligent entity) {
+    public void collectSensorData(EntityMob entity) {
 
     }
 
     @Override
-    public void tickRunningBehaviors(EntityIntelligent entity) {
+    public void tickRunningBehaviors(EntityMob entity) {
 
     }
 
     @Override
-    public void tickRunningCoreBehaviors(EntityIntelligent entity) {
+    public void tickRunningCoreBehaviors(EntityMob entity) {
 
     }
 
     @Override
-    public void applyController(EntityIntelligent entity) {
+    public void applyController(EntityMob entity) {
 
     }
 
@@ -93,7 +94,7 @@ public class EmptyBehaviorGroup implements IBehaviorGroup {
     }
 
     @Override
-    public void updateRoute(EntityIntelligent entity) {
+    public void updateRoute(EntityMob entity) {
 
     }
 

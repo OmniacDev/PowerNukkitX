@@ -63,8 +63,8 @@ public class BlockSoulSand extends BlockSolid {
 
     @Override
     public void onEntityCollide(Entity entity) {
-        entity.motionX *= 0.4d;
-        entity.motionZ *= 0.4d;
+        entity.motion.x *= 0.4d;
+        entity.motion.z *= 0.4d;
     }
 
     @Override

@@ -1,8 +1,8 @@
 package cn.nukkit.entity.ai.sensor;
 
 import cn.nukkit.Player;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.animal.EntityAnimal;
 
 
@@ -25,7 +25,7 @@ public class NearestFeedingPlayerSensor implements ISensor {
     }
 
     @Override
-    public void sense(EntityIntelligent entity) {
+    public void sense(EntityMob entity) {
         if (entity instanceof EntityAnimal entityAnimal) {
             Player player = null;
             double rangeSquared = this.range * this.range;

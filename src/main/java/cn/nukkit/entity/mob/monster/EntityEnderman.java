@@ -2,7 +2,7 @@ package cn.nukkit.entity.mob.monster;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityWalkable;
 import cn.nukkit.entity.ai.behavior.Behavior;
 import cn.nukkit.entity.ai.behaviorgroup.BehaviorGroup;
@@ -79,7 +79,7 @@ public class EntityEnderman extends EntityMonster implements EntityWalkable {
                                 new EntityCheckEvaluator(CoreMemoryTypes.ATTACK_TARGET),
                                 any(
                                         entity -> getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET) instanceof Player holder && holder.getInventory() != null && !holder.getInventory().getHelmet().getId().equals(Block.CARVED_PUMPKIN),
-                                        entity -> getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET) instanceof EntityIntelligent
+                                        entity -> getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET) instanceof EntityMob
                                 )
                         ), 3, 1),
                         new Behavior(new EndermanBlockExecutor(), all(

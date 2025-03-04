@@ -1,10 +1,9 @@
 package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.block.Block;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.level.Location;
 import cn.nukkit.level.Sound;
-import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.Vector3;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,7 @@ public class TeleportExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         Location location = entity.getLocation();
         for(int i = 0; i < maxTries; i++) {
             if(location.distance(entity.pos) < minDistance) {

@@ -2,12 +2,11 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.EntityEquipment;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.effect.EffectType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityMonster;
-import cn.nukkit.inventory.InventorySlice;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemGoldIngot;
 import cn.nukkit.item.enchantment.Enchantment;
@@ -15,8 +14,6 @@ import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
 
 import java.util.concurrent.ThreadLocalRandom;
-
-import static cn.nukkit.inventory.EntityEquipmentInventory.OFFHAND;
 
 
 public class PiglinTradeExecutor implements EntityControl, IBehaviorExecutor {
@@ -26,7 +23,7 @@ public class PiglinTradeExecutor implements EntityControl, IBehaviorExecutor {
     public PiglinTradeExecutor() {}
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         tick++;
         if(tick < 160) {
             if(tick % 30 == 0 && ThreadLocalRandom.current().nextBoolean()) {
@@ -48,14 +45,14 @@ public class PiglinTradeExecutor implements EntityControl, IBehaviorExecutor {
 
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         tick = -1;
         removeLookTarget(entity);
         entity.setDataFlag(EntityFlag.ADMIRING);
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         if(entity instanceof EntityMonster mob) {
             clearOffhand(mob, mob.getItemInOffhand());
         }
@@ -110,7 +107,7 @@ public class PiglinTradeExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         onStop(entity);
     }
 

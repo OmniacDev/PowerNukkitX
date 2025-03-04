@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.controller;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.BVector3;
 import cn.nukkit.math.Vector3;
 
@@ -20,7 +20,7 @@ public class LookController implements IController {
     }
 
     @Override
-    public boolean control(EntityIntelligent entity) {
+    public boolean control(EntityMob entity) {
         Vector3 lookTarget = entity.getLookTarget();
 
         if (lookAtRoute && entity.hasMoveDirection()) {

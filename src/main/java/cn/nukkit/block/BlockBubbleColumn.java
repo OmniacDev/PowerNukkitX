@@ -109,12 +109,12 @@ public class BlockBubbleColumn extends BlockTransparent {
         if (entity.canBeMovedByCurrents()) {
             if (up().isAir()) {
                 if (isDragDown()) {
-                    entity.motionY = Math.max(-0.9, entity.motionY - 0.03);
+                    entity.motion.y = Math.max(-0.9, entity.motion.y - 0.03);
                 } else {
-                    if (entity instanceof EntityPhysical entityPhysical && entity.motionY < -entityPhysical.getGravity() * 8) {
-                        entity.motionY = -entityPhysical.getGravity() * 2;
+                    if (entity instanceof EntityPhysical entityPhysical && entity.motion.y < -entityPhysical.getGravity() * 8) {
+                        entity.motion.y = -entityPhysical.getGravity() * 2;
                     }
-                    entity.motionY = Math.min(1.8, entity.motionY + 0.1);
+                    entity.motion.y = Math.min(1.8, entity.motion.y + 0.1);
                 }
                 
                 ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -125,9 +125,9 @@ public class BlockBubbleColumn extends BlockTransparent {
                 
             } else {
                 if (isDragDown()) {
-                    entity.motionY = Math.max(-0.3, entity.motionY - 0.3);
+                    entity.motion.y = Math.max(-0.3, entity.motion.y - 0.3);
                 } else {
-                    entity.motionY = Math.min(0.7, entity.motionY + 0.06);
+                    entity.motion.y = Math.min(0.7, entity.motion.y + 0.06);
                 }
             }
             entity.motionChanged = true;

@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.route.finder.impl;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.route.data.Node;
 import cn.nukkit.entity.ai.route.finder.IRouteFinder;
 import cn.nukkit.math.Vector3;
@@ -16,16 +16,16 @@ import java.util.function.Predicate;
 
 public class ConditionalAStarRouteFinder implements IRouteFinder {
 
-    private final EntityIntelligent entity;
-    private Object2ObjectArrayMap<Predicate<EntityIntelligent>, IRouteFinder> routeFinders = new Object2ObjectArrayMap<>();
+    private final EntityMob entity;
+    private Object2ObjectArrayMap<Predicate<EntityMob>, IRouteFinder> routeFinders = new Object2ObjectArrayMap<>();
 
-    public ConditionalAStarRouteFinder(EntityIntelligent entity, Pair<Predicate<EntityIntelligent>, IRouteFinder>... routeFinders) {
+    public ConditionalAStarRouteFinder(EntityMob entity, Pair<Predicate<EntityMob>, IRouteFinder>... routeFinders) {
         this.entity = entity;
         Arrays.stream(routeFinders).forEach(pair -> this.routeFinders.put(pair.first(), pair.second()));
     }
 
     public Optional<IRouteFinder> getRouteFinder() {
-        for(Object2ObjectMap.Entry<Predicate<EntityIntelligent>, IRouteFinder> entry : routeFinders.object2ObjectEntrySet()) {
+        for(Object2ObjectMap.Entry<Predicate<EntityMob>, IRouteFinder> entry : routeFinders.object2ObjectEntrySet()) {
             if(entry.getKey().test(this.entity)) {
                 return Optional.ofNullable(entry.getValue());
             }

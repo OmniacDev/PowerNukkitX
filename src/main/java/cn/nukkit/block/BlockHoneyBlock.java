@@ -54,7 +54,7 @@ public class BlockHoneyBlock extends BlockSolid {
 
     @Override
     public void onEntityCollide(Entity entity) {
-        if (!entity.onGround && entity.motionY <= 0.08 &&
+        if (!entity.onGround && entity.motion.y <= 0.08 &&
                 (!(entity instanceof Player)
                         || !((Player) entity).getAdventureSettings().get(AdventureSettings.Type.FLYING))) {
             double ex = Math.abs(x + 0.5D - entity.pos.x);
@@ -63,8 +63,8 @@ public class BlockHoneyBlock extends BlockSolid {
             if (ex + 1.0E-3D > width || ez + 1.0E-3D > width) {
                 Vector3 motion = entity.getMotion();
                 motion.y = -0.05;
-                if (entity.motionY < -0.13) {
-                    double m = -0.05 / entity.motionY;
+                if (entity.motion.y < -0.13) {
+                    double m = -0.05 / entity.motion.y;
                     motion.x *= m;
                     motion.z *= m;
                 }

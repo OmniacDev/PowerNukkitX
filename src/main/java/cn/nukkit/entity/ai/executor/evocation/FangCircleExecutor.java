@@ -1,7 +1,8 @@
 package cn.nukkit.entity.ai.executor.evocation;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager;
 import cn.nukkit.level.Location;
 
@@ -23,7 +24,7 @@ public class FangCircleExecutor extends FangLineExecutor {
 
     public FangCircleExecutor() {}
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         EntityEvocationIllager illager = (EntityEvocationIllager) entity;
         if(tick == CAST_DURATION) {
             entity.rotation.yaw = (entity.headYaw);
@@ -51,7 +52,7 @@ public class FangCircleExecutor extends FangLineExecutor {
     }
 
     @Override
-    protected void startSpell(EntityIntelligent entity) {
+    protected void startSpell(EntityMob entity) {
         super.startSpell(entity);
         entity.getMemoryStorage().put(LAST_MAGIC, EntityEvocationIllager.SPELL.CAST_CIRLCE);
     }

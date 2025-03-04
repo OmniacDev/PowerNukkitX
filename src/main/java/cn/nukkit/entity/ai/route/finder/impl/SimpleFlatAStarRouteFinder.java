@@ -3,7 +3,7 @@ package cn.nukkit.entity.ai.route.finder.impl;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.EntityAI;
 import cn.nukkit.entity.ai.route.data.Node;
 import cn.nukkit.entity.ai.route.finder.SimpleRouteFinder;
@@ -39,7 +39,7 @@ public class SimpleFlatAStarRouteFinder extends SimpleRouteFinder {
     protected final List<Node> closeList = new ArrayList<>();
     protected final HashSet<Vector3> closeHashSet = new HashSet<>();
 
-    protected EntityIntelligent entity;
+    protected EntityMob entity;
 
     protected Vector3 start;
 
@@ -63,7 +63,7 @@ public class SimpleFlatAStarRouteFinder extends SimpleRouteFinder {
 
     protected long lastRouteParticleSpawn;
 
-    public SimpleFlatAStarRouteFinder(IPosEvaluator blockEvaluator, EntityIntelligent entity) {
+    public SimpleFlatAStarRouteFinder(IPosEvaluator blockEvaluator, EntityMob entity) {
         super(blockEvaluator);
         this.entity = entity;
     }

@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.controller;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 
 /**
  * 控制器是用来控制实体的行为的，比如移动、跳跃、攻击等等的具体实现。<br/>
@@ -20,5 +20,5 @@ public interface IController {
      * @param entity 目标实体
      * @return 是否成功实施行为
      */
-    boolean control(EntityIntelligent entity);
+    boolean control(EntityMob entity);
 }

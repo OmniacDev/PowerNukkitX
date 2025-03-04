@@ -149,7 +149,7 @@ public class EntityWindCharge extends EntityProjectile {
     }
 
     protected void knockBack(Entity entity) {
-        Vector3 knockback = new Vector3(entity.motionX, entity.motionY, entity.motionZ);
+        Vector3 knockback = new Vector3(entity.motion.x, entity.motion.y, entity.motion.z);
         knockback.x /= 2d;
         knockback.y /= 2d;
         knockback.z /= 2d;

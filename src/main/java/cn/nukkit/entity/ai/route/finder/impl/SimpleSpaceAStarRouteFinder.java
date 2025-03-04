@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.route.finder.impl;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.route.data.Node;
 import cn.nukkit.entity.ai.route.posevaluator.IPosEvaluator;
 import cn.nukkit.level.Level;
@@ -21,7 +21,7 @@ public class SimpleSpaceAStarRouteFinder extends SimpleFlatAStarRouteFinder {
     protected final static int OBLIQUE_2D_MOVE_COST = 14;
     protected final static int OBLIQUE_3D_MOVE_COST = 17;
 
-    public SimpleSpaceAStarRouteFinder(IPosEvaluator blockEvaluator, EntityIntelligent entity) {
+    public SimpleSpaceAStarRouteFinder(IPosEvaluator blockEvaluator, EntityMob entity) {
         super(blockEvaluator, entity);
     }
 

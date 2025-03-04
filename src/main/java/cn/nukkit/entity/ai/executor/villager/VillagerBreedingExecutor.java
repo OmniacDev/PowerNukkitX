@@ -4,9 +4,10 @@ import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockBed;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.executor.EntityBreedingExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.villagers.EntityVillagerV2;
 import cn.nukkit.level.Location;
 import cn.nukkit.network.protocol.EntityEventPacket;
@@ -20,14 +21,14 @@ public class VillagerBreedingExecutor extends EntityBreedingExecutor {
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         super.onStart(entity);
         finded = true;
-        another = (EntityIntelligent) entity.getMemoryStorage().get(CoreMemoryTypes.ENTITY_SPOUSE);
+        another = (EntityMob) entity.getMemoryStorage().get(CoreMemoryTypes.ENTITY_SPOUSE);
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         clearData(entity);
         if(another != null) {
             clearData(another);
@@ -35,13 +36,13 @@ public class VillagerBreedingExecutor extends EntityBreedingExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent uncasted) {
+    public boolean execute(EntityMob uncasted) {
         if(another == null) return false;
         return super.execute(uncasted);
     }
 
     @Override
-    protected void bear(EntityIntelligent entity) {
+    protected void bear(EntityMob entity) {
 
         int range = 48;
         int lookY = 5;
@@ -77,7 +78,7 @@ public class VillagerBreedingExecutor extends EntityBreedingExecutor {
     }
 
     @Override
-    protected void clearData(EntityIntelligent entity) {
+    protected void clearData(EntityMob entity) {
         entity.getMemoryStorage().clear(CoreMemoryTypes.ENTITY_SPOUSE);
         //clear move target
         entity.setMoveTarget(null);
@@ -90,14 +91,14 @@ public class VillagerBreedingExecutor extends EntityBreedingExecutor {
         entity.getMemoryStorage().put(CoreMemoryTypes.LAST_IN_LOVE_TIME, entity.getLevel().getTick());
     }
 
-    protected void sendInLoveParticles(EntityIntelligent entity) {
+    protected void sendInLoveParticles(EntityMob entity) {
         EntityEventPacket pk = new EntityEventPacket();
         pk.eid = entity.getId();
         pk.event = EntityEventPacket.LOVE_PARTICLES;
         Server.broadcastPacket(entity.getViewers().values(), pk);
     }
 
-    protected void sendAngryParticles(EntityIntelligent entity) {
+    protected void sendAngryParticles(EntityMob entity) {
         EntityEventPacket pk = new EntityEventPacket();
         pk.eid = entity.getId();
         pk.event = EntityEventPacket.VILLAGER_ANGRY;

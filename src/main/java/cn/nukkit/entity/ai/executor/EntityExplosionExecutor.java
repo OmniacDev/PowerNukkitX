@@ -1,9 +1,10 @@
 package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.Server;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityCreeper;
 import cn.nukkit.event.entity.EntityExplosionPrimeEvent;
 import cn.nukkit.level.Explosion;
@@ -34,7 +35,7 @@ public class EntityExplosionExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         //check flag
         if (flagMemory != null && entity.getMemoryStorage().compareDataTo(flagMemory, false)) {
             return false;
@@ -53,18 +54,18 @@ public class EntityExplosionExecutor implements IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         entity.setDataFlag(EntityFlag.IGNITED, false);
         currentTick = 0;
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         entity.setDataFlag(EntityFlag.IGNITED, false);
         currentTick = 0;
     }
 
-    protected void explode(EntityIntelligent entity) {
+    protected void explode(EntityMob entity) {
         EntityExplosionPrimeEvent ev = new EntityExplosionPrimeEvent(entity, entity instanceof EntityCreeper creeper ? creeper.isPowered() ? explodeForce * 2 : explodeForce : explodeForce);
 
         if (!entity.level.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {

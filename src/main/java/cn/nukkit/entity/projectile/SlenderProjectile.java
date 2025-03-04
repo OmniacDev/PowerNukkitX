@@ -144,21 +144,21 @@ public abstract class SlenderProjectile extends EntityProjectile {
         this.updateFallState(this.onGround);
 
         if (movX != dx) {
-            this.motionX = 0;
+            this.motion.x = 0;
         }
         if (movY != dy) {
-            this.motionY = 0;
+            this.motion.y = 0;
         }
         if (movZ != dz) {
-            this.motionZ = 0;
+            this.motion.z = 0;
         }
 
         //collide with block
         if (this.isCollided && !this.hadCollision) {
             this.hadCollision = true;
-            this.motionX = 0;
-            this.motionY = 0;
-            this.motionZ = 0;
+            this.motion.x = 0;
+            this.motion.y = 0;
+            this.motion.z = 0;
             BVector3 bVector3 = BVector3.fromPos(new Vector3(dx, dy, dz));
             BlockFace blockFace = BlockFace.fromHorizontalAngle(bVector3.getYaw());
             Block block = level.getBlock(this.pos.getFloorX(), this.pos.getFloorY(), this.pos.getFloorZ()).getSide(blockFace);
@@ -194,9 +194,9 @@ public abstract class SlenderProjectile extends EntityProjectile {
 
         if (this.isCollided && this.hadCollision) {
             if (lastHitBlock != null && lastHitBlock.typeOfHit == 0 && level.getBlock(lastHitBlock.blockX, lastHitBlock.blockY, lastHitBlock.blockZ).isAir()) {
-                this.motionY -= this.getGravity();
+                this.motion.y -= this.getGravity();
                 updateRotation();
-                this.move(this.motionX, this.motionY, this.motionZ);
+                this.move(this.motion.x, this.motion.y, this.motion.z);
                 this.updateMovement();
             }
             return this.entityBaseTick(tickDiff);
@@ -208,11 +208,11 @@ public abstract class SlenderProjectile extends EntityProjectile {
             if (!this.isCollided) {
                 updateMotion();
             }
-            if (!this.hadCollision || Math.abs(this.motionX) > 0.00001 || Math.abs(this.motionY) > 0.00001 || Math.abs(this.motionZ) > 0.00001) {
+            if (!this.hadCollision || Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.y) > 0.00001 || Math.abs(this.motion.z) > 0.00001) {
                 updateRotation();
                 hasUpdate = true;
             }
-            this.move(this.motionX, this.motionY, this.motionZ);
+            this.move(this.motion.x, this.motion.y, this.motion.z);
             this.updateMovement();
         }
         return hasUpdate;

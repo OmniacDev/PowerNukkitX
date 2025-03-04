@@ -3,12 +3,11 @@ package cn.nukkit.entity.ai.executor;
 import cn.nukkit.Player;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityOwnable;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -41,7 +40,7 @@ public class EntityMoveToOwnerExecutor implements EntityControl, IBehaviorExecut
     }
 
     @Override
-    public boolean execute(@NotNull EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if (!entity.isEnablePitch()) entity.setEnablePitch(true);
 
         if (entity instanceof EntityOwnable entityOwnable) {
@@ -93,7 +92,7 @@ public class EntityMoveToOwnerExecutor implements EntityControl, IBehaviorExecut
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         //目标丢失
         removeRouteTarget(entity);
         removeLookTarget(entity);
@@ -107,7 +106,7 @@ public class EntityMoveToOwnerExecutor implements EntityControl, IBehaviorExecut
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         //目标丢失
         removeRouteTarget(entity);
         removeLookTarget(entity);

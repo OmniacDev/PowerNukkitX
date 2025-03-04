@@ -122,7 +122,7 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
             this.fallingTick++;
         }
         super.updateMovement();
-        this.move(this.motionX, this.motionY, this.motionZ);
+        this.move(this.motion.x, this.motion.y, this.motion.z);
     }
 
     public boolean isFalling() {
@@ -130,19 +130,19 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
     }
 
     public final void addTmpMoveMotion(Vector3 tmpMotion) {
-        this.motionX += tmpMotion.x;
-        this.motionY += tmpMotion.y;
-        this.motionZ += tmpMotion.z;
+        this.motion.x += tmpMotion.x;
+        this.motion.y += tmpMotion.y;
+        this.motion.z += tmpMotion.z;
     }
 
     public final void addTmpMoveMotionXZ(Vector3 tmpMotion) {
-        this.motionX += tmpMotion.x;
-        this.motionZ += tmpMotion.z;
+        this.motion.x += tmpMotion.x;
+        this.motion.z += tmpMotion.z;
     }
 
     protected void handleGravity() {
         //重力一直存在
-        this.motionY -= this.getGravity();
+        this.motion.y -= this.getGravity();
         if (!this.onGround && this.hasWaterAt(getFootHeight())) {
             //落地水
             resetFallDistance();
@@ -157,13 +157,13 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
         //未在地面就没有地面阻力
         if (!this.onGround) return;
         //小于精度
-        if (Math.abs(this.motionZ) < PRECISION && Math.abs(this.motionX) < PRECISION) return;
+        if (Math.abs(this.motion.z) < PRECISION && Math.abs(this.motion.x) < PRECISION) return;
         // 减少移动向量（计算摩擦系数，在冰上滑得更远）
         final double factor = getGroundFrictionFactor();
-        this.motionX *= factor;
-        this.motionZ *= factor;
-        if (Math.abs(this.motionX) < PRECISION) this.motionX = 0;
-        if (Math.abs(this.motionZ) < PRECISION) this.motionZ = 0;
+        this.motion.x *= factor;
+        this.motion.z *= factor;
+        if (Math.abs(this.motion.x) < PRECISION) this.motion.x = 0;
+        if (Math.abs(this.motion.z) < PRECISION) this.motion.z = 0;
     }
 
     /**
@@ -172,15 +172,15 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
 
     protected void handlePassableBlockFrictionMovement() {
         //小于精度
-        if (Math.abs(this.motionZ) < PRECISION && Math.abs(this.motionX) < PRECISION && Math.abs(this.motionY) < PRECISION)
+        if (Math.abs(this.motion.z) < PRECISION && Math.abs(this.motion.x) < PRECISION && Math.abs(this.motion.y) < PRECISION)
             return;
         final double factor = getPassableBlockFrictionFactor();
-        this.motionX *= factor;
-        this.motionY *= factor;
-        this.motionZ *= factor;
-        if (Math.abs(this.motionX) < PRECISION) this.motionX = 0;
-        if (Math.abs(this.motionY) < PRECISION) this.motionY = 0;
-        if (Math.abs(this.motionZ) < PRECISION) this.motionZ = 0;
+        this.motion.x *= factor;
+        this.motion.y *= factor;
+        this.motion.z *= factor;
+        if (Math.abs(this.motion.x) < PRECISION) this.motion.x = 0;
+        if (Math.abs(this.motion.y) < PRECISION) this.motion.y = 0;
+        if (Math.abs(this.motion.z) < PRECISION) this.motion.z = 0;
     }
 
     /**
@@ -191,7 +191,7 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
 
     public double getGroundFrictionFactor() {
         if (!this.onGround) return 1.0;
-        return this.getLevel().getTickCachedBlock(this.temporalVector.setComponents((int) Math.floor(this.pos.x), (int) Math.floor(this.pos.y - 1), (int) Math.floor(this.pos.z))).getFrictionFactor();
+        return this.getLevel().getTickCachedBlock(this.pos.add(0, -1, 0).floor()).getFrictionFactor();
     }
 
     /**
@@ -224,9 +224,9 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
             final var len = tmp.length();
             final var speed = getLiquidMovementSpeed(blockLiquid) * 0.3f;
             if (len > 0) {
-                this.motionX += tmp.x / len * speed;
-                this.motionY += tmp.y / len * speed;
-                this.motionZ += tmp.z / len * speed;
+                this.motion.x += tmp.x / len * speed;
+                this.motion.y += tmp.y / len * speed;
+                this.motion.z += tmp.z / len * speed;
             }
         }
     }
@@ -238,7 +238,7 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
 
     protected void handleFloatingMovement() {
         if (this.hasWaterAt(0)) {
-            this.motionY += this.getGravity() * getFloatingForceFactor();
+            this.motion.y += this.getGravity() * getFloatingForceFactor();
         }
     }
 
@@ -274,7 +274,7 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
     }
 
     protected void handleCollideMovement(int currentTick) {
-        var selfAABB = getOffsetBoundingBox().getOffsetBoundingBox(this.motionX, this.motionY, this.motionZ);
+        var selfAABB = getOffsetBoundingBox().getOffsetBoundingBox(this.motion.x, this.motion.y, this.motion.z);
         var collidingEntities = this.level.fastCollidingEntities(selfAABB, this);
         collidingEntities.removeIf(entity -> !(entity.canCollide() && (entity instanceof EntityPhysical || entity instanceof Player)));
         var size = collidingEntities.size();

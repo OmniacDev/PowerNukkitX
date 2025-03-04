@@ -1,8 +1,8 @@
 package cn.nukkit.entity.ai.behavior;
 
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.evaluator.IBehaviorEvaluator;
 import cn.nukkit.entity.ai.executor.IBehaviorExecutor;
+import cn.nukkit.entity.mob.EntityMob;
 import lombok.Getter;
 
 /**
@@ -48,27 +48,27 @@ public class Behavior extends AbstractBehavior {
     }
 
     @Override
-    public boolean evaluate(EntityIntelligent entity) {
+    public boolean evaluate(EntityMob entity) {
         return evaluator.evaluate(entity);
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         return executor.execute(entity);
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         executor.onStart(entity);
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         executor.onInterrupt(entity);
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         executor.onStop(entity);
     }
 

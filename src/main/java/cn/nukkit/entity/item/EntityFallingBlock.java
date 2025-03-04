@@ -148,15 +148,15 @@ public class EntityFallingBlock extends Entity {
                 }
             }
 
-            motionY -= getGravity();
+            this.motion.y -= getGravity();
 
-            move(motionX, motionY, motionZ);
+            move(this.motion.x, this.motion.y, this.motion.z);
 
             float friction = 1 - getDrag();
 
-            motionX *= friction;
-            motionY *= 1 - getDrag();
-            motionZ *= friction;
+            this.motion.x *= friction;
+            this.motion.y *= 1 - getDrag();
+            this.motion.z *= friction;
 
             Vector3 pos = (new Vector3(this.pos.x - 0.5, this.pos.y, this.pos.z - 0.5)).round();
             if (breakOnLava && level.getBlock(pos.subtract(0, 1, 0)) instanceof BlockFlowingLava) {
@@ -260,7 +260,7 @@ public class EntityFallingBlock extends Entity {
             updateMovement();
         }
 
-        return hasUpdate || !onGround || Math.abs(motionX) > 0.00001 || Math.abs(motionY) > 0.00001 || Math.abs(motionZ) > 0.00001;
+        return hasUpdate || !onGround || Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.y) > 0.00001 || Math.abs(this.motion.z) > 0.00001;
     }
 
     public Block getBlock() {

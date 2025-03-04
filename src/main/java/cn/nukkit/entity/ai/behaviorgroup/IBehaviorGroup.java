@@ -1,11 +1,11 @@
 package cn.nukkit.entity.ai.behaviorgroup;
 
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.behavior.IBehavior;
 import cn.nukkit.entity.ai.controller.IController;
 import cn.nukkit.entity.ai.memory.IMemoryStorage;
 import cn.nukkit.entity.ai.route.finder.IRouteFinder;
 import cn.nukkit.entity.ai.sensor.ISensor;
+import cn.nukkit.entity.mob.EntityMob;
 
 import java.util.Set;
 
@@ -29,7 +29,7 @@ public interface IBehaviorGroup {
      *
      * @param entity 目标实体对象
      */
-    void evaluateBehaviors(EntityIntelligent entity);
+    void evaluateBehaviors(EntityMob entity);
 
     /**
      * 调用行为组内部的所有核心行为{@link IBehavior}的评估器{@link cn.nukkit.entity.ai.evaluator.IBehaviorEvaluator}
@@ -38,7 +38,7 @@ public interface IBehaviorGroup {
      *
      * @param entity 目标实体对象
      */
-    void evaluateCoreBehaviors(EntityIntelligent entity);
+    void evaluateCoreBehaviors(EntityMob entity);
 
     /**
      * 调用行为组内部的所有传感器{@link ISensor}，并将传感器返回的记忆数据写入到记忆存储器中{@link IMemoryStorage}
@@ -47,7 +47,7 @@ public interface IBehaviorGroup {
      *
      * @param entity 目标实体对象
      */
-    void collectSensorData(EntityIntelligent entity);
+    void collectSensorData(EntityMob entity);
 
     /**
      * 调用行为组内部所有被激活的行为{@link IBehavior}的执行器{@link cn.nukkit.entity.ai.executor.IBehaviorExecutor}
@@ -56,7 +56,7 @@ public interface IBehaviorGroup {
      *
      * @param entity 目标实体对象
      */
-    void tickRunningBehaviors(EntityIntelligent entity);
+    void tickRunningBehaviors(EntityMob entity);
 
     /**
      * 调用行为组内部所有被激活的核心行为{@link IBehavior}的执行器{@link cn.nukkit.entity.ai.executor.IBehaviorExecutor}
@@ -65,7 +65,7 @@ public interface IBehaviorGroup {
      *
      * @param entity 目标实体对象
      */
-    void tickRunningCoreBehaviors(EntityIntelligent entity);
+    void tickRunningCoreBehaviors(EntityMob entity);
 
     /**
      * 应用行为内部所有的控制器{@link IController}
@@ -74,7 +74,7 @@ public interface IBehaviorGroup {
      *
      * @param entity 目标实体对象
      */
-    void applyController(EntityIntelligent entity);
+    void applyController(EntityMob entity);
 
     /**
      * @return 行为组包含的行为 {@link IBehavior}<br>Behaviors contained in Behavior Groups {@link IBehavior}
@@ -118,7 +118,7 @@ public interface IBehaviorGroup {
      *
      * @param entity 目标实体
      */
-    void updateRoute(EntityIntelligent entity);
+    void updateRoute(EntityMob entity);
 
     /**
      * @return 行为组的记忆存储器 {@link IMemoryStorage}<br>Behavior Group Memory Storage {@link IMemoryStorage}
@@ -144,10 +144,10 @@ public interface IBehaviorGroup {
      * <p>
      * When EntityAI.checkDebugOption(BEHAVIOR) == true, this method is called every 1gt to refresh the content related to debug mode
      */
-    default void debugTick(EntityIntelligent entity) {
+    default void debugTick(EntityMob entity) {
     }
 
-    default void save(EntityIntelligent entity) {
+    default void save(EntityMob entity) {
         //EmptyBehaviorGroup will return null
         if (getMemoryStorage() != null)
             getMemoryStorage().encode();

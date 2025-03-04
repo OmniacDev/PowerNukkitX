@@ -1,12 +1,13 @@
 package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
+import cn.nukkit.entity.mob.EntityMob;
 import org.jetbrains.annotations.Nullable;
 
 
-public class EntityBreedingExecutor<T extends EntityIntelligent> implements IBehaviorExecutor {
+public class EntityBreedingExecutor<T extends EntityMob> implements IBehaviorExecutor {
 
     protected Class<T> entityClass;
     protected int findingRangeSquared;
@@ -24,7 +25,7 @@ public class EntityBreedingExecutor<T extends EntityIntelligent> implements IBeh
     }
 
     @Override
-    public boolean execute(EntityIntelligent uncasted) {
+    public boolean execute(EntityMob uncasted) {
         if (entityClass.isInstance(uncasted)) {
             T entity = entityClass.cast(uncasted);
             if (shouldFindingSpouse(entity)) {
@@ -65,7 +66,7 @@ public class EntityBreedingExecutor<T extends EntityIntelligent> implements IBeh
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         clearData((T) entity);
 
         currentTick = 0;
@@ -122,7 +123,7 @@ public class EntityBreedingExecutor<T extends EntityIntelligent> implements IBeh
     }
 
     @Nullable
-    protected T getNearestInLove(EntityIntelligent entity) {
+    protected T getNearestInLove(EntityMob entity) {
         var entities = entity.level.getEntities();
         var maxDistanceSquared = -1d;
         T nearestInLove = null;

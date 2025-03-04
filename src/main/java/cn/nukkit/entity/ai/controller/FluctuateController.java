@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.controller;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -13,7 +13,7 @@ public class FluctuateController implements IController {
     private boolean lastTickInWater = false;
 
     @Override
-    public boolean control(EntityIntelligent entity) {
+    public boolean control(EntityMob entity) {
         if (entity.hasWaterAt(entity.getFloatingHeight())) {
             if (!lastTickInWater) lastTickInWater = true;
         } else {
@@ -21,9 +21,9 @@ public class FluctuateController implements IController {
                 lastTickInWater = false;
                 if (entity.hasWaterAt(0)) {
                     if (ThreadLocalRandom.current().nextInt(0, 4) == 3) {// 1/3
-                        entity.motionY += entity.getFloatingHeight() * 0.8;
+                        entity.motion.y += entity.getFloatingHeight() * 0.8;
                     } else {
-                        entity.motionY += entity.getFloatingHeight() * 0.6;
+                        entity.motion.y += entity.getFloatingHeight() * 0.6;
                     }
                 }
             }

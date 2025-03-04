@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.evaluator;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 
 /**
  * 此接口抽象了一个行为评估器 <br/> 决定是否激活与其绑定的执行器
@@ -23,5 +23,5 @@ public interface IBehaviorEvaluator {
      * @param entity 评估目标实体<br>Assess the targetEntity
      * @return 是否需要激活<br>Do you need to activate
      */
-    boolean evaluate(EntityIntelligent entity);
+    boolean evaluate(EntityMob entity);
 }

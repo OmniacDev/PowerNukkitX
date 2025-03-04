@@ -1,10 +1,7 @@
 package cn.nukkit.entity.ai.evaluator;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import lombok.AllArgsConstructor;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Set;
 
 @AllArgsConstructor
 public class NotMatchEvaluator implements IBehaviorEvaluator {
@@ -12,7 +9,7 @@ public class NotMatchEvaluator implements IBehaviorEvaluator {
     private IBehaviorEvaluator evaluator;
 
     @Override
-    public boolean evaluate(EntityIntelligent entity) {
+    public boolean evaluate(EntityMob entity) {
         return !evaluator.evaluate(entity);
     }
 }

@@ -3,10 +3,10 @@ package cn.nukkit.entity.ai.executor;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityDataTypes;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityMonster;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
@@ -49,7 +49,7 @@ public class GuardianAttackExecutor implements EntityControl, IBehaviorExecutor 
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if (tick2 == 0) {
             tick1++;
         }
@@ -100,7 +100,7 @@ public class GuardianAttackExecutor implements EntityControl, IBehaviorExecutor 
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         removeLookTarget(entity);
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED);
         if (clearDataWhenLose) {
@@ -112,7 +112,7 @@ public class GuardianAttackExecutor implements EntityControl, IBehaviorExecutor 
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         removeLookTarget(entity);
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED);
         if (clearDataWhenLose) {

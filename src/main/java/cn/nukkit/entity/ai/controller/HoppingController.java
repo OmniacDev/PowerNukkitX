@@ -1,9 +1,9 @@
 package cn.nukkit.entity.ai.controller;
 
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.EntityPhysical;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntitySlime;
 import cn.nukkit.entity.mob.animal.EntityRabbit;
 import cn.nukkit.level.Sound;
@@ -26,13 +26,13 @@ public class HoppingController extends WalkController {
     }
 
     @Override
-    public boolean control(EntityIntelligent entity) {
+    public boolean control(EntityMob entity) {
         currentJumpCoolDown++;
         if (entity.hasMoveDirection() && !entity.isShouldUpdateMoveDirection() && currentJumpCoolDown > moveCooldown) {
             //clone防止异步导致的NPE
             Vector3 direction = entity.getMoveDirectionEnd().clone();
             var speed = entity.getMovementSpeed();
-            if (entity.motionX * entity.motionX + entity.motionZ * entity.motionZ > speed * speed * 0.4756) {
+            if (entity.motion.x * entity.motion.x + entity.motion.z * entity.motion.z > speed * speed * 0.4756) {
                 entity.setDataFlag(EntityFlag.MOVING, false);
                 return false;
             }

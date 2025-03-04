@@ -6,6 +6,7 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityBoat;
 import cn.nukkit.event.vehicle.VehicleMoveEvent;
 import cn.nukkit.level.Location;
+import cn.nukkit.math.Vector3;
 import cn.nukkit.network.process.DataPacketProcessor;
 import cn.nukkit.network.protocol.MoveEntityAbsolutePacket;
 import cn.nukkit.network.protocol.ProtocolInfo;
@@ -23,15 +24,15 @@ public class MoveEntityAbsoluteProcessor extends DataPacketProcessor<MoveEntityA
             return;
         }
 
-        player.temporalVector.setComponents(pk.x, pk.y - ((EntityBoat) movedEntity).getBaseOffset(), pk.z);
+        Vector3 pos = new Vector3(pk.x, pk.y - ((EntityBoat) movedEntity).getBaseOffset(), pk.z);
         if (!movedEntity.equals(player.getRiding()) || !movedEntity.isControlling(player)
-                || player.temporalVector.distanceSquared(movedEntity.pos) > 10 * 10) {
+                || pos.distanceSquared(movedEntity.pos) > 10 * 10) {
             movedEntity.addMovement(movedEntity.pos.x, movedEntity.pos.y, movedEntity.pos.z, movedEntity.rotation.yaw, movedEntity.rotation.pitch, movedEntity.rotation.yaw);
             return;
         }
 
         Location from = movedEntity.getLocation();
-        movedEntity.setPositionAndRotation(player.temporalVector, pk.headYaw, 0);
+        movedEntity.setPositionAndRotation(pos, pk.headYaw, 0);
         Location to = movedEntity.getLocation();
         if (!from.equals(to)) {
             player.getServer().getPluginManager().callEvent(new VehicleMoveEvent(player, from, to));

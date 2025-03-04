@@ -1,10 +1,11 @@
 package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.animal.EntityWolf;
 
 /**
@@ -31,7 +32,7 @@ public class WolfAttackExecutor extends MeleeAttackExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         var wolf = (EntityWolf) entity;
 
 //        target = entity.getBehaviorGroup().getMemoryStorage().get(memory);
@@ -51,18 +52,18 @@ public class WolfAttackExecutor extends MeleeAttackExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         stop(entity);
         super.onStop(entity);
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         stop(entity);
         super.onInterrupt(entity);
     }
 
-    private void stop(EntityIntelligent entity) {
+    private void stop(EntityMob entity) {
         var wolf = (EntityWolf) entity;
         entity.getLevel().getScheduler().scheduleDelayedTask(null, () -> wolf.setAngry(false), 5);
 

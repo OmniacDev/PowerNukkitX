@@ -1,10 +1,9 @@
 package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.block.Block;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -27,7 +26,7 @@ public class NearbyFlatRandomRoamExecutor extends FlatRandomRoamExecutor {
     }
 
     @Override
-    public boolean execute(@NotNull EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         currentTargetCalTick++;
         durationTick++;
 

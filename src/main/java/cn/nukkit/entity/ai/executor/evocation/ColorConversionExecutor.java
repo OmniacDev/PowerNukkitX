@@ -1,10 +1,11 @@
 package cn.nukkit.entity.ai.executor.evocation;
 
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager;
 import cn.nukkit.entity.mob.animal.EntitySheep;
 import cn.nukkit.level.Sound;
@@ -20,7 +21,7 @@ public class ColorConversionExecutor extends FangLineExecutor {
 
     public ColorConversionExecutor() {}
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         tick++;
         if(tick == CAST_DURATION) {
             for(Entity entity1 : entity.getLevel().getNearbyEntities(entity.getBoundingBox().grow(16, 16, 16))) {
@@ -40,7 +41,7 @@ public class ColorConversionExecutor extends FangLineExecutor {
     }
 
     @Override
-    protected void startSpell(EntityIntelligent entity) {
+    protected void startSpell(EntityMob entity) {
         tick = 0;
         entity.level.addSound(entity.pos, Sound.MOB_EVOCATION_ILLAGER_PREPARE_WOLOLO);
         entity.setDataProperty(EntityDataTypes.EVOKER_SPELL_CASTING_COLOR, BlockColor.ORANGE_BLOCK_COLOR.getARGB());

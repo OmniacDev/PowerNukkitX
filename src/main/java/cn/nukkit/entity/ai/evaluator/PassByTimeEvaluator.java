@@ -1,8 +1,7 @@
 package cn.nukkit.entity.ai.evaluator;
 
-import cn.nukkit.Server;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.entity.mob.EntityMob;
 
 /**
  * 用于判断一个时间类型的记忆是否在指定范围内的评估器
@@ -38,7 +37,7 @@ public class PassByTimeEvaluator implements IBehaviorEvaluator {
     }
 
     @Override
-    public boolean evaluate(EntityIntelligent entity) {
+    public boolean evaluate(EntityMob entity) {
         var time = entity.getMemoryStorage().get(timedMemory);
         int passByTime = entity.getLevel().getTick() - time;
         return passByTime >= minPassByTimeRange && passByTime <= maxPassByTimeRange;

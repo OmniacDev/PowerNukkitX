@@ -1,8 +1,9 @@
 package cn.nukkit.entity.ai.sensor;
 
 import cn.nukkit.Player;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
+import cn.nukkit.entity.mob.EntityMob;
 import lombok.Getter;
 
 
@@ -20,7 +21,7 @@ public class PlayerStaringSensor implements ISensor {
     }
 
     @Override
-    public void sense(EntityIntelligent entity) {
+    public void sense(EntityMob entity) {
         for(Player player : entity.getViewers().values()) {
             if(player.pos.distance(entity.pos) <= range) {
                 if(ignoreRotation || Math.abs(Math.abs(player.headYaw-entity.headYaw)-180) <= this.triggerDiff) {

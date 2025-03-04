@@ -1,7 +1,7 @@
 package cn.nukkit.entity.ai.behaviorgroup;
 
 import cn.nukkit.Server;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.EntityAI;
 import cn.nukkit.entity.ai.behavior.Behavior;
 import cn.nukkit.entity.ai.behavior.BehaviorState;
@@ -9,11 +9,11 @@ import cn.nukkit.entity.ai.behavior.IBehavior;
 import cn.nukkit.entity.ai.controller.IController;
 import cn.nukkit.entity.ai.memory.IMemoryStorage;
 import cn.nukkit.entity.ai.memory.MemoryStorage;
-import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.ai.route.RouteFindingManager;
 import cn.nukkit.entity.ai.route.data.Node;
 import cn.nukkit.entity.ai.route.finder.IRouteFinder;
 import cn.nukkit.entity.ai.sensor.ISensor;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.level.DimensionData;
 import cn.nukkit.level.Level;
 import cn.nukkit.math.Vector3;
@@ -95,7 +95,7 @@ public class BehaviorGroup implements IBehaviorGroup {
     /**
      * 此行为组所属实体
      */
-    protected final EntityIntelligent entity;
+    protected final EntityMob entity;
     /**
      * 寻路任务
      */
@@ -117,7 +117,7 @@ public class BehaviorGroup implements IBehaviorGroup {
                          Set<ISensor> sensors,
                          Set<IController> controllers,
                          IRouteFinder routeFinder,
-                         EntityIntelligent entity) {
+                         EntityMob entity) {
         //此参数用于错开各个实体路径更新的时间，避免在1gt内提交过多路径更新任务
         this.currentRouteUpdateTick = startRouteUpdateTick;
         this.coreBehaviors = coreBehaviors;
@@ -134,7 +134,7 @@ public class BehaviorGroup implements IBehaviorGroup {
      * 运行并刷新正在运行的行为
      */
     @Override
-    public void tickRunningBehaviors(EntityIntelligent entity) {
+    public void tickRunningBehaviors(EntityMob entity) {
         var iterator = runningBehaviors.iterator();
         while (iterator.hasNext()) {
             IBehavior behavior = iterator.next();
@@ -147,7 +147,7 @@ public class BehaviorGroup implements IBehaviorGroup {
     }
 
     @Override
-    public void tickRunningCoreBehaviors(EntityIntelligent entity) {
+    public void tickRunningCoreBehaviors(EntityMob entity) {
         var iterator = runningCoreBehaviors.iterator();
         while (iterator.hasNext()) {
             IBehavior coreBehavior = iterator.next();
@@ -168,7 +168,7 @@ public class BehaviorGroup implements IBehaviorGroup {
     }
 
     @Override
-    public void collectSensorData(EntityIntelligent entity) {
+    public void collectSensorData(EntityMob entity) {
         sensorPeriodTimer.forEach((sensor, tick) -> {
             //刷新gt数
             sensorPeriodTimer.put(sensor, ++tick);
@@ -180,7 +180,7 @@ public class BehaviorGroup implements IBehaviorGroup {
     }
 
     @Override
-    public void evaluateCoreBehaviors(EntityIntelligent entity) {
+    public void evaluateCoreBehaviors(EntityMob entity) {
         coreBehaviorPeriodTimer.forEach((coreBehavior, tick) -> {
             //若已经在运行了，就不需要评估了
             if (runningCoreBehaviors.contains(coreBehavior)) return;
@@ -204,7 +204,7 @@ public class BehaviorGroup implements IBehaviorGroup {
      * @param entity 评估的实体对象
      */
     @Override
-    public void evaluateBehaviors(EntityIntelligent entity) {
+    public void evaluateBehaviors(EntityMob entity) {
         //存储评估成功的行为（未过滤优先级）
         var evalSucceed = new HashSet<IBehavior>(behaviors.size());
         int highestPriority = Integer.MIN_VALUE;
@@ -255,14 +255,14 @@ public class BehaviorGroup implements IBehaviorGroup {
     }
 
     @Override
-    public void applyController(EntityIntelligent entity) {
+    public void applyController(EntityMob entity) {
         for (IController controller : controllers) {
             controller.control(entity);
         }
     }
 
     @Override
-    public void updateRoute(EntityIntelligent entity) {
+    public void updateRoute(EntityMob entity) {
         currentRouteUpdateTick++;
         boolean reachUpdateCycle = currentRouteUpdateTick >= calcActiveDelay(entity, ROUTE_UPDATE_CYCLE + (entity.level.tickRateOptDelay << 1));
         if (reachUpdateCycle) currentRouteUpdateTick = 0;
@@ -314,7 +314,7 @@ public class BehaviorGroup implements IBehaviorGroup {
      *
      * @return 是否需要更新路径
      */
-    protected boolean shouldUpdateRoute(EntityIntelligent entity) {
+    protected boolean shouldUpdateRoute(EntityMob entity) {
         //此优化只针对处于非active区块的实体
         if (entity.isActive()) return true;
         //终点发生变化或第一次计算，需要重算
@@ -332,7 +332,7 @@ public class BehaviorGroup implements IBehaviorGroup {
      * @param entity 实体
      * @return 是否存在新的未计算的寻路目标
      */
-    protected boolean hasNewUnCalMoveTarget(EntityIntelligent entity) {
+    protected boolean hasNewUnCalMoveTarget(EntityMob entity) {
         return !entity.getMoveTarget().equals(this.routeFinder.getTarget());
     }
 
@@ -370,7 +370,7 @@ public class BehaviorGroup implements IBehaviorGroup {
     }
 
     @Override
-    public void debugTick(EntityIntelligent entity) {
+    public void debugTick(EntityMob entity) {
 
         var strBuilder = new StringBuilder();
 
@@ -424,7 +424,7 @@ public class BehaviorGroup implements IBehaviorGroup {
      * @param originalDelay 原始延迟
      * @return 如果实体是非活跃的，则延迟*4，否则返回原始延迟
      */
-    protected int calcActiveDelay(@NotNull EntityIntelligent entity, int originalDelay) {
+    protected int calcActiveDelay(@NotNull EntityMob entity, int originalDelay) {
         if (!entity.isActive()) {
             return originalDelay << 2;
         }
@@ -437,7 +437,7 @@ public class BehaviorGroup implements IBehaviorGroup {
         sensors.forEach(sensor -> sensorPeriodTimer.put(sensor, 0));
     }
 
-    protected void updateMoveDirection(EntityIntelligent entity) {
+    protected void updateMoveDirection(EntityMob entity) {
         Vector3 end = entity.getMoveDirectionEnd();
         if (end == null) {
             end = entity.pos.clone();
@@ -455,7 +455,7 @@ public class BehaviorGroup implements IBehaviorGroup {
      * @param entity    评估的实体
      * @param behaviors 要添加的行为
      */
-    protected void addToRunningBehaviors(EntityIntelligent entity, @NotNull Set<IBehavior> behaviors) {
+    protected void addToRunningBehaviors(EntityMob entity, @NotNull Set<IBehavior> behaviors) {
         behaviors.forEach((behavior) -> {
             behavior.onStart(entity);
             behavior.setBehaviorState(BehaviorState.ACTIVE);
@@ -466,7 +466,7 @@ public class BehaviorGroup implements IBehaviorGroup {
     /**
      * 中断所有正在运行的行为
      */
-    protected void interruptAllRunningBehaviors(EntityIntelligent entity) {
+    protected void interruptAllRunningBehaviors(EntityMob entity) {
         for (IBehavior behavior : runningBehaviors) {
             behavior.onInterrupt(entity);
             behavior.setBehaviorState(BehaviorState.STOP);

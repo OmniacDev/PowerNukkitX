@@ -349,9 +349,9 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
     public void onInput(Location clientLoc) {
         if (this.getRider() == null || this.getOwner() == null || this.getSaddle().isNull()) return;
         //每次输入乘骑玩家位置之前都要确保motion为0,避免onGround不更新
-        this.motionX = 0;
-        this.motionY = 0;
-        this.motionZ = 0;
+        this.motion.x = 0;
+        this.motion.y = 0;
+        this.motion.z = 0;
         this.setMoveTarget(null);
         this.setLookTarget(null);
         this.move(clientLoc.x - this.pos.x, clientLoc.y - this.pos.y, clientLoc.z - this.pos.z);
@@ -513,9 +513,9 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
         addEntity.x = (float) this.pos.x;
         addEntity.y = (float) this.pos.y + this.getBaseOffset();
         addEntity.z = (float) this.pos.z;
-        addEntity.speedX = (float) this.motionX;
-        addEntity.speedY = (float) this.motionY;
-        addEntity.speedZ = (float) this.motionZ;
+        addEntity.speedX = (float) this.motion.x;
+        addEntity.speedY = (float) this.motion.y;
+        addEntity.speedZ = (float) this.motion.z;
         addEntity.entityData = this.entityDataMap;
         addEntity.attributes = this.attributeMap.values().toArray(Attribute.EMPTY_ARRAY);
         addEntity.links = new EntityLink[this.passengers.size()];

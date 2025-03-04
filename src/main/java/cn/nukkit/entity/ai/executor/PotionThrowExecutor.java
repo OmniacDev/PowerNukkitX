@@ -4,11 +4,12 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityID;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.effect.EffectType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.projectile.throwable.EntitySplashPotion;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
@@ -56,7 +57,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         if (tick2 == 0) {
             tick1++;
         }
@@ -105,7 +106,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED);
@@ -118,7 +119,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED);
@@ -130,7 +131,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
         this.target = null;
     }
 
-    protected void throwPotion(EntityLiving entity) {
+    protected void throwPotion(EntityMob entity) {
 
         Location potionLocation = entity.getLocation();
         Vector3 directionVector = entity.getDirectionVector();
@@ -145,7 +146,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
                         .add(new FloatTag(-Math.sin(entity.rotation.pitch / 180 * Math.PI)))
                         .add(new FloatTag(Math.cos(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI))))
                 .putList("Rotation", new ListTag<FloatTag>()
-                        .add(new FloatTag((entity.headYaw > 180 ? 360 : 0) - (float) entity.headYaw))
+                        .add(new FloatTag((float) (entity.headYaw > 180 ? 360 : 0) - entity.headYaw))
                         .add(new FloatTag((float) -entity.rotation.pitch)))
                 .putInt("PotionId", getPotionEffect(entity));
 
@@ -177,7 +178,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     public int getPotionEffect(Entity entity) {
-        if(entity instanceof EntityIntelligent intelligent) {
+        if(entity instanceof EntityMob intelligent) {
             if(intelligent.getMemoryStorage().notEmpty(memory)) {
                 Entity target = intelligent.getMemoryStorage().get(memory);
                 double distance = target.pos.distance(entity.pos);

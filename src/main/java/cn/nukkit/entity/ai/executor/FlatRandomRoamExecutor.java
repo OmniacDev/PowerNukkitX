@@ -1,9 +1,9 @@
 package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.block.Block;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.Vector3;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -52,7 +52,7 @@ public class FlatRandomRoamExecutor implements EntityControl, IBehaviorExecutor 
     }
 
     @Override
-    public boolean execute(@NotNull EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         currentTargetCalTick++;
         durationTick++;
         if (entity.isEnablePitch()) entity.setEnablePitch(false);
@@ -85,16 +85,16 @@ public class FlatRandomRoamExecutor implements EntityControl, IBehaviorExecutor 
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         stop(entity);
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         stop(entity);
     }
 
-    protected void stop(EntityIntelligent entity) {
+    protected void stop(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
         entity.setEnablePitch(true);
@@ -102,11 +102,11 @@ public class FlatRandomRoamExecutor implements EntityControl, IBehaviorExecutor 
         durationTick = 0;
     }
 
-    protected boolean needUpdateTarget(EntityIntelligent entity) {
+    protected boolean needUpdateTarget(EntityMob entity) {
         return entity.getMoveTarget() == null;
     }
 
-    protected Vector3 next(EntityIntelligent entity) {
+    protected Vector3 next(EntityMob entity) {
         var random = ThreadLocalRandom.current();
         int x = random.nextInt(maxRoamRange * 2) - maxRoamRange + entity.pos.getFloorX();
         int z = random.nextInt(maxRoamRange * 2) - maxRoamRange + entity.pos.getFloorZ();

@@ -1,9 +1,8 @@
 package cn.nukkit.entity.ai.sensor;
 
 import cn.nukkit.block.Block;
-import cn.nukkit.entity.EntityIntelligent;
-import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.level.Location;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +38,7 @@ public class BlockSensor implements ISensor {
     }
 
     @Override
-    public void sense(EntityIntelligent entity) {
+    public void sense(EntityMob entity) {
         Block block = null;
         for(int x = -range; x<=range; x++) {
             for(int z = -range; z<=range; z++) {

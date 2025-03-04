@@ -2,7 +2,7 @@ package cn.nukkit.entity.mob;
 
 import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityWalkable;
 import cn.nukkit.entity.ai.behavior.Behavior;
 import cn.nukkit.entity.ai.behaviorgroup.BehaviorGroup;
@@ -115,7 +115,7 @@ public class EntityZoglin extends EntityMob implements EntityWalkable {
 
     @Override
     public boolean attackTarget(Entity entity) {
-        return (!(entity instanceof EntityZoglin) && entity instanceof EntityIntelligent);
+        return (!(entity instanceof EntityZoglin) && entity instanceof EntityMob);
     }
 
     @Override

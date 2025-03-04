@@ -1,6 +1,6 @@
 package cn.nukkit.entity.ai.executor;
 
-import cn.nukkit.entity.EntityIntelligent;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.level.Sound;
 import lombok.AllArgsConstructor;
 
@@ -23,7 +23,7 @@ public class PlaySoundExecutor implements IBehaviorExecutor {
 
 
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         float volume = minVolume == maxVolume ? minVolume : ThreadLocalRandom.current().nextFloat(minVolume, maxVolume);
         float pitch = minPitch == maxPitch ? minPitch : ThreadLocalRandom.current().nextFloat(minPitch, maxPitch);
         entity.getPosition().getValidLevel().addSound(entity.pos, sound, volume, pitch);

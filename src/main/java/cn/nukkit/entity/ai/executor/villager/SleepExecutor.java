@@ -1,12 +1,12 @@
 package cn.nukkit.entity.ai.executor.villager;
 
 import cn.nukkit.block.BlockBed;
-import cn.nukkit.entity.EntityIntelligent;
 import cn.nukkit.entity.ai.executor.EntityControl;
 import cn.nukkit.entity.ai.executor.IBehaviorExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.villagers.EntityVillagerV2;
 import cn.nukkit.level.Location;
 import cn.nukkit.math.BVector3;
@@ -19,12 +19,12 @@ public class SleepExecutor implements EntityControl, IBehaviorExecutor {
 
     public SleepExecutor() {}
     @Override
-    public boolean execute(EntityIntelligent entity) {
+    public boolean execute(EntityMob entity) {
         return true;
     }
 
     @Override
-    public void onStart(EntityIntelligent entity) {
+    public void onStart(EntityMob entity) {
         removeRouteTarget(entity);
         removeLookTarget(entity);
         if(entity.getMemoryStorage().notEmpty(CoreMemoryTypes.OCCUPIED_BED)) {
@@ -52,7 +52,7 @@ public class SleepExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onStop(EntityIntelligent entity) {
+    public void onStop(EntityMob entity) {
         entity.setDataFlag(EntityFlag.SLEEPING, false);
         entity.setDataFlag(EntityFlag.BODY_ROTATION_BLOCKED, false);
         entity.setDataProperty(EntityDataTypes.BED_POSITION, new BlockVector3(0, 0 ,0));
@@ -64,7 +64,7 @@ public class SleepExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     @Override
-    public void onInterrupt(EntityIntelligent entity) {
+    public void onInterrupt(EntityMob entity) {
         onStop(entity);
     }
 }
