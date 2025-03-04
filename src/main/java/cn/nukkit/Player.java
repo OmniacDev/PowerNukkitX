@@ -2609,8 +2609,8 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     }
 
     @Override
-    public void addMovement(double x, double y, double z, double yaw, double pitch, double headYaw) {
-        this.sendPosition(new Vector3(x, y, z), yaw, pitch, MovePlayerPacket.MODE_NORMAL, this.getViewers().values().toArray(EMPTY_ARRAY));
+    public void moveDelta() {
+        this.sendPosition(this.pos, this.rotation.yaw, this.rotation.pitch, MovePlayerPacket.MODE_NORMAL, this.getViewers().values().toArray(EMPTY_ARRAY));
     }
 
     /**
@@ -4320,7 +4320,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     }
 
     /**
-     * {@link Player#addMovement}的实现,仅发送{@link MovePlayerPacket}数据包到客户端
+     * {@link Player#moveDelta}的实现,仅发送{@link MovePlayerPacket}数据包到客户端
      *
      * @param pos     the pos of MovePlayerPacket
      * @param yaw     the yaw of MovePlayerPacket

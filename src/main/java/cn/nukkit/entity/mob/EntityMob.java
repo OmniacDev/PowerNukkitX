@@ -1,11 +1,11 @@
 package cn.nukkit.entity.mob;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCanAttack;
 import cn.nukkit.entity.EntityEquipment;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityPhysical;
 import cn.nukkit.entity.ai.EntityAI;
 import cn.nukkit.entity.ai.behaviorgroup.EmptyBehaviorGroup;
@@ -16,13 +16,11 @@ import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.IMemoryStorage;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.mob.monster.EntityCreeper;
-import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.form.window.SimpleForm;
 import cn.nukkit.inventory.EntityInventoryHolder;
 import cn.nukkit.inventory.Inventory;
-import cn.nukkit.inventory.InventoryHolder;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.item.enchantment.Enchantment;
@@ -36,12 +34,12 @@ import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.nbt.tag.Tag;
+import cn.nukkit.network.protocol.MoveEntityDeltaPacket;
 import cn.nukkit.utils.Utils;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -349,58 +347,42 @@ public abstract class EntityMob extends EntityPhysical implements EntityInventor
     }
 
     @Override
-    public void updateMovement() {
-        if (!enableHeadYaw()) {
-            this.headYaw = this.rotation.yaw;
+    public boolean hasRotationChanged(double threshold) {
+        return ((enableHeadYaw() ? Math.pow(this.headYaw - this.prevHeadYaw, 2) : 0) + this.rotation.subtract(this.prevRotation).lengthSquared()) > threshold;
+    }
+
+    @Override
+    public void moveDelta() {
+        MoveEntityDeltaPacket pk = new MoveEntityDeltaPacket();
+        pk.runtimeEntityId = this.getId();
+        if (this.prevPos.x != this.pos.x) {
+            pk.x = (float) this.pos.x;
+            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_X;
         }
-
-        double diffPosition =
-                (this.pos.x - this.prevPos.x) *
-                        (this.pos.x - this.prevPos.x) +
-                        (this.pos.y - this.prevPos.y) *
-                                (this.pos.y - this.prevPos.y) +
-                        (this.pos.z - this.prevPos.z) *
-                                (this.pos.z - this.prevPos.z);
-        double diffRotation = (enableHeadYaw() ? (this.headYaw - this.prevHeadYaw) * (this.headYaw - this.prevHeadYaw) : 0) + (this.rotation.yaw - this.prevRotation.yaw) * (this.rotation.yaw - this.prevRotation.yaw) + (this.rotation.pitch - this.prevRotation.pitch) * (this.rotation.pitch - this.prevRotation.pitch);
-
-        double diffMotion = (this.motion.x - this.prevMotion.x) * (this.motion.x - this.prevMotion.x) + (this.motion.y - this.prevMotion.y) * (this.motion.y - this.prevMotion.y) + (this.motion.z - this.prevMotion.z) * (this.motion.z - this.prevMotion.z);
-
-        if (diffPosition > 0.0001 || diffRotation > 1.0) { //0.2 ** 2, 1.5 ** 2
-            if (diffPosition > 0.0001) {
-                if (this.isOnGround()) {
-                    this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.pos.clone(), VibrationType.STEP));
-                } else if (this.isTouchingWater()) {
-                    this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.pos.clone(), VibrationType.SWIM));
-                }
-            }
-
-            this.addMovement(this.pos.x, this.isPlayer ? this.pos.y : this.pos.y + this.getBaseOffset(), this.pos.z, this.rotation.yaw, this.rotation.pitch, this.headYaw);
-
-            this.prevPos.x = this.pos.x;
-            this.prevPos.y = this.pos.y;
-            this.prevPos.z = this.pos.z;
-
-            this.prevRotation.pitch = this.rotation.pitch;
-            this.prevRotation.yaw = this.rotation.yaw;
-            this.prevHeadYaw = this.headYaw;
-
-            this.positionChanged = true;
-        } else {
-            this.positionChanged = false;
+        if (this.prevPos.y != this.pos.y) {
+            pk.y = (float) this.pos.y;
+            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_Y;
         }
-
-        if (diffMotion > 0.0025 || (diffMotion > 0.0001 && this.getMotion().lengthSquared() <= 0.0001)) { //0.05 ** 2
-            this.prevMotion.x = this.motion.x;
-            this.prevMotion.y = this.motion.y;
-            this.prevMotion.z = this.motion.z;
-
-            this.addMotion(this.motion.x, this.motion.y, this.motion.z);
+        if (this.prevPos.z != this.pos.z) {
+            pk.z = (float) this.pos.z;
+            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_Z;
         }
-
-        if (isFalling()) {
-            this.fallingTick++;
+        if (this.prevRotation.pitch != this.rotation.pitch) {
+            pk.pitch = (float) this.rotation.pitch;
+            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_PITCH;
         }
-        this.move(this.motion.x, this.motion.y, this.motion.z);
+        if (this.prevRotation.yaw != this.rotation.yaw) {
+            pk.yaw = (float) this.rotation.yaw;
+            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_YAW;
+        }
+        if (!this.prevHeadYaw.equals(this.headYaw)) {
+            pk.headYaw = this.headYaw.floatValue();
+            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_HEAD_YAW;
+        }
+        if (this.onGround) {
+            pk.flags |= MoveEntityDeltaPacket.FLAG_ON_GROUND;
+        }
+        Server.broadcastPacket(this.getViewers().values(), pk);
     }
 
     public boolean enableHeadYaw() {

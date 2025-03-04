@@ -56,14 +56,13 @@ public class AbilityCommand extends VanillaCommand {
                     log.addSuccess("commands.ability.revoked", ability_str);
             }
             log.addSuccess("commands.ability.success").successCount(1).output();
-            return 1;
         } else {
             if (!sender.isPlayer()) {
                 return 0;
             }
             boolean value = sender.asPlayer().getAdventureSettings().get(type);
             log.addSuccess(ability_str + " = " + value).output();
-            return 1;
         }
+        return 1;
     }
 }

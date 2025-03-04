@@ -1530,20 +1530,36 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
         return hasUpdate;
     }
 
+    public boolean hasPosChanged() {
+        return this.hasPosChanged(0.0001);
+    }
+
+    public boolean hasPosChanged(double threshold) {
+        return this.pos.subtract(this.prevPos).lengthSquared() > threshold;
+    }
+
+    public boolean hasRotationChanged() {
+        return this.hasRotationChanged(1.0);
+    }
+
+    public boolean hasRotationChanged(double threshold) {
+        return this.rotation.subtract(this.prevRotation).lengthSquared() > threshold;
+    }
+
+    public boolean hasMotionChanged() {
+        return this.hasMotionChanged(0.0001);
+    }
+
+    public boolean hasMotionChanged(double threshold) {
+        return this.motion.subtract(this.prevMotion).lengthSquared() > threshold;
+    }
+
     public void updateMovement() {
-        double diffPosition =
-                (this.pos.x - this.prevPos.x) *
-                        (this.pos.x - this.prevPos.x) +
-                        (this.pos.y - this.prevPos.y) *
-                                (this.pos.y - this.prevPos.y) +
-                        (this.pos.z - this.prevPos.z) *
-                                (this.pos.z - this.prevPos.z);
-        double diffRotation = (this.rotation.yaw - this.prevRotation.yaw) * (this.rotation.yaw - this.prevRotation.yaw) + (this.rotation.pitch - this.prevRotation.pitch) * (this.rotation.pitch - this.prevRotation.pitch);
+        boolean posChanged = this.hasPosChanged();
+        boolean rotationChanged = this.hasRotationChanged();
 
-        double diffMotion = (this.motion.x - this.prevMotion.x) * (this.motion.x - this.prevMotion.x) + (this.motion.y - this.prevMotion.y) * (this.motion.y - this.prevMotion.y) + (this.motion.z - this.prevMotion.z) * (this.motion.z - this.prevMotion.z);
-
-        if (diffPosition > 0.0001 || diffRotation > 1.0) { //0.2 ** 2, 1.5 ** 2
-            if (diffPosition > 0.0001) {
+        if (posChanged || rotationChanged) { //0.2 ** 2, 1.5 ** 2
+            if (posChanged && this.level != null) {
                 if (this.isOnGround()) {
                     this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this instanceof EntityProjectile projectile ? projectile.shootingEntity : this, this.pos.clone(), VibrationType.STEP));
                 } else if (this.isTouchingWater()) {
@@ -1551,7 +1567,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
                 }
             }
 
-            this.addMovement(this.pos.x, this.isPlayer ? this.pos.y : this.pos.y + this.getBaseOffset(), this.pos.z, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw);
+            this.moveDelta();
 
             this.prevPos.x = this.pos.x;
             this.prevPos.y = this.pos.y;
@@ -1565,7 +1581,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
             this.positionChanged = false;
         }
 
-        if (diffMotion > 0.0025 || (diffMotion > 0.0001 && this.getMotion().lengthSquared() <= 0.0001)) { //0.05 ** 2
+        if (this.hasMotionChanged(0.025) || (this.hasMotionChanged(0.0001) && this.getMotion().lengthSquared() <= 0.0001)) { //0.05 ** 2
             this.prevMotion.x = this.motion.x;
             this.prevMotion.y = this.motion.y;
             this.prevMotion.z = this.motion.z;
@@ -1579,15 +1595,34 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
      * <p>
      * Add motion (just sending packet will not make the entity actually move, use {@link #setMotion} if needed)
      *
-     * @param x       x
-     * @param y       y
-     * @param z       z
-     * @param yaw     左右旋转
-     * @param pitch   上下旋转
-     * @param headYaw headYaw
      */
-    public void addMovement(double x, double y, double z, double yaw, double pitch, double headYaw) {
-        this.level.addEntityMovement(this, x, y, z, yaw, pitch, headYaw);
+    public void moveDelta() {
+        MoveEntityDeltaPacket pk = new MoveEntityDeltaPacket();
+        pk.runtimeEntityId = this.getId();
+        if (this.prevPos.x != this.pos.x) {
+            pk.x = (float) this.pos.x;
+            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_X;
+        }
+        if (this.prevPos.y != this.pos.y) {
+            pk.y = (float) this.pos.y;
+            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_Y;
+        }
+        if (this.prevPos.z != this.pos.z) {
+            pk.z = (float) this.pos.z;
+            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_Z;
+        }
+        if (this.prevRotation.pitch != this.rotation.pitch) {
+            pk.pitch = (float) this.rotation.pitch;
+            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_PITCH;
+        }
+        if (this.prevRotation.yaw != this.rotation.yaw) {
+            pk.yaw = (float) this.rotation.yaw;
+            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_YAW;
+        }
+        if (this.onGround) {
+            pk.flags |= MoveEntityDeltaPacket.FLAG_ON_GROUND;
+        }
+        Server.broadcastPacket(this.getViewers().values(), pk);
     }
 
     /*

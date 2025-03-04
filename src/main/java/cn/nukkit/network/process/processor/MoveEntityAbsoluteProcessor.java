@@ -27,7 +27,7 @@ public class MoveEntityAbsoluteProcessor extends DataPacketProcessor<MoveEntityA
         Vector3 pos = new Vector3(pk.x, pk.y - ((EntityBoat) movedEntity).getBaseOffset(), pk.z);
         if (!movedEntity.equals(player.getRiding()) || !movedEntity.isControlling(player)
                 || pos.distanceSquared(movedEntity.pos) > 10 * 10) {
-            movedEntity.addMovement(movedEntity.pos.x, movedEntity.pos.y, movedEntity.pos.z, movedEntity.rotation.yaw, movedEntity.rotation.pitch, movedEntity.rotation.yaw);
+            movedEntity.moveDelta();
             return;
         }
 

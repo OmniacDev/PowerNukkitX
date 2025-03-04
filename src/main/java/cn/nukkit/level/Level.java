@@ -16,7 +16,6 @@ import cn.nukkit.entity.item.EntityFireworksRocket;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.entity.item.EntityPainting;
 import cn.nukkit.entity.item.EntityXpOrb;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.entity.weather.EntityLightningBolt;
 import cn.nukkit.event.block.BlockBreakEvent;
@@ -58,7 +57,6 @@ import cn.nukkit.metadata.MetadataValue;
 import cn.nukkit.metadata.Metadatable;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.nbt.tag.StringTag;
@@ -76,7 +74,6 @@ import cn.nukkit.utils.BlockUpdateEntry;
 import cn.nukkit.utils.GameLoop;
 import cn.nukkit.utils.Hash;
 import cn.nukkit.utils.LevelException;
-import cn.nukkit.utils.MainLogger;
 import cn.nukkit.utils.TextFormat;
 import cn.nukkit.utils.Utils;
 import cn.nukkit.utils.collection.nb.Int2ObjectNonBlockingMap;
@@ -4107,58 +4104,6 @@ public class Level implements Metadatable {
     @Override
     public void removeMetadata(String metadataKey, Plugin owningPlugin) {
         this.server.getLevelMetadata().removeMetadata(this, metadataKey, owningPlugin);
-    }
-
-    public void addPlayerMovement(Entity entity, double x, double y, double z, double yaw, double pitch, double headYaw) {
-        MovePlayerPacket pk = new MovePlayerPacket();
-        pk.eid = entity.getId();
-        pk.x = (float) x;
-        pk.y = (float) y;
-        pk.z = (float) z;
-        pk.yaw = (float) yaw;
-        pk.headYaw = (float) headYaw;
-        pk.pitch = (float) pitch;
-        if (entity.riding != null) {
-            pk.ridingEid = entity.riding.getId();
-            pk.mode = MovePlayerPacket.MODE_PITCH;
-        }
-
-        Server.broadcastPacket(entity.getViewers().values(), pk);
-    }
-
-    public void addEntityMovement(Entity entity, double x, double y, double z, double yaw, double pitch, double headYaw) {
-        MoveEntityDeltaPacket pk = new MoveEntityDeltaPacket();
-        pk.runtimeEntityId = entity.getId();
-        if (entity.prevPos.x != x) {
-            pk.x = (float) x;
-            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_X;
-        }
-        if (entity.prevPos.y != y) {
-            pk.y = (float) y;
-            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_Y;
-        }
-        if (entity.prevPos.z != z) {
-            pk.z = (float) z;
-            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_Z;
-        }
-        if (entity.prevRotation.pitch != pitch) {
-            pk.pitch = (float) pitch;
-            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_PITCH;
-        }
-        if (entity.prevRotation.yaw != yaw) {
-            pk.yaw = (float) yaw;
-            pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_YAW;
-        }
-        if (entity instanceof EntityMob mob) {
-            if (mob.prevHeadYaw != headYaw) {
-                pk.headYaw = (float) headYaw;
-                pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_HEAD_YAW;
-            }
-        }
-        if (entity.onGround) {
-            pk.flags |= MoveEntityDeltaPacket.FLAG_ON_GROUND;
-        }
-        Server.broadcastPacket(entity.getViewers().values(), pk);
     }
 
     public boolean isRaining() {

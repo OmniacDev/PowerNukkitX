@@ -1,6 +1,7 @@
 package cn.nukkit.entity;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.entity.EntityDamageEvent;
@@ -10,6 +11,7 @@ import cn.nukkit.item.ItemShield;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.AddPlayerPacket;
+import cn.nukkit.network.protocol.MovePlayerPacket;
 import cn.nukkit.network.protocol.RemoveEntityPacket;
 import cn.nukkit.network.protocol.SetEntityLinkPacket;
 import cn.nukkit.network.protocol.types.EntityLink;
@@ -145,8 +147,21 @@ public class EntityHuman extends EntityHumanType {
     }
 
     @Override
-    public void addMovement(double x, double y, double z, double yaw, double pitch, double headYaw) {
-        this.level.addPlayerMovement(this, x, y, z, yaw, pitch, headYaw);
+    public void moveDelta() {
+        MovePlayerPacket pk = new MovePlayerPacket();
+        pk.eid = this.getId();
+        pk.x = (float) this.pos.x;
+        pk.y = (float) this.pos.y;
+        pk.z = (float) this.pos.z;
+        pk.yaw = (float) this.rotation.yaw;
+        pk.headYaw = this.headYaw.floatValue();
+        pk.pitch = (float) this.rotation.pitch;
+        if (this.riding != null) {
+            pk.ridingEid = this.riding.getId();
+            pk.mode = MovePlayerPacket.MODE_PITCH;
+        }
+
+        Server.broadcastPacket(this.getViewers().values(), pk);
     }
 
     @Override
