@@ -181,9 +181,9 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
 
     @Nullable public Level level;
 
-    public Vector3 prevPos;
-    public Vector3 prevMotion;
-    public Rotator2 prevRotation;
+    @NotNull public Vector3 prevPos = pos;
+    @NotNull public Vector3 prevMotion = motion;
+    @NotNull public Rotator2 prevRotation = rotation;
 
     public static final Entity[] EMPTY_ARRAY = new Entity[0];
     protected final EntityDataMap entityDataMap = new EntityDataMap();

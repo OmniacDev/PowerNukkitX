@@ -104,8 +104,8 @@ public abstract class EntityMob extends EntityPhysical implements EntityInventor
     @Nullable public Integer tradeTier;
     @Nullable public Boolean wantsToBeJockey;
 
-    @NotNull public Double headYaw;
-    public Double prevHeadYaw;
+    @NotNull public Double headYaw = this.rotation.yaw;
+    @NotNull public Double prevHeadYaw = headYaw;
     /**
      * 不同难度下实体空手能造成的伤害.
      * <p>
@@ -119,19 +119,6 @@ public abstract class EntityMob extends EntityPhysical implements EntityInventor
 
     public EntityMob(IChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
-
-        var storage = getMemoryStorage();
-        if (storage != null) {
-            storage.put(CoreMemoryTypes.ENTITY_SPAWN_TIME, getLevel().getTick());
-            MemoryType.getPersistentMemories().forEach(memory -> {
-                var mem = (MemoryType<Object>) memory;
-                var codec = mem.getCodec();
-                var data = Objects.requireNonNull(codec).getDecoder().apply(this.namedTag);
-                if (data != null) {
-                    storage.put(mem, data);
-                }
-            });
-        }
 
         this.equipment = new EntityEquipment(this);
 
@@ -163,14 +150,26 @@ public abstract class EntityMob extends EntityPhysical implements EntityInventor
         if (nbt.contains(TAG_TRADE_EXPERIENCE)) this.tradeExperience = nbt.getInt(TAG_TRADE_EXPERIENCE);
         if (nbt.contains(TAG_TRADE_TIER)) this.tradeTier = nbt.getInt(TAG_TRADE_TIER);
         if (nbt.contains(TAG_WANTS_TO_BE_JOCKEY)) this.wantsToBeJockey = nbt.getBoolean(TAG_WANTS_TO_BE_JOCKEY);
-
-        this.headYaw = this.rotation.yaw;
     }
 
     @Override
     protected void initEntity() {
         super.initEntity();
+
         this.behaviorGroup = requireBehaviorGroup();
+
+        var storage = getMemoryStorage();
+        if (storage != null) {
+            storage.put(CoreMemoryTypes.ENTITY_SPAWN_TIME, getLevel().getTick());
+            MemoryType.getPersistentMemories().forEach(memory -> {
+                var mem = (MemoryType<Object>) memory;
+                var codec = mem.getCodec();
+                var data = Objects.requireNonNull(codec).getDecoder().apply(this.namedTag);
+                if (data != null) {
+                    storage.put(mem, data);
+                }
+            });
+        }
     }
 
     public void spawnToAll() {
