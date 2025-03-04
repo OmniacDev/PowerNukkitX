@@ -4950,12 +4950,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
             this.dataPacket(spawnPosition);
 
             // Remove old chunks
-            for (long index : new ArrayList<>(playerChunkManager.getUsedChunks())) {
-                int chunkX = Level.getHashX(index);
-                int chunkZ = Level.getHashZ(index);
-                this.unloadChunk(chunkX, chunkZ, oldLevel);
-            }
-            playerChunkManager.getUsedChunks().clear();
+            this.forceSendEmptyChunks();
 
             SetTimePacket setTime = new SetTimePacket();
             setTime.time = level.getTime();
