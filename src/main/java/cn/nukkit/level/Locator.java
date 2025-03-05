@@ -18,7 +18,8 @@ import java.util.Set;
  */
 
 @Slf4j
-public class Locator extends NamedPosition {
+public class Locator extends Vector3 implements NamedPosition {
+    public @NotNull Vector3 position;
     public @NotNull Level level;
 
     public Locator(@NotNull Level level) {
@@ -37,6 +38,11 @@ public class Locator extends NamedPosition {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.level = level;
+    }
+
+    public Locator(@NotNull Vector3 position, @NotNull Level level) {
+        this.position = position;
         this.level = level;
     }
 

@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
  */
 
 
-public class PositionTracking extends NamedPosition {
+public class PositionTracking extends Vector3 implements NamedPosition {
 
     private @NotNull String levelName;
 
@@ -39,7 +39,7 @@ public class PositionTracking extends NamedPosition {
     }
 
     public PositionTracking(@NotNull NamedPosition pos) {
-        this(pos.getLevelName(), pos.x, pos.y, pos.z);
+        this(pos.getLevelName(), pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override

@@ -100,7 +100,9 @@ public abstract class BlockEntity extends Locator implements BlockEntityID {
     }
 
     public BlockEntity(IChunk chunk, CompoundTag nbt) {
-        if (chunk == null || chunk.getProvider() == null || chunk.getProvider().getLevel() == null) {
+        super(chunk.getProvider().getLevel());
+
+        if (chunk.getProvider() == null || chunk.getProvider().getLevel() == null) {
             throw new ChunkException("Invalid garbage Chunk given to Block Entity");
         }
 

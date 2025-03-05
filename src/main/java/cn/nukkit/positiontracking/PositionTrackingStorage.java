@@ -438,9 +438,9 @@ public class PositionTrackingStorage implements Closeable {
                 .put(enabled ? (byte) 1 : 0)
                 .putLong(namePos)
                 .putInt(name.length)
-                .putDouble(pos.x)
-                .putDouble(pos.y)
-                .putDouble(pos.z)
+                .putDouble(pos.getX())
+                .putDouble(pos.getY())
+                .putDouble(pos.getZ())
                 .array());
     }
 
@@ -462,9 +462,9 @@ public class PositionTrackingStorage implements Closeable {
     @NotNull public synchronized IntList findTrackingHandlers(NamedPosition pos, boolean onlyEnabled, int limit) throws IOException {
         persistence.seek(HEADER.length + 4 + 4 + 4);
         int handler = startIndex - 1;
-        final double lookingX = pos.x;
-        final double lookingY = pos.y;
-        final double lookingZ = pos.z;
+        final double lookingX = pos.getX();
+        final double lookingY = pos.getY();
+        final double lookingZ = pos.getZ();
         final byte[] lookingName = pos.getLevelName().getBytes(StandardCharsets.UTF_8);
         IntList results = new IntArrayList(NukkitMath.clamp(limit, 1, 16));
         byte[] buf = new byte[8 + 4 + 8 + 8 + 8];

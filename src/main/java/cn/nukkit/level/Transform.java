@@ -1,5 +1,6 @@
 package cn.nukkit.level;
 
+import cn.nukkit.math.Rotator2;
 import cn.nukkit.math.Vector3;
 import org.jetbrains.annotations.NotNull;
 
@@ -7,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * @author MagicDroidX (Nukkit Project)
  */
 public class Transform extends Locator {
+    public @NotNull Rotator2 rotation;
     public double yaw;
     public double pitch;
     public double headYaw;
@@ -40,6 +42,11 @@ public class Transform extends Locator {
         this.yaw = yaw;
         this.pitch = pitch;
         this.headYaw = headYaw;
+    }
+
+    public Transform(@NotNull Vector3 position, @NotNull Rotator2 rotation, @NotNull Level level) {
+        super(position.x, position.y, position.z, level);
+        this.rotation = rotation;
     }
 
     public static Transform fromObject(Vector3 pos, @NotNull Level level) {
