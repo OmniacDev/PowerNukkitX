@@ -17,7 +17,7 @@ import cn.nukkit.command.tree.node.FloatNode;
 import cn.nukkit.command.tree.node.PlayersNode;
 import cn.nukkit.command.tree.node.RelativeFloatNode;
 import cn.nukkit.command.utils.CommandLogger;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.Vector2f;
 import cn.nukkit.math.Vector3f;
 import cn.nukkit.network.protocol.CameraInstructionPacket;
@@ -209,10 +209,10 @@ public class CameraCommand extends VanillaCommand {
                     log.addError("commands.camera.invalid-preset").output();
                     return 0;
                 }
-                Position position = list.get(4).get();
+                Locator locator = list.get(4).get();
                 pk.setInstruction(SetInstruction.builder()
                         .preset(preset)
-                        .pos(new Vector3f((float) position.getX(), (float) position.getY(), (float) position.getZ()))
+                        .pos(new Vector3f((float) locator.getX(), (float) locator.getY(), (float) locator.getZ()))
                         .build());
             }
             case "set-pos-rot" -> {
@@ -221,10 +221,10 @@ public class CameraCommand extends VanillaCommand {
                     log.addError("commands.camera.invalid-preset").output();
                     return 0;
                 }
-                Position position = list.get(4).get();
+                Locator locator = list.get(4).get();
                 pk.setInstruction(SetInstruction.builder()
                         .preset(preset)
-                        .pos(new Vector3f((float) position.getX(), (float) position.getY(), (float) position.getZ()))
+                        .pos(new Vector3f((float) locator.getX(), (float) locator.getY(), (float) locator.getZ()))
                         .rot(new Vector2f(((RelativeFloatNode) list.get(6)).get((float) senderLocation.getPitch()), ((RelativeFloatNode) list.get(7)).get((float) senderLocation.getYaw())))
                         .build());
             }
@@ -263,11 +263,11 @@ public class CameraCommand extends VanillaCommand {
                 }
                 float easeTime = list.get(4).get();
                 var easeType = EaseType.valueOf(((String) list.get(5).get()).toUpperCase(Locale.ENGLISH));
-                Position position = list.get(7).get();
+                Locator locator = list.get(7).get();
                 pk.setInstruction(SetInstruction.builder()
                         .preset(preset)
                         .ease(new Ease(easeTime, easeType))
-                        .pos(new Vector3f((float) position.getX(), (float) position.getY(), (float) position.getZ()))
+                        .pos(new Vector3f((float) locator.getX(), (float) locator.getY(), (float) locator.getZ()))
                         .build());
             }
             case "set-ease-pos-rot" -> {
@@ -278,11 +278,11 @@ public class CameraCommand extends VanillaCommand {
                 }
                 float easeTime = list.get(4).get();
                 var easeType = EaseType.valueOf(((String) list.get(5).get()).toUpperCase(Locale.ENGLISH));
-                Position position = list.get(7).get();
+                Locator locator = list.get(7).get();
                 pk.setInstruction(SetInstruction.builder()
                         .preset(preset)
                         .ease(new Ease(easeTime, easeType))
-                        .pos(new Vector3f((float) position.getX(), (float) position.getY(), (float) position.getZ()))
+                        .pos(new Vector3f((float) locator.getX(), (float) locator.getY(), (float) locator.getZ()))
                         .rot(new Vector2f(((RelativeFloatNode) list.get(9)).get((float) senderLocation.getPitch()), ((RelativeFloatNode) list.get(10)).get((float) senderLocation.getYaw())))
                         .build());
             }

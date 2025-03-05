@@ -5,7 +5,7 @@ import cn.nukkit.PlayerHandle;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityBoat;
 import cn.nukkit.event.vehicle.VehicleMoveEvent;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.process.DataPacketProcessor;
 import cn.nukkit.network.protocol.MoveEntityAbsolutePacket;
@@ -31,9 +31,9 @@ public class MoveEntityAbsoluteProcessor extends DataPacketProcessor<MoveEntityA
             return;
         }
 
-        Location from = movedEntity.getLocation();
+        Transform from = movedEntity.getLocation();
         movedEntity.setPositionAndRotation(pos, pk.headYaw, 0);
-        Location to = movedEntity.getLocation();
+        Transform to = movedEntity.getLocation();
         if (!from.equals(to)) {
             player.getServer().getPluginManager().callEvent(new VehicleMoveEvent(player, from, to));
         }

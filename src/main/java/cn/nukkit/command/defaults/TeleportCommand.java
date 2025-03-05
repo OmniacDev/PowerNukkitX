@@ -7,8 +7,8 @@ import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.command.tree.ParamList;
 import cn.nukkit.command.utils.CommandLogger;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.level.Location;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Transform;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.BVector3;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.types.PlayerAbility;
@@ -101,11 +101,11 @@ public class TeleportCommand extends VanillaCommand {
                     log.addError("commands.generic.tooManyTargets").output();
                     return 0;
                 }
-                Location victim = sender.getLocation();
+                Transform victim = sender.getLocation();
                 Entity entity = destination.get(0);
                 entity.rotation.yaw = (victim.getYaw());
                 entity.rotation.pitch = (victim.getPitch());
-                Location target = entity.getLocation();
+                Transform target = entity.getLocation();
                 boolean checkForBlocks = false;
                 if (list.hasResult(1)) {
                     checkForBlocks = list.getResult(1);
@@ -173,7 +173,7 @@ public class TeleportCommand extends VanillaCommand {
                     log.addNoTargetMatch().output();
                     return 0;
                 }
-                Position pos = list.getResult(1);
+                Locator pos = list.getResult(1);
                 double yRot = sender.getLocation().pitch;
                 if (list.hasResult(2)) {
                     yRot = list.getResult(2);
@@ -190,7 +190,7 @@ public class TeleportCommand extends VanillaCommand {
                 for (Entity victim : victims) {
                     sb.append(victim.getName()).append(" ");
                 }
-                Location target = Location.fromObject(pos, pos.level, xRot, yRot);
+                Transform target = Transform.fromObject(pos, pos.level, xRot, yRot);
                 if (checkForBlocks) {
                     if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {
                         for (Entity victim : victims) {
@@ -215,8 +215,8 @@ public class TeleportCommand extends VanillaCommand {
                     log.addNoTargetMatch().output();
                     return 0;
                 }
-                Position pos = list.getResult(1);
-                Position lookAtPosition = list.getResult(3);
+                Locator pos = list.getResult(1);
+                Locator lookAtLocator = list.getResult(3);
                 boolean checkForBlocks = false;
                 if (list.hasResult(4)) {
                     checkForBlocks = list.getResult(4);
@@ -225,8 +225,8 @@ public class TeleportCommand extends VanillaCommand {
                 for (Entity victim : victims) {
                     sb.append(victim.getName()).append(" ");
                 }
-                BVector3 bv = BVector3.fromPos(new Vector3(lookAtPosition.x - pos.x, lookAtPosition.y - pos.y, lookAtPosition.z - pos.z));
-                Location target = Location.fromObject(pos, pos.level, bv.getYaw(), bv.getPitch());
+                BVector3 bv = BVector3.fromPos(new Vector3(lookAtLocator.x - pos.x, lookAtLocator.y - pos.y, lookAtLocator.z - pos.z));
+                Transform target = Transform.fromObject(pos, pos.level, bv.getYaw(), bv.getPitch());
                 if (checkForBlocks) {
                     if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {
                         for (Entity victim : victims) {
@@ -252,7 +252,7 @@ public class TeleportCommand extends VanillaCommand {
                     log.addNoTargetMatch().output();
                     return 0;
                 }
-                Position pos = list.getResult(1);
+                Locator pos = list.getResult(1);
                 List<Entity> lookAtEntity = list.getResult(3);
                 if (lookAtEntity.isEmpty()) {
                     log.addNoTargetMatch().output();
@@ -272,7 +272,7 @@ public class TeleportCommand extends VanillaCommand {
                     sb.append(victim.getName()).append(" ");
                 }
                 BVector3 bv = BVector3.fromPos(lookAtPosition.subtract(pos));
-                Location target = Location.fromObject(pos, pos.level, bv.getYaw(), bv.getPitch());
+                Transform target = Transform.fromObject(pos, pos.level, bv.getYaw(), bv.getPitch());
                 if (checkForBlocks) {
                     if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {
                         for (Entity victim : victims) {
@@ -297,7 +297,7 @@ public class TeleportCommand extends VanillaCommand {
                     log.addError("commands.generic.noTargetMatch").output();
                     return 0;
                 }
-                Position pos = list.getResult(0);
+                Locator pos = list.getResult(0);
                 double yRot = sender.getLocation().pitch;
                 if (list.hasResult(1)) {
                     yRot = list.getResult(1);
@@ -310,7 +310,7 @@ public class TeleportCommand extends VanillaCommand {
                 if (list.hasResult(3)) {
                     checkForBlocks = list.getResult(3);
                 }
-                Location target = Location.fromObject(pos, pos.level, xRot, yRot);
+                Transform target = Transform.fromObject(pos, pos.level, xRot, yRot);
                 if (checkForBlocks) {
                     if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {
                         sender.asEntity().teleport(target);
@@ -331,14 +331,14 @@ public class TeleportCommand extends VanillaCommand {
                     log.addError("commands.generic.noTargetMatch").output();
                     return 0;
                 }
-                Position pos = list.getResult(0);
-                Position lookAtPosition = list.getResult(2);
+                Locator pos = list.getResult(0);
+                Locator lookAtLocator = list.getResult(2);
                 boolean checkForBlocks = false;
                 if (list.hasResult(3)) {
                     checkForBlocks = list.getResult(3);
                 }
-                BVector3 bv = BVector3.fromPos(new Vector3(lookAtPosition.x - pos.x, lookAtPosition.y - pos.y, lookAtPosition.z - pos.z));
-                Location target = Location.fromObject(pos, pos.level, bv.getYaw(), bv.getPitch());
+                BVector3 bv = BVector3.fromPos(new Vector3(lookAtLocator.x - pos.x, lookAtLocator.y - pos.y, lookAtLocator.z - pos.z));
+                Transform target = Transform.fromObject(pos, pos.level, bv.getYaw(), bv.getPitch());
                 if (checkForBlocks) {
                     if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {
                         sender.asEntity().teleport(target);
@@ -359,7 +359,7 @@ public class TeleportCommand extends VanillaCommand {
                     log.addError("commands.generic.noTargetMatch").output();
                     return 0;
                 }
-                Position pos = list.getResult(0);
+                Locator pos = list.getResult(0);
                 List<Entity> lookAtEntity = list.getResult(2);
                 if (lookAtEntity.isEmpty()) {
                     log.addNoTargetMatch().output();
@@ -375,7 +375,7 @@ public class TeleportCommand extends VanillaCommand {
                     checkForBlocks = list.getResult(3);
                 }
                 BVector3 bv = BVector3.fromPos(lookAtPosition.subtract(pos));
-                Location target = Location.fromObject(pos, pos.level, bv.getYaw(), bv.getPitch());
+                Transform target = Transform.fromObject(pos, pos.level, bv.getYaw(), bv.getPitch());
                 if (checkForBlocks) {
                     if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {
                         sender.asEntity().teleport(target);

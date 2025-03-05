@@ -9,10 +9,9 @@ import cn.nukkit.entity.ai.executor.IBehaviorExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityEvocationFang;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -88,27 +87,27 @@ public class FangLineExecutor implements EntityControl, IBehaviorExecutor {
 
     protected void spell(EntityLiving entity, int distance) {
         if(!entity.getDataFlag(EntityFlag.CASTING)) return;
-        Location fangLocation = entity.getLocation();
+        Transform fangTransform = entity.getLocation();
         Vector3 directionVector = entity.getDirectionVector().multiply(0.8 * (distance+1));
-        fangLocation = fangLocation.add(directionVector.getX(), 0, directionVector.getZ());
-        spawn((EntityEvocationIllager) entity, fangLocation);
+        fangTransform = fangTransform.add(directionVector.getX(), 0, directionVector.getZ());
+        spawn((EntityEvocationIllager) entity, fangTransform);
     }
 
-    protected void spawn(EntityEvocationIllager illager, Location location) {
+    protected void spawn(EntityEvocationIllager illager, Transform transform) {
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(location.x))
-                        .add(new FloatTag(location.y))
-                        .add(new FloatTag(location.z)))
+                        .add(new FloatTag(transform.x))
+                        .add(new FloatTag(transform.y))
+                        .add(new FloatTag(transform.z)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(0))
                         .add(new FloatTag(0))
                         .add(new FloatTag(0)))
                 .putList("Rotation", new ListTag<FloatTag>()
-                        .add(new FloatTag((location.yaw)))
+                        .add(new FloatTag((transform.yaw)))
                         .add(new FloatTag(0f)));
 
-        Entity fang = Entity.createEntity(EntityID.EVOCATION_FANG, location.level.getChunk(location.getChunkX(), location.getChunkZ()), nbt);
+        Entity fang = Entity.createEntity(EntityID.EVOCATION_FANG, transform.level.getChunk(transform.getChunkX(), transform.getChunkZ()), nbt);
         if(fang instanceof EntityEvocationFang fangEntity) {
             fangEntity.setEvocationIllager(illager);
         }

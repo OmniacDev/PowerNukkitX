@@ -15,7 +15,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.GameRule;
 import cn.nukkit.level.MovingObjectPosition;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.BVector3;
@@ -294,7 +294,7 @@ public class EntityThrownTrident extends EntityAbstractArrow {
 
         if (this.hasChanneling) {
             if (this.level.isThundering() && this.level.canBlockSeeSky(this.pos)) {
-                Position pos = this.getPosition();
+                Locator pos = this.getPosition();
                 EntityLightningBolt lighting = new EntityLightningBolt(pos.getChunk(), getDefaultNBT(pos));
                 lighting.spawnToAll();
                 this.getLevel().addSound(this.pos, Sound.ITEM_TRIDENT_THUNDER);
@@ -318,7 +318,7 @@ public class EntityThrownTrident extends EntityAbstractArrow {
     }
 
     @Override
-    protected void onCollideWithBlock(Position position, Vector3 motion) {
+    protected void onCollideWithBlock(Locator locator, Vector3 motion) {
         if (this.noClip) {
             return;
         }
@@ -331,7 +331,7 @@ public class EntityThrownTrident extends EntityAbstractArrow {
                 this.setTridentRope(true);
                 return;
             }
-            onCollideWithBlock(position, motion, collisionBlock);
+            onCollideWithBlock(locator, motion, collisionBlock);
         }
     }
 

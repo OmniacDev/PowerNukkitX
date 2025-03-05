@@ -6,7 +6,7 @@ import cn.nukkit.block.BlockBeehive;
 import cn.nukkit.block.BlockLiquid;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.mob.animal.EntityBee;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.BlockFace;
@@ -246,20 +246,20 @@ public class BlockEntityBeehive extends BlockEntity {
 
         CompoundTag saveData = occupant.saveData.copy();
 
-        Position lookAt;
-        Position spawnPosition;
+        Locator lookAt;
+        Locator spawnLocator;
         if (validFaces != null) {
             BlockFace face = validFaces.get(RANDOM.nextInt(validFaces.size()));
-            spawnPosition = add(
+            spawnLocator = add(
                     face.getXOffset() * 0.25 - face.getZOffset() * 0.5,
                     face.getYOffset() + (face.getYOffset() < 0 ? -0.4 : 0.2),
                     face.getZOffset() * 0.25 - face.getXOffset() * 0.5
             );
 
             saveData.putList("Pos", new ListTag<FloatTag>()
-                    .add(new FloatTag(spawnPosition.x))
-                    .add(new FloatTag(spawnPosition.y))
-                    .add(new FloatTag(spawnPosition.z))
+                    .add(new FloatTag(spawnLocator.x))
+                    .add(new FloatTag(spawnLocator.y))
+                    .add(new FloatTag(spawnLocator.z))
             );
 
             saveData.putList("Motion", new ListTag<FloatTag>()
@@ -270,12 +270,12 @@ public class BlockEntityBeehive extends BlockEntity {
 
             lookAt = getSide(face, 2);
         } else {
-            spawnPosition = add(RANDOM.nextDouble(), 0.2, RANDOM.nextDouble());
-            lookAt = spawnPosition.add(RANDOM.nextDouble(), 0, RANDOM.nextDouble());
+            spawnLocator = add(RANDOM.nextDouble(), 0.2, RANDOM.nextDouble());
+            lookAt = spawnLocator.add(RANDOM.nextDouble(), 0, RANDOM.nextDouble());
         }
 
-        double dx = lookAt.getX() - spawnPosition.getX();
-        double dz = lookAt.getZ() - spawnPosition.getZ();
+        double dx = lookAt.getX() - spawnLocator.getX();
+        double dz = lookAt.getZ() - spawnLocator.getZ();
         float yaw = 0;
 
         if (dx != 0) {
@@ -296,7 +296,7 @@ public class BlockEntityBeehive extends BlockEntity {
                 .add(new FloatTag(0))
         );
 
-        Entity entity = Entity.createEntity(occupant.actorIdentifier, spawnPosition.getChunk(), saveData);
+        Entity entity = Entity.createEntity(occupant.actorIdentifier, spawnLocator.getChunk(), saveData);
         if (entity != null) {
             removeOccupant(occupant);
             level.addSound(this, Sound.BLOCK_BEEHIVE_EXIT);

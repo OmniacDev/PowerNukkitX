@@ -7,7 +7,7 @@ import cn.nukkit.entity.ai.executor.EntityControl;
 import cn.nukkit.entity.ai.executor.IBehaviorExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.mob.EntityMob;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.math.BVector3;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -34,14 +34,14 @@ public class StrafeExecutor implements EntityControl, IBehaviorExecutor {
 
             Vector3 toPlayerVector = new Vector3(player.pos.x - entity.pos.x, player.pos.y - entity.pos.y, player.pos.z - entity.pos.z).normalize();
 
-            Location fireballLocation = entity.getLocation().add(toPlayerVector.multiply(5));
+            Transform fireballTransform = entity.getLocation().add(toPlayerVector.multiply(5));
             double yaw = BVector3.getYawFromVector(toPlayerVector);
             double pitch = BVector3.getPitchFromVector(toPlayerVector);
             CompoundTag nbt = new CompoundTag()
                     .putList("Pos", new ListTag<FloatTag>()
-                            .add(new FloatTag(fireballLocation.x))
-                            .add(new FloatTag(fireballLocation.y))
-                            .add(new FloatTag(fireballLocation.z)))
+                            .add(new FloatTag(fireballTransform.x))
+                            .add(new FloatTag(fireballTransform.y))
+                            .add(new FloatTag(fireballTransform.z)))
                     .putList("Motion", new ListTag<FloatTag>()
                             .add(new FloatTag(-Math.sin(yaw / 180 * Math.PI) * Math.cos(pitch / 180 * Math.PI)))
                             .add(new FloatTag(-Math.sin(pitch / 180 * Math.PI)))

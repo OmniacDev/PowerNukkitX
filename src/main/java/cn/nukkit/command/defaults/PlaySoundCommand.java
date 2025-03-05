@@ -8,7 +8,7 @@ import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.command.tree.ParamList;
 import cn.nukkit.command.tree.node.PlayersNode;
 import cn.nukkit.command.utils.CommandLogger;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.Sound;
 import cn.nukkit.network.protocol.PlaySoundPacket;
 import com.google.common.collect.Lists;
@@ -40,12 +40,12 @@ public class PlaySoundCommand extends VanillaCommand {
         var list = result.getValue();
         String sound = list.getResult(0);
         List<Player> targets = null;
-        Position position = null;
+        Locator locator = null;
         float volume = 1;
         float pitch = 1;
         float minimumVolume = 0;
         if (list.hasResult(1)) targets = list.getResult(1);
-        if (list.hasResult(2)) position = list.getResult(2);
+        if (list.hasResult(2)) locator = list.getResult(2);
         if (list.hasResult(3)) volume = list.getResult(3);
         if (list.hasResult(4)) pitch = list.getResult(4);
         if (list.hasResult(5)) minimumVolume = list.getResult(5);
@@ -62,8 +62,8 @@ public class PlaySoundCommand extends VanillaCommand {
                 return 0;
             }
         }
-        if (position == null) {
-            position = targets.get(0).getPosition();
+        if (locator == null) {
+            locator = targets.get(0).getPosition();
         }
 
         double maxDistance = volume > 1 ? volume * 16 : 16;
@@ -72,7 +72,7 @@ public class PlaySoundCommand extends VanillaCommand {
         for (Player player : targets) {
             String name = player.getName();
             PlaySoundPacket packet = new PlaySoundPacket();
-            if (position.distance(player.pos) > maxDistance) {
+            if (locator.distance(player.pos) > maxDistance) {
                 if (minimumVolume <= 0) {
                     log.addError("commands.playsound.playerTooFar", name);
                     continue;
@@ -84,9 +84,9 @@ public class PlaySoundCommand extends VanillaCommand {
                 packet.z = player.pos.getFloorZ();
             } else {
                 packet.volume = volume;
-                packet.x = position.getFloorX();
-                packet.y = position.getFloorY();
-                packet.z = position.getFloorZ();
+                packet.x = locator.getFloorX();
+                packet.y = locator.getFloorY();
+                packet.z = locator.getFloorZ();
             }
 
             packet.name = sound;

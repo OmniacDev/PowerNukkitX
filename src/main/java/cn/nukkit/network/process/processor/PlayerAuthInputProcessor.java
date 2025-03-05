@@ -13,7 +13,7 @@ import cn.nukkit.event.player.PlayerToggleGlideEvent;
 import cn.nukkit.event.player.PlayerToggleSneakEvent;
 import cn.nukkit.event.player.PlayerToggleSprintEvent;
 import cn.nukkit.event.player.PlayerToggleSwimEvent;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.BlockVector3;
 import cn.nukkit.math.Vector3;
@@ -180,7 +180,7 @@ public class PlayerAuthInputProcessor extends DataPacketProcessor<PlayerAuthInpu
         if (yaw < 0) {
             yaw += 360;
         }
-        Location clientLoc = Location.fromObject(clientPosition, player.level, yaw, pitch, headYaw);
+        Transform clientLoc = Transform.fromObject(clientPosition, player.level, yaw, pitch, headYaw);
         // Proper player.isPassenger() check may be needed
         if (player.riding instanceof EntityMinecartAbstract entityMinecartAbstract) {
             double inputY = pk.motion.getY();
@@ -190,7 +190,7 @@ public class PlayerAuthInputProcessor extends DataPacketProcessor<PlayerAuthInpu
         } else if (player.riding instanceof EntityBoat boat && pk.inputData.contains(AuthInputAction.IN_CLIENT_PREDICTED_IN_VEHICLE)) {
             if (player.riding.getId() == pk.predictedVehicle && player.riding.isControlling(player)) {
                 if (check(clientLoc, player)) {
-                    Location offsetLoc = clientLoc.add(0, playerHandle.getBaseOffset(), 0);
+                    Transform offsetLoc = clientLoc.add(0, playerHandle.getBaseOffset(), 0);
                     boat.onInput(offsetLoc);
                     playerHandle.handleMovement(offsetLoc);
                 }
@@ -198,7 +198,7 @@ public class PlayerAuthInputProcessor extends DataPacketProcessor<PlayerAuthInpu
             }
         } else if (playerHandle.player.riding instanceof EntityHorse entityHorse) {
             if (check(clientLoc, player)) {
-                Location playerLoc;
+                Transform playerLoc;
                 if (entityHorse.hasOwner() && !entityHorse.getSaddle().isNull()) {
                     entityHorse.onInput(clientLoc.add(0, entityHorse.getHeight(), 0));
                     playerLoc = clientLoc.add(0, playerHandle.getBaseOffset() + entityHorse.getHeight(), 0);
@@ -212,7 +212,7 @@ public class PlayerAuthInputProcessor extends DataPacketProcessor<PlayerAuthInpu
         playerHandle.offerMovementTask(clientLoc);
     }
 
-    private static boolean check(Location clientLoc, Player player) {
+    private static boolean check(Transform clientLoc, Player player) {
         var distance = clientLoc.distanceSquared(player.pos);
         var updatePosition = (float) Math.sqrt(distance) > 0.1f;
         var updateRotation = (float) Math.abs(player.rotation.pitch - clientLoc.pitch) > 1

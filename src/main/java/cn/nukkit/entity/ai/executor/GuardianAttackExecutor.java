@@ -10,7 +10,7 @@ import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityMonster;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.network.protocol.EntityEventPacket;
 import cn.nukkit.network.protocol.LevelSoundEventPacketV2;
 
@@ -70,7 +70,7 @@ public class GuardianAttackExecutor implements EntityControl, IBehaviorExecutor 
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Location clone = this.target.getLocation();
+        Transform clone = this.target.getLocation();
 
         setLookTarget(entity, clone);
 

@@ -5,7 +5,7 @@ import cn.nukkit.entity.effect.Effect;
 import cn.nukkit.entity.effect.PotionType;
 import cn.nukkit.entity.item.EntityAreaEffectCloud;
 import cn.nukkit.entity.mob.monster.EntityEnderDragon;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -65,7 +65,7 @@ public class EntityDragonFireball extends EntityProjectile {
     }
 
     @Override
-    protected void onCollideWithBlock(Position position, Vector3 motion) {
+    protected void onCollideWithBlock(Locator locator, Vector3 motion) {
         onCollide();
     }
 

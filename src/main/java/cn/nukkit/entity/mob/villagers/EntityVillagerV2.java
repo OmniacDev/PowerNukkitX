@@ -39,7 +39,6 @@ import cn.nukkit.entity.ai.sensor.NearestEntitySensor;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.data.profession.Profession;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.entity.mob.animal.EntityAnimal;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityZombie;
@@ -51,7 +50,7 @@ import cn.nukkit.inventory.InventorySlice;
 import cn.nukkit.inventory.TradeInventory;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.level.ParticleEffect;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
@@ -229,8 +228,8 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                     for (int x = -range; x <= range; x++) {
                                         for (int z = -range; z <= range; z++) {
                                             for (int y = -lookY; y <= lookY; y++) {
-                                                Location lookLocation = entity.getLocation().add(x, y, z);
-                                                Block lookBlock = lookLocation.getLevelBlock();
+                                                Transform lookTransform = entity.getLocation().add(x, y, z);
+                                                Block lookBlock = lookTransform.getLevelBlock();
                                                 if (lookBlock instanceof BlockBed bed) {
                                                     if (!bed.isHeadPiece() && Arrays.stream(getLevel().getEntities()).noneMatch(entity1 -> entity1 instanceof EntityVillagerV2 v && v.getMemoryStorage().notEmpty(CoreMemoryTypes.OCCUPIED_BED) && v.getBed().equals(bed))) {
                                                         block = bed.getFootPart();

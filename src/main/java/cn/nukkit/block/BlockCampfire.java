@@ -22,7 +22,7 @@ import cn.nukkit.item.ItemID;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.BlockFace;
@@ -242,7 +242,7 @@ public class BlockCampfire extends BlockTransparent implements Faceable, BlockEn
     }
 
     @Override
-    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Position position, @NotNull Vector3 motion) {
+    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Locator locator, @NotNull Vector3 motion) {
         if ((projectile instanceof EntitySmallFireball || (projectile.isOnFire() && projectile instanceof EntityArrow)) && isExtinguished()) {
             setExtinguished(false);
             level.setBlock(this, this, true);

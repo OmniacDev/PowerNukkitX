@@ -25,7 +25,7 @@ import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.player.PlayerTeleportEvent;
 import cn.nukkit.item.Item;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.BlockFace;
@@ -157,17 +157,17 @@ public class EntityShulker extends EntityMob implements EntityVariant {
     public void teleport() {
         Arrays.stream(getLevel().getCollisionBlocks(getBoundingBox().grow(7, 7, 7))).filter(block -> block.isFullBlock() && block.up().isAir()).findAny().ifPresent(
                 block -> {
-                    Location location = block.up().getLocation();
+                    Transform transform = block.up().getLocation();
                     getLevel().addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_TELEPORT, -1, getIdentifier(), false, false);
-                    teleport(location, PlayerTeleportEvent.TeleportCause.SHULKER);
-                    getLevel().addLevelSoundEvent(location, LevelSoundEventPacket.SOUND_SPAWN, -1, getIdentifier(), false, false);
+                    teleport(transform, PlayerTeleportEvent.TeleportCause.SHULKER);
+                    getLevel().addLevelSoundEvent(transform, LevelSoundEventPacket.SOUND_SPAWN, -1, getIdentifier(), false, false);
                 }
         );
     }
 
     @Override
-    public boolean teleport(Location location, PlayerTeleportEvent.TeleportCause cause) {
-        boolean superValue = super.teleport(location, cause);
+    public boolean teleport(Transform transform, PlayerTeleportEvent.TeleportCause cause) {
+        boolean superValue = super.teleport(transform, cause);
         if(superValue) super.updateMovement();
         return superValue;
     }

@@ -3,9 +3,8 @@ package cn.nukkit.item.enchantment;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.network.protocol.PlayerEnchantOptionsPacket;
-import cn.nukkit.tags.ItemTags;
 import cn.nukkit.utils.random.NukkitRandom;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 public final class EnchantmentHelper {
     private static final int MAX_BOOKSHELF_COUNT = 15;
 
-    public static List<PlayerEnchantOptionsPacket.EnchantOptionData> getEnchantOptions(Position tablePos, Item input, int seed) {
+    public static List<PlayerEnchantOptionsPacket.EnchantOptionData> getEnchantOptions(Locator tablePos, Item input, int seed) {
         if (input == null || input.hasEnchantments()) {
             return Collections.emptyList();
         }
@@ -37,7 +36,7 @@ public final class EnchantmentHelper {
         );
     }
 
-    private static int countBookshelves(Position tablePos) {
+    private static int countBookshelves(Locator tablePos) {
         int bookshelfCount = 0;
         Level world = tablePos.getLevel();
 

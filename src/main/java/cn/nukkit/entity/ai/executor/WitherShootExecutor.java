@@ -9,7 +9,7 @@ import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.entity.projectile.EntitySmallFireball;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.level.Sound;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.FloatTag;
@@ -50,13 +50,13 @@ public class WitherShootExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     protected void spawn(EntityMob entity, boolean charged) {
-        Location fireballLocation = entity.getLocation();
-        fireballLocation.add(entity.getDirectionVector());
+        Transform fireballTransform = entity.getLocation();
+        fireballTransform.add(entity.getDirectionVector());
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(fireballLocation.x))
-                        .add(new FloatTag(fireballLocation.y))
-                        .add(new FloatTag(fireballLocation.z)))
+                        .add(new FloatTag(fireballTransform.x))
+                        .add(new FloatTag(fireballTransform.y))
+                        .add(new FloatTag(fireballTransform.z)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(-Math.sin(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI)))
                         .add(new FloatTag(-Math.sin(entity.rotation.pitch / 180 * Math.PI)))

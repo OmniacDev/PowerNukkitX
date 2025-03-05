@@ -6,8 +6,8 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.form.window.Form;
 import cn.nukkit.inventory.Inventory;
-import cn.nukkit.level.Location;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Transform;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.BlockVector3;
 import cn.nukkit.math.Vector3;
@@ -149,12 +149,12 @@ public final class PlayerHandle {
         player.chunkRadius = chunkRadius;
     }
 
-    public Position getSpawnPosition() {
+    public Locator getSpawnPosition() {
         return player.spawnPoint;
     }
 
-    public void setSpawnPosition(Position spawnPosition) {
-        player.spawnPoint = spawnPosition;
+    public void setSpawnPosition(Locator spawnLocator) {
+        player.spawnPoint = spawnLocator;
     }
 
     public void setInAirTicks(int inAirTicks) {
@@ -324,11 +324,11 @@ public final class PlayerHandle {
         player.checkNearEntities();
     }
 
-    public void handleMovement(Location clientPos) {
+    public void handleMovement(Transform clientPos) {
         player.handleMovement(clientPos);
     }
 
-    public void offerMovementTask(Location newPosition) {
+    public void offerMovementTask(Transform newPosition) {
         player.offerMovementTask(newPosition);
     }
 
@@ -340,7 +340,7 @@ public final class PlayerHandle {
         player.resetClientMovement();
     }
 
-    public void revertClientMotion(Location originalPos) {
+    public void revertClientMotion(Transform originalPos) {
         player.revertClientMotion(originalPos);
     }
 

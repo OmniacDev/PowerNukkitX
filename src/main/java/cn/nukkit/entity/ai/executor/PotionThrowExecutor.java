@@ -9,11 +9,10 @@ import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.projectile.throwable.EntitySplashPotion;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.FloatTag;
@@ -78,7 +77,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Location clone = this.target.getLocation();
+        Transform clone = this.target.getLocation();
 
         if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
             setRouteTarget(entity, clone);
@@ -133,14 +132,14 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
 
     protected void throwPotion(EntityMob entity) {
 
-        Location potionLocation = entity.getLocation();
+        Transform potionTransform = entity.getLocation();
         Vector3 directionVector = entity.getDirectionVector();
-        potionLocation.setY(entity.pos.y + entity.getEyeHeight() + directionVector.getY());
+        potionTransform.setY(entity.pos.y + entity.getEyeHeight() + directionVector.getY());
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(potionLocation.x))
-                        .add(new FloatTag(potionLocation.y))
-                        .add(new FloatTag(potionLocation.z)))
+                        .add(new FloatTag(potionTransform.x))
+                        .add(new FloatTag(potionTransform.y))
+                        .add(new FloatTag(potionTransform.z)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(-Math.sin(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI)))
                         .add(new FloatTag(-Math.sin(entity.rotation.pitch / 180 * Math.PI)))

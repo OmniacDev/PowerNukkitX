@@ -14,7 +14,7 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityDamageEvent.DamageCause;
 import cn.nukkit.event.entity.ProjectileHitEvent;
 import cn.nukkit.level.MovingObjectPosition;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
@@ -228,7 +228,7 @@ public abstract class EntityProjectile extends Entity {
                 }
             }
 
-            Position position = getPosition();
+            Locator locator = getPosition();
             Vector3 motion = getMotion();
             this.move(this.motion.x, this.motion.y, this.motion.z);
 
@@ -240,7 +240,7 @@ public abstract class EntityProjectile extends Entity {
                 this.motion.z = 0;
 
                 this.server.getPluginManager().callEvent(new ProjectileHitEvent(this, MovingObjectPosition.fromBlock(this.pos.getFloorX(), this.pos.getFloorY(), this.pos.getFloorZ(), BlockFace.UP, this.pos)));
-                onCollideWithBlock(position, motion);
+                onCollideWithBlock(locator, motion);
                 addHitEffect();
                 return false;
             } else if (!this.isCollided && this.hadCollision) {
@@ -272,15 +272,15 @@ public abstract class EntityProjectile extends Entity {
         this.motion.z += rand.nextGaussian() * 0.007499999832361937 * modifier;
     }
 
-    protected void onCollideWithBlock(Position position, Vector3 motion) {
+    protected void onCollideWithBlock(Locator locator, Vector3 motion) {
         this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.getVector3(), VibrationType.PROJECTILE_LAND));
         for (Block collisionBlock : level.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1))) {
-            onCollideWithBlock(position, motion, collisionBlock);
+            onCollideWithBlock(locator, motion, collisionBlock);
         }
     }
 
-    protected boolean onCollideWithBlock(Position position, Vector3 motion, Block collisionBlock) {
-        return collisionBlock.onProjectileHit(this, position, motion);
+    protected boolean onCollideWithBlock(Locator locator, Vector3 motion, Block collisionBlock) {
+        return collisionBlock.onProjectileHit(this, locator, motion);
     }
 
     protected void addHitEffect() {

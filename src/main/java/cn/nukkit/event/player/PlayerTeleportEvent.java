@@ -4,8 +4,8 @@ import cn.nukkit.Player;
 import cn.nukkit.event.Cancellable;
 import cn.nukkit.event.HandlerList;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Location;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Transform;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.Vector3;
 
 public class PlayerTeleportEvent extends PlayerEvent implements Cancellable {
@@ -16,14 +16,14 @@ public class PlayerTeleportEvent extends PlayerEvent implements Cancellable {
     }
 
     private TeleportCause cause;
-    private Location from;
-    private Location to;
+    private Transform from;
+    private Transform to;
 
     private PlayerTeleportEvent(Player player) {
         this.player = player;
     }
 
-    public PlayerTeleportEvent(Player player, Location from, Location to, TeleportCause cause) {
+    public PlayerTeleportEvent(Player player, Transform from, Transform to, TeleportCause cause) {
         this(player);
         this.from = from;
         this.to = to;
@@ -37,11 +37,11 @@ public class PlayerTeleportEvent extends PlayerEvent implements Cancellable {
         this.cause = cause;
     }
 
-    public Location getFrom() {
+    public Transform getFrom() {
         return from;
     }
 
-    public Location getTo() {
+    public Transform getTo() {
         return to;
     }
 
@@ -49,10 +49,10 @@ public class PlayerTeleportEvent extends PlayerEvent implements Cancellable {
         return cause;
     }
 
-    private Location vectorToLocation(Level baseLevel, Vector3 vector) {
-        if (vector instanceof Location) return (Location) vector;
-        if (vector instanceof Position) return ((Position) vector).getLocation();
-        return new Location(vector.getX(), vector.getY(), vector.getZ(), 0, 0, baseLevel);
+    private Transform vectorToLocation(Level baseLevel, Vector3 vector) {
+        if (vector instanceof Transform) return (Transform) vector;
+        if (vector instanceof Locator) return ((Locator) vector).getLocation();
+        return new Transform(vector.getX(), vector.getY(), vector.getZ(), 0, 0, baseLevel);
     }
 
     public enum TeleportCause {

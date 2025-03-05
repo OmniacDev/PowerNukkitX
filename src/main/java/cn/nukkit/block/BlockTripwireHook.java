@@ -5,7 +5,7 @@ import cn.nukkit.event.block.BlockRedstoneEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemBlock;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
 import cn.nukkit.math.BlockFace;
@@ -112,7 +112,7 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
         }
 
         BlockFace facing = this.getFacing();
-        Position position = this.getLocation();
+        Locator locator = this.getLocation();
         boolean wasConnected = this.isAttached();
         boolean wasPowered = this.isPowered();
 
@@ -123,7 +123,7 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
         BlockTripWire[] line = new BlockTripWire[MAX_TRIPWIRE_CIRCUIT_LENGTH];
         //Skip the starting hook in potential circuit
         for (int steps = 1; steps < MAX_TRIPWIRE_CIRCUIT_LENGTH; ++steps) {
-            Block b = this.level.getBlock(position.getSide(facing, steps));
+            Block b = this.level.getBlock(locator.getSide(facing, steps));
 
             if (b instanceof BlockTripwireHook hook) {
                 if (hook.getFacing() == facing.getOpposite()) {
@@ -162,7 +162,7 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
         updatedHook.setPowered(isPowered);
 
         if (foundPairedHook) {
-            Position pairedPos = position.getSide(facing, pairedHookDistance);
+            Locator pairedPos = locator.getSide(facing, pairedHookDistance);
             BlockFace pairedFace = facing.getOpposite();
             updatedHook.setFace(pairedFace);
             this.level.setBlock(pairedPos, updatedHook, true, true);
@@ -171,15 +171,15 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
             this.addSound(pairedPos, isConnected, isPowered, wasConnected, wasPowered);
         }
 
-        this.addSound(position, isConnected, isPowered, wasConnected, wasPowered);
+        this.addSound(locator, isConnected, isPowered, wasConnected, wasPowered);
 
         if (!isHookBroken) {
             updatedHook.setFace(facing);
-            this.level.setBlock(position, updatedHook, true, true);
+            this.level.setBlock(locator, updatedHook, true, true);
 
             if (doUpdateAroundHook) {
                 updateAroundRedstone();
-                RedstoneComponent.updateAroundRedstone(position.getSide(facing.getOpposite()));
+                RedstoneComponent.updateAroundRedstone(locator.getSide(facing.getOpposite()));
             }
         }
 
@@ -187,7 +187,7 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
         for (int steps = 1; steps < pairedHookDistance; steps++) {
             BlockTripWire wire = line[steps];
             if(wire == null) { continue; }
-            Vector3 vc = position.getSide(facing, steps);
+            Vector3 vc = locator.getSide(facing, steps);
             wire.setAttached(isConnected);
             this.level.setBlock(vc, wire, true, true);
         }

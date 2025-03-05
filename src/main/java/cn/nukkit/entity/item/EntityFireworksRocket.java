@@ -7,7 +7,7 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityDamageEvent.DamageCause;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemFireworkRocket;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.Vector3;
@@ -104,7 +104,7 @@ public class EntityFireworksRocket extends Entity {
             this.motion.x *= 1.15D;
             this.motion.z *= 1.15D;
             this.motion.y += 0.04D;
-            Position position = getPosition();
+            Locator locator = getPosition();
             Vector3 motion = getMotion();
             this.move(this.motion.x, this.motion.y, this.motion.z);
 
@@ -112,7 +112,7 @@ public class EntityFireworksRocket extends Entity {
                 this.hadCollision = true;
 
                 for (Block collisionBlock : level.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1))) {
-                    collisionBlock.onProjectileHit(this, position, motion);
+                    collisionBlock.onProjectileHit(this, locator, motion);
                 }
 
             } else if (!this.isCollided && this.hadCollision) {

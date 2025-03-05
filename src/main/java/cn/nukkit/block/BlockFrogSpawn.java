@@ -4,7 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityFallingBlock;
 import cn.nukkit.item.Item;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +51,7 @@ public class BlockFrogSpawn extends BlockFlowable {
             this.onBreak(null);
     }
 
-    public boolean supportable(Position pos){
+    public boolean supportable(Locator pos){
         Block under = pos.getSide(BlockFace.DOWN).getLevelBlock();
         return under.getId() == FLOWING_WATER
                 || under.getId() == WATER

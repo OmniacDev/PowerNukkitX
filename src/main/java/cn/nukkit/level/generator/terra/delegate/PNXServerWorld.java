@@ -2,7 +2,7 @@ package cn.nukkit.level.generator.terra.delegate;
 
 import cn.nukkit.block.BlockID;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.generator.terra.PNXAdapter;
 import cn.nukkit.level.generator.terra.TerraGenerator;
 import cn.nukkit.math.BlockVector3;
@@ -42,7 +42,7 @@ public record PNXServerWorld(TerraGenerator generatorWrapper, Level level) imple
     @Override
     public Entity spawnEntity(double v, double v1, double v2, EntityType entityType) {
         String identifier = (String) entityType.getHandle();
-        cn.nukkit.entity.Entity nukkitEntity = cn.nukkit.entity.Entity.createEntity(identifier, new Position(v, v1, v2, level));
+        cn.nukkit.entity.Entity nukkitEntity = cn.nukkit.entity.Entity.createEntity(identifier, new Locator(v, v1, v2, level));
         return new PNXEntity(nukkitEntity, this);
     }
 

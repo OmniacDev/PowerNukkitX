@@ -8,7 +8,7 @@ import cn.nukkit.block.BlockPistonArmCollision;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.event.entity.EntityMoveByPistonEvent;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.BlockVector3;
@@ -173,7 +173,7 @@ public class BlockEntityPistonArm extends BlockEntitySpawnable {
             }
             for (var update : redstoneUpdateList) {
                 //红石更新
-                RedstoneComponent.updateAllAroundRedstone(new Position(update.x, update.y, update.z, this.level));
+                RedstoneComponent.updateAllAroundRedstone(new Locator(update.x, update.y, update.z, this.level));
             }
             var pos = getSide(facing);
             if (!extending) {

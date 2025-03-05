@@ -9,7 +9,7 @@ import cn.nukkit.entity.effect.Effect;
 import cn.nukkit.entity.effect.PotionType;
 import cn.nukkit.entity.item.EntityAreaEffectCloud;
 import cn.nukkit.entity.mob.EntityMob;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.FloatTag;
@@ -36,13 +36,13 @@ public class PerchingExecutor implements EntityControl, IBehaviorExecutor {
                     removeRouteTarget(entity);
                     setLookTarget(entity, player.pos);
                     Vector3 toPlayerVector = new Vector3(player.pos.x - entity.pos.x, player.pos.y - entity.pos.y, player.pos.z - entity.pos.z).normalize();
-                    Location location = entity.getLocation().add(toPlayerVector.multiply(10));
-                    location.y = location.level.getHighestBlockAt(location.toHorizontal()) + 1;
-                    EntityAreaEffectCloud areaEffectCloud = (EntityAreaEffectCloud) Entity.createEntity(Entity.AREA_EFFECT_CLOUD, location.getChunk(),
+                    Transform transform = entity.getLocation().add(toPlayerVector.multiply(10));
+                    transform.y = transform.level.getHighestBlockAt(transform.toHorizontal()) + 1;
+                    EntityAreaEffectCloud areaEffectCloud = (EntityAreaEffectCloud) Entity.createEntity(Entity.AREA_EFFECT_CLOUD, transform.getChunk(),
                             new CompoundTag().putList("Pos", new ListTag<>()
-                                            .add(new FloatTag(location.x))
-                                            .add(new FloatTag(location.y))
-                                            .add(new FloatTag(location.z))
+                                            .add(new FloatTag(transform.x))
+                                            .add(new FloatTag(transform.y))
+                                            .add(new FloatTag(transform.z))
                                     )
                                     .putList("Rotation", new ListTag<>()
                                             .add(new FloatTag(0))

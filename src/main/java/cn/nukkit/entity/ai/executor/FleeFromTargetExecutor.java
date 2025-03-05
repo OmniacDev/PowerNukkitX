@@ -4,8 +4,7 @@ import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
-import cn.nukkit.entity.mob.EntityMob;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.GetVector3;
 import cn.nukkit.math.Vector3;
 import lombok.Getter;
@@ -53,7 +52,7 @@ public class FleeFromTargetExecutor implements EntityControl, IBehaviorExecutor 
         Vector3 target = entity.getBehaviorGroup().getMemoryStorage().get(memory).getVector3();
         Vector3 moveTarget = target.add(new Vector3(entity.pos.x-target.x, entity.pos.y-target.y, entity.pos.z-target.z).normalize().multiply(minDistance));
 
-        if (moveTarget instanceof Position position && !position.level.getName().equals(entity.level.getName()))
+        if (moveTarget instanceof Locator locator && !locator.level.getName().equals(entity.level.getName()))
             return false;
 
         if (target.distance(entity.pos) > minDistance) {

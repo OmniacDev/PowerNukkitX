@@ -10,7 +10,7 @@ import cn.nukkit.command.tree.ParamList;
 import cn.nukkit.command.utils.CommandLogger;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 
 import java.util.Map;
 
@@ -32,7 +32,7 @@ public class SetBlockCommand extends VanillaCommand {
     @Override
     public int execute(CommandSender sender, String commandLabel, Map.Entry<String, ParamList> result, CommandLogger log) {
         var list = result.getValue();
-        Position position = list.getResult(0);
+        Locator locator = list.getResult(0);
         Block block = list.getResult(1);
         try {
             if (list.hasResult(2)) {
@@ -47,13 +47,13 @@ public class SetBlockCommand extends VanillaCommand {
         if (list.hasResult(3)) {
             oldBlockHandling = list.getResult(3);
         }
-        if (!sender.getPosition().level.isYInRange((int) position.y)) {
+        if (!sender.getPosition().level.isYInRange((int) locator.y)) {
             log.addError("commands.setblock.outOfWorld").output();
             return 0;
         }
 
         Level level = sender.getPosition().getLevel();
-        Block current = level.getBlock(position);
+        Block current = level.getBlock(locator);
         if (current.getId().equals(block.getId()) && current.getBlockState() == block.getBlockState()) {
             log.addError("commands.setblock.noChange").output();
             return 0;
@@ -62,9 +62,9 @@ public class SetBlockCommand extends VanillaCommand {
             switch (oldBlockHandling) {
                 case "destroy" -> {
                     if (sender.isPlayer()) {
-                        level.useBreakOn(position, null, Item.AIR, sender.asPlayer(), true, true);
+                        level.useBreakOn(locator, null, Item.AIR, sender.asPlayer(), true, true);
                     } else {
-                        level.useBreakOn(position);
+                        level.useBreakOn(locator);
                     }
                 }
                 case "keep" -> {
@@ -73,7 +73,7 @@ public class SetBlockCommand extends VanillaCommand {
                 }
             }
         }
-        level.setBlock(position, block);
+        level.setBlock(locator, block);
         log.addSuccess("commands.setblock.success").output();
         return 1;
     }

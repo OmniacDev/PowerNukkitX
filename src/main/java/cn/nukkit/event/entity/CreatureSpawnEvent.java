@@ -4,7 +4,7 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.event.Cancellable;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.HandlerList;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.nbt.tag.CompoundTag;
 
 public class CreatureSpawnEvent extends Event implements Cancellable {
@@ -17,21 +17,21 @@ public class CreatureSpawnEvent extends Event implements Cancellable {
 
     private final SpawnReason reason;
     private final int entityNetworkId;
-    private final Position position;
+    private final Locator locator;
     private final CompoundTag compoundTag;
 
-    public CreatureSpawnEvent(int networkId, Position position, CompoundTag nbt, SpawnReason reason) {
+    public CreatureSpawnEvent(int networkId, Locator locator, CompoundTag nbt, SpawnReason reason) {
         this.reason = reason;
         this.entityNetworkId = networkId;
-        this.position = position;
+        this.locator = locator;
         this.compoundTag = nbt;
     }
 
-    public CreatureSpawnEvent(int networkId, Position position, SpawnReason reason) {
+    public CreatureSpawnEvent(int networkId, Locator locator, SpawnReason reason) {
         this.reason = reason;
         this.entityNetworkId = networkId;
-        this.position = position;
-        this.compoundTag = Entity.getDefaultNBT(position);
+        this.locator = locator;
+        this.compoundTag = Entity.getDefaultNBT(locator);
     }
 
     public SpawnReason getReason() {
@@ -46,8 +46,8 @@ public class CreatureSpawnEvent extends Event implements Cancellable {
         return compoundTag;
     }
 
-    public Position getPosition() {
-        return position;
+    public Locator getPosition() {
+        return locator;
     }
 
     /**

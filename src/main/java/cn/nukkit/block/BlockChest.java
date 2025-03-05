@@ -10,7 +10,7 @@ import cn.nukkit.inventory.ContainerInventory;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemBlock;
 import cn.nukkit.item.ItemTool;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
@@ -187,7 +187,7 @@ public class BlockChest extends BlockTransparent implements Faceable, BlockEntit
     }
 
     @Override
-    public boolean cloneTo(Position pos) {
+    public boolean cloneTo(Locator pos) {
         if (!super.cloneTo(pos)) return false;
         else {
             var blockEntity = this.getBlockEntity();

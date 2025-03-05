@@ -8,7 +8,7 @@ import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.command.tree.ParamList;
 import cn.nukkit.command.utils.CommandLogger;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 
 import java.util.Map;
 
@@ -30,7 +30,7 @@ public class TestForBlockCommand extends VanillaCommand {
     @Override
     public int execute(CommandSender sender, String commandLabel, Map.Entry<String, ParamList> result, CommandLogger log) {
         var list = result.getValue();
-        Position position = list.getResult(0);
+        Locator locator = list.getResult(0);
         Block tileName = list.getResult(1);
         String tileId = tileName.getId();
         int dataValue = 0;
@@ -42,22 +42,22 @@ public class TestForBlockCommand extends VanillaCommand {
             return 0;
         }
 
-        Level level = position.getLevel();
+        Level level = locator.getLevel();
 
-        if (level.getChunkIfLoaded(position.getChunkX(), position.getChunkZ()) == null) {
+        if (level.getChunkIfLoaded(locator.getChunkX(), locator.getChunkZ()) == null) {
             log.addError("commands.testforblock.outOfWorld").output();
             return 0;
         }
 
-        Block block = level.getBlock(position, false);
+        Block block = level.getBlock(locator, false);
         String id = block.getId();
         int meta = block.getBlockState().specialValue();
 
         if (id == tileId && meta == dataValue) {
-            log.addSuccess("commands.testforblock.success", String.valueOf(position.getFloorX()), String.valueOf(position.getFloorY()), String.valueOf(position.getFloorZ())).output();
+            log.addSuccess("commands.testforblock.success", String.valueOf(locator.getFloorX()), String.valueOf(locator.getFloorY()), String.valueOf(locator.getFloorZ())).output();
             return 1;
         } else {
-            log.addError("commands.testforblock.failed.tile", String.valueOf(position.getFloorX()), String.valueOf(position.getFloorY()), String.valueOf(position.getFloorZ()), String.valueOf(id), String.valueOf(tileId))
+            log.addError("commands.testforblock.failed.tile", String.valueOf(locator.getFloorX()), String.valueOf(locator.getFloorY()), String.valueOf(locator.getFloorZ()), String.valueOf(id), String.valueOf(tileId))
                     .output();
             return 0;
         }

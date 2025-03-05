@@ -7,7 +7,7 @@ import cn.nukkit.event.block.BlockGrowEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.particle.BoneMealParticle;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.utils.OptionalBoolean;
@@ -212,7 +212,7 @@ public abstract class BlockVinesNether extends BlockTransparent {
      */
     @NotNull public Optional<BlockVinesNether> findVineBlock(boolean base) {
         return findVine(base)
-                .map(Position::getLevelBlock)
+                .map(Locator::getLevelBlock)
                 .filter(BlockVinesNether.class::isInstance)
                 .map(BlockVinesNether.class::cast);
     }
@@ -222,16 +222,16 @@ public abstract class BlockVinesNether extends BlockTransparent {
      * @param base True to find the base (oldest block), false to find the head (newest block)
      * @return Empty if the target could not be reached. The position of the target if it was found.
      */
-    @NotNull public Optional<Position> findVine(boolean base) {
+    @NotNull public Optional<Locator> findVine(boolean base) {
         BlockFace supportFace = getGrowthDirection();
         if (base) {
             supportFace = supportFace.getOpposite();
         }
-        Position result = getLocation();
+        Locator result = getLocation();
         String id = getId();
         int limit = 256;
         while (--limit > 0){
-            Position next = result.getSide(supportFace);
+            Locator next = result.getSide(supportFace);
             if (Objects.equals(next.getLevelBlockState().getIdentifier(), id)) {
                 result = next;
             } else {
@@ -251,7 +251,7 @@ public abstract class BlockVinesNether extends BlockTransparent {
      *     </ul>
      */
     @NotNull public OptionalBoolean increaseRootAge() {
-        Block base = findVine(true).map(Position::getLevelBlock).orElse(null);
+        Block base = findVine(true).map(Locator::getLevelBlock).orElse(null);
         if (!(base instanceof BlockVinesNether baseVine)) {
             return OptionalBoolean.EMPTY;
         }

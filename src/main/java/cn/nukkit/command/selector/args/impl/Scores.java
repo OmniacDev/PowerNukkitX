@@ -8,7 +8,7 @@ import cn.nukkit.command.selector.ParseUtils;
 import cn.nukkit.command.selector.SelectorType;
 import cn.nukkit.command.selector.args.CachedSimpleSelectorArgument;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.scoreboard.scorer.EntityScorer;
 import cn.nukkit.scoreboard.scorer.IScorer;
 import cn.nukkit.scoreboard.scorer.PlayerScorer;
@@ -25,7 +25,7 @@ public class Scores extends CachedSimpleSelectorArgument {
     protected static final String SCORE_SCOPE_SEPARATOR = "..";
 
     @Override
-    protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location basePos, String... arguments) throws SelectorSyntaxException {
+    protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Transform basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
         final var conditions = new ArrayList<ScoreCondition>();
         for (String entry : StringUtils.fastSplit(SCORE_SEPARATOR, arguments[0].substring(1, arguments[0].length() - 1))) {

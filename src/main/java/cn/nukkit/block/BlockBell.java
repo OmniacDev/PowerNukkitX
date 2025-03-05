@@ -13,7 +13,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemBlock;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.SimpleAxisAlignedBB;
@@ -182,7 +182,7 @@ public class BlockBell extends BlockTransparent implements RedstoneComponent, Fa
         if (hitFace == null) {
             if (causeEntity != null) {
                 if (causeEntity instanceof EntityItem) {
-                    Position blockMid = add(0.5, 0.5, 0.5);
+                    Locator blockMid = add(0.5, 0.5, 0.5);
                     Vector3 vector = causeEntity.pos.subtract(blockMid).normalize();
                     int x = vector.x < 0 ? -1 : vector.x > 0 ? 1 : 0;
                     int z = vector.z < 0 ? -1 : vector.z > 0 ? 1 : 0;
@@ -367,7 +367,7 @@ public class BlockBell extends BlockTransparent implements RedstoneComponent, Fa
     }
 
     @Override
-    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Position position, @NotNull Vector3 motion) {
+    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Locator locator, @NotNull Vector3 motion) {
         ring(projectile, BellRingEvent.RingCause.PROJECTILE);
         if (projectile.isOnFire() && projectile instanceof EntityArrow && level.getBlock(projectile.pos).isAir()) {
             level.setBlock(projectile.pos, Block.get(BlockID.FIRE), true);

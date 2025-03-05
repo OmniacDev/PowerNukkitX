@@ -1,7 +1,7 @@
 package cn.nukkit.command.tree.node;
 
-import cn.nukkit.level.Location;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Transform;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.BVector3;
 import cn.nukkit.math.Vector3;
 
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 /**
  * 坐标节点基类
  */
-public abstract class PositionNode extends ParamNode<Position> {
+public abstract class PositionNode extends ParamNode<Locator> {
     private final Pattern pattern;
     protected final double[] coordinate = new double[3];
     protected final List<String> TMP = new ArrayList<>();
@@ -29,7 +29,7 @@ public abstract class PositionNode extends ParamNode<Position> {
     }
 
     @SuppressWarnings("unchecked")
-    public <E> E get(Position basePos) {
+    public <E> E get(Locator basePos) {
         if (this.value == null) return null;
         if (this.getRelative(0)) {
             this.value.setX(this.value.x + basePos.getX());
@@ -57,7 +57,7 @@ public abstract class PositionNode extends ParamNode<Position> {
         else {
             //parse
             try {
-                Location loc = paramList.getParamTree().getSender().getLocation();
+                Transform loc = paramList.getParamTree().getSender().getLocation();
                 for (String s : TMP) {
                     if (s.charAt(0) == '~') {
                         this.setRelative(index);
@@ -112,7 +112,7 @@ public abstract class PositionNode extends ParamNode<Position> {
                     index++;
                 }
                 if (index == 3) {
-                    this.value = new Position(coordinate[0], coordinate[1], coordinate[2], loc.getLevel());
+                    this.value = new Locator(coordinate[0], coordinate[1], coordinate[2], loc.getLevel());
                     index = 0;
                 }
             } catch (NumberFormatException ignore) {

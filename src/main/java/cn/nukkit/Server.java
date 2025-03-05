@@ -33,7 +33,7 @@ import cn.nukkit.lang.TextContainer;
 import cn.nukkit.level.DimensionEnum;
 import cn.nukkit.level.GameRule;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.format.LevelConfig;
 import cn.nukkit.level.format.LevelProvider;
 import cn.nukkit.level.format.LevelProviderManager;
@@ -51,7 +51,6 @@ import cn.nukkit.metadata.PlayerMetadataStore;
 import cn.nukkit.metrics.NukkitMetrics;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.network.Network;
@@ -1699,7 +1698,7 @@ public class Server {
             if (this.getSettings().playerSettings().savePlayerData()) {
                 log.info(this.getLanguage().tr("nukkit.data.playerNotFound", uuid));
             }
-            Position spawn = this.getDefaultLevel().getSafeSpawn();
+            Locator spawn = this.getDefaultLevel().getSafeSpawn();
             CompoundTag nbt = new CompoundTag()
                     .putLong("firstPlayed", System.currentTimeMillis() / 1000)
                     .putLong("lastPlayed", System.currentTimeMillis() / 1000)

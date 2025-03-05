@@ -7,21 +7,18 @@ import cn.nukkit.entity.projectile.abstract_arrow.EntityArrow;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.EntityShootBowEvent;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
-import cn.nukkit.inventory.Inventory;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.item.enchantment.bow.EnchantmentBow;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Stream;
 
 /**
  * @author MagicDroidX (Nukkit Project)
@@ -79,10 +76,10 @@ public class ItemBow extends ItemTool {
         Enchantment flameEnchant = this.getEnchantment(Enchantment.ID_BOW_FLAME);
         boolean flame = flameEnchant != null && flameEnchant.getLevel() > 0;
 
-        Location arrowLocation = player.getLocation();
+        Transform arrowTransform = player.getLocation();
         Vector3 directionVector = player.getDirectionVector().multiply(1.1);
-        arrowLocation = arrowLocation.add(directionVector.getX(), 0, directionVector.getZ());
-        arrowLocation.setY(player.pos.y + player.getEyeHeight() + directionVector.getY());
+        arrowTransform = arrowTransform.add(directionVector.getX(), 0, directionVector.getZ());
+        arrowTransform.setY(player.pos.y + player.getEyeHeight() + directionVector.getY());
 
         ItemArrow itemArrow = (ItemArrow) (offhandOptional.isPresent() ?
                 offhandOptional.get().getValue() :
@@ -93,9 +90,9 @@ public class ItemBow extends ItemTool {
 
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(arrowLocation.x))
-                        .add(new FloatTag(arrowLocation.y))
-                        .add(new FloatTag(arrowLocation.z)))
+                        .add(new FloatTag(arrowTransform.x))
+                        .add(new FloatTag(arrowTransform.y))
+                        .add(new FloatTag(arrowTransform.z)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(-Math.sin(player.rotation.yaw / 180 * Math.PI) * Math.cos(player.rotation.pitch / 180 * Math.PI)))
                         .add(new FloatTag(-Math.sin(player.rotation.pitch / 180 * Math.PI)))

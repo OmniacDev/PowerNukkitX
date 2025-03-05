@@ -14,8 +14,8 @@ import cn.nukkit.command.tree.ParamList;
 import cn.nukkit.command.utils.CommandLogger;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Location;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Transform;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.*;
 import cn.nukkit.scoreboard.scorer.EntityScorer;
 import cn.nukkit.scoreboard.scorer.IScorer;
@@ -207,8 +207,8 @@ public class ExecuteCommand extends VanillaCommand {
                     return 0;
                 }
                 String chainCommand = list.getResult(2);
-                for (Location location : locations.stream().map(Entity::getLocation).toList()) {
-                    ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), location);
+                for (Transform transform : locations.stream().map(Entity::getLocation).toList()) {
+                    ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), transform);
                     num += executorCommandSender.getServer().executeCommand(executorCommandSender, chainCommand);
                 }
                 return num;
@@ -220,15 +220,15 @@ public class ExecuteCommand extends VanillaCommand {
                     return 0;
                 }
                 String chainCommand = list.getResult(2);
-                Location location = sender.getLocation();
-                location.setLevel(level);
-                ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), location);
+                Transform transform = sender.getLocation();
+                transform.setLevel(level);
+                ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), transform);
                 return executorCommandSender.getServer().executeCommand(executorCommandSender, chainCommand);
             }
             case "facing" -> {
                 Vector3 pos = list.getResult(1);
                 String chainCommand = list.getResult(2);
-                Location source = sender.getLocation();
+                Transform source = sender.getLocation();
                 BVector3 bv = BVector3.fromPos(pos.x - source.x, pos.y - source.y, pos.z - source.z);
                 source.setPitch(bv.getPitch());
                 source.setYaw(bv.getYaw());
@@ -245,7 +245,7 @@ public class ExecuteCommand extends VanillaCommand {
                 boolean anchorAtEyes = anchor.equals("eyes");
                 String chainCommand = list.getResult(4);
                 for (Entity target : targets) {
-                    Location source = sender.getLocation();
+                    Transform source = sender.getLocation();
                     BVector3 bv = BVector3.fromPos(target.pos.x - source.x, target.pos.y + (anchorAtEyes ? target.getEyeHeight() : 0) - source.y, target.pos.z - source.z);
                     source.setPitch(bv.getPitch());
                     source.setYaw(bv.getYaw());
@@ -260,10 +260,10 @@ public class ExecuteCommand extends VanillaCommand {
                 double pitch = sender.getLocation().pitch;
                 if (list.hasResult(2)) pitch = list.getResult(2);
                 String chainCommand = list.getResult(3);
-                Location location = sender.getLocation();
-                location.setYaw(yaw);
-                location.setPitch(pitch);
-                ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), location);
+                Transform transform = sender.getLocation();
+                transform.setYaw(yaw);
+                transform.setPitch(pitch);
+                ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), transform);
                 return executorCommandSender.getServer().executeCommand(executorCommandSender, chainCommand);
             }
             case "rotated as" -> {
@@ -274,10 +274,10 @@ public class ExecuteCommand extends VanillaCommand {
                 }
                 String chainCommand = list.getResult(3);
                 for (Entity executor : executors) {
-                    Location location = sender.getLocation();
-                    location.setYaw(executor.rotation.yaw);
-                    location.setPitch(executor.rotation.pitch);
-                    ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), location);
+                    Transform transform = sender.getLocation();
+                    transform.setYaw(executor.rotation.yaw);
+                    transform.setPitch(executor.rotation.pitch);
+                    ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), transform);
                     num += executorCommandSender.getServer().executeCommand(executorCommandSender, chainCommand);
                 }
                 return num;
@@ -285,34 +285,34 @@ public class ExecuteCommand extends VanillaCommand {
             case "align" -> {
                 String axes = list.getResult(1);
                 String chainCommand = list.getResult(2);
-                Location location = sender.getLocation();
+                Transform transform = sender.getLocation();
                 for (char c : axes.toCharArray()) {
                     switch (c) {
-                        case 'x' -> location.x = location.getFloorX();
-                        case 'y' -> location.y = location.getFloorY();
-                        case 'z' -> location.z = location.getFloorZ();
+                        case 'x' -> transform.x = transform.getFloorX();
+                        case 'y' -> transform.y = transform.getFloorY();
+                        case 'z' -> transform.z = transform.getFloorZ();
                     }
                 }
-                ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), location);
+                ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), transform);
                 return executorCommandSender.getServer().executeCommand(executorCommandSender, chainCommand);
             }
             case "anchored" -> {
                 if (!sender.isEntity()) return 0;
-                Location location = sender.getLocation();
+                Transform transform = sender.getLocation();
                 String anchor = list.getResult(1);
                 String chainCommand = list.getResult(2);
                 switch (anchor) {
                     case "feet" -> {
                         //todo do nothing
                     }
-                    case "eyes" -> location = location.add(0, sender.asEntity().getEyeHeight(), 0);
+                    case "eyes" -> transform = transform.add(0, sender.asEntity().getEyeHeight(), 0);
                 }
-                ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), location);
+                ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), transform);
                 return executorCommandSender.getServer().executeCommand(executorCommandSender, chainCommand);
             }
             case "positioned" -> {
                 Vector3 vec = list.getResult(1);
-                Location newLoc = sender.getLocation();
+                Transform newLoc = sender.getLocation();
                 newLoc.setX(vec.getX());
                 newLoc.setY(vec.getY());
                 newLoc.setZ(vec.getZ());
@@ -328,7 +328,7 @@ public class ExecuteCommand extends VanillaCommand {
                 }
                 String chainCommand = list.getResult(3);
                 for (Vector3 vec : targets.stream().map(e -> e.pos).toList()) {
-                    Location newLoc = sender.getLocation();
+                    Transform newLoc = sender.getLocation();
                     newLoc.setX(vec.getX());
                     newLoc.setY(vec.getY());
                     newLoc.setZ(vec.getZ());
@@ -338,7 +338,7 @@ public class ExecuteCommand extends VanillaCommand {
                 return num;
             }
             case "if-unless-block" -> {
-                Position pos = list.getResult(2);
+                Locator pos = list.getResult(2);
                 Block block = pos.getLevelBlock();
                 Block blockName = list.getResult(3);
                 String id = blockName.getId();
@@ -360,7 +360,7 @@ public class ExecuteCommand extends VanillaCommand {
                 }
             }
             case "if-unless-block-data" -> {
-                Position pos = list.getResult(2);
+                Locator pos = list.getResult(2);
                 Block block = pos.getLevelBlock();
                 Block blockName = list.getResult(3);
                 String id = blockName.getId();
@@ -385,9 +385,9 @@ public class ExecuteCommand extends VanillaCommand {
             case "if-unless-blocks" -> {
                 String isIF = list.getResult(0);
                 boolean shouldMatch = isIF.equals("if");
-                Position begin = list.getResult(2);
-                Position end = list.getResult(3);
-                Position destination = list.getResult(4);
+                Locator begin = list.getResult(2);
+                Locator end = list.getResult(3);
+                Locator destination = list.getResult(4);
                 TestForBlocksCommand.TestForBlocksMode mode = TestForBlocksCommand.TestForBlocksMode.ALL;
                 if (list.hasResult(5)) {
                     String str5 = list.getResult(5);
@@ -403,7 +403,7 @@ public class ExecuteCommand extends VanillaCommand {
                             .successCount(2).output();
                 }
 
-                Position to = new Position(destination.getX() + (blocksAABB.getMaxX() - blocksAABB.getMinX()), destination.getY() + (blocksAABB.getMaxY() - blocksAABB.getMinY()), destination.getZ() + (blocksAABB.getMaxZ() - blocksAABB.getMinZ()));
+                Locator to = new Locator(destination.getX() + (blocksAABB.getMaxX() - blocksAABB.getMinX()), destination.getY() + (blocksAABB.getMaxY() - blocksAABB.getMinY()), destination.getZ() + (blocksAABB.getMaxZ() - blocksAABB.getMinZ()));
                 AxisAlignedBB destinationAABB = new SimpleAxisAlignedBB(Math.min(destination.getX(), to.getX()), Math.min(destination.getY(), to.getY()), Math.min(destination.getZ(), to.getZ()), Math.max(destination.getX(), to.getX()), Math.max(destination.getY(), to.getY()), Math.max(destination.getZ(), to.getZ()));
 
                 if (blocksAABB.getMinY() < 0 || blocksAABB.getMaxY() > 255 || destinationAABB.getMinY() < 0 || destinationAABB.getMaxY() > 255) {

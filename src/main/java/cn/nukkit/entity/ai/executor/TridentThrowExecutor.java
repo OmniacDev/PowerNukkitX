@@ -12,7 +12,7 @@ import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.entity.projectile.abstract_arrow.EntityThrownTrident;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -82,7 +82,7 @@ public class TridentThrowExecutor implements EntityControl, IBehaviorExecutor {
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Location clone = this.target.getLocation();
+        Transform clone = this.target.getLocation();
 
         if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
             //更新寻路target
@@ -142,14 +142,14 @@ public class TridentThrowExecutor implements EntityControl, IBehaviorExecutor {
 
     protected void throwTrident(EntityMob entity) {
 
-        Location fireballLocation = entity.getLocation();
+        Transform fireballTransform = entity.getLocation();
         Vector3 directionVector = entity.getDirectionVector().multiply(1 + ThreadLocalRandom.current().nextFloat(0.2f));
-        fireballLocation.setY(entity.pos.y + entity.getEyeHeight() + directionVector.getY());
+        fireballTransform.setY(entity.pos.y + entity.getEyeHeight() + directionVector.getY());
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(fireballLocation.x))
-                        .add(new FloatTag(fireballLocation.y))
-                        .add(new FloatTag(fireballLocation.z)))
+                        .add(new FloatTag(fireballTransform.x))
+                        .add(new FloatTag(fireballTransform.y))
+                        .add(new FloatTag(fireballTransform.z)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(-Math.sin(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI)))
                         .add(new FloatTag(-Math.sin(entity.rotation.pitch / 180 * Math.PI)))

@@ -9,7 +9,7 @@ import cn.nukkit.entity.projectile.abstract_arrow.EntityThrownTrident;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.MovingObjectPosition;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.BlockFace.Axis;
 import cn.nukkit.math.NukkitMath;
@@ -116,13 +116,13 @@ public class BlockTarget extends BlockTransparent implements RedstoneComponent, 
     }
 
     @Override
-    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Position position, @NotNull Vector3 motion) {
+    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Locator locator, @NotNull Vector3 motion) {
         int ticks = 8;
         if (projectile instanceof EntityArrow || projectile instanceof EntityThrownTrident || projectile instanceof EntitySmallFireball) {
             ticks = 20;
         }
 
-        MovingObjectPosition intercept = calculateIntercept(position, position.add(motion.multiply(2)));
+        MovingObjectPosition intercept = calculateIntercept(locator, locator.add(motion.multiply(2)));
         if (intercept == null) {
             return false;
         }

@@ -14,7 +14,7 @@ import cn.nukkit.item.customitem.ItemCustomTool;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.MovingObjectPosition;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.GetVector3;
@@ -42,7 +42,7 @@ import java.util.function.Predicate;
  * @author MagicDroidX (Nukkit Project)
  */
 @Slf4j
-public abstract class Block extends Position implements Metadatable, AxisAlignedBB, BlockID, GetVector3 {
+public abstract class Block extends Locator implements Metadatable, AxisAlignedBB, BlockID, GetVector3 {
     public static final Block[] EMPTY_ARRAY = new Block[0];
     public static final double DEFAULT_FRICTION_FACTOR = 0.6;
     public static final double DEFAULT_AIR_FLUID_FRICTION = 0.95;
@@ -68,7 +68,7 @@ public abstract class Block extends Position implements Metadatable, AxisAligned
     }
 
     @NotNull
-    public static Block get(String id, Position pos) {
+    public static Block get(String id, Locator pos) {
         id = id.contains(":") ? id : "minecraft:" + id;
         Block block = Registries.BLOCK.get(id, pos.getFloorX(), pos.getFloorY(), pos.getFloorZ(), pos.level);
         if (block == null) {
@@ -83,7 +83,7 @@ public abstract class Block extends Position implements Metadatable, AxisAligned
     }
 
     @NotNull
-    public static Block get(String id, Position pos, int layer) {
+    public static Block get(String id, Locator pos, int layer) {
         id = id.contains(":") ? id : "minecraft:" + id;
         Block block = get(id, pos);
         block.layer = layer;
@@ -123,12 +123,12 @@ public abstract class Block extends Position implements Metadatable, AxisAligned
     }
 
     @NotNull
-    public static Block get(BlockState blockState, Position pos) {
+    public static Block get(BlockState blockState, Locator pos) {
         return get(blockState, pos.level, pos.getFloorX(), pos.getFloorY(), pos.getFloorZ());
     }
 
     @NotNull
-    public static Block get(BlockState blockState, Position pos, int layer) {
+    public static Block get(BlockState blockState, Locator pos, int layer) {
         Block block = get(blockState, pos);
         block.layer = layer;
         return block;
@@ -528,7 +528,7 @@ public abstract class Block extends Position implements Metadatable, AxisAligned
     public void addVelocityToEntity(Entity entity, Vector3 vector) {
     }
 
-    public final void position(Position v) {
+    public final void position(Locator v) {
         this.x = (int) v.x;
         this.y = (int) v.y;
         this.z = (int) v.z;
@@ -1351,7 +1351,7 @@ public abstract class Block extends Position implements Metadatable, AxisAligned
         return Level.canRandomTick(getId());
     }
 
-    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Position position, @NotNull Vector3 motion) {
+    public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Locator locator, @NotNull Vector3 motion) {
         return false;
     }
 
@@ -1377,7 +1377,7 @@ public abstract class Block extends Position implements Metadatable, AxisAligned
         return this.level.isBlockPowered(this.getLocation());
     }
 
-    public boolean cloneTo(Position pos) {
+    public boolean cloneTo(Locator pos) {
         return cloneTo(pos, true);
     }
 
@@ -1391,7 +1391,7 @@ public abstract class Block extends Position implements Metadatable, AxisAligned
      * @return 是否克隆成功
      */
     @SuppressWarnings("null")
-    public boolean cloneTo(Position pos, boolean update) {
+    public boolean cloneTo(Locator pos, boolean update) {
         //清除旧方块
         level.setBlock(pos, this.layer, Block.get(Block.AIR), false, false);
         if (this instanceof BlockEntityHolder<?> holder && holder.getBlockEntity() != null) {

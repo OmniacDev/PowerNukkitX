@@ -3,14 +3,12 @@ package cn.nukkit.entity.ai.executor.evocation;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityID;
 import cn.nukkit.entity.mob.EntityMob;
-import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.EntityDataTypes;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityEvocationIllager;
 import cn.nukkit.entity.mob.monster.EntityVex;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.level.Sound;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.FloatTag;
@@ -61,15 +59,15 @@ public class VexSummonExecutor extends FangLineExecutor {
 
     protected void summon(EntityMob entity) {
         if(!entity.getDataFlag(EntityFlag.CASTING)) return;
-        Location vexLocation = entity.getLocation();
-        vexLocation.x += ThreadLocalRandom.current().nextFloat(2);
-        vexLocation.y += ThreadLocalRandom.current().nextFloat(2);
-        vexLocation.z += ThreadLocalRandom.current().nextFloat(2);
+        Transform vexTransform = entity.getLocation();
+        vexTransform.x += ThreadLocalRandom.current().nextFloat(2);
+        vexTransform.y += ThreadLocalRandom.current().nextFloat(2);
+        vexTransform.z += ThreadLocalRandom.current().nextFloat(2);
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(vexLocation.x))
-                        .add(new FloatTag(vexLocation.y))
-                        .add(new FloatTag(vexLocation.z)))
+                        .add(new FloatTag(vexTransform.x))
+                        .add(new FloatTag(vexTransform.y))
+                        .add(new FloatTag(vexTransform.z)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(0))
                         .add(new FloatTag(0))

@@ -2,7 +2,7 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.mob.EntityMob;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
 import lombok.AllArgsConstructor;
@@ -18,31 +18,31 @@ public class TeleportExecutor implements IBehaviorExecutor {
     int minDistance;
     int maxTries = 16;
 
-    private Location find(Location location) {
+    private Transform find(Transform transform) {
         int distance = maxDistance-minDistance;
-        double dx = location.x + ThreadLocalRandom.current().nextInt(-distance, distance) + minDistance;
-        double dz = location.z + ThreadLocalRandom.current().nextInt(-distance, distance) + minDistance;
-        Vector3 pos = new Vector3(Math.floor(dx), (int) Math.floor(location.y + 0.1) + maxDistance, Math.floor(dz));
-        for (int y = Math.min(location.getLevel().getMaxHeight(), (int) pos.y); y > location.getLevel().getMinHeight(); y--) {
-            Block block = location.getValidLevel().getBlock((int) dx, y, (int) dz);
+        double dx = transform.x + ThreadLocalRandom.current().nextInt(-distance, distance) + minDistance;
+        double dz = transform.z + ThreadLocalRandom.current().nextInt(-distance, distance) + minDistance;
+        Vector3 pos = new Vector3(Math.floor(dx), (int) Math.floor(transform.y + 0.1) + maxDistance, Math.floor(dz));
+        for (int y = Math.min(transform.getLevel().getMaxHeight(), (int) pos.y); y > transform.getLevel().getMinHeight(); y--) {
+            Block block = transform.getValidLevel().getBlock((int) dx, y, (int) dz);
             if(block.isSolid()) {
                 return block.up().getLocation();
             }
         }
-        return location;
+        return transform;
     }
 
     @Override
     public boolean execute(EntityMob entity) {
-        Location location = entity.getLocation();
+        Transform transform = entity.getLocation();
         for(int i = 0; i < maxTries; i++) {
-            if(location.distance(entity.pos) < minDistance) {
-                location = find(entity.getLocation());
+            if(transform.distance(entity.pos) < minDistance) {
+                transform = find(entity.getLocation());
             } else break;
         }
-        if(entity.pos.distance(location) > minDistance) {
-            entity.teleport(location);
-            location.level.addSound(location, Sound.MOB_ENDERMEN_PORTAL);
+        if(entity.pos.distance(transform) > minDistance) {
+            entity.teleport(transform);
+            transform.level.addSound(transform, Sound.MOB_ENDERMEN_PORTAL);
         }
         return true;
     }

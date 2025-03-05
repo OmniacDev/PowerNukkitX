@@ -10,7 +10,7 @@ import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.command.tree.ParamList;
 import cn.nukkit.command.utils.CommandLogger;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.generator.object.BlockManager;
 import cn.nukkit.level.particle.DestroyBlockParticle;
 import cn.nukkit.math.AxisAlignedBB;
@@ -51,8 +51,8 @@ public class FillCommand extends VanillaCommand {
     @Override
     public int execute(CommandSender sender, String commandLabel, Map.Entry<String, ParamList> result, CommandLogger log) {
         var list = result.getValue();
-        Position from = list.getResult(0);
-        Position to = list.getResult(1);
+        Locator from = list.getResult(0);
+        Locator to = list.getResult(1);
         Block b = list.getResult(2);
         BlockState tileState = b.getProperties().getDefaultState();
         FillMode oldBlockHandling = FillMode.REPLACE;

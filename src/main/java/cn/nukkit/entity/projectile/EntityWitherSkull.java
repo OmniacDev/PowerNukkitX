@@ -10,7 +10,7 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityExplosionPrimeEvent;
 import cn.nukkit.level.Explosion;
 import cn.nukkit.level.GameRule;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
@@ -73,11 +73,11 @@ public class EntityWitherSkull extends EntityProjectile implements EntityExplosi
     }
 
     @Override
-    protected void onCollideWithBlock(Position position, Vector3 motion) {
+    protected void onCollideWithBlock(Locator locator, Vector3 motion) {
         this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.getVector3(), VibrationType.PROJECTILE_LAND));
         boolean affect = false;
         for (Block collisionBlock : level.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1)))
-            affect = onCollideWithBlock(position, motion, collisionBlock);
+            affect = onCollideWithBlock(locator, motion, collisionBlock);
         if (!affect && this.getPosition().getLevelBlock().isAir()) {
             explode();
         }

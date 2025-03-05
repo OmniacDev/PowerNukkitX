@@ -7,7 +7,7 @@ import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.Cancellable;
 import cn.nukkit.event.HandlerList;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 
 /**
  * @author MagicDroidX (Nukkit Project)
@@ -27,7 +27,7 @@ public class EntitySpawnEvent extends EntityEvent implements Cancellable {
         this.entityType = entity.getNetworkId();
     }
 
-    public Position getPosition() {
+    public Locator getPosition() {
         return this.entity.getPosition();
     }
 

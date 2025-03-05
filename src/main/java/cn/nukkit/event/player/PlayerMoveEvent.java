@@ -3,7 +3,7 @@ package cn.nukkit.event.player;
 import cn.nukkit.Player;
 import cn.nukkit.event.Cancellable;
 import cn.nukkit.event.HandlerList;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 
 public class PlayerMoveEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
@@ -12,35 +12,35 @@ public class PlayerMoveEvent extends PlayerEvent implements Cancellable {
         return handlers;
     }
 
-    private Location from;
-    private Location to;
+    private Transform from;
+    private Transform to;
 
     private boolean resetBlocksAround;
 
-    public PlayerMoveEvent(Player player, Location from, Location to) {
+    public PlayerMoveEvent(Player player, Transform from, Transform to) {
         this(player, from, to, true);
     }
 
-    public PlayerMoveEvent(Player player, Location from, Location to, boolean resetBlocks) {
+    public PlayerMoveEvent(Player player, Transform from, Transform to, boolean resetBlocks) {
         this.player = player;
         this.from = from;
         this.to = to;
         this.resetBlocksAround = resetBlocks;
     }
 
-    public Location getFrom() {
+    public Transform getFrom() {
         return from;
     }
 
-    public void setFrom(Location from) {
+    public void setFrom(Transform from) {
         this.from = from;
     }
 
-    public Location getTo() {
+    public Transform getTo() {
         return to;
     }
 
-    public void setTo(Location to) {
+    public void setTo(Transform to) {
         this.to = to;
     }
 

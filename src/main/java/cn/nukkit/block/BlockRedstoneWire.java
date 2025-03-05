@@ -6,7 +6,7 @@ import cn.nukkit.event.redstone.RedstoneUpdateEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemRedstone;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.BlockFace.Plane;
 import cn.nukkit.math.Vector3;
@@ -55,7 +55,7 @@ public class BlockRedstoneWire extends BlockFlowable implements RedstoneComponen
 
             this.updateSurroundingRedstone(true);
 
-            Position pos = getLocation();
+            Locator pos = getLocation();
 
             for (BlockFace blockFace : Plane.VERTICAL) {
                 RedstoneComponent.updateAroundRedstone(pos.getSide(blockFace), blockFace.getOpposite());
@@ -66,7 +66,7 @@ public class BlockRedstoneWire extends BlockFlowable implements RedstoneComponen
             }
 
             for (BlockFace blockFace : Plane.HORIZONTAL) {
-                Position p = pos.getSide(blockFace);
+                Locator p = pos.getSide(blockFace);
 
                 if (this.level.getBlock(p).isNormalBlock()) {
                     this.updateAround(p.getSide(BlockFace.UP), BlockFace.DOWN);
@@ -81,7 +81,7 @@ public class BlockRedstoneWire extends BlockFlowable implements RedstoneComponen
     }
 
     //Update the neighbor's block of the pos location as well as the neighbor's neighbor's block
-    private void updateAround(Position pos, BlockFace face) {
+    private void updateAround(Locator pos, BlockFace face) {
         if (this.level.getBlock(pos).getId().equals(Block.REDSTONE_WIRE)) {
             updateAroundRedstone(face);
 
@@ -163,7 +163,7 @@ public class BlockRedstoneWire extends BlockFlowable implements RedstoneComponen
         Block air = Block.get(BlockID.AIR);
         this.getLevel().setBlock(this, air, true, true);
 
-        Position pos = getLocation();
+        Locator pos = getLocation();
 
         if (this.level.getServer().getSettings().levelSettings().enableRedstone()) {
             this.updateSurroundingRedstone(false);
@@ -174,7 +174,7 @@ public class BlockRedstoneWire extends BlockFlowable implements RedstoneComponen
             }
 
             for (BlockFace blockFace : Plane.HORIZONTAL) {
-                Position p = pos.getSide(blockFace);
+                Locator p = pos.getSide(blockFace);
 
                 if (this.level.getBlock(p).isNormalBlock()) {
                     this.updateAround(p.getSide(BlockFace.UP), BlockFace.DOWN);

@@ -14,7 +14,7 @@ import cn.nukkit.inventory.InventoryHolder;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
@@ -198,9 +198,9 @@ public class BlockHopper extends BlockTransparent implements RedstoneComponent, 
     }
 
     public interface IHopper {
-        Position getPosition();
+        Locator getPosition();
 
-        default boolean pullItems(InventoryHolder hopperHolder, Position hopperPos) {
+        default boolean pullItems(InventoryHolder hopperHolder, Locator hopperPos) {
             var hopperInv = hopperHolder.getInventory();
 
             if (hopperInv.isFull())
@@ -262,7 +262,7 @@ public class BlockHopper extends BlockTransparent implements RedstoneComponent, 
             return false;
         }
 
-        default boolean pickupItems(InventoryHolder hopperHolder, Position hopperPos, AxisAlignedBB pickupArea) {
+        default boolean pickupItems(InventoryHolder hopperHolder, Locator hopperPos, AxisAlignedBB pickupArea) {
             var hopperInv = hopperHolder.getInventory();
 
             if (hopperInv.isFull())

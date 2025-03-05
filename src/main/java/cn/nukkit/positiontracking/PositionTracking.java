@@ -1,7 +1,7 @@
 package cn.nukkit.positiontracking;
 
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +34,7 @@ public class PositionTracking extends NamedPosition {
         this(levelName, v.x, v.y, v.z);
     }
 
-    public PositionTracking(@NotNull Position pos) {
+    public PositionTracking(@NotNull Locator pos) {
         this(pos.getLevel(), pos.x, pos.y, pos.z);
     }
 

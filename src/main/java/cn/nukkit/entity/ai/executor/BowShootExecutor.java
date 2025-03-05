@@ -16,7 +16,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemBow;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.item.enchantment.bow.EnchantmentBow;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.level.Sound;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.FloatTag;
@@ -88,7 +88,7 @@ public class BowShootExecutor implements EntityControl, IBehaviorExecutor {
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Location clone = this.target.getLocation();
+        Transform clone = this.target.getLocation();
 
         if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
             //更新寻路target

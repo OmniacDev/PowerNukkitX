@@ -9,7 +9,7 @@ import cn.nukkit.command.tree.node.PlayersNode;
 import cn.nukkit.command.utils.CommandLogger;
 import cn.nukkit.lang.TranslationContainer;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.network.protocol.types.SpawnPointType;
 import cn.nukkit.utils.TextFormat;
 
@@ -49,21 +49,21 @@ public class SpawnpointCommand extends VanillaCommand {
             Level level = sender.getPosition().getLevel();
             if (list.hasResult(1)) {
                 if (level != null) {
-                    Position position = list.getResult(1);
+                    Locator locator = list.getResult(1);
                     if (level.isOverWorld()) {
-                        if (position.y < -64) position.y = -64;
-                        if (position.y > 320) position.y = 320;
+                        if (locator.y < -64) locator.y = -64;
+                        if (locator.y > 320) locator.y = 320;
                     } else {
-                        if (position.y < 0) position.y = 0;
-                        if (position.y > 255) position.y = 255;
+                        if (locator.y < 0) locator.y = 0;
+                        if (locator.y > 255) locator.y = 255;
                     }
                     for (Player player : players) {
-                        player.setSpawn(position, SpawnPointType.PLAYER);
+                        player.setSpawn(locator, SpawnPointType.PLAYER);
                     }
                     log.addSuccess("commands.spawnpoint.success.multiple.specific", players.stream().map(Player::getName).collect(Collectors.joining(" ")),
-                            round2.format(position.x),
-                            round2.format(position.y),
-                            round2.format(position.z)).successCount(players.size()).output(true);
+                            round2.format(locator.x),
+                            round2.format(locator.y),
+                            round2.format(locator.z)).successCount(players.size()).output(true);
                     return players.size();
                 }
             }
@@ -71,7 +71,7 @@ public class SpawnpointCommand extends VanillaCommand {
             return 0;
         }
         if (!players.isEmpty()) {
-            Position pos = players.get(0).getPosition();
+            Locator pos = players.get(0).getPosition();
             players.get(0).setSpawn(pos, SpawnPointType.PLAYER);
             log.addSuccess("commands.spawnpoint.success.single", sender.getName(),
                     round2.format(pos.x),

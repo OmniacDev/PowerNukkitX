@@ -5,8 +5,8 @@ import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.lang.CommandOutputContainer;
 import cn.nukkit.lang.TextContainer;
-import cn.nukkit.level.Location;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Transform;
+import cn.nukkit.level.Locator;
 import cn.nukkit.permission.Permission;
 import cn.nukkit.permission.PermissionAttachment;
 import cn.nukkit.permission.PermissionAttachmentInfo;
@@ -23,16 +23,16 @@ public class ExecutorCommandSender implements CommandSender {
 
     private final CommandSender executor;
     private final Entity entity;
-    private final Location executeLocation;
+    private final Transform executeTransform;
 
-    public ExecutorCommandSender(@NotNull CommandSender executor, @Nullable Entity entity, @Nullable Location executeLocation) {
+    public ExecutorCommandSender(@NotNull CommandSender executor, @Nullable Entity entity, @Nullable Transform executeTransform) {
         if (executor instanceof ExecutorCommandSender executorCommandSender) {
             this.executor = executorCommandSender.getExecutor();
         } else {
             this.executor = executor;
         }
         this.entity = entity;
-        this.executeLocation = executeLocation;
+        this.executeTransform = executeTransform;
     }
 
     @Override
@@ -80,13 +80,13 @@ public class ExecutorCommandSender implements CommandSender {
     }
 
     @Override
-    @NotNull public Position getPosition() {
-        return (executeLocation == null ? entity.getPosition() : executeLocation).clone();
+    @NotNull public Locator getPosition() {
+        return (executeTransform == null ? entity.getPosition() : executeTransform).clone();
     }
 
     @Override
-    @NotNull public Location getLocation() {
-        return (executeLocation == null ? entity.getLocation() : executeLocation).clone();
+    @NotNull public Transform getLocation() {
+        return (executeTransform == null ? entity.getLocation() : executeTransform).clone();
     }
 
     @Override

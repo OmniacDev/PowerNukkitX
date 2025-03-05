@@ -43,9 +43,9 @@ import cn.nukkit.item.ItemTotemOfUndying;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.GameRule;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.level.ParticleEffect;
-import cn.nukkit.level.Position;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.level.particle.ExplodeParticle;
@@ -285,7 +285,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
      * @return the entity
      */
     @Nullable
-    public static Entity createEntity(Identifier identifier, @NotNull Position pos, @Nullable Object... args) {
+    public static Entity createEntity(Identifier identifier, @NotNull Locator pos, @Nullable Object... args) {
         return createEntity(identifier.toString(), Objects.requireNonNull(pos.getChunk()), getDefaultNBT(pos), args);
     }
 
@@ -300,7 +300,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
      * @return the entity
      */
     @Nullable
-    public static Entity createEntity(@NotNull String name, @NotNull Position pos, @Nullable Object... args) {
+    public static Entity createEntity(@NotNull String name, @NotNull Locator pos, @Nullable Object... args) {
         return createEntity(name, Objects.requireNonNull(pos.getChunk()), getDefaultNBT(pos), args);
     }
 
@@ -315,7 +315,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
      * @return the entity
      */
     @Nullable
-    public static Entity createEntity(int type, @NotNull Position pos, @Nullable Object... args) {
+    public static Entity createEntity(int type, @NotNull Locator pos, @Nullable Object... args) {
         String entityIdentifier = Registries.ENTITY.getEntityIdentifier(type);
         if (entityIdentifier == null) return null;
         return createEntity(entityIdentifier, Objects.requireNonNull(pos.getChunk()), getDefaultNBT(pos), args);
@@ -369,7 +369,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
 
     @NotNull
     public static CompoundTag getDefaultNBT(@NotNull Vector3 pos, @Nullable Vector3 motion) {
-        Location loc = pos instanceof Location ? (Location) pos : null;
+        Transform loc = pos instanceof Transform ? (Transform) pos : null;
 
         if (loc != null) {
             return getDefaultNBT(pos, motion, (float) loc.getYaw(), (float) loc.getPitch());
@@ -1501,13 +1501,13 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
             getServer().getPluginManager().callEvent(ev);//call event
 
             if (!ev.isCancelled() && (level.getDimension() == Level.DIMENSION_OVERWORLD || level.getDimension() == Level.DIMENSION_NETHER)) {
-                Position newPos = PortalHelper.convertPosBetweenNetherAndOverworld(new Position(this.pos.x, this.pos.y, this.pos.z, this.level));
+                Locator newPos = PortalHelper.convertPosBetweenNetherAndOverworld(new Locator(this.pos.x, this.pos.y, this.pos.z, this.level));
                 if (newPos != null) {
-                    Position nearestPortal = PortalHelper.getNearestValidPortal(newPos);
+                    Locator nearestPortal = PortalHelper.getNearestValidPortal(newPos);
                     if (nearestPortal != null) {
                         teleport(nearestPortal.add(0.5, 0, 0.5), PlayerTeleportEvent.TeleportCause.NETHER_PORTAL);
                     } else {
-                        final Position finalPos = newPos.add(1.5, 1, 1.5);
+                        final Locator finalPos = newPos.add(1.5, 1, 1.5);
                         if (teleport(finalPos, PlayerTeleportEvent.TeleportCause.NETHER_PORTAL)) {
                             level.getScheduler().scheduleDelayedTask(new Task() {
                                 @Override
@@ -1887,7 +1887,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
             fallDistance = (float) (this.highestPosition - this.pos.y);
 
             if (fallDistance > 0) {
-                Position pos = new Position(this.pos.x, this.pos.y, this.pos.z, this.level);
+                Locator pos = new Locator(this.pos.x, this.pos.y, this.pos.z, this.level);
                 // check if we fell into at least 1 block of water
                 var lb = pos.getLevelBlock();
                 var lb2 = pos.getLevelBlockAtLayer(1);
@@ -2058,13 +2058,13 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     }
 
     @NotNull
-    public Location getLocation() {
-        return new Location(this.pos.x, this.pos.y, this.pos.z, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw, this.level);
+    public Transform getLocation() {
+        return new Transform(this.pos.x, this.pos.y, this.pos.z, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw, this.level);
     }
 
     @NotNull
-    public Position getPosition() {
-        return new Position(this.pos.x, this.pos.y, this.pos.z, this.level);
+    public Locator getPosition() {
+        return new Locator(this.pos.x, this.pos.y, this.pos.z, this.level);
     }
 
     public boolean isValid() {
@@ -2416,8 +2416,8 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
             outerScaffolding:
             for (int i = minX; i <= maxX; i++) {
                 for (int j = minZ; j <= maxZ; j++) {
-                    Location location = new Location(i, Y, j, level);
-                    if (BlockID.SCAFFOLDING.equals(location.getLevelBlock(false).getId())) {
+                    Transform transform = new Transform(i, Y, j, level);
+                    if (BlockID.SCAFFOLDING.equals(transform.getLevelBlock(false).getId())) {
                         setDataFlagExtend(EntityFlag.OVER_SCAFFOLDING, true);
                         break outerScaffolding;
                     }
@@ -2433,7 +2433,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
                     getServer().getPluginManager().callEvent(ev);
 
                     if (!ev.isCancelled() && (level.getDimension() == Level.DIMENSION_OVERWORLD || level.getDimension() == Level.DIMENSION_THE_END)) {
-                        final Position newPos = PortalHelper.moveToTheEnd(this.getLocation());
+                        final Locator newPos = PortalHelper.moveToTheEnd(this.getLocation());
                         if (newPos != null) {
                             if (newPos.getLevel().getDimension() == Level.DIMENSION_THE_END) {
                                 if (teleport(newPos.add(0.5, 1, 0.5), PlayerTeleportEvent.TeleportCause.END_PORTAL)) {
@@ -2559,8 +2559,8 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
             return false;
         }
 
-        if (pos instanceof Position && ((Position) pos).level != null && ((Position) pos).level != this.level) {
-            if (!this.switchLevel(((Position) pos).getLevel())) {
+        if (pos instanceof Locator && ((Locator) pos).level != null && ((Locator) pos).level != this.level) {
+            if (!this.switchLevel(((Locator) pos).getLevel())) {
                 return false;
             }
         }
@@ -2626,34 +2626,34 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     }
 
     public boolean teleport(Vector3 pos, PlayerTeleportEvent.TeleportCause cause) {
-        return this.teleport(Location.fromObject(pos, this.level, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw), cause);
+        return this.teleport(Transform.fromObject(pos, this.level, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw), cause);
     }
 
-    public boolean teleport(Position pos) {
+    public boolean teleport(Locator pos) {
         return this.teleport(pos, PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
 
-    public boolean teleport(Position pos, PlayerTeleportEvent.TeleportCause cause) {
-        return this.teleport(Location.fromObject(pos, pos.level, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw), cause);
+    public boolean teleport(Locator pos, PlayerTeleportEvent.TeleportCause cause) {
+        return this.teleport(Transform.fromObject(pos, pos.level, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw), cause);
     }
 
-    public boolean teleport(Location location) {
-        return this.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
+    public boolean teleport(Transform transform) {
+        return this.teleport(transform, PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
 
     /**
      * Teleport the entity to another location
      *
-     * @param location the another location
+     * @param transform the another location
      * @param cause    the teleported cause
      * @return the boolean
      */
-    public boolean teleport(Location location, PlayerTeleportEvent.TeleportCause cause) {
-        double yaw = location.yaw;
-        double pitch = location.pitch;
+    public boolean teleport(Transform transform, PlayerTeleportEvent.TeleportCause cause) {
+        double yaw = transform.yaw;
+        double pitch = transform.pitch;
 
-        Location from = this.getLocation();
-        Location to = location;
+        Transform from = this.getLocation();
+        Transform to = transform;
         if (cause != null) {
             EntityTeleportEvent ev = new EntityTeleportEvent(this, from, to, cause);
             this.server.getPluginManager().callEvent(ev);

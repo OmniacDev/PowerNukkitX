@@ -1,7 +1,7 @@
 package cn.nukkit.math;
 
 import cn.nukkit.api.DoNotModify;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 
 import static java.lang.StrictMath.*;
 
@@ -33,11 +33,11 @@ public final class BVector3 {
      * Initialize BVector3 by passing in the yaw and pitch of Location<br>
      * The module length of BVector3 returned by this method is 1
      *
-     * @param location the location
+     * @param transform the location
      * @return the b vector 3
      */
-    public static BVector3 fromLocation(Location location) {
-        return fromLocation(location, 1);
+    public static BVector3 fromLocation(Transform transform) {
+        return fromLocation(transform, 1);
     }
 
     /**
@@ -47,11 +47,11 @@ public final class BVector3 {
      * Initialize BVector3 by passing in the yaw and pitch of the Location<br>
      * The module length of the BVector3 returned by this method is the length value passed in
      *
-     * @param location the location
+     * @param transform the location
      * @return the b vector 3
      */
-    public static BVector3 fromLocation(Location location, double length) {
-        return new BVector3(location.getYaw(), location.getPitch(), length);
+    public static BVector3 fromLocation(Transform transform, double length) {
+        return new BVector3(transform.getYaw(), transform.getPitch(), length);
     }
 
     /**

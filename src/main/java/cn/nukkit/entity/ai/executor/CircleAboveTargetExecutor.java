@@ -4,8 +4,7 @@ import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
-import cn.nukkit.entity.mob.EntityMob;
-import cn.nukkit.level.Location;
+import cn.nukkit.level.Transform;
 import cn.nukkit.math.GetVector3;
 import cn.nukkit.math.Vector3;
 import lombok.Getter;
@@ -49,12 +48,12 @@ public class CircleAboveTargetExecutor implements EntityControl, IBehaviorExecut
             return false;
         }
         Vector3 target = entity.getBehaviorGroup().getMemoryStorage().get(memory).getVector3();
-        Location origin = entity.getBehaviorGroup().getMemoryStorage().get(CoreMemoryTypes.LAST_ATTACK_ENTITY).getLocation().add(0, 24, 0);
+        Transform origin = entity.getBehaviorGroup().getMemoryStorage().get(CoreMemoryTypes.LAST_ATTACK_ENTITY).getLocation().add(0, 24, 0);
         double angleIncrement = 360.0 / sections;
         double angle = Math.toRadians((circleLoc * angleIncrement));
         double particleX = origin.getX() + Math.cos(angle) * 20;
         double particleZ = origin.getZ() + Math.sin(angle) * 20;
-        Location loc = new Location(particleX, origin.y, particleZ, angle, 0, origin.level);
+        Transform loc = new Transform(particleX, origin.y, particleZ, angle, 0, origin.level);
         if(entity.pos.distance(loc) < 3) {
             circleLoc++;
             circleLoc%=8;
