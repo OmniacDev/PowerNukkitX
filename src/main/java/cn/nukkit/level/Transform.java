@@ -113,7 +113,7 @@ public class Transform extends Locator {
     }
 
     @Override
-    @NotNull public Transform getLocation() {
+    @NotNull public Transform getTransform() {
         return new Transform(this.position.x, this.position.y, this.position.z, this.yaw, this.pitch, this.headYaw, this.level);
     }
 

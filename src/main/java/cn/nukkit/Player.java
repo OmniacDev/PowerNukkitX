@@ -789,7 +789,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
         //已经设置immobile了所以不用管下落了
         Transform pos;
         if (this.server.getSettings().baseSettings().safeSpawn() && (this.gamemode & 0x01) == 0) {
-            pos = this.level.getSafeSpawn(this.pos).getLocation();
+            pos = this.level.getSafeSpawn(this.pos).getTransform();
             pos.yaw = this.rotation.yaw;
             pos.pitch = this.rotation.pitch;
         } else {

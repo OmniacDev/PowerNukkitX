@@ -161,11 +161,11 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
         Transform down;
         Transform up;
         if (this.isTop()) {
-            down = down().getLocation();
-            up = getLocation();
+            down = down().getTransform();
+            up = getTransform();
         } else {
-            down = getLocation();
-            up = up().getLocation();
+            down = getTransform();
+            up = up().getTransform();
         }
 
         if (val) {
@@ -181,11 +181,11 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
         Transform down;
         Transform up;
         if (this.isTop()) {
-            down = down().getLocation();
-            up = getLocation();
+            down = down().getTransform();
+            up = getTransform();
         } else {
-            down = getLocation();
-            up = up().getLocation();
+            down = getTransform();
+            up = up().getTransform();
         }
 
         return manualOverrides.contains(up) || manualOverrides.contains(down);
@@ -196,19 +196,19 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
         Transform down;
         Transform up;
         if (this.isTop()) {
-            down = down().getLocation();
-            up = getLocation();
+            down = down().getTransform();
+            up = getTransform();
         } else {
-            down = getLocation();
-            up = up().getLocation();
+            down = getTransform();
+            up = up().getTransform();
         }
 
         for (BlockFace side : BlockFace.values()) {
             Block blockDown = down.getSide(side).getLevelBlock();
             Block blockUp = up.getSide(side).getLevelBlock();
 
-            if (this.level.isSidePowered(blockDown.getLocation().position, side)
-                    || this.level.isSidePowered(blockUp.getLocation().position, side)) {
+            if (this.level.isSidePowered(blockDown.getTransform().position, side)
+                    || this.level.isSidePowered(blockUp.getTransform().position, side)) {
                 return true;
             }
         }

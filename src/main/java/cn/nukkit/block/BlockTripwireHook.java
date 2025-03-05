@@ -112,7 +112,7 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
         }
 
         BlockFace facing = this.getFacing();
-        Locator locator = this.getLocation();
+        Locator locator = this.getTransform();
         boolean wasConnected = this.isAttached();
         boolean wasPowered = this.isPowered();
 

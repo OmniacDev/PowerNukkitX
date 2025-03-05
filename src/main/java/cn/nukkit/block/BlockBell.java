@@ -331,7 +331,7 @@ public class BlockBell extends BlockTransparent implements RedstoneComponent, Fa
             }
         }
 
-        return this.level.isBlockPowered(this.getLocation().position);
+        return this.level.isBlockPowered(this.getTransform().position);
     }
 
     @Override

@@ -190,14 +190,14 @@ public class BlockTrapdoor extends BlockTransparent implements RedstoneComponent
 
     public void setManualOverride(boolean val) {
         if (val) {
-            manualOverrides.add(this.getLocation());
+            manualOverrides.add(this.getTransform());
         } else {
-            manualOverrides.remove(this.getLocation());
+            manualOverrides.remove(this.getTransform());
         }
     }
 
     public boolean getManualOverride() {
-        return manualOverrides.contains(this.getLocation());
+        return manualOverrides.contains(this.getTransform());
     }
 
     @Override

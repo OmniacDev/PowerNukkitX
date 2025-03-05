@@ -43,7 +43,7 @@ public interface Oxidizable {
         }
 
         Block block = this instanceof Block? (Block) this : getLocation().getLevelBlock();
-        Transform mutableTransform = block.getLocation();
+        Transform mutableTransform = block.getTransform();
 
         int odds = 0;
         int cons = 0;

@@ -78,7 +78,7 @@ public abstract class BlockRedstoneDiode extends BlockFlowable implements Redsto
             }
 
             if (!this.isLocked()) {
-                Vector3 pos = getLocation().position;
+                Vector3 pos = getTransform().position;
                 boolean shouldBePowered = this.shouldBePowered();
 
                 if (this.isPowered && !shouldBePowered) {
@@ -141,7 +141,7 @@ public abstract class BlockRedstoneDiode extends BlockFlowable implements Redsto
 
     protected int calculateInputStrength() {
         BlockFace face = getFacing();
-        Vector3 pos = this.getLocation().getSide(face).position;
+        Vector3 pos = this.getTransform().getSide(face).position;
         int power = this.level.getRedstonePower(pos, face);
 
         if (power >= 15) {
@@ -153,7 +153,7 @@ public abstract class BlockRedstoneDiode extends BlockFlowable implements Redsto
     }
 
     protected int getPowerOnSides() {
-        Vector3 pos = getLocation().position;
+        Vector3 pos = getTransform().position;
 
         BlockFace face = getFacing();
         BlockFace face1 = face.rotateY();

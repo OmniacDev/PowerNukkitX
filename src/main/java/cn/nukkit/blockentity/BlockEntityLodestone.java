@@ -4,7 +4,6 @@ import cn.nukkit.Server;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.level.Locator;
 import cn.nukkit.level.format.IChunk;
-import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.positiontracking.PositionTracking;
 import cn.nukkit.positiontracking.PositionTrackingService;
@@ -75,7 +74,7 @@ public class BlockEntityLodestone extends BlockEntitySpawnable {
                 return;
             }
         } catch (IOException e) {
-            log.error("Failed to remove the tracking position handler for {}", getLocation());
+            log.error("Failed to remove the tracking position handler for {}", getTransform());
             return;
         }
         
@@ -85,7 +84,7 @@ public class BlockEntityLodestone extends BlockEntitySpawnable {
             try {
                 positionTrackingService.invalidateHandler(handler);
             } catch (IOException e) {
-                log.error("Failed to remove the tracking handler {} for position {}", handler, getLocation(), e);
+                log.error("Failed to remove the tracking handler {} for position {}", handler, getTransform(), e);
             }
         }
     }

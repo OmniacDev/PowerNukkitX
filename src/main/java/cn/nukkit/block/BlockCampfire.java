@@ -137,7 +137,7 @@ public class BlockCampfire extends BlockTransparent implements Faceable, BlockEn
 
             createBlockEntity(nbt);
         } catch (Exception e) {
-            log.warn("Failed to create the block entity {} at {}", getBlockEntityType(), getLocation(), e);
+            log.warn("Failed to create the block entity {} at {}", getBlockEntityType(), getTransform(), e);
             level.setBlock(layer0.position, 0, layer0, true);
             level.setBlock(layer1.position, 0, layer1, true);
             return false;

@@ -147,7 +147,7 @@ public class BlockHopper extends BlockTransparent implements RedstoneComponent, 
         }
 
         if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) {
-            boolean disabled = this.level.isBlockPowered(this.getLocation().position);
+            boolean disabled = this.level.isBlockPowered(this.getTransform().position);
 
             if (disabled == this.isEnabled()) {
                 this.setEnabled(!disabled);

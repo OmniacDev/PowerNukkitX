@@ -157,7 +157,7 @@ public class EntityShulker extends EntityMob implements EntityVariant {
     public void teleport() {
         Arrays.stream(getLevel().getCollisionBlocks(getBoundingBox().grow(7, 7, 7))).filter(block -> block.isFullBlock() && block.up().isAir()).findAny().ifPresent(
                 block -> {
-                    Transform transform = block.up().getLocation();
+                    Transform transform = block.up().getTransform();
                     getLevel().addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_TELEPORT, -1, getIdentifier(), false, false);
                     teleport(transform, PlayerTeleportEvent.TeleportCause.SHULKER);
                     getLevel().addLevelSoundEvent(transform.position, LevelSoundEventPacket.SOUND_SPAWN, -1, getIdentifier(), false, false);

@@ -227,7 +227,7 @@ public abstract class BlockVinesNether extends BlockTransparent {
         if (base) {
             supportFace = supportFace.getOpposite();
         }
-        Locator result = getLocation();
+        Locator result = getTransform();
         String id = getId();
         int limit = 256;
         while (--limit > 0){

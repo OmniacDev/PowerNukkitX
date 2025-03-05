@@ -55,7 +55,7 @@ public class BlockRedstoneWire extends BlockFlowable implements RedstoneComponen
 
             this.updateSurroundingRedstone(true);
 
-            Locator pos = getLocation();
+            Locator pos = getTransform();
 
             for (BlockFace blockFace : Plane.VERTICAL) {
                 RedstoneComponent.updateAroundRedstone(pos.getSide(blockFace), blockFace.getOpposite());
@@ -92,7 +92,7 @@ public class BlockRedstoneWire extends BlockFlowable implements RedstoneComponen
     }
 
     private void updateSurroundingRedstone(boolean force) {
-        Vector3 pos = this.getLocation().position;
+        Vector3 pos = this.getTransform().position;
 
         int meta = this.getRedStoneSignal();
         int maxStrength = meta;
@@ -163,7 +163,7 @@ public class BlockRedstoneWire extends BlockFlowable implements RedstoneComponen
         Block air = Block.get(BlockID.AIR);
         this.getLevel().setBlock(this.position, air, true, true);
 
-        Locator pos = getLocation();
+        Locator pos = getTransform();
 
         if (this.level.getServer().getSettings().levelSettings().enableRedstone()) {
             this.updateSurroundingRedstone(false);
@@ -259,7 +259,7 @@ public class BlockRedstoneWire extends BlockFlowable implements RedstoneComponen
     }
 
     private boolean isPowerSourceAt(BlockFace side) {
-        Vector3 pos = getLocation().position;
+        Vector3 pos = getTransform().position;
         Vector3 v = pos.getSide(side);
         Block block = this.level.getBlock(v);
         boolean flag = block.isNormalBlock();
@@ -298,7 +298,7 @@ public class BlockRedstoneWire extends BlockFlowable implements RedstoneComponen
 
     private int getIndirectPower() {
         int power = 0;
-        Vector3 pos = getLocation().position;
+        Vector3 pos = getTransform().position;
 
         for (BlockFace face : BlockFace.values()) {
             int blockPower = this.getIndirectPower(pos.getSide(face), face);

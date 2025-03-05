@@ -50,7 +50,7 @@ public class Locator implements NamedPosition, Cloneable, IVector3 {
         return this.position.clone();
     }
 
-    public Locator getPosition() {
+    public Locator getLocator() {
         return this.clone();
     }
 
@@ -139,7 +139,7 @@ public class Locator implements NamedPosition, Cloneable, IVector3 {
         return getLevel().getTickCachedBlock(this.position, layer);
     }
 
-    @NotNull public Transform getLocation() {
+    @NotNull public Transform getTransform() {
         return new Transform(this.position, new Rotator2(0, 0), getLevel());
     }
 

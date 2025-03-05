@@ -17,7 +17,6 @@ import cn.nukkit.level.MovingObjectPosition;
 import cn.nukkit.level.Locator;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.BlockFace;
-import cn.nukkit.math.IVector3;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.metadata.MetadataValue;
 import cn.nukkit.metadata.Metadatable;
@@ -1334,11 +1333,11 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
         for (BlockFace side : BlockFace.values()) {
             Block b = this.getSide(side).getLevelBlock();
 
-            if (this.level.isSidePowered(b.getLocation().position, side)) {
+            if (this.level.isSidePowered(b.getTransform().position, side)) {
                 return true;
             }
         }
-        return this.level.isBlockPowered(this.getLocation().position);
+        return this.level.isBlockPowered(this.getTransform().position);
     }
 
     public boolean cloneTo(Locator pos) {
