@@ -52,7 +52,7 @@ public class ExecuteCommandOld extends VanillaCommand {
                 String command = list.getResult(2);
                 for (Entity entity : entities) {
                     Locator pos = ((PositionNode) list.get(1)).get(entity.getPosition());
-                    ExecutorCommandSender executeSender = new ExecutorCommandSender(sender, entity, Transform.fromObject(pos));
+                    ExecutorCommandSender executeSender = new ExecutorCommandSender(sender, entity, Transform.fromObject(pos, pos.level));
                     int n = executeSender.getServer().executeCommand(executeSender, command);
                     if (n == 0) {
                         log.addError("commands.execute.failed", command, entity.getName());
@@ -67,7 +67,7 @@ public class ExecuteCommandOld extends VanillaCommand {
                     Locator pos = ((PositionNode) list.get(1)).get(entity.getPosition());
                     Locator detect = ((PositionNode) list.get(3)).get(pos);
                     if (detect.getLevelBlock().getId() == blockId && detect.getLevelBlock().getBlockState().specialValue() == meta) {
-                        ExecutorCommandSender executeSender = new ExecutorCommandSender(sender, entity, Transform.fromObject(pos));
+                        ExecutorCommandSender executeSender = new ExecutorCommandSender(sender, entity, Transform.fromObject(pos, pos.level));
                         int n = executeSender.getServer().executeCommand(executeSender, command);
                         if (n == 0) {
                             log.addError("commands.execute.failed", command, entity.getName());

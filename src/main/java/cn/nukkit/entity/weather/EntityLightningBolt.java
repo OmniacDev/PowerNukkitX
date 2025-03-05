@@ -123,13 +123,13 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
             Block down = getLevel().getBlock(this.pos.down());
             if (isVulnerableOxidizable(down)) {
                 Map<Locator, OxidizationLevel> changes = new LinkedHashMap<>();
-                changes.put(new Locator().setComponents(down).setLevel(level), OxidizationLevel.UNAFFECTED);
+                changes.put(new Locator(down, level), OxidizationLevel.UNAFFECTED);
 
                 ThreadLocalRandom random = ThreadLocalRandom.current();
                 int scans = random.nextInt(3) + 3;
 
-                Locator directionPos = new Locator().setLevel(level);
-                Locator randomPos = new Locator().setLevel(level);
+                Locator directionPos = new Locator(level);
+                Locator randomPos = new Locator(level);
                 Supplier<Vector3> cleanOxidizationAround = () -> {
                     for (int attempt = 0; attempt < 10; attempt++) {
                         randomPos.x = directionPos.x + (random.nextInt(3) - 1);
