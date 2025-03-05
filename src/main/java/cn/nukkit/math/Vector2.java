@@ -4,8 +4,8 @@ package cn.nukkit.math;
  * @author MagicDroidX (Nukkit Project)
  */
 public class Vector2 {
-    public final double x;
-    public final double y;
+    public double x;
+    public double y;
 
     public static final Vector2 ZERO = new Vector2(0, 0);
 
