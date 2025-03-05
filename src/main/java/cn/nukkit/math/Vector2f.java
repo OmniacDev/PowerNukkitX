@@ -4,8 +4,8 @@ package cn.nukkit.math;
  * @author MagicDroidX (Nukkit Project)
  */
 public class Vector2f {
-    public final float x;
-    public final float y;
+    public float x;
+    public float y;
 
     public Vector2f() {
         this(0, 0);
