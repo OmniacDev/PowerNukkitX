@@ -64,9 +64,7 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
             Block block = this.getPosition().getLevelBlock();
             if (block.isAir() || block.getId().equals(BlockID.TALL_GRASS)) {
                 BlockFire fire = (BlockFire) Block.get(BlockID.FIRE);
-                fire.x = block.x;
-                fire.y = block.y;
-                fire.z = block.z;
+                fire.position = block.position.clone();
                 fire.level = level;
 //                this.getLevel().setBlock(fire, fire, true); WTF???
                 if (fire.isBlockTopFacingSurfaceSolid(fire.down()) || fire.canNeighborBurn()) {
@@ -75,7 +73,7 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
                     getServer().getPluginManager().callEvent(e);
 
                     if (!e.isCancelled()) {
-                        level.setBlock(fire, fire, true);
+                        level.setBlock(fire.position, fire, true);
                         level.scheduleUpdate(fire, fire.tickRate() + ThreadLocalRandom.current().nextInt(10));
                     }
                 }
@@ -123,13 +121,13 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
             Block down = getLevel().getBlock(this.pos.down());
             if (isVulnerableOxidizable(down)) {
                 Map<Locator, OxidizationLevel> changes = new LinkedHashMap<>();
-                changes.put(new Locator(down, level), OxidizationLevel.UNAFFECTED);
+                changes.put(new Locator(down.getVector3(), level), OxidizationLevel.UNAFFECTED);
 
                 ThreadLocalRandom random = ThreadLocalRandom.current();
                 int scans = random.nextInt(3) + 3;
 
-                Locator directionPos = new Locator(level);
-                Locator randomPos = new Locator(level);
+                Vector3 directionPos = new Vector3();
+                Vector3 randomPos = new Vector3();
                 Supplier<Vector3> cleanOxidizationAround = () -> {
                     for (int attempt = 0; attempt < 10; attempt++) {
                         randomPos.x = directionPos.x + (random.nextInt(3) - 1);
@@ -137,8 +135,8 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
                         randomPos.z = directionPos.z + (random.nextInt(3) - 1);
                         Block possibility = level.getBlock(randomPos);
                         if (isVulnerableOxidizable(possibility)) {
-                            Locator nextPos = randomPos.clone();
-                            changes.compute(nextPos, (k, v) -> {
+                            Vector3 nextPos = randomPos.clone();
+                            changes.compute(new Locator(nextPos, level), (k, v) -> {
                                 int nextLevel = v == null ?
                                         ((Oxidizable) possibility).getOxidizationLevel().ordinal() - 1 :
                                         v.ordinal() - 1;
@@ -151,7 +149,7 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
                 };
 
                 IntConsumer cleanOxidizationAroundLoop = count -> {
-                    directionPos.setComponents(down);
+                    directionPos.setComponents(down.position);
                     for (int i = 0; i < count; ++i) {
                         Vector3 next = cleanOxidizationAround.get();
                         if (next != null) {
@@ -168,15 +166,15 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
                 }
 
                 for (Map.Entry<Locator, OxidizationLevel> entry : changes.entrySet()) {
-                    Block current = level.getBlock(entry.getKey());
+                    Block current = level.getBlock(entry.getKey().position);
                     Block next = ((Oxidizable) current).getBlockWithOxidizationLevel(entry.getValue());
                     BlockFadeEvent event = new BlockFadeEvent(current, next);
                     getServer().getPluginManager().callEvent(event);
                     if (event.isCancelled()) {
                         break;
                     }
-                    getLevel().setBlock(entry.getKey(), event.getNewState());
-                    getLevel().addParticle(new ElectricSparkParticle(entry.getKey()));
+                    getLevel().setBlock(entry.getKey().position, event.getNewState());
+                    getLevel().addParticle(new ElectricSparkParticle(entry.getKey().position));
                 }
             }
         }
@@ -200,7 +198,7 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
 
                         if (!event.isCancelled()) {
                             Block fire = Block.get(BlockID.FIRE);
-                            this.level.setBlock(block, fire);
+                            this.level.setBlock(block.position, fire);
                             this.getLevel().scheduleUpdate(fire, fire.tickRate());
                         }
                     }
