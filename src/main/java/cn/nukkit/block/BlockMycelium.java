@@ -68,9 +68,9 @@ public class BlockMycelium extends BlockDirt {
             if (getLevel().getFullLight(add(0, 1, 0).position) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
                 //TODO: light levels
                 NukkitRandom random = new NukkitRandom();
-                x = random.nextInt((int) x - 1, (int) x + 1);
-                y = random.nextInt((int) y - 1, (int) y + 1);
-                z = random.nextInt((int) z - 1, (int) z + 1);
+                int x = random.nextInt(this.position.getFloorX() - 1, this.position.getFloorX() + 1);
+                int y = random.nextInt(this.position.getFloorY() - 1, this.position.getFloorY() + 1);
+                int z = random.nextInt(this.position.getFloorZ() - 1, this.position.getFloorZ() + 1);
                 Block block = this.getLevel().getBlock(new Vector3(x, y, z));
                 if (block.getId().equals(Block.DIRT) && block.getPropertyValue(CommonBlockProperties.DIRT_TYPE) == DirtType.NORMAL) {
                     if (block.up().isTransparent()) {

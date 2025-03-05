@@ -34,11 +34,6 @@ public class Locator implements NamedPosition, Cloneable, IVector3 {
         this.level = level;
     }
 
-
-    public double x;
-    public double y;
-    public double z;
-
     public int getFloorX() {
         return this.position.getFloorX();
     }
@@ -76,14 +71,6 @@ public class Locator implements NamedPosition, Cloneable, IVector3 {
     public Locator setLevel(Level level) {
         this.level = level;
         return this;
-    }
-
-    public boolean setStrong() {
-        return false;
-    }
-
-    public boolean setWeak() {
-        return false;
     }
 
     public Locator getSide(BlockFace face) {

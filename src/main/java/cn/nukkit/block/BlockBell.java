@@ -132,9 +132,9 @@ public class BlockBell extends BlockTransparent implements RedstoneComponent, Fa
                 );
                 Vector3 entityPos = entity.pos.add(entityCenter);
                 Vector3 blockPos = this.position.add(
-                        blockBoundingBox.getMinX() - x + blockCenter.x,
-                        blockBoundingBox.getMinY() - y + blockCenter.y,
-                        blockBoundingBox.getMinZ() - z + blockCenter.z
+                        blockBoundingBox.getMinX() - this.position.x + blockCenter.x,
+                        blockBoundingBox.getMinY() - this.position.y + blockCenter.y,
+                        blockBoundingBox.getMinZ() - this.position.z + blockCenter.z
                 );
 
 

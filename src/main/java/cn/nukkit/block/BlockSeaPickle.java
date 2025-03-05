@@ -144,7 +144,7 @@ public class BlockSeaPickle extends BlockFlowable {
             }
 
             ThreadLocalRandom random = ThreadLocalRandom.current();
-            Block[] blocksAround = this.getLevel().getCollisionBlocks(new SimpleAxisAlignedBB(x - 2, y - 2, z - 2, x + 3, y, z + 3));
+            Block[] blocksAround = this.getLevel().getCollisionBlocks(new SimpleAxisAlignedBB(this.position.x - 2, this.position.y - 2, this.position.z - 2, this.position.x + 3, this.position.y, this.position.z + 3));
             for (Block blockNearby : blocksAround) {
                 if (blockNearby instanceof BlockCoralBlock) {
                     Block up = blockNearby.up();

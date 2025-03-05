@@ -268,8 +268,8 @@ public class BlockFrame extends BlockTransparent implements BlockEntityHolder<Bl
         }
 
         return new SimpleAxisAlignedBB(
-                aabb[0][0] + x, aabb[1][0] + y, aabb[2][0] + z,
-                aabb[0][1] + x, aabb[1][1] + y, aabb[2][1] + z
+                aabb[0][0] + this.position.x, aabb[1][0] + this.position.y, aabb[2][0] + this.position.z,
+                aabb[0][1] + this.position.x, aabb[1][1] + this.position.y, aabb[2][1] + this.position.z
         );
     }
 }

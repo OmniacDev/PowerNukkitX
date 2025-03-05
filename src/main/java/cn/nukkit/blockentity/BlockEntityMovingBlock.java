@@ -66,9 +66,9 @@ public class BlockEntityMovingBlock extends BlockEntitySpawnable {
             }else{
                 this.block = blockState.toBlock();
             }
-            this.block.position.x = x;
-            this.block.position.y = y;
-            this.block.position.z = z;
+            this.block.position.x = this.position.x;
+            this.block.position.y = this.position.y;
+            this.block.position.z = this.position.z;
         } else {
             this.close();
         }

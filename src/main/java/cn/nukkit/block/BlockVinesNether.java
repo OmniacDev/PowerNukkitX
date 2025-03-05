@@ -350,27 +350,27 @@ public abstract class BlockVinesNether extends BlockTransparent {
 
     @Override
     public double getMinX() {
-        return x+ (4/16.0);
+        return this.position.x+ (4/16.0);
     }
 
     @Override
     public double getMinZ() {
-        return z+ (4/16.0);
+        return this.position.z+ (4/16.0);
     }
 
     @Override
     public double getMaxX() {
-        return x+ (12/16.0);
+        return this.position.x+ (12/16.0);
     }
 
     @Override
     public double getMaxZ() {
-        return z+ (12/16.0);
+        return this.position.z+ (12/16.0);
     }
 
     @Override
     public double getMaxY() {
-        return y+ (15/16.0);
+        return this.position.y+ (15/16.0);
     }
 
     @Override

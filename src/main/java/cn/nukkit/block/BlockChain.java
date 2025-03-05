@@ -68,22 +68,22 @@ public class BlockChain extends BlockTransparent {
 
     @Override
     public double getMinX() {
-        return x + 7/16.0;
+        return this.position.x + 7/16.0;
     }
 
     @Override
     public double getMaxX() {
-        return x + 9/16.0;
+        return this.position.x + 9/16.0;
     }
 
     @Override
     public double getMinZ() {
-        return z + 7/16.0;
+        return this.position.z + 7/16.0;
     }
 
     @Override
     public double getMaxZ() {
-        return z + 9/16.0;
+        return this.position.z + 9/16.0;
     }
 
     @Override

@@ -136,27 +136,27 @@ public class BlockTurtleEgg extends BlockFlowable {
 
     @Override
     public double getMinX() {
-        return x + (3.0 / 16);
+        return this.position.x + (3.0 / 16);
     }
 
     @Override
     public double getMinZ() {
-        return z + (3.0 / 16);
+        return this.position.z + (3.0 / 16);
     }
 
     @Override
     public double getMaxX() {
-        return x + (12.0 / 16);
+        return this.position.x + (12.0 / 16);
     }
 
     @Override
     public double getMaxZ() {
-        return z + (12.0 / 16);
+        return this.position.z + (12.0 / 16);
     }
 
     @Override
     public double getMaxY() {
-        return y + (7.0 / 16);
+        return this.position.y + (7.0 / 16);
     }
 
     @Override
@@ -228,7 +228,7 @@ public class BlockTurtleEgg extends BlockFlowable {
                             creatureSpawnEvent.getPosition());
                     if (turtle != null) {
                         turtle.setBreedingAge(-24000);
-                        turtle.setHomePos(new Vector3(x, y, z));
+                        turtle.setHomePos(this.position.clone());
                         turtle.setDataFlag(EntityFlag.BABY, true);
                         turtle.setScale(0.16f);
                         turtle.spawnToAll();

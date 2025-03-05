@@ -67,8 +67,8 @@ public class BlockBambooSapling extends BlockSapling {
                 if (!blockGrowEvent.isCancelled()) {
                     Block newState1 = blockGrowEvent.getNewState();
                     newState1.position.y = up.position.y;
-                    newState1.position.x = x;
-                    newState1.position.z = z;
+                    newState1.position.x = this.position.x;
+                    newState1.position.z = this.position.z;
                     newState1.level = level;
                     newState1.place(toItem(), up, this, BlockFace.DOWN, 0.5, 0.5, 0.5, null);
                 }
@@ -117,9 +117,9 @@ public class BlockBambooSapling extends BlockSapling {
 
     public boolean grow(Block up) {
         BlockBamboo bamboo = new BlockBamboo();
-        bamboo.position.x = x;
-        bamboo.position.y = y;
-        bamboo.position.z = z;
+        bamboo.position.x = this.position.x;
+        bamboo.position.y = this.position.y;
+        bamboo.position.z = this.position.z;
         bamboo.level = level;
         return bamboo.grow(up);
     }
@@ -154,26 +154,26 @@ public class BlockBambooSapling extends BlockSapling {
 
     @Override
     public double getMinX() {
-        return x + 0.125;
+        return this.position.x + 0.125;
     }
 
     @Override
     public double getMaxX() {
-        return x + 0.875;
+        return this.position.x + 0.875;
     }
 
     @Override
     public double getMinZ() {
-        return z + 0.125;
+        return this.position.z + 0.125;
     }
 
     @Override
     public double getMaxZ() {
-        return z + 0.875;
+        return this.position.z + 0.875;
     }
 
     @Override
     public double getMaxY() {
-        return y + 0.875;
+        return this.position.y + 0.875;
     }
 }

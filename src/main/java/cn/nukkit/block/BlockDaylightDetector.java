@@ -142,7 +142,7 @@ public class BlockDaylightDetector extends BlockTransparent implements RedstoneC
     public void updatePower() {
         int i;
         if (getLevel().getDimension() == Level.DIMENSION_OVERWORLD) {
-            i = getLevel().getBlockSkyLightAt((int) x, (int) y, (int) z) - getLevel().calculateSkylightSubtracted(1.0F);
+            i = getLevel().getBlockSkyLightAt(this.position.getFloorX(), this.position.getFloorY(), this.position.getFloorZ()) - getLevel().calculateSkylightSubtracted(1.0F);
             float f = getLevel().getCelestialAngle(1.0F) * 6.2831855F;
 
             if (this.isInverted()) {

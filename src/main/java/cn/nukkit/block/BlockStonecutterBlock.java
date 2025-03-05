@@ -116,7 +116,7 @@ public class BlockStonecutterBlock extends BlockTransparent implements Faceable,
 
     @Override
     public double getMaxY() {
-        return y + 9 / 16.0;
+        return this.position.y + 9 / 16.0;
     }
 
     @Override

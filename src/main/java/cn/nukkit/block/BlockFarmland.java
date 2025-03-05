@@ -65,7 +65,7 @@ public class BlockFarmland extends BlockTransparent {
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             Vector3 v = new Vector3();
-            if (this.level.getBlock(v.setComponents(x, this.position.y + 1, z)) instanceof BlockCrops) {
+            if (this.level.getBlock(v.setComponents(this.position.x, this.position.y + 1, this.position.z)) instanceof BlockCrops) {
                 return 0;
             }
 
@@ -100,7 +100,7 @@ public class BlockFarmland extends BlockTransparent {
                 }
             }
 
-            Block block = this.level.getBlock(v.setComponents(x, y - 1, z));
+            Block block = this.level.getBlock(v.setComponents(this.position.x, this.position.y - 1, this.position.z));
             if (found || block instanceof BlockFlowingWater || block instanceof BlockFrostedIce) {
                 if (getMoistureAmount() < 7) {
                     setMoistureAmount(7);

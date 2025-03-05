@@ -187,7 +187,7 @@ public class BlockScaffolding extends BlockFallable {
 
     @Override
     protected AxisAlignedBB recalculateBoundingBox() {
-        return new SimpleAxisAlignedBB(x, y + (2.0 / 16), z, x + 1, y + 1, z + 1);
+        return new SimpleAxisAlignedBB(this.position.x, this.position.y + (2.0 / 16), this.position.z, this.position.x + 1, this.position.y + 1, this.position.z + 1);
     }
 
     @Override

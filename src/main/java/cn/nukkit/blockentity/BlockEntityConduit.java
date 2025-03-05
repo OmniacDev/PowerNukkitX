@@ -145,7 +145,7 @@ public class BlockEntityConduit extends BlockEntitySpawnable {
         }
         final int radiusSquared = radius * radius;
 
-        Vector2 conduitPos = new Vector2(x, z);
+        Vector2 conduitPos = new Vector2(this.position.x, this.position.z);
 
         this.getLevel().getPlayers().values().stream()
                 .filter(this::canAffect)
@@ -176,7 +176,7 @@ public class BlockEntityConduit extends BlockEntitySpawnable {
         }
 
         if (target == null) {
-            Entity[] mobs = Arrays.stream(level.getCollidingEntities(new SimpleAxisAlignedBB(x - radius, y - radius, z - radius, x + 1 + radius, y + 1 + radius, z + 1 + radius)))
+            Entity[] mobs = Arrays.stream(level.getCollidingEntities(new SimpleAxisAlignedBB(this.position.x - radius, this.position.y - radius, this.position.z - radius, this.position.x + 1 + radius, this.position.y + 1 + radius, this.position.z + 1 + radius)))
                     .filter(this::canAttack)
                     .toArray(Entity[]::new);
             if (mobs.length == 0) {

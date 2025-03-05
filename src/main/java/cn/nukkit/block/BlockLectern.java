@@ -78,7 +78,7 @@ public class BlockLectern extends BlockTransparent implements RedstoneComponent,
 
     @Override
     public double getMaxY() {
-        return y + 0.89999;
+        return this.position.y + 0.89999;
     }
 
     @Override

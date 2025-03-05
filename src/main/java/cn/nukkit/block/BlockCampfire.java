@@ -263,12 +263,12 @@ public class BlockCampfire extends BlockTransparent implements Faceable, BlockEn
 
     @Override
     public double getMaxY() {
-        return y + 0.4371948;
+        return this.position.y + 0.4371948;
     }
 
     @Override
     protected AxisAlignedBB recalculateCollisionBoundingBox() {
-        return new SimpleAxisAlignedBB(x, y, z, x + 1, y + 1, z + 1);
+        return new SimpleAxisAlignedBB(this.position.x, this.position.y, this.position.z, this.position.x + 1, this.position.y + 1, this.position.z + 1);
     }
 
     public boolean isExtinguished() {

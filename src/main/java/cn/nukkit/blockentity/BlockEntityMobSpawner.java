@@ -171,7 +171,7 @@ public class BlockEntityMobSpawner extends BlockEntitySpawnable {
 
     @Override
     public boolean isBlockEntityValid() {
-        return Objects.equals(level.getBlockIdAt((int) x, (int) y, (int) z), Block.MOB_SPAWNER);
+        return Objects.equals(level.getBlockIdAt(this.position.getFloorX(), this.position.getFloorY(), this.position.getFloorZ()), Block.MOB_SPAWNER);
     }
 
     @Override

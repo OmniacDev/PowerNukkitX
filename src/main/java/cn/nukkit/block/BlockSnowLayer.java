@@ -72,7 +72,7 @@ public class BlockSnowLayer extends BlockFallable {
 
     @Override
     public double getMaxY() {
-        return y + (Math.min(16, getSnowHeight() + 1) * 2) / 16.0;
+        return this.position.y + (Math.min(16, getSnowHeight() + 1) * 2) / 16.0;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class BlockSnowLayer extends BlockFallable {
         if (snowHeight == 3 || snowHeight == HEIGHT.getMax()) {
             return this;
         }
-        return new SimpleAxisAlignedBB(x, y, z, x + 1, y + 8 / 16.0, z + 1);
+        return new SimpleAxisAlignedBB(this.position.x, this.position.y, this.position.z, this.position.x + 1, this.position.y + 8 / 16.0, this.position.z + 1);
     }
 
     @Override

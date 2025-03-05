@@ -96,11 +96,11 @@ public class BlockMobSpawner extends BlockSolid {
             CompoundTag nbt = new CompoundTag()
                     .putString(BlockEntityMobSpawner.TAG_ID, BlockEntity.MOB_SPAWNER)
                     .putString(BlockEntityMobSpawner.TAG_ENTITY_IDENTIFIER, identifier)
-                    .putInt(BlockEntityMobSpawner.TAG_X, (int) x)
-                    .putInt(BlockEntityMobSpawner.TAG_Y, (int) y)
-                    .putInt(BlockEntityMobSpawner.TAG_Z, (int) z);
+                    .putInt(BlockEntityMobSpawner.TAG_X, this.position.getFloorX())
+                    .putInt(BlockEntityMobSpawner.TAG_Y, this.position.getFloorY())
+                    .putInt(BlockEntityMobSpawner.TAG_Z, this.position.getFloorZ());
 
-            BlockEntityMobSpawner entitySpawner = new BlockEntityMobSpawner(getLevel().getChunk((int) x >> 4, (int) z >> 4), nbt);
+            BlockEntityMobSpawner entitySpawner = new BlockEntityMobSpawner(getLevel().getChunk(this.position.getChunkX(), this.position.getChunkZ()), nbt);
             entitySpawner.spawnToAll();
         }
         return true;
