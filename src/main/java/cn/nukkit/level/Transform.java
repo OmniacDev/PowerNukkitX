@@ -11,69 +11,50 @@ public class Transform extends Locator {
     public double pitch;
     public double headYaw;
 
-    public Transform() {
-        this(0);
+    public Transform(@NotNull Level level) {
+        this(0, level);
     }
 
-    public Transform(double x) {
-        this(x, 0);
+    public Transform(double x, @NotNull Level level) {
+        this(x, 0, level);
     }
 
-    public Transform(double x, double y) {
-        this(x, y, 0);
+    public Transform(double x, double y, @NotNull Level level) {
+        this(x, y, 0, level);
     }
 
-    public Transform(double x, double y, double z) {
-        this(x, y, z, 0);
+    public Transform(double x, double y, double z, @NotNull Level level) {
+        this(x, y, z, 0, level);
     }
 
-    public Transform(double x, double y, double z, Level level) {
-        this(x, y, z, 0, 0, level);
+    public Transform(double x, double y, double z, double yaw, @NotNull Level level) {
+        this(x, y, z, yaw, 0, level);
     }
 
-    public Transform(double x, double y, double z, double yaw) {
-        this(x, y, z, yaw, 0);
-    }
-
-    public Transform(double x, double y, double z, double yaw, double pitch) {
-        this(x, y, z, yaw, pitch, null);
-    }
-
-    public Transform(double x, double y, double z, double yaw, double pitch, Level level) {
+    public Transform(double x, double y, double z, double yaw, double pitch, @NotNull Level level) {
         this(x, y, z, yaw, pitch, 0, level);
     }
 
-    public Transform(double x, double y, double z, double yaw, double pitch, double headYaw) {
-        this(x, y, z, yaw, pitch, headYaw, null);
-    }
-
-    public Transform(double x, double y, double z, double yaw, double pitch, double headYaw, Level level) {
+    public Transform(double x, double y, double z, double yaw, double pitch, double headYaw, @NotNull Level level) {
         super(x, y, z , level);
         this.yaw = yaw;
         this.pitch = pitch;
         this.headYaw = headYaw;
     }
 
-    public static Transform fromObject(Vector3 pos) {
-        return fromObject(pos, null, 0.0f, 0.0f);
-    }
-
     public static Transform fromObject(Vector3 pos, @NotNull Level level) {
-        return fromObject(pos, level, 0.0f, 0.0f);
+        return fromObject(pos, level, 0.0f);
     }
 
-    public static Transform fromObject(Vector3 pos, Level level, double yaw) {
+    public static Transform fromObject(Vector3 pos, @NotNull Level level, double yaw) {
         return fromObject(pos, level, yaw, 0.0f);
     }
 
-    public static Transform fromObject(Vector3 pos, Level level, double yaw, double pitch) {
-        return new Transform(pos.x, pos.y, pos.z, yaw, pitch, (level == null) ? ((pos instanceof Locator) ? ((Locator) pos).level : null) : level);
+    public static Transform fromObject(Vector3 pos, @NotNull Level level, double yaw, double pitch) {
+        return fromObject(pos, level, yaw, pitch, 0.0f);
     }
 
-    public static Transform fromObject(Vector3 pos, Level level, double yaw, double pitch, double headYaw) {
-        if (level == null && pos instanceof Locator) {
-            level = ((Locator) pos).level;
-        }
+    public static Transform fromObject(Vector3 pos, @NotNull Level level, double yaw, double pitch, double headYaw) {
         return new Transform(pos.x, pos.y, pos.z, yaw, pitch, headYaw, level);
     }
 
