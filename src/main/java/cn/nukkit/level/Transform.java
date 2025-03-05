@@ -183,15 +183,6 @@ public class Transform extends Locator {
         return new Transform((int) Math.abs(this.x), (int) Math.abs(this.y), (int) Math.abs(this.z), this.yaw, this.pitch, this.headYaw, this.level);
     }
 
-    public Vector3 getDirectionVector() {
-        double pitch = ((getPitch() + 90) * Math.PI) / 180;
-        double yaw = ((getYaw() + 90) * Math.PI) / 180;
-        double x = Math.sin(pitch) * Math.cos(yaw);
-        double z = Math.sin(pitch) * Math.sin(yaw);
-        double y = Math.cos(pitch);
-        return new Vector3(x, y, z).normalize();
-    }
-
     @Override
     public Transform clone() {
         return (Transform) super.clone();
