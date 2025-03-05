@@ -183,7 +183,7 @@ public class ExecuteCommand extends VanillaCommand {
                 }
                 String chainCommand = list.getResult(2);
                 for (Entity executor : executors) {
-                    ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, executor, executor.getLocation());
+                    ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, executor, executor.getTransform());
                     int n = executorCommandSender.getServer().executeCommand(executorCommandSender, chainCommand);
                     if (n == 0) {
                         var names = new ArrayList<String>();
@@ -207,7 +207,7 @@ public class ExecuteCommand extends VanillaCommand {
                     return 0;
                 }
                 String chainCommand = list.getResult(2);
-                for (Transform transform : locations.stream().map(Entity::getLocation).toList()) {
+                for (Transform transform : locations.stream().map(Entity::getTransform).toList()) {
                     ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), transform);
                     num += executorCommandSender.getServer().executeCommand(executorCommandSender, chainCommand);
                 }
@@ -220,7 +220,7 @@ public class ExecuteCommand extends VanillaCommand {
                     return 0;
                 }
                 String chainCommand = list.getResult(2);
-                Transform transform = sender.getLocation();
+                Transform transform = sender.getTransform();
                 transform.setLevel(level);
                 ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), transform);
                 return executorCommandSender.getServer().executeCommand(executorCommandSender, chainCommand);
@@ -228,7 +228,7 @@ public class ExecuteCommand extends VanillaCommand {
             case "facing" -> {
                 Vector3 pos = list.getResult(1);
                 String chainCommand = list.getResult(2);
-                Transform source = sender.getLocation();
+                Transform source = sender.getTransform();
                 BVector3 bv = BVector3.fromPos(pos.x - source.position.x, pos.y - source.position.y, pos.z - source.position.z);
                 source.setPitch(bv.getPitch());
                 source.setYaw(bv.getYaw());
@@ -245,7 +245,7 @@ public class ExecuteCommand extends VanillaCommand {
                 boolean anchorAtEyes = anchor.equals("eyes");
                 String chainCommand = list.getResult(4);
                 for (Entity target : targets) {
-                    Transform source = sender.getLocation();
+                    Transform source = sender.getTransform();
                     BVector3 bv = BVector3.fromPos(target.pos.x - source.position.x, target.pos.y + (anchorAtEyes ? target.getEyeHeight() : 0) - source.position.y, target.pos.z - source.position.z);
                     source.setPitch(bv.getPitch());
                     source.setYaw(bv.getYaw());
@@ -255,12 +255,12 @@ public class ExecuteCommand extends VanillaCommand {
                 return num;
             }
             case "rotated" -> {
-                double yaw = sender.getLocation().yaw;
+                double yaw = sender.getTransform().rotation.yaw;
                 if (list.hasResult(1)) yaw = list.getResult(1);
-                double pitch = sender.getLocation().pitch;
+                double pitch = sender.getTransform().rotation.pitch;
                 if (list.hasResult(2)) pitch = list.getResult(2);
                 String chainCommand = list.getResult(3);
-                Transform transform = sender.getLocation();
+                Transform transform = sender.getTransform();
                 transform.setYaw(yaw);
                 transform.setPitch(pitch);
                 ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), transform);
@@ -274,7 +274,7 @@ public class ExecuteCommand extends VanillaCommand {
                 }
                 String chainCommand = list.getResult(3);
                 for (Entity executor : executors) {
-                    Transform transform = sender.getLocation();
+                    Transform transform = sender.getTransform();
                     transform.setYaw(executor.rotation.yaw);
                     transform.setPitch(executor.rotation.pitch);
                     ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), transform);
@@ -285,7 +285,7 @@ public class ExecuteCommand extends VanillaCommand {
             case "align" -> {
                 String axes = list.getResult(1);
                 String chainCommand = list.getResult(2);
-                Transform transform = sender.getLocation();
+                Transform transform = sender.getTransform();
                 for (char c : axes.toCharArray()) {
                     switch (c) {
                         case 'x' -> transform.position.x = transform.position.getFloorX();
@@ -298,7 +298,7 @@ public class ExecuteCommand extends VanillaCommand {
             }
             case "anchored" -> {
                 if (!sender.isEntity()) return 0;
-                Transform transform = sender.getLocation();
+                Transform transform = sender.getTransform();
                 String anchor = list.getResult(1);
                 String chainCommand = list.getResult(2);
                 switch (anchor) {
@@ -312,7 +312,7 @@ public class ExecuteCommand extends VanillaCommand {
             }
             case "positioned" -> {
                 Vector3 vec = list.getResult(1);
-                Transform newLoc = sender.getLocation();
+                Transform newLoc = sender.getTransform();
                 newLoc.setX(vec.getX());
                 newLoc.setY(vec.getY());
                 newLoc.setZ(vec.getZ());
@@ -328,7 +328,7 @@ public class ExecuteCommand extends VanillaCommand {
                 }
                 String chainCommand = list.getResult(3);
                 for (Vector3 vec : targets.stream().map(e -> e.pos).toList()) {
-                    Transform newLoc = sender.getLocation();
+                    Transform newLoc = sender.getTransform();
                     newLoc.setX(vec.getX());
                     newLoc.setY(vec.getY());
                     newLoc.setZ(vec.getZ());

@@ -789,11 +789,9 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
         //已经设置immobile了所以不用管下落了
         Transform pos;
         if (this.server.getSettings().baseSettings().safeSpawn() && (this.gamemode & 0x01) == 0) {
-            pos = this.level.getSafeSpawn(this.pos).getTransform();
-            pos.yaw = this.rotation.yaw;
-            pos.pitch = this.rotation.pitch;
+            pos = new Transform(this.level.getSafeSpawn(this.pos).position, this.rotation, this.level);
         } else {
-            pos = new Transform(this.pos.x, this.pos.y, this.pos.z, this.rotation.yaw, this.rotation.pitch, this.level);
+            pos = new Transform(this.pos, this.rotation, this.level);
         }
         this.teleport(pos, TeleportCause.PLAYER_SPAWN);
 
@@ -883,7 +881,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
                     getServer().getPluginManager().callEvent(ev);
 
                     if (!ev.isCancelled()) {
-                        final Locator newPos = PortalHelper.moveToTheEnd(this.getPosition());
+                        final Locator newPos = PortalHelper.moveToTheEnd(this.getLocator());
                         if (newPos != null) {
                             if (newPos.getLevel().getDimension() == Level.DIMENSION_THE_END) {
                                 if (teleport(newPos, TeleportCause.END_PORTAL)) {
@@ -945,7 +943,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     protected void handleMovement(Transform clientPos) {
         if (this.firstMove) this.firstMove = false;
         boolean invalidMotion = false;
-        var revertPos = this.getLocation().clone();
+        var revertPos = this.getTransform().clone();
         double distance = clientPos.position.distanceSquared(this.pos);
         //before check
         if (distance > 128) {
@@ -999,12 +997,12 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
 
         //update server-side position and rotation and aabb
         Transform last = new Transform(this.prevPos.x, this.prevPos.y, this.prevPos.z, this.prevRotation.yaw, this.prevRotation.pitch, this.prevHeadYaw, this.level);
-        Transform now = this.getLocation();
+        Transform now = this.getTransform();
         this.prevPos.x = now.position.x;
         this.prevPos.y = now.position.y;
         this.prevPos.z = now.position.z;
-        this.prevRotation.yaw = now.yaw;
-        this.prevRotation.pitch = now.pitch;
+        this.prevRotation.yaw = now.rotation.yaw;
+        this.prevRotation.pitch = now.rotation.pitch;
         this.prevHeadYaw = now.headYaw;
 
         List<Block> blocksAround = null;
@@ -1031,10 +1029,10 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
                     if (this.getGamemode() != Player.SPECTATOR && (last.position.x != now.position.x || last.position.y != now.position.y || last.position.z != now.position.z)) {
                         if (this.isOnGround() && this.isGliding()) {
                             this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.getVector3(), VibrationType.ELYTRA_GLIDE));
-                        } else if (this.isOnGround() && !(this.getPosition().getSide(BlockFace.DOWN).getLevelBlock() instanceof BlockWool) && !this.isSneaking()) {
+                        } else if (this.isOnGround() && !(this.getLocator().getSide(BlockFace.DOWN).getLevelBlock() instanceof BlockWool) && !this.isSneaking()) {
                             this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.getVector3(), VibrationType.STEP));
                         } else if (this.isTouchingWater()) {
-                            this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.getLocation().clone().position, VibrationType.SWIM));
+                            this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.getTransform().clone().position, VibrationType.SWIM));
                         }
                     }
                     this.broadcastMovement(false);
@@ -1069,8 +1067,8 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     protected void offerMovementTask(Transform newPosition) {
         var distance = newPosition.position.distance(this.pos);
         var updatePosition = distance > MOVEMENT_DISTANCE_THRESHOLD;//sqrt distance
-        var updateRotation = (float) Math.abs(this.rotation.pitch - newPosition.pitch) > ROTATION_UPDATE_THRESHOLD
-                || (float) Math.abs(this.rotation.yaw - newPosition.yaw) > ROTATION_UPDATE_THRESHOLD
+        var updateRotation = (float) Math.abs(this.rotation.pitch - newPosition.rotation.pitch) > ROTATION_UPDATE_THRESHOLD
+                || (float) Math.abs(this.rotation.yaw - newPosition.rotation.yaw) > ROTATION_UPDATE_THRESHOLD
                 || (float) Math.abs(this.rotation.yaw - newPosition.headYaw) > ROTATION_UPDATE_THRESHOLD;
         var isHandle = this.isAlive() && this.spawned && !this.isSleeping() && (updatePosition || updateRotation);
         if (isHandle) {
@@ -1141,7 +1139,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
             //Handling Soul Speed Enchantment
             int soulSpeedLevel = this.getInventory().getBoots().getEnchantmentLevel(Enchantment.ID_SOUL_SPEED);
             if (soulSpeedLevel > 0) {
-                Block levelBlock = this.getPosition().getLevelBlock();
+                Block levelBlock = this.getLocator().getLevelBlock();
                 this.soulSpeedMultiplier = (soulSpeedLevel * 0.105f) + 1.3f;
 
                 // levelBlock check is required because of soul sand being 1 pixel shorter than normal blocks
@@ -2111,7 +2109,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
      * @return the next position
      */
     public Locator getNextPosition() {
-        return this.newPosition != null ? new Locator(this.newPosition.x, this.newPosition.y, this.newPosition.z, this.level) : this.getPosition();
+        return this.newPosition != null ? new Locator(this.newPosition.x, this.newPosition.y, this.newPosition.z, this.level) : this.getLocator();
     }
 
     /**
@@ -2912,7 +2910,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
 
         // get all blocks in looking direction until the max interact distance is reached (it's possible that startblock isn't found!)
         try {
-            BlockIterator itr = new BlockIterator(level, getPosition().position, getDirectionVector(), getEyeHeight(), maxDistance);
+            BlockIterator itr = new BlockIterator(level, this.getLocator().position, getDirectionVector(), getEyeHeight(), maxDistance);
             if (itr.hasNext()) {
                 Block block;
                 while (itr.hasNext()) {
@@ -4203,7 +4201,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
             //source.setCancelled();
             return false;
         } else if (source.getCause() == DamageCause.FALL) {
-            if (this.getLevel().getBlock(this.getPosition().position.floor().add(0.5, -1, 0.5)).getId().equals(Block.SLIME)) {
+            if (this.getLevel().getBlock(this.getLocator().position.floor().add(0.5, -1, 0.5)).getId().equals(Block.SLIME)) {
                 if (!this.isSneaking()) {
                     //source.setCancelled();
                     this.resetFallDistance();
@@ -4350,7 +4348,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
         if (!this.isOnline()) {
             return false;
         }
-        Transform from = this.getLocation();
+        Transform from = this.getTransform();
         this.lastTeleportMessage = Pair.of(from, System.currentTimeMillis());
 
         Transform to = transform;
@@ -4399,10 +4397,10 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
                 this.nextChunkOrderRun = 0;
             }
             //send to client
-            this.sendPosition(to.position, to.yaw, to.pitch, MovePlayerPacket.MODE_TELEPORT);
+            this.sendPosition(to.position, to.rotation.yaw, to.rotation.pitch, MovePlayerPacket.MODE_TELEPORT);
             this.newPosition = to.position;
         } else {
-            this.sendPosition(this.pos, to.yaw, to.pitch, MovePlayerPacket.MODE_TELEPORT);
+            this.sendPosition(this.pos, to.rotation.yaw, to.rotation.pitch, MovePlayerPacket.MODE_TELEPORT);
             this.newPosition = this.pos;
         }
         //state update

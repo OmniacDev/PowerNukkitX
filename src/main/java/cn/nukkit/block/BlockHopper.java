@@ -147,7 +147,7 @@ public class BlockHopper extends BlockTransparent implements RedstoneComponent, 
         }
 
         if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) {
-            boolean disabled = this.level.isBlockPowered(this.getTransform().position);
+            boolean disabled = this.level.isBlockPowered(this.position);
 
             if (disabled == this.isEnabled()) {
                 this.setEnabled(!disabled);
@@ -198,7 +198,7 @@ public class BlockHopper extends BlockTransparent implements RedstoneComponent, 
     }
 
     public interface IHopper {
-        Locator getPosition();
+        Locator getLocator();
 
         default boolean pullItems(InventoryHolder hopperHolder, Locator hopperPos) {
             var hopperInv = hopperHolder.getInventory();

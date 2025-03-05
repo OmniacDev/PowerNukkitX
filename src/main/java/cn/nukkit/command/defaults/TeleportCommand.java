@@ -101,11 +101,11 @@ public class TeleportCommand extends VanillaCommand {
                     log.addError("commands.generic.tooManyTargets").output();
                     return 0;
                 }
-                Transform victim = sender.getLocation();
+                Transform victim = sender.getTransform();
                 Entity entity = destination.get(0);
                 entity.rotation.yaw = (victim.getYaw());
                 entity.rotation.pitch = (victim.getPitch());
-                Transform target = entity.getLocation();
+                Transform target = entity.getTransform();
                 boolean checkForBlocks = false;
                 if (list.hasResult(1)) {
                     checkForBlocks = list.getResult(1);
@@ -151,7 +151,7 @@ public class TeleportCommand extends VanillaCommand {
                 if (checkForBlocks) {
                     if (!target.getPosition().getLevelBlock().isSolid() && !target.getPosition().add(0, 1, 0).getLevelBlock().isSolid()) {
                         for (Entity victim : victims) {
-                            victim.teleport(target.getLocation().setYaw(victim.rotation.yaw).setPitch(victim.rotation.pitch));
+                            victim.teleport(target.getTransform().setYaw(victim.rotation.yaw).setPitch(victim.rotation.pitch));
                         }
                         log.addSuccess("commands.tp.success", sb.toString(), target.getName());
                     } else {
@@ -160,7 +160,7 @@ public class TeleportCommand extends VanillaCommand {
                     }
                 } else {
                     for (Entity victim : victims) {
-                        victim.teleport(target.getLocation().setYaw(victim.rotation.yaw).setPitch(victim.rotation.pitch));
+                        victim.teleport(target.getTransform().setYaw(victim.rotation.yaw).setPitch(victim.rotation.pitch));
                     }
                     log.addSuccess("commands.tp.success", sb.toString(), target.getName());
                 }
@@ -174,11 +174,11 @@ public class TeleportCommand extends VanillaCommand {
                     return 0;
                 }
                 Locator pos = list.getResult(1);
-                double yRot = sender.getLocation().pitch;
+                double yRot = sender.getTransform().rotation.pitch;
                 if (list.hasResult(2)) {
                     yRot = list.getResult(2);
                 }
-                double xRot = sender.getLocation().yaw;
+                double xRot = sender.getTransform().rotation.yaw;
                 if (list.hasResult(3)) {
                     xRot = list.getResult(3);
                 }
@@ -298,11 +298,11 @@ public class TeleportCommand extends VanillaCommand {
                     return 0;
                 }
                 Locator pos = list.getResult(0);
-                double yRot = sender.getLocation().pitch;
+                double yRot = sender.getTransform().rotation.pitch;
                 if (list.hasResult(1)) {
                     yRot = list.getResult(1);
                 }
-                double xRot = sender.getLocation().yaw;
+                double xRot = sender.getTransform().rotation.yaw;
                 if (list.hasResult(2)) {
                     xRot = list.getResult(2);
                 }

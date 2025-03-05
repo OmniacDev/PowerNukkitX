@@ -31,7 +31,7 @@ public class DayLockCommand extends VanillaCommand {
 
         if (list.hasResult(0)) lock = list.getResult(0);
 
-        Level level = sender.getPosition().getLevel();
+        Level level = sender.getLocator().getLevel();
         level = level == null ? sender.getServer().getDefaultLevel() : level;
         GameRules rules = level.getGameRules();
 

@@ -59,7 +59,7 @@ public class TickingAreaCommand extends VanillaCommand {
     public int execute(CommandSender sender, String commandLabel, Map.Entry<String, ParamList> result, CommandLogger log) {
         var list = result.getValue();
         TickingAreaManager manager = Server.getInstance().getTickingAreaManager();
-        Level level = sender.getPosition().getLevel();
+        Level level = sender.getLocator().getLevel();
         switch (result.getKey()) {
             case "add-pos" -> {
                 Locator from = list.getResult(1);

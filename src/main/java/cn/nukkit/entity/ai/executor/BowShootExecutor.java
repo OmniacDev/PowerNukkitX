@@ -88,7 +88,7 @@ public class BowShootExecutor implements EntityControl, IBehaviorExecutor {
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Transform clone = this.target.getLocation();
+        Transform clone = this.target.getTransform();
 
         if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
             //更新寻路target

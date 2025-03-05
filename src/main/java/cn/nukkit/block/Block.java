@@ -1333,11 +1333,11 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
         for (BlockFace side : BlockFace.values()) {
             Block b = this.getSide(side).getLevelBlock();
 
-            if (this.level.isSidePowered(b.getTransform().position, side)) {
+            if (this.level.isSidePowered(b.position, side)) {
                 return true;
             }
         }
-        return this.level.isBlockPowered(this.getTransform().position);
+        return this.level.isBlockPowered(this.position);
     }
 
     public boolean cloneTo(Locator pos) {

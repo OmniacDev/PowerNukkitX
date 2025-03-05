@@ -70,7 +70,7 @@ public class GameruleCommand extends VanillaCommand {
 
     @Override
     public int execute(CommandSender sender, String commandLabel, Map.Entry<String, ParamList> result, CommandLogger log) {
-        GameRules rules = sender.getPosition().level.getGameRules();
+        GameRules rules = sender.getLocator().level.getGameRules();
         var list = result.getValue();
         String ruleStr = list.getResult(0);
         if (result.getKey().equals("default")) {

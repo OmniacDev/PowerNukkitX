@@ -47,12 +47,12 @@ public class SetBlockCommand extends VanillaCommand {
         if (list.hasResult(3)) {
             oldBlockHandling = list.getResult(3);
         }
-        if (!sender.getPosition().level.isYInRange((int) locator.position.y)) {
+        if (!sender.getLocator().level.isYInRange((int) locator.position.y)) {
             log.addError("commands.setblock.outOfWorld").output();
             return 0;
         }
 
-        Level level = sender.getPosition().getLevel();
+        Level level = sender.getLocator().getLevel();
         Block current = level.getBlock(locator.position);
         if (current.getId().equals(block.getId()) && current.getBlockState() == block.getBlockState()) {
             log.addError("commands.setblock.noChange").output();

@@ -10,6 +10,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.level.Level;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.Transform;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.vibration.VibrationEvent;
@@ -38,7 +39,7 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
     // It is used to detect on redstone update, if the door should be closed if redstone is off on the update,
     // previously the door always closed, when placing an unpowered redstone at the door, this fixes it
     // and gives the vanilla behavior; no idea how to make this better :d
-    private static final List<Transform> manualOverrides = new ArrayList<>();
+    private static final List<Locator> manualOverrides = new ArrayList<>();
 
     protected final static BiMap<BlockFace, Integer> DOOR_DIRECTION = HashBiMap.create(4);
 
@@ -158,14 +159,14 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
     }
 
     public void setManualOverride(boolean val) {
-        Transform down;
-        Transform up;
+        Locator down;
+        Locator up;
         if (this.isTop()) {
-            down = down().getTransform();
-            up = getTransform();
+            down = down().getLocator();
+            up = getLocator();
         } else {
-            down = getTransform();
-            up = up().getTransform();
+            down = getLocator();
+            up = up().getLocator();
         }
 
         if (val) {
@@ -178,14 +179,14 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
     }
 
     public boolean getManualOverride() {
-        Transform down;
-        Transform up;
+        Locator down;
+        Locator up;
         if (this.isTop()) {
-            down = down().getTransform();
-            up = getTransform();
+            down = down().getLocator();
+            up = getLocator();
         } else {
-            down = getTransform();
-            up = up().getTransform();
+            down = getLocator();
+            up = up().getLocator();
         }
 
         return manualOverrides.contains(up) || manualOverrides.contains(down);
@@ -193,22 +194,22 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
 
     @Override
     public boolean isGettingPower() {
-        Transform down;
-        Transform up;
+        Locator down;
+        Locator up;
         if (this.isTop()) {
-            down = down().getTransform();
-            up = getTransform();
+            down = down().getLocator();
+            up = getLocator();
         } else {
-            down = getTransform();
-            up = up().getTransform();
+            down = getLocator();
+            up = up().getLocator();
         }
 
         for (BlockFace side : BlockFace.values()) {
             Block blockDown = down.getSide(side).getLevelBlock();
             Block blockUp = up.getSide(side).getLevelBlock();
 
-            if (this.level.isSidePowered(blockDown.getTransform().position, side)
-                    || this.level.isSidePowered(blockUp.getTransform().position, side)) {
+            if (this.level.isSidePowered(blockDown.position, side)
+                    || this.level.isSidePowered(blockUp.position, side)) {
                 return true;
             }
         }

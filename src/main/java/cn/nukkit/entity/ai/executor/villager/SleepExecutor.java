@@ -33,7 +33,7 @@ public class SleepExecutor implements EntityControl, IBehaviorExecutor {
                 BlockBed head = bed.getHeadPart();
                 BlockBed foot = bed.getFootPart();
 
-                Transform sleepingTransform = foot.getTransform().add(switch (head.getBlockFace()) {
+                Transform sleepingTransform = new Transform(foot.getLocator()).add(switch (head.getBlockFace()) {
                     case NORTH -> new Vector3(0.5f, 0.5625f, 0);
                     case SOUTH -> new Vector3(0.5f, 0.5625f, 1);
                     case WEST -> new Vector3(0, 0.5625f, 0.5);

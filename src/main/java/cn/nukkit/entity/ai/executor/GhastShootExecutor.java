@@ -78,7 +78,7 @@ public class GhastShootExecutor implements EntityControl, IBehaviorExecutor {
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Transform clone = this.target.getLocation();
+        Transform clone = this.target.getTransform();
 
         if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
             setRouteTarget(entity, clone.position);
@@ -133,7 +133,7 @@ public class GhastShootExecutor implements EntityControl, IBehaviorExecutor {
 
     protected void shootFireball(EntityMob entity) {
 
-        Transform fireballTransform = entity.getLocation();
+        Transform fireballTransform = entity.getTransform();
         Vector3 directionVector = entity.getDirectionVector().multiply(1 + ThreadLocalRandom.current().nextFloat(0.2f));
         fireballTransform.setY(entity.pos.y + entity.getEyeHeight() + directionVector.getY());
         CompoundTag nbt = new CompoundTag()

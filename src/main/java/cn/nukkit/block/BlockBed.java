@@ -226,7 +226,7 @@ public class BlockBed extends BlockTransparent implements Faceable, BlockEntityH
             BlockEntityHolder<?> nextBlock = (BlockEntityHolder<?>) next.getLevelBlock();
             nextBlock.createBlockEntity(new CompoundTag().putByte("color", item.getDamage()));
         } catch (Exception e) {
-            log.warn("Failed to create the block entity {} at {} and {}", getBlockEntityType(), getTransform(), next.getTransform(), e);
+            log.warn("Failed to create the block entity {} at {} and {}", getBlockEntityType(), getLocator(), next.getLocator(), e);
             if (thisBed != null) {
                 thisBed.close();
             }

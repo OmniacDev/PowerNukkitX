@@ -77,7 +77,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
-        Transform clone = this.target.getLocation();
+        Transform clone = this.target.getTransform();
 
         if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
             setRouteTarget(entity, clone.position);
@@ -132,7 +132,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
 
     protected void throwPotion(EntityMob entity) {
 
-        Transform potionTransform = entity.getLocation();
+        Transform potionTransform = entity.getTransform();
         Vector3 directionVector = entity.getDirectionVector();
         potionTransform.setY(entity.pos.y + entity.getEyeHeight() + directionVector.getY());
         CompoundTag nbt = new CompoundTag()

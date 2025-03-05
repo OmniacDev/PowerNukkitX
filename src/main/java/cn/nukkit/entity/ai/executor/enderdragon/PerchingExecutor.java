@@ -36,7 +36,7 @@ public class PerchingExecutor implements EntityControl, IBehaviorExecutor {
                     removeRouteTarget(entity);
                     setLookTarget(entity, player.pos);
                     Vector3 toPlayerVector = new Vector3(player.pos.x - entity.pos.x, player.pos.y - entity.pos.y, player.pos.z - entity.pos.z).normalize();
-                    Transform transform = entity.getLocation().add(toPlayerVector.multiply(10));
+                    Transform transform = entity.getTransform().add(toPlayerVector.multiply(10));
                     transform.position.y = transform.level.getHighestBlockAt(transform.position.toHorizontal()) + 1;
                     EntityAreaEffectCloud areaEffectCloud = (EntityAreaEffectCloud) Entity.createEntity(Entity.AREA_EFFECT_CLOUD, transform.getChunk(),
                             new CompoundTag().putList("Pos", new ListTag<>()

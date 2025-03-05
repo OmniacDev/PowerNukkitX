@@ -102,7 +102,7 @@ public class ConsoleCommandSender implements CommandSender {
 
     @Override
     public void sendCommandOutput(CommandOutputContainer container) {
-        if (this.getLocation().getLevel().getGameRules().getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
+        if (this.getTransform().getLevel().getGameRules().getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
             for (var msg : container.getMessages()) {
                 var text = this.getServer().getLanguage().tr(new TranslationContainer(msg.getMessageId(), msg.getParameters()));
                 ConsoleCommandOutputEvent event = new ConsoleCommandOutputEvent(this, text);

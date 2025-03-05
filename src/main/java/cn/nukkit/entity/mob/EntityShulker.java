@@ -25,6 +25,7 @@ import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.player.PlayerTeleportEvent;
 import cn.nukkit.item.Item;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.Transform;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
@@ -96,7 +97,7 @@ public class EntityShulker extends EntityMob implements EntityVariant {
 
     @Override
     public boolean onUpdate(int currentTick) {
-        Block block = this.getPosition().getLevelBlock();
+        Block block = this.getLocator().getLevelBlock();
         if(!block.isAir() || block.down().isAir()) teleport();
         return super.onUpdate(currentTick);
     }
@@ -131,7 +132,7 @@ public class EntityShulker extends EntityMob implements EntityVariant {
         this.setMaxHealth(30);
         super.initEntity();
         if(getMemoryStorage().get(CoreMemoryTypes.VARIANT) == null) setVariant(16);
-        setDataProperty(EntityDataTypes.SHULKER_ATTACH_POS, this.getPosition().getLevelBlock().getSide(BlockFace.UP).position.asBlockVector3());
+        setDataProperty(EntityDataTypes.SHULKER_ATTACH_POS, this.getLocator().getLevelBlock().getSide(BlockFace.UP).position.asBlockVector3());
     }
 
     @Override
@@ -157,10 +158,10 @@ public class EntityShulker extends EntityMob implements EntityVariant {
     public void teleport() {
         Arrays.stream(getLevel().getCollisionBlocks(getBoundingBox().grow(7, 7, 7))).filter(block -> block.isFullBlock() && block.up().isAir()).findAny().ifPresent(
                 block -> {
-                    Transform transform = block.up().getTransform();
+                    Locator locator = block.up().getLocator();
                     getLevel().addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_TELEPORT, -1, getIdentifier(), false, false);
-                    teleport(transform, PlayerTeleportEvent.TeleportCause.SHULKER);
-                    getLevel().addLevelSoundEvent(transform.position, LevelSoundEventPacket.SOUND_SPAWN, -1, getIdentifier(), false, false);
+                    teleport(locator, PlayerTeleportEvent.TeleportCause.SHULKER);
+                    getLevel().addLevelSoundEvent(locator.position, LevelSoundEventPacket.SOUND_SPAWN, -1, getIdentifier(), false, false);
                 }
         );
     }

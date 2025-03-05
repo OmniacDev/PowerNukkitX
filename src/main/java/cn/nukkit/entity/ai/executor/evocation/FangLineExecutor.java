@@ -87,7 +87,7 @@ public class FangLineExecutor implements EntityControl, IBehaviorExecutor {
 
     protected void spell(EntityLiving entity, int distance) {
         if(!entity.getDataFlag(EntityFlag.CASTING)) return;
-        Transform fangTransform = entity.getLocation();
+        Transform fangTransform = entity.getTransform();
         Vector3 directionVector = entity.getDirectionVector().multiply(0.8 * (distance+1));
         fangTransform = fangTransform.add(directionVector.getX(), 0, directionVector.getZ());
         spawn((EntityEvocationIllager) entity, fangTransform);
@@ -104,7 +104,7 @@ public class FangLineExecutor implements EntityControl, IBehaviorExecutor {
                         .add(new FloatTag(0))
                         .add(new FloatTag(0)))
                 .putList("Rotation", new ListTag<FloatTag>()
-                        .add(new FloatTag((transform.yaw)))
+                        .add(new FloatTag((transform.rotation.yaw)))
                         .add(new FloatTag(0f)));
 
         Entity fang = Entity.createEntity(EntityID.EVOCATION_FANG, transform.level.getChunk(transform.position.getChunkX(), transform.position.getChunkZ()), nbt);

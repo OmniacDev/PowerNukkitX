@@ -16,7 +16,6 @@ import cn.nukkit.lang.TextContainer;
 import cn.nukkit.lang.TranslationContainer;
 import cn.nukkit.level.GameRule;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Transform;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
@@ -550,12 +549,6 @@ public class BlockEntityCommandBlock extends BlockEntitySpawnable implements ICo
     @Override
     public boolean isEntity() {
         return false;
-    }
-
-    @NotNull
-    @Override
-    public Transform getTransform() {
-        return Transform.fromObject(this.clone().position, this.getLevel());
     }
 
     @Override

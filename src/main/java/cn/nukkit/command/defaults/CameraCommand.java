@@ -163,7 +163,7 @@ public class CameraCommand extends VanillaCommand {
         }
         var playerNames = players.stream().map(Player::getName).reduce((a, b) -> a + " " + b).orElse("");
         var pk = new CameraInstructionPacket();
-        var senderLocation = sender.getLocation();
+        var senderLocation = sender.getTransform();
         switch (result.getKey()) {
             case "clear" -> {
                 pk.setInstruction(ClearInstruction.get());

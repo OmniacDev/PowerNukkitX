@@ -112,7 +112,7 @@ public class EntitySelectorAPI {
             ARGS_CACHE.put(token, arguments);
         }
         //获取克隆过的执行者位置信息
-        var senderLocation = sender.getLocation();
+        var senderLocation = sender.getTransform();
         //获取选择器类型
         var selectorType = parseSelectorType(matcher.group(1));
         //根据选择器类型先确定实体检测范围

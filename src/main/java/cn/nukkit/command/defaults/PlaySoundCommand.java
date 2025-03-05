@@ -63,7 +63,7 @@ public class PlaySoundCommand extends VanillaCommand {
             }
         }
         if (locator == null) {
-            locator = targets.get(0).getPosition();
+            locator = targets.get(0).getLocator();
         }
 
         double maxDistance = volume > 1 ? volume * 16 : 16;

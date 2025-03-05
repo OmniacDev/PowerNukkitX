@@ -50,7 +50,7 @@ public class WitherShootExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     protected void spawn(EntityMob entity, boolean charged) {
-        Transform fireballTransform = entity.getLocation();
+        Transform fireballTransform = entity.getTransform();
         fireballTransform.add(entity.getDirectionVector());
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()

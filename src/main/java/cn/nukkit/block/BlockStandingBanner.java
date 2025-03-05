@@ -129,7 +129,7 @@ public class BlockStandingBanner extends BlockTransparent implements Faceable, B
             createBlockEntity(nbt);
             return true;
         } catch (Exception e) {
-            log.error("Failed to create the block entity {} at {}", getBlockEntityType(), getTransform(), e);
+            log.error("Failed to create the block entity {} at {}", getBlockEntityType(), getLocator(), e);
             level.setBlock(layer0.position, 0, layer0, true);
             level.setBlock(layer0.position, 1, layer1, true);
             return false;

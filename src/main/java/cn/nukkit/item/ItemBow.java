@@ -76,7 +76,7 @@ public class ItemBow extends ItemTool {
         Enchantment flameEnchant = this.getEnchantment(Enchantment.ID_BOW_FLAME);
         boolean flame = flameEnchant != null && flameEnchant.getLevel() > 0;
 
-        Transform arrowTransform = player.getLocation();
+        Transform arrowTransform = player.getTransform();
         Vector3 directionVector = player.getDirectionVector().multiply(1.1);
         arrowTransform = arrowTransform.add(directionVector.getX(), 0, directionVector.getZ());
         arrowTransform.setY(player.pos.y + player.getEyeHeight() + directionVector.getY());

@@ -127,11 +127,10 @@ public class BlockEntityCauldron extends BlockEntitySpawnable {
         Player[] viewers = this.level.getChunkPlayers(this.position.getChunkX(), this.position.getChunkZ()).values().toArray(Player.EMPTY_ARRAY);
         this.level.sendBlocks(viewers, new Vector3[]{block.position});
         super.spawnToAll();
-        Transform transform = getTransform();
         getLevel().getScheduler().scheduleTask(null, () -> {
-            BlockEntity cauldron = this.level.getBlockEntity(transform.position);
+            BlockEntity cauldron = this.level.getBlockEntity(this.position);
             if (cauldron == BlockEntityCauldron.this) {
-                this.level.sendBlocks(viewers, new Vector3[]{transform.position});
+                this.level.sendBlocks(viewers, new Vector3[]{this.position});
                 super.spawnToAll();
             }
         });

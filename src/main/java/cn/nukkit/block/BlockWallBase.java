@@ -127,7 +127,7 @@ public abstract class BlockWallBase extends BlockTransparent implements BlockCon
                     connect(blockFace, above, false);
                 } catch (RuntimeException e) {
                     log.error("Failed to connect the block {} at {} to {} which is {} at {}",
-                            this, getTransform(), blockFace, side, side.getTransform(), e);
+                            this, getLocator(), blockFace, side, side.getLocator(), e);
                     throw e;
                 }
             } else {

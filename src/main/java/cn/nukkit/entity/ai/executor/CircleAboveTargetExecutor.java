@@ -48,7 +48,7 @@ public class CircleAboveTargetExecutor implements EntityControl, IBehaviorExecut
             return false;
         }
         Vector3 target = entity.getBehaviorGroup().getMemoryStorage().get(memory).getVector3();
-        Transform origin = entity.getBehaviorGroup().getMemoryStorage().get(CoreMemoryTypes.LAST_ATTACK_ENTITY).getLocation().add(0, 24, 0);
+        Transform origin = entity.getBehaviorGroup().getMemoryStorage().get(CoreMemoryTypes.LAST_ATTACK_ENTITY).getTransform().add(0, 24, 0);
         double angleIncrement = 360.0 / sections;
         double angle = Math.toRadians((circleLoc * angleIncrement));
         double particleX = origin.getX() + Math.cos(angle) * 20;

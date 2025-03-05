@@ -2823,7 +2823,7 @@ public class Level implements Metadatable {
                 ++realCount;
             }
             if (player != null) {
-                var diff = player.getNextPosition().position.subtract(player.getPosition().position);
+                var diff = player.getNextPosition().position.subtract(player.getLocator().position);
                 var aabb = player.getBoundingBox().getOffsetBoundingBox(diff.x, diff.y, diff.z);
                 if (aabb.intersectsWith(hand.getBoundingBox().shrink(0.02, 0.02, 0.02))) {
                     ++realCount;

@@ -77,13 +77,13 @@ public class NPCCommandSender implements CommandSender {
     }
 
     @Override
-    @NotNull public Locator getPosition() {
+    @NotNull public Locator getLocator() {
         return npc.getPosition();
     }
 
     @Override
-    @NotNull public Transform getLocation() {
-        return npc.getLocation();
+    @NotNull public Transform getTransform() {
+        return npc.getTransform();
     }
 
     @Override

@@ -34,7 +34,7 @@ public class StrafeExecutor implements EntityControl, IBehaviorExecutor {
 
             Vector3 toPlayerVector = new Vector3(player.pos.x - entity.pos.x, player.pos.y - entity.pos.y, player.pos.z - entity.pos.z).normalize();
 
-            Transform fireballTransform = entity.getLocation().add(toPlayerVector.multiply(5));
+            Transform fireballTransform = entity.getTransform().add(toPlayerVector.multiply(5));
             double yaw = BVector3.getYawFromVector(toPlayerVector);
             double pitch = BVector3.getPitchFromVector(toPlayerVector);
             CompoundTag nbt = new CompoundTag()

@@ -44,7 +44,7 @@ public class SummonCommand extends VanillaCommand {
             return 0;
         }
         Integer entityId = Type.ENTITY_TYPE2ID.get(entityType);
-        Locator pos = sender.getPosition();
+        Locator pos = sender.getLocator();
         if (list.hasResult(1)) {
             pos = list.getResult(1);
         }

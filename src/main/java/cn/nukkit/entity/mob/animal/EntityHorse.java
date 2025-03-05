@@ -355,7 +355,7 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
         this.setMoveTarget(null);
         this.setLookTarget(null);
         this.move(clientLoc.position.x - this.pos.x, clientLoc.position.y - this.pos.y, clientLoc.position.z - this.pos.z);
-        this.rotation.yaw = clientLoc.yaw;
+        this.rotation.yaw = clientLoc.rotation.yaw;
         this.headYaw = clientLoc.headYaw;
         broadcastMovement(false);
     }

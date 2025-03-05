@@ -46,7 +46,7 @@ public class SpawnpointCommand extends VanillaCommand {
                 log.addNoTargetMatch().output();
                 return 0;
             }
-            Level level = sender.getPosition().getLevel();
+            Level level = sender.getLocator().getLevel();
             if (list.hasResult(1)) {
                 if (level != null) {
                     Locator locator = list.getResult(1);
@@ -71,7 +71,7 @@ public class SpawnpointCommand extends VanillaCommand {
             return 0;
         }
         if (!players.isEmpty()) {
-            Locator pos = players.get(0).getPosition();
+            Locator pos = players.get(0).getLocator();
             players.get(0).setSpawn(pos, SpawnPointType.PLAYER);
             log.addSuccess("commands.spawnpoint.success.single", sender.getName(),
                     round2.format(pos.position.x),

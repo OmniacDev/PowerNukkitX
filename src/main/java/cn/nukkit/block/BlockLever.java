@@ -168,7 +168,7 @@ public class BlockLever extends BlockFlowable implements RedstoneComponent, Face
 
         if (isPowerOn()) {
             BlockFace face = getLeverOrientation().getFacing();
-            this.level.updateAround(this.getTransform().getSide(face.getOpposite()).position);
+            this.level.updateAround(this.position.getSide(face.getOpposite()));
 
             if (level.getServer().getSettings().levelSettings().enableRedstone()) {
                 updateAroundRedstone();

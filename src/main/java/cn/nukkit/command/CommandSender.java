@@ -126,7 +126,7 @@ public interface CommandSender extends Permissible {
      * @return 返回发送者的Position<br>return the sender's position.
      */
     @NotNull
-    default Locator getPosition() {
+    default Locator getLocator() {
         return new Locator(0, 0, 0, Server.getInstance().getDefaultLevel());
     }
 
@@ -134,7 +134,7 @@ public interface CommandSender extends Permissible {
      * @return 返回发送者克隆过的Location<br>return the sender's location.
      */
     @NotNull
-    default Transform getLocation() {
+    default Transform getTransform() {
         return new Transform(0, 0, 0, Server.getInstance().getDefaultLevel());
     }
 }

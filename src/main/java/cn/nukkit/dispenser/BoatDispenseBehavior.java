@@ -28,7 +28,7 @@ public class BoatDispenseBehavior extends DefaultDispenseBehavior {
             return super.dispense(block, face, item);
         }
 
-        spawnBoatEntity(block.level, target.getTransform().add(face.getXOffset() * 0.75, face.getYOffset() * 0.75, face.getZOffset() * 0.75).position, item);
+        spawnBoatEntity(block.level, target.position.add(face.getXOffset() * 0.75, face.getYOffset() * 0.75, face.getZOffset() * 0.75), item);
 
         return null;
     }

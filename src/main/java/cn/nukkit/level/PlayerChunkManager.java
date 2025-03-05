@@ -1,7 +1,6 @@
 package cn.nukkit.level;
 
 import cn.nukkit.Player;
-import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.event.player.PlayerChunkRequestEvent;
 import cn.nukkit.level.format.IChunk;
@@ -28,7 +27,7 @@ public final class PlayerChunkManager {
     private final LongComparator chunkDistanceComparator = new LongComparator() {
         @Override
         public int compare(long chunkHash1, long chunkHash2) {
-            BlockVector3 floor = player.getPosition().position.asBlockVector3();
+            BlockVector3 floor = player.getLocator().position.asBlockVector3();
             var loaderChunkX = floor.x >> 4;
             var loaderChunkZ = floor.z >> 4;
             var chunkDX1 = loaderChunkX - Level.getHashX(chunkHash1);

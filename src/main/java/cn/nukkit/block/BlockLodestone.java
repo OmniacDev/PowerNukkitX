@@ -68,7 +68,7 @@ public class BlockLodestone extends BlockSolid implements BlockEntityHolder<Bloc
             trackingHandle = getOrCreateBlockEntity().requestTrackingHandler();
             compass.setTrackingHandle(trackingHandle);
         } catch (Exception e) {
-            log.warn("Could not create a lodestone compass to {} for {}", getTransform(), player.getName(), e);
+            log.warn("Could not create a lodestone compass to {} for {}", getLocator(), player.getName(), e);
             return false;
         }
 
@@ -81,17 +81,17 @@ public class BlockLodestone extends BlockSolid implements BlockEntityHolder<Bloc
             player.getInventory().setItemInHand(clone);
             for (Item failed : player.getInventory().addItem(compass)) {
                 added = false;
-                player.getLevel().dropItem(player.getPosition().position, failed);
+                player.getLevel().dropItem(player.getLocator().position, failed);
             }
         }
 
-        getLevel().addSound(player.getPosition().position, Sound.LODESTONE_COMPASS_LINK_COMPASS_TO_LODESTONE);
+        getLevel().addSound(player.getLocator().position, Sound.LODESTONE_COMPASS_LINK_COMPASS_TO_LODESTONE);
         
         if (added) {
             try {
                 getLevel().getServer().getPositionTrackingService().startTracking(player, trackingHandle, false);
             } catch (IOException e) {
-                log.warn("Failed to make the player {} track {} at {}", player.getName(), trackingHandle, getTransform(),  e);
+                log.warn("Failed to make the player {} track {} at {}", player.getName(), trackingHandle, getLocator(),  e);
             }
             getLevel().getScheduler().scheduleTask(null, player::updateTrackingPositions);
         }

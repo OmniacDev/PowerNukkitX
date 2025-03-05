@@ -116,7 +116,7 @@ public class BlockStandingSign extends BlockSignBase implements BlockEntityHolde
             }
             return true;
         } catch (Exception e) {
-            log.warn("Failed to create block entity {} at {}", getBlockEntityType(), getTransform(), e);
+            log.warn("Failed to create block entity {} at {}", getBlockEntityType(), getLocator(), e);
             level.setBlock(layer0.position, 0, layer0, true);
             level.setBlock(layer1.position, 0, layer1, true);
             return false;

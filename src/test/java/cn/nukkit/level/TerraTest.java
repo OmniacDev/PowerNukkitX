@@ -67,7 +67,7 @@ public class TerraTest {
         }
 
         //teleport
-        player.teleport(player.getLocation().position.setComponents(10000, 100, 10000));
+        player.teleport(player.getTransform().position.setComponents(10000, 100, 10000));
 
         int limit2 = 1000;
         while (limit2-- != 0) {

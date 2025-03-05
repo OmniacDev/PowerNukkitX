@@ -31,7 +31,7 @@ public class WeatherCommand extends VanillaCommand {
     public int execute(CommandSender sender, String commandLabel, Map.Entry<String, ParamList> result, CommandLogger log) {
         var list = result.getValue();
         String weather = list.getResult(0);
-        Level level = sender.getPosition().level;
+        Level level = sender.getLocator().level;
         int seconds;
         if (list.hasResult(1)) {
             seconds = list.getResult(1);

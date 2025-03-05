@@ -37,7 +37,7 @@ public class ShulkerAttackExecutor implements IBehaviorExecutor {
         if(tick > nextAttack) {
             tick = 0;
             nextAttack = Utils.rand(20, 110);
-            Transform bulletTransform = entity.getLocation().clone().add(new Vector3(target.pos.x - entity.pos.x, target.pos.y - entity.pos.y, target.pos.z - entity.pos.z).normalize()).add(0, 0.5f, 0);
+            Transform bulletTransform = entity.getTransform().clone().add(new Vector3(target.pos.x - entity.pos.x, target.pos.y - entity.pos.y, target.pos.z - entity.pos.z).normalize()).add(0, 0.5f, 0);
             CompoundTag nbt = new CompoundTag()
                     .putList("Pos", new ListTag<FloatTag>()
                             .add(new FloatTag(bulletTransform.position.x))

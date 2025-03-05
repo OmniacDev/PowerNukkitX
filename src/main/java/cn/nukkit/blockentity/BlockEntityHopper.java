@@ -229,8 +229,6 @@ public class BlockEntityHopper extends BlockEntitySpawnable implements BlockEnti
         Block blockSide = this.getSide(BlockFace.UP).getTickCachedLevelBlock();
         BlockEntity blockEntity = this.level.getBlockEntity(temporalVector.setComponentsAdding(this.position, BlockFace.UP));
 
-        if (this.getTransform().getLevel() == null) return true;
-
         boolean changed = pushItems() || pushItemsIntoMinecart();
 
         HopperSearchItemEvent event = new HopperSearchItemEvent(this, false);

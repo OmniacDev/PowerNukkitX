@@ -60,7 +60,7 @@ public class BlockWetSponge extends BlockSolid {
         ThreadLocalRandom random = ThreadLocalRandom.current();
 
         for (int i = 0; i < 8; ++i) {
-            level.addParticle(new CloudParticle(block.getTransform().position.add(random.nextDouble(), 1, random.nextDouble())));
+            level.addParticle(new CloudParticle(block.position.add(random.nextDouble(), 1, random.nextDouble())));
         }
 
         return true;

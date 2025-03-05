@@ -6,7 +6,6 @@ import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.IVector3;
-import cn.nukkit.math.Rotator2;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.positiontracking.NamedPosition;
 import lombok.SneakyThrows;
@@ -50,7 +49,7 @@ public class Locator implements NamedPosition, Cloneable, IVector3 {
         return this.position.clone();
     }
 
-    public Locator getLocator() {
+    public @NotNull Locator getLocator() {
         return this.clone();
     }
 
@@ -137,10 +136,6 @@ public class Locator implements NamedPosition, Cloneable, IVector3 {
 
     public Block getTickCachedLevelBlockAtLayer(int layer) {
         return getLevel().getTickCachedBlock(this.position, layer);
-    }
-
-    @NotNull public Transform getTransform() {
-        return new Transform(this.position, new Rotator2(0, 0), getLevel());
     }
 
     @Override

@@ -8,7 +8,6 @@ import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.inventory.EntityInventoryHolder;
@@ -118,8 +117,8 @@ public class MeleeAttackExecutor implements EntityControl, IBehaviorExecutor {
         if (!this.target.getPosition().equals(newTarget.getPosition())) {
             target = newTarget;
         }
-        if (!this.lookTarget.equals(newTarget.getLocation())) {
-            lookTarget = newTarget.getLocation().position;
+        if (!this.lookTarget.equals(newTarget.getTransform())) {
+            lookTarget = newTarget.getTransform().position;
         }
 
         //set some motion control

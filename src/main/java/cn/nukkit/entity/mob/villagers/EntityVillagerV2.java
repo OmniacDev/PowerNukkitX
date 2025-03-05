@@ -228,7 +228,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                     for (int x = -range; x <= range; x++) {
                                         for (int z = -range; z <= range; z++) {
                                             for (int y = -lookY; y <= lookY; y++) {
-                                                Transform lookTransform = entity.getLocation().add(x, y, z);
+                                                Transform lookTransform = entity.getTransform().add(x, y, z);
                                                 Block lookBlock = lookTransform.getLevelBlock();
                                                 if (lookBlock instanceof BlockBed bed) {
                                                     if (!bed.isHeadPiece() && Arrays.stream(getLevel().getEntities()).noneMatch(entity1 -> entity1 instanceof EntityVillagerV2 v && v.getMemoryStorage().notEmpty(CoreMemoryTypes.OCCUPIED_BED) && v.getBed().equals(bed))) {

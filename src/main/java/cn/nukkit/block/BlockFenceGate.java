@@ -8,6 +8,7 @@ import cn.nukkit.event.block.DoorToggleEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.level.Level;
+import cn.nukkit.level.Locator;
 import cn.nukkit.level.Transform;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.vibration.VibrationEvent;
@@ -41,7 +42,7 @@ public class BlockFenceGate extends BlockTransparent implements RedstoneComponen
     // It is used to detect on redstone update, if the gate should be closed if redstone is off on the update,
     // previously the gate always closed, when placing an unpowered redstone at the gate, this fixes it
     // and gives the vanilla behavior; no idea how to make this better :d
-    private static final Set<Transform> manualOverrides = Sets.newConcurrentHashSet();
+    private static final Set<Locator> manualOverrides = Sets.newConcurrentHashSet();
 
     public BlockFenceGate() {
         this(PROPERTIES.getDefaultState());
@@ -282,14 +283,14 @@ public class BlockFenceGate extends BlockTransparent implements RedstoneComponen
 
     public void setManualOverride(boolean val) {
         if (val) {
-            manualOverrides.add(this.getTransform());
+            manualOverrides.add(this.getLocator());
         } else {
-            manualOverrides.remove(this.getTransform());
+            manualOverrides.remove(this.getLocator());
         }
     }
 
     public boolean getManualOverride() {
-        return manualOverrides.contains(this.getTransform());
+        return manualOverrides.contains(this.getLocator());
     }
 
     @Override

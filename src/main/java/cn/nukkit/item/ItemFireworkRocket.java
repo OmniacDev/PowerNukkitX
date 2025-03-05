@@ -10,7 +10,6 @@ import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.utils.DyeColor;
@@ -142,7 +141,7 @@ public class ItemFireworkRocket extends Item {
                         .add(new FloatTag(0)))
                 .putCompound("FireworkItem", NBTIO.putItemHelper(this));
 
-        EntityElytraFirework entity = new EntityElytraFirework(player.getPosition().getChunk(), nbt, player);
+        EntityElytraFirework entity = new EntityElytraFirework(player.getLocator().getChunk(), nbt, player);
         entity.spawnToAll();
     }
 

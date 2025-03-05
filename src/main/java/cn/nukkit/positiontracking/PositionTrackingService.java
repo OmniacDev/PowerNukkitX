@@ -88,7 +88,7 @@ public class PositionTrackingService implements Closeable {
         }
 
         PositionTracking position = getPosition(trackingHandler);
-        return position != null && position.getLevelName().equals(player.getPosition().getLevelName());
+        return position != null && position.getLevelName().equals(player.getLocator().getLevelName());
     }
 
     public boolean hasTrackingDevice(Player player, int trackingHandler) throws IOException {
@@ -101,7 +101,7 @@ public class PositionTrackingService implements Closeable {
     }
 
     private void sendTrackingUpdate(Player player, int trackingHandler, PositionTracking pos) {
-        if (player.getPosition().getLevelName().equals(pos.getLevelName())) {
+        if (player.getLocator().getLevelName().equals(pos.getLevelName())) {
             PositionTrackingDBServerBroadcastPacket packet = new PositionTrackingDBServerBroadcastPacket();
             packet.setAction(PositionTrackingDBServerBroadcastPacket.Action.UPDATE);
             packet.setPosition(pos);
@@ -272,7 +272,7 @@ public class PositionTrackingService implements Closeable {
                         PositionTracking pos;
                         try {
                             pos = getPosition(trackingHandle);
-                            if (pos != null && pos.getLevelName().equals(player.getPosition().getLevelName())) {
+                            if (pos != null && pos.getLevelName().equals(player.getLocator().getLevelName())) {
                                 startTracking(player, trackingHandle, false);
                             }
                         } catch (IOException e) {

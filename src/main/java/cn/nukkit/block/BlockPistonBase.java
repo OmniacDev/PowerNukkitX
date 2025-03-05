@@ -189,7 +189,7 @@ public abstract class BlockPistonBase extends BlockTransparent implements Faceab
                 TorchFacingDirection torchAttachment = torch.getTorchAttachment();
                 Block support = torch.getSide(torchAttachment.getAttachedFace());
 
-                if (support.getTransform().equals(this.getTransform())) {
+                if (support.getLocator().equals(this.getLocator())) {
                     torch.onUpdate(Level.BLOCK_UPDATE_REDSTONE);
                 }
             }
@@ -388,7 +388,7 @@ public abstract class BlockPistonBase extends BlockTransparent implements Faceab
         private Vector3 armPos;
 
         public BlocksCalculator(boolean extending) {
-            this.pistonPos = getTransform().position;
+            this.pistonPos = position;
             this.extending = extending;
 
             BlockFace face = getBlockFace();

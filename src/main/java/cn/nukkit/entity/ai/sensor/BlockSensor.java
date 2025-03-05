@@ -43,7 +43,7 @@ public class BlockSensor implements ISensor {
         for(int x = -range; x<=range; x++) {
             for(int z = -range; z<=range; z++) {
                 for(int y = -lookY; y<=lookY; y++) {
-                    Transform lookTransform = entity.getLocation().add(x, y, z);
+                    Transform lookTransform = entity.getTransform().add(x, y, z);
                     Block lookBlock = lookTransform.getLevelBlock();
                     if(blockClass.isAssignableFrom(lookBlock.getClass())) {
                         block = lookBlock;

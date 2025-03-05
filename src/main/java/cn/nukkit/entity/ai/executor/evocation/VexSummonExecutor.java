@@ -59,7 +59,7 @@ public class VexSummonExecutor extends FangLineExecutor {
 
     protected void summon(EntityMob entity) {
         if(!entity.getDataFlag(EntityFlag.CASTING)) return;
-        Transform vexTransform = entity.getLocation();
+        Transform vexTransform = entity.getTransform();
         vexTransform.position.x += ThreadLocalRandom.current().nextFloat(2);
         vexTransform.position.y += ThreadLocalRandom.current().nextFloat(2);
         vexTransform.position.z += ThreadLocalRandom.current().nextFloat(2);

@@ -180,13 +180,13 @@ public class BlockSnowLayer extends BlockFallable {
         level.setBlock(this.position, 0, newBlock, true, false);
         getLevel().getScheduler().scheduleDelayedTask(InternalPlugin.INSTANCE, () -> {
             Player[] target = level.getChunkPlayers(this.position.getChunkX(), this.position.getChunkZ()).values().toArray(Player.EMPTY_ARRAY);
-            Vector3[] blocks = {getTransform().position};
+            Vector3[] blocks = {this.position};
             level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0, false);
             level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1, false);
         }, 10);
 
         Player[] target = level.getChunkPlayers(this.position.getChunkX(), this.position.getChunkZ()).values().toArray(Player.EMPTY_ARRAY);
-        Vector3[] blocks = {getTransform().position};
+        Vector3[] blocks = {this.position};
         level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0, false);
         level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1, false);
     }

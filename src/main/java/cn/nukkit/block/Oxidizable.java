@@ -43,7 +43,7 @@ public interface Oxidizable {
         }
 
         Block block = this instanceof Block? (Block) this : getLocation().getLevelBlock();
-        Transform mutableTransform = block.getTransform();
+        Locator mutableLocator = block.getLocator();
 
         int odds = 0;
         int cons = 0;
@@ -54,11 +54,11 @@ public interface Oxidizable {
                     if (x == 0 && y == 0 && z == 0){
                         continue;
                     }
-                    mutableTransform.position.setComponents(block.position.x + x, block.position.y + y, block.position.z + z);
-                    if (block.position.distanceManhattan(mutableTransform.position) > 4) {
+                    mutableLocator.position.setComponents(block.position.x + x, block.position.y + y, block.position.z + z);
+                    if (block.position.distanceManhattan(mutableLocator.position) > 4) {
                         continue ;
                     }
-                    Block relative = mutableTransform.getLevelBlock();
+                    Block relative = mutableLocator.getLevelBlock();
                     if (!(relative instanceof Oxidizable)) {
                         continue;
                     }

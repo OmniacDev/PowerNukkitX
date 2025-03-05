@@ -74,7 +74,7 @@ public class BlockEntityLodestone extends BlockEntitySpawnable {
                 return;
             }
         } catch (IOException e) {
-            log.error("Failed to remove the tracking position handler for {}", getTransform());
+            log.error("Failed to remove the tracking position handler for {}", getLocator());
             return;
         }
         
@@ -84,7 +84,7 @@ public class BlockEntityLodestone extends BlockEntitySpawnable {
             try {
                 positionTrackingService.invalidateHandler(handler);
             } catch (IOException e) {
-                log.error("Failed to remove the tracking handler {} for position {}", handler, getTransform(), e);
+                log.error("Failed to remove the tracking handler {} for position {}", handler, getLocator(), e);
             }
         }
     }

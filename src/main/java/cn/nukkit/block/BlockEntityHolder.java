@@ -2,7 +2,6 @@ package cn.nukkit.block;
 
 import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.Transform;
 import cn.nukkit.level.Locator;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.BlockVector3;
@@ -64,7 +63,7 @@ public interface BlockEntityHolder<E extends BlockEntity> {
         Class<? extends E> entityClass = getBlockEntityClass();
 
         if (!entityClass.isInstance(created)) {
-            String error = "Failed to create the block entity " + typeName + " of class " + entityClass + " at " + getLocation() + ", " +
+            String error = "Failed to create the block entity " + typeName + " of class " + entityClass + " at " + getLocator() + ", " +
                     "the created type is not an instance of the requested class. Created: " + created;
             if (created != null) {
                 created.close();
@@ -98,7 +97,7 @@ public interface BlockEntityHolder<E extends BlockEntity> {
     int getFloorZ();
 
     @NotNull
-    Transform getLocation();
+    Locator getLocator();
 
     Level getLevel();
 
@@ -125,7 +124,7 @@ public interface BlockEntityHolder<E extends BlockEntity> {
             try {
                 return holder.createBlockEntity(initialData, args);
             } catch (Exception e) {
-                Loggers.logBlocKEntityHolder.warn("Failed to create block entity {} at {} at ", holder.getBlockEntityType(), holder.getLocation(), e);
+                Loggers.logBlocKEntityHolder.warn("Failed to create block entity {} at {} at ", holder.getBlockEntityType(), holder.getLocator(), e);
                 level.setBlock(layer0.position, 0, layer0, direct, update);
                 level.setBlock(layer1.position, 1, layer1, direct, update);
                 throw e;

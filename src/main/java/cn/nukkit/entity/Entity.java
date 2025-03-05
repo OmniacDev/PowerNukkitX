@@ -2052,12 +2052,12 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     }
 
     @NotNull
-    public Transform getLocation() {
+    public Transform getTransform() {
         return new Transform(this.pos.x, this.pos.y, this.pos.z, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw, this.level);
     }
 
     @NotNull
-    public Locator getPosition() {
+    public Locator getLocator() {
         return new Locator(this.pos.x, this.pos.y, this.pos.z, this.level);
     }
 
@@ -2156,7 +2156,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     }
 
     public boolean isOnLadder() {
-        Block b = this.getLocation().getLevelBlock();
+        Block b = this.getTransform().getLevelBlock();
 
         return Block.LADDER.equals(b.getId());
     }
@@ -2166,7 +2166,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
      */
     public boolean move(double dx, double dy, double dz) {
         if (dx == 0 && dz == 0 && dy == 0) {
-            Locator value = this.getLocation();
+            Locator value = this.getTransform();
             value.position.setComponents(this.pos.down());
             this.onGround = !value.getTickCachedLevelBlock().canPassThrough();
             return true;
@@ -2429,7 +2429,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
                     getServer().getPluginManager().callEvent(ev);
 
                     if (!ev.isCancelled() && (level.getDimension() == Level.DIMENSION_OVERWORLD || level.getDimension() == Level.DIMENSION_THE_END)) {
-                        final Locator newPos = PortalHelper.moveToTheEnd(this.getLocation());
+                        final Locator newPos = PortalHelper.moveToTheEnd(this.getTransform());
                         if (newPos != null) {
                             if (newPos.getLevel().getDimension() == Level.DIMENSION_THE_END) {
                                 if (teleport(newPos.add(0.5, 1, 0.5), PlayerTeleportEvent.TeleportCause.END_PORTAL)) {
@@ -2639,10 +2639,10 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
      * @return the boolean
      */
     public boolean teleport(Transform transform, PlayerTeleportEvent.TeleportCause cause) {
-        double yaw = transform.yaw;
-        double pitch = transform.pitch;
+        double yaw = transform.rotation.yaw;
+        double pitch = transform.rotation.pitch;
 
-        Transform from = this.getLocation();
+        Transform from = this.getTransform();
         Transform to = transform;
         if (cause != null) {
             EntityTeleportEvent ev = new EntityTeleportEvent(this, from, to, cause);

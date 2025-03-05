@@ -46,7 +46,7 @@ public class LevelTest {
 
         p.level.setAutoSave(true);
         p.setPosition(new Vector3(0, 100, 0));
-        IChunk chunk = p.getPosition().getChunk();
+        IChunk chunk = p.getLocator().getChunk();
         chunk.setBlockState(0, 3, 0, BlockDirt.PROPERTIES.getDefaultState());
         Assertions.assertEquals(chunk.getBlockState(0, 3, 0), BlockDirt.PROPERTIES.getDefaultState());
         chunk.setBlockState(0, 3, 0, BlockDiamondBlock.PROPERTIES.getDefaultState());
@@ -88,7 +88,7 @@ public class LevelTest {
             Assertions.fail("Chunk cannot be regenerate in 10s");
         }
 
-        Assertions.assertEquals(BlockDirt.PROPERTIES.getDefaultState(), p.getPosition().getChunk().getBlockState(0, 3, 0));
+        Assertions.assertEquals(BlockDirt.PROPERTIES.getDefaultState(), p.getLocator().getChunk().getBlockState(0, 3, 0));
         p.level.setAutoSave(false);
 
         gameLoop.stop();

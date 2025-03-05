@@ -80,13 +80,13 @@ public class ExecutorCommandSender implements CommandSender {
     }
 
     @Override
-    @NotNull public Locator getPosition() {
+    @NotNull public Locator getLocator() {
         return (executeTransform == null ? entity.getPosition() : executeTransform).clone();
     }
 
     @Override
-    @NotNull public Transform getLocation() {
-        return (executeTransform == null ? entity.getLocation() : executeTransform).clone();
+    @NotNull public Transform getTransform() {
+        return (executeTransform == null ? entity.getTransform() : executeTransform).clone();
     }
 
     @Override
