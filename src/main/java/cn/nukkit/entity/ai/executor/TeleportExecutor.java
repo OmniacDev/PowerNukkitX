@@ -24,7 +24,7 @@ public class TeleportExecutor implements IBehaviorExecutor {
         double dz = transform.z + ThreadLocalRandom.current().nextInt(-distance, distance) + minDistance;
         Vector3 pos = new Vector3(Math.floor(dx), (int) Math.floor(transform.y + 0.1) + maxDistance, Math.floor(dz));
         for (int y = Math.min(transform.getLevel().getMaxHeight(), (int) pos.y); y > transform.getLevel().getMinHeight(); y--) {
-            Block block = transform.getValidLevel().getBlock((int) dx, y, (int) dz);
+            Block block = transform.getLevel().getBlock((int) dx, y, (int) dz);
             if(block.isSolid()) {
                 return block.up().getLocation();
             }

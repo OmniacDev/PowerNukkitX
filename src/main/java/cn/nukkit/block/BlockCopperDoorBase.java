@@ -55,7 +55,7 @@ public abstract class BlockCopperDoorBase extends BlockDoor implements Oxidizabl
         if (getOxidizationLevel().equals(oxidizationLevel)) {
             return true;
         }
-        return getValidLevel().setBlock(this, Block.get(getCopperId(isWaxed(), oxidizationLevel)));
+        return getLevel().setBlock(this, Block.get(getCopperId(isWaxed(), oxidizationLevel)));
     }
 
     @Override
@@ -63,7 +63,7 @@ public abstract class BlockCopperDoorBase extends BlockDoor implements Oxidizabl
         if (isWaxed() == waxed) {
             return true;
         }
-        return getValidLevel().setBlock(this, Block.get(getCopperId(waxed, getOxidizationLevel())));
+        return getLevel().setBlock(this, Block.get(getCopperId(waxed, getOxidizationLevel())));
     }
 
     @Override

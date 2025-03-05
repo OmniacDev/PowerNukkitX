@@ -756,26 +756,14 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
     }
 
     public Block getTickCachedSideAtLayer(int layer, BlockFace face) {
-        if (this.isValid()) {
-            return this.getLevel().getTickCachedBlock((int) x + face.getXOffset(), (int) y + face.getYOffset(), (int) z + face.getZOffset(), layer);
-        }
-        return this.getTickCachedSide(face, 1);
+        return this.getLevel().getTickCachedBlock((int) x + face.getXOffset(), (int) y + face.getYOffset(), (int) z + face.getZOffset(), layer);
     }
 
     public Block getTickCachedSideAtLayer(int layer, BlockFace face, int step) {
-        if (this.isValid()) {
-            if (step == 1) {
-                return this.getLevel().getTickCachedBlock((int) x + face.getXOffset(), (int) y + face.getYOffset(), (int) z + face.getZOffset(), layer);
-            } else {
-                return this.getLevel().getTickCachedBlock((int) x + face.getXOffset() * step, (int) y + face.getYOffset() * step, (int) z + face.getZOffset() * step, layer);
-            }
+        if (step == 1) {
+            return this.getLevel().getTickCachedBlock((int) x + face.getXOffset(), (int) y + face.getYOffset(), (int) z + face.getZOffset(), layer);
         }
-        Block block = Block.get(AIR);
-        block.x = (int) x + face.getXOffset() * step;
-        block.y = (int) y + face.getYOffset() * step;
-        block.z = (int) z + face.getZOffset() * step;
-        block.layer = layer;
-        return block;
+        return this.getLevel().getTickCachedBlock((int) x + face.getXOffset() * step, (int) y + face.getYOffset() * step, (int) z + face.getZOffset() * step, layer);
     }
 
     @Override
@@ -789,26 +777,14 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
     }
 
     public Block getSideAtLayer(int layer, BlockFace face) {
-        if (this.isValid()) {
-            return this.getLevel().getBlock((int) x + face.getXOffset(), (int) y + face.getYOffset(), (int) z + face.getZOffset(), layer);
-        }
-        return this.getSide(face, 1);
+        return this.getLevel().getBlock((int) x + face.getXOffset(), (int) y + face.getYOffset(), (int) z + face.getZOffset(), layer);
     }
 
     public Block getSideAtLayer(int layer, BlockFace face, int step) {
-        if (this.isValid()) {
-            if (step == 1) {
-                return this.getLevel().getBlock((int) x + face.getXOffset(), (int) y + face.getYOffset(), (int) z + face.getZOffset(), layer);
-            } else {
-                return this.getLevel().getBlock((int) x + face.getXOffset() * step, (int) y + face.getYOffset() * step, (int) z + face.getZOffset() * step, layer);
-            }
+        if (step == 1) {
+            return this.getLevel().getBlock((int) x + face.getXOffset(), (int) y + face.getYOffset(), (int) z + face.getZOffset(), layer);
         }
-        Block block = Block.get(AIR);
-        block.x = (int) x + face.getXOffset() * step;
-        block.y = (int) y + face.getYOffset() * step;
-        block.z = (int) z + face.getZOffset() * step;
-        block.layer = layer;
-        return block;
+        return this.getLevel().getBlock((int) x + face.getXOffset() * step, (int) y + face.getYOffset() * step, (int) z + face.getZOffset() * step, layer);
     }
 
     @Override

@@ -203,7 +203,7 @@ public abstract class BlockEntity extends Locator implements BlockEntityID {
             getLevel().getScheduler().scheduleTask(new Task() {
                 @Override
                 public void onRun(int currentTick) {
-                    if (isValid() && isBlockEntityValid()) {
+                    if (isBlockEntityValid()) {
                         getLevel().updateComparatorOutputLevelSelective(BlockEntity.this, isObservable());
                     }
                 }

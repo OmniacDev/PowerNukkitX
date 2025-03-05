@@ -1080,7 +1080,7 @@ public class Level implements Metadatable {
                     }
                 }
             }
-            this.updateBlockEntities.removeIf(blockEntity -> !(!blockEntity.closed && blockEntity.isValid() && blockEntity.onUpdate()));
+            this.updateBlockEntities.removeIf(blockEntity -> !(!blockEntity.closed && blockEntity.onUpdate()));
 
             this.tickChunks();
             synchronized (changedBlocks) {
@@ -2379,7 +2379,7 @@ public class Level implements Metadatable {
     }
 
     public void breakBlock(Block block) {
-        if(block.isValid() && block.level == this) {
+        if(block.level == this) {
             this.setBlock(block, Block.get(Block.AIR));
             Locator locator = block.add(0.5, 0.5, 0.5);
             this.addParticle(new DestroyBlockParticle(locator, block));
@@ -4033,12 +4033,7 @@ public class Level implements Metadatable {
             var iter = blockEntities.values().iterator();
             while (iter.hasNext()) {
                 BlockEntity blockEntity = iter.next();
-                if (blockEntity != null) {
-                    if (!blockEntity.isValid()) {
-                        iter.remove();
-                        blockEntity.close();
-                    }
-                } else {
+                if (blockEntity == null) {
                     iter.remove();
                 }
             }

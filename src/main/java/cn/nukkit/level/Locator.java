@@ -7,12 +7,10 @@ import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.positiontracking.NamedPosition;
-import cn.nukkit.utils.LevelException;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -21,25 +19,21 @@ import java.util.Set;
 
 @Slf4j
 public class Locator extends NamedPosition {
-    public @Nullable Level level;
+    public @NotNull Level level;
 
-    public Locator() {
-        this(0, 0, 0, null);
+    public Locator(@NotNull Level level) {
+        this(0, 0, 0, level);
     }
 
-    public Locator(double x) {
-        this(x, 0, 0, null);
+    public Locator(double x, @NotNull Level level) {
+        this(x, 0, 0, level);
     }
 
-    public Locator(double x, double y) {
-        this(x, y, 0, null);
+    public Locator(double x, double y, @NotNull Level level) {
+        this(x, y, 0, level);
     }
 
-    public Locator(double x, double y, double z) {
-        this(x, y, z, null);
-    }
-
-    public Locator(double x, double y, double z, @Nullable Level level) {
+    public Locator(double x, double y, double z, @NotNull Level level) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -51,25 +45,17 @@ public class Locator extends NamedPosition {
         return new Locator(this.x, this.y, this.z, this.level);
     }
 
-    public static Locator fromObject(Vector3 pos) {
-        return fromObject(pos, null);
-    }
-
-    public static Locator fromObject(Vector3 pos, Level level) {
+    public static Locator fromObject(Vector3 pos, @NotNull Level level) {
         return new Locator(pos.x, pos.y, pos.z, level);
     }
 
-    public @Nullable Level getLevel() {
+    public @NotNull Level getLevel() {
         return this.level;
     }
 
     public Locator setLevel(Level level) {
         this.level = level;
         return this;
-    }
-
-    public boolean isValid() {
-        return this.level != null;
     }
 
     public boolean setStrong() {
@@ -87,19 +73,19 @@ public class Locator extends NamedPosition {
 
     @Override
     public Locator getSide(BlockFace face, int step) {
-        return Locator.fromObject(super.getSide(face, step), getValidLevel());
+        return Locator.fromObject(super.getSide(face, step), getLevel());
     }
 
     // Get as a Position for better performance. Do not override it!
 
 
     public Locator getSidePos(BlockFace face) {
-        return Locator.fromObject(super.getSide(face, 1), getValidLevel());
+        return Locator.fromObject(super.getSide(face, 1), getLevel());
     }
 
     @Override
     public String toString() {
-        return "Position(level=" + (this.isValid() ? Objects.requireNonNull(this.getLevel()).getName() : "null") + ",x=" + this.x + ",y=" + this.y + ",z=" + this.z + ")";
+        return "Position(level=" + this.getLevel().getName() + ",x=" + this.x + ",y=" + this.y + ",z=" + this.z + ")";
     }
 
     @Override
@@ -117,11 +103,11 @@ public class Locator extends NamedPosition {
     }
 
     public @Nullable BlockEntity getLevelBlockEntity() {
-        return getValidLevel().getBlockEntity(this);
+        return getLevel().getBlockEntity(this);
     }
 
     public @Nullable final <T extends BlockEntity> T getTypedBlockEntity(@NotNull Class<T> type) {
-        BlockEntity blockEntity = getValidLevel().getBlockEntity(this);
+        BlockEntity blockEntity = getLevel().getBlockEntity(this);
         return type.isInstance(blockEntity) ? type.cast(blockEntity) : null;
     }
 
@@ -130,7 +116,7 @@ public class Locator extends NamedPosition {
     }
 
     @NotNull public BlockState getLevelBlockState(int layer) {
-        return getValidLevel().getBlockStateAt(getFloorX(), getFloorY(), getFloorZ(), layer);
+        return getLevel().getBlockStateAt(getFloorX(), getFloorY(), getFloorZ(), layer);
     }
 
     public Block getLevelBlock() {
@@ -138,48 +124,40 @@ public class Locator extends NamedPosition {
     }
 
     public Block getLevelBlock(boolean load) {
-        return getValidLevel().getBlock(this, load);
+        return getLevel().getBlock(this, load);
     }
 
     public Block getLevelBlock(int layer) {
-        return getValidLevel().getBlock(this, layer);
+        return getLevel().getBlock(this, layer);
     }
 
     public Block getLevelBlock(int layer, boolean load) {
-        return getValidLevel().getBlock(this, layer, load);
+        return getLevel().getBlock(this, layer, load);
     }
 
     public Block getTickCachedLevelBlock() {
-        return getValidLevel().getTickCachedBlock(this);
+        return getLevel().getTickCachedBlock(this);
     }
 
     public Set<Block> getLevelBlockAround() {
-        return getValidLevel().getBlockAround(this);
+        return getLevel().getBlockAround(this);
     }
 
     public Block getLevelBlockAtLayer(int layer) {
-        return getValidLevel().getBlock(this, layer);
+        return getLevel().getBlock(this, layer);
     }
 
     public Block getTickCachedLevelBlockAtLayer(int layer) {
-        return getValidLevel().getTickCachedBlock(this, layer);
+        return getLevel().getTickCachedBlock(this, layer);
     }
 
     @NotNull public Transform getLocation() {
-        return new Transform(this.x, this.y, this.z, 0, 0, getValidLevel());
+        return new Transform(this.x, this.y, this.z, 0, 0, getLevel());
     }
 
     @Override
     @NotNull public String getLevelName() {
-        return getValidLevel().getName();
-    }
-
-    @NotNull public final Level getValidLevel() {
-        Level level = this.level;
-        if (level == null) {
-            throw new LevelException("Undefined Level reference");
-        }
-        return level;
+        return getLevel().getName();
     }
 
     @Override
@@ -258,6 +236,6 @@ public class Locator extends NamedPosition {
     }
 
     public IChunk getChunk() {
-        return isValid() ? Objects.requireNonNull(this.getLevel()).getChunk(getChunkX(), getChunkZ()) : null;
+        return this.getLevel().getChunk(getChunkX(), getChunkZ());
     }
 }

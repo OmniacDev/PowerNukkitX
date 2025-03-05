@@ -141,7 +141,7 @@ public class BlockEntityItemFrame extends BlockEntitySpawnable {
     }
 
     public @Nullable EntityItem dropItemAndGetEntity(@Nullable Player player) {
-        Level level = getValidLevel();
+        Level level = getLevel();
         Item drop = getItem();
         if (drop.isNull()) {
             if (player != null) {

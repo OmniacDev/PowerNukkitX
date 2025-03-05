@@ -1,10 +1,7 @@
 package cn.nukkit.level;
 
 import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.LevelException;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 /**
  * @author MagicDroidX (Nukkit Project)
@@ -51,20 +48,17 @@ public class Transform extends Locator {
     }
 
     public Transform(double x, double y, double z, double yaw, double pitch, double headYaw, Level level) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        super(x, y, z , level);
         this.yaw = yaw;
         this.pitch = pitch;
         this.headYaw = headYaw;
-        this.level = level;
     }
 
     public static Transform fromObject(Vector3 pos) {
         return fromObject(pos, null, 0.0f, 0.0f);
     }
 
-    public static Transform fromObject(Vector3 pos, Level level) {
+    public static Transform fromObject(Vector3 pos, @NotNull Level level) {
         return fromObject(pos, level, 0.0f, 0.0f);
     }
 
@@ -130,13 +124,12 @@ public class Transform extends Locator {
 
     @Override
     public String toString() {
-        return "Location (level=" + (this.isValid() ? Objects.requireNonNull(this.getLevel()).getName() : "null") + ", x=" + this.x + ", y=" + this.y + ", z=" + this.z + ", yaw=" + this.yaw + ", pitch=" + this.pitch + ", headYaw=" + this.headYaw + ")";
+        return "Location (level=" + this.getLevel().getName() + ", x=" + this.x + ", y=" + this.y + ", z=" + this.z + ", yaw=" + this.yaw + ", pitch=" + this.pitch + ", headYaw=" + this.headYaw + ")";
     }
 
     @Override
     @NotNull public Transform getLocation() {
-        if (this.isValid()) return new Transform(this.x, this.y, this.z, this.yaw, this.pitch, this.headYaw, this.level);
-        else throw new LevelException("Undefined Level reference");
+        return new Transform(this.x, this.y, this.z, this.yaw, this.pitch, this.headYaw, this.level);
     }
 
     @Override
