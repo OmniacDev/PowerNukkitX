@@ -32,13 +32,13 @@ public abstract class PositionNode extends ParamNode<Locator> {
     public <E> E get(Locator basePos) {
         if (this.value == null) return null;
         if (this.getRelative(0)) {
-            this.value.setX(this.value.position.x + basePos.getX());
+            this.value.position.setX(this.value.position.x + basePos.getX());
         }
         if (this.getRelative(1)) {
-            this.value.setY(this.value.position.y + basePos.getY());
+            this.value.position.setY(this.value.position.y + basePos.getY());
         }
         if (this.getRelative(2)) {
-            this.value.setZ(this.value.position.z + basePos.getZ());
+            this.value.position.setZ(this.value.position.z + basePos.getZ());
         }
         return (E) this.value;
     }

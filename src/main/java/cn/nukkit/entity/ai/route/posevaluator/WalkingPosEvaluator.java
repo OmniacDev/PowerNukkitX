@@ -21,7 +21,7 @@ public class WalkingPosEvaluator implements IPosEvaluator {
         //居中坐标
         var blockCenter = block.add(0.5, 1, 0.5);
         //检查是否可到达
-        if (!isPassable(entity, blockCenter))
+        if (!isPassable(entity, blockCenter.position))
             return false;
         if (entity.hasWaterAt(0) && blockCenter.getY() - entity.getY() > 1)//实体在水中不能移动到一格高以上的方块
             return false;

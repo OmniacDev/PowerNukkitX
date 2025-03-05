@@ -7,7 +7,9 @@ import cn.nukkit.event.HandlerList;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Locator;
 import cn.nukkit.math.BlockFace;
+import cn.nukkit.math.IVector3;
 import cn.nukkit.math.Vector3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -27,16 +29,16 @@ public class PlayerInteractEvent extends PlayerEvent implements Cancellable {
     protected final Vector3 touchVector;
     protected final Action action;
 
-    public PlayerInteractEvent(Player player, @Nullable Item item, @Nullable Block block, @Nullable BlockFace face) {
-        this(player, item, block, face, Action.RIGHT_CLICK_BLOCK);
+    public PlayerInteractEvent(Player player, @Nullable Item item, @NotNull IVector3 vector, @Nullable BlockFace face) {
+        this(player, item, vector, face, Action.RIGHT_CLICK_BLOCK);
     }
 
-    public PlayerInteractEvent(Player player, @Nullable Item item, @Nullable Block block, @Nullable BlockFace face, Action action) {
-        if (block != null) {
-            this.blockTouched = block;
+    public PlayerInteractEvent(Player player, @Nullable Item item, @NotNull IVector3 vector, @Nullable BlockFace face, Action action) {
+        if (vector instanceof Block block1) {
+            this.blockTouched = block1;
             this.touchVector = new Vector3(0, 0, 0);
         } else {
-            this.touchVector = block.position;
+            this.touchVector = vector.getVector3();
             this.blockTouched = Block.get(Block.AIR, new Locator(0, 0, 0, player.level));
         }
 

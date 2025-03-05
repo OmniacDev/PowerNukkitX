@@ -1,10 +1,8 @@
 package cn.nukkit.entity.ai.executor;
 
-import cn.nukkit.block.Block;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.mob.EntityMob;
-import cn.nukkit.level.Locator;
-import cn.nukkit.math.GetVector3;
+import cn.nukkit.math.IVector3;
 import cn.nukkit.math.Vector3;
 import lombok.Getter;
 
@@ -13,7 +11,7 @@ import lombok.Getter;
 public class MoveToTargetExecutor implements EntityControl, IBehaviorExecutor {
 
     //指示执行器应该从哪个Memory获取目标位置
-    protected MemoryType<? extends GetVector3> memory;
+    protected MemoryType<? extends IVector3> memory;
     protected float speed;
     protected Vector3 oldTarget;
     protected boolean updateRouteImmediatelyWhenTargetChange;
@@ -22,19 +20,19 @@ public class MoveToTargetExecutor implements EntityControl, IBehaviorExecutor {
     protected float minFollowRangeSquared;
     protected boolean clearDataWhenLose;
 
-    public MoveToTargetExecutor(MemoryType<? extends GetVector3> memory, float speed) {
+    public MoveToTargetExecutor(MemoryType<? extends IVector3> memory, float speed) {
         this(memory, speed, false);
     }
 
-    public MoveToTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange) {
+    public MoveToTargetExecutor(MemoryType<? extends IVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange) {
         this(memory, speed, updateRouteImmediatelyWhenTargetChange, -1, -1);
     }
 
-    public MoveToTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float maxFollowRange, float minFollowRange) {
+    public MoveToTargetExecutor(MemoryType<? extends IVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float maxFollowRange, float minFollowRange) {
         this(memory, speed, updateRouteImmediatelyWhenTargetChange, maxFollowRange, minFollowRange, false);
     }
 
-    public MoveToTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float maxFollowRange, float minFollowRange, boolean clearDataWhenLose) {
+    public MoveToTargetExecutor(MemoryType<? extends IVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float maxFollowRange, float minFollowRange, boolean clearDataWhenLose) {
         this.memory = memory;
         this.speed = speed;
         this.updateRouteImmediatelyWhenTargetChange = updateRouteImmediatelyWhenTargetChange;

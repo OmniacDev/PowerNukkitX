@@ -44,7 +44,7 @@ public class TestForBlockCommand extends VanillaCommand {
 
         Level level = locator.getLevel();
 
-        if (level.getChunkIfLoaded(locator.getChunkX(), locator.getChunkZ()) == null) {
+        if (level.getChunkIfLoaded(locator.position.getChunkX(), locator.position.getChunkZ()) == null) {
             log.addError("commands.testforblock.outOfWorld").output();
             return 0;
         }

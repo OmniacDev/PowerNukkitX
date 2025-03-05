@@ -38,7 +38,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
-import cn.nukkit.math.GetVector3;
+import cn.nukkit.math.IVector3;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.EntityEventPacket;
@@ -194,7 +194,7 @@ public class EntityHoglin extends EntityMob implements EntityWalkable {
 
     protected static class HoglinFleeFromTargetExecutor extends FleeFromTargetExecutor {
 
-        public HoglinFleeFromTargetExecutor(MemoryType<? extends GetVector3> memory) {
+        public HoglinFleeFromTargetExecutor(MemoryType<? extends IVector3> memory) {
             super(memory, 0.5f, true, 8);
         }
 

@@ -39,7 +39,7 @@ public interface Waxable {
                 item.useOn(this instanceof Block? (Block) this : location.getLevelBlock());
             }
         }
-        location.getLevel().addParticle(waxed? new WaxOnParticle(location) : new WaxOffParticle(location));
+        location.getLevel().addParticle(waxed? new WaxOnParticle(location.position) : new WaxOffParticle(location.position));
         return true;
     }
 

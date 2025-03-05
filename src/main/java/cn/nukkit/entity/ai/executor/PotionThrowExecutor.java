@@ -80,11 +80,11 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
         Transform clone = this.target.getLocation();
 
         if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
-            setRouteTarget(entity, clone);
+            setRouteTarget(entity, clone.position);
         } else {
             setRouteTarget(entity, null);
         }
-        setLookTarget(entity, clone);
+        setLookTarget(entity, clone.position);
 
         if (tick2 == 0 && tick1 > coolDownTick) {
             if (entity.pos.distanceSquared(target.pos) <= maxShootDistanceSquared) {

@@ -66,7 +66,7 @@ public class SimpleTickingAreaManager extends TickingAreaManager {
 
     @Override
     public TickingArea getTickingAreaByPos(Locator pos) {
-        return getTickingAreaByChunk(pos.getLevelName(), new TickingArea.ChunkPos(pos.getChunkX(), pos.getChunkZ()));
+        return getTickingAreaByChunk(pos.getLevelName(), new TickingArea.ChunkPos(pos.position.getChunkX(), pos.position.getChunkZ()));
     }
 
     @Override

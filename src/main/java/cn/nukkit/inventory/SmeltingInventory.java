@@ -46,7 +46,7 @@ public abstract class SmeltingInventory extends ContainerInventory {
             short xp = holder.calculateXpDrop();
             if (xp > 0) {
                 holder.setStoredXP(0);
-                holder.level.dropExpOrb(holder, xp);
+                holder.level.dropExpOrb(holder.position, xp);
             }
         }
         this.getHolder().scheduleUpdate();

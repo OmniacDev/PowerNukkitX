@@ -5,6 +5,7 @@ import cn.nukkit.block.BlockState;
 import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.math.BlockFace;
+import cn.nukkit.math.IVector3;
 import cn.nukkit.math.Rotator2;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.positiontracking.NamedPosition;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 
 @Slf4j
-public class Locator implements NamedPosition, Cloneable {
+public class Locator implements NamedPosition, Cloneable, IVector3 {
     public @NotNull Vector3 position;
     public @NotNull Level level;
 

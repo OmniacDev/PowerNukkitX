@@ -30,8 +30,8 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
         if(entity instanceof EntityVillagerV2 villager) {
             Block site = villager.getMemoryStorage().get(CoreMemoryTypes.SITE_BLOCK);
             if(stayTick < 100) {
-                if(site.distance(villager.pos) < 1.5f) {
-                    setLookTarget(villager, site);
+                if(site.position.distance(villager.pos) < 1.5f) {
+                    setLookTarget(villager, site.position);
                     stayTick++;
                     if(stayTick == 40 || stayTick == 90) villager.getLevel().addSound(villager.pos, Profession.getProfession(villager.getProfession()).getWorkSound());
                 }
@@ -45,7 +45,7 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
                             double minDistance = Float.MAX_VALUE;
                             Block nearest = null;
                             for(Block block : Arrays.stream(villager.getLevel().getCollisionBlocks(villager.getBoundingBox().grow(9, 2, 9), false, true)).filter(block -> block instanceof BlockCrops crops && crops.isFullyGrown()).toList()) {
-                                double distance = block.distance(villager.pos);
+                                double distance = block.position.distance(villager.pos);
                                 if(distance < minDistance) {
                                     minDistance = distance;
                                     nearest = block;

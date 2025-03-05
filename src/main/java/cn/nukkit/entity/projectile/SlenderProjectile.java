@@ -73,7 +73,7 @@ public abstract class SlenderProjectile extends EntityProjectile {
             var collisionEntities = this.getLevel().fastCollidingEntities(currentAABB, this);
             if (collisionBlocks.length != 0) {
                 currentAABB.offset(-dirVector.x, -dirVector.y, -dirVector.z);
-                collisionBlock = Arrays.stream(collisionBlocks).min(Comparator.comparingDouble(projectile.pos::distanceSquared)).get();
+                collisionBlock = Arrays.stream(collisionBlocks).min(Comparator.comparingDouble(block -> projectile.pos.distanceSquared(block.position))).get();
                 break;
             }
             collisionEntity = collisionEntities.stream()

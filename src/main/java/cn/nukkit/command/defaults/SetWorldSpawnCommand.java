@@ -33,7 +33,7 @@ public class SetWorldSpawnCommand extends VanillaCommand {
         Vector3 pos;
         if (!result.getValue().hasResult(0)) {
             level = sender.getPosition().level;
-            pos = sender.getPosition().round();
+            pos = sender.getPosition().position.round();
         } else {
             level = sender.getServer().getDefaultLevel();
             pos = result.getValue().getResult(0);

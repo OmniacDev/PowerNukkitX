@@ -100,7 +100,7 @@ public class ReplaceItemCommand extends VanillaCommand {
                     }
                 }
                 if (holder == null) {
-                    log.addError("commands.replaceitem.noContainer", block.asBlockVector3().toString()).output();
+                    log.addError("commands.replaceitem.noContainer", block.position.asBlockVector3().toString()).output();
                     return 0;
                 }
                 int slotId = list.getResult(3);

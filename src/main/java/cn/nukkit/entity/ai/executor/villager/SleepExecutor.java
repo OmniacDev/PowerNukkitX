@@ -45,7 +45,7 @@ public class SleepExecutor implements EntityControl, IBehaviorExecutor {
                 entity.teleport(sleepingTransform);
                 entity.respawnToAll();
                 entity.setDataFlag(EntityFlag.SLEEPING);
-                entity.setDataProperty(EntityDataTypes.BED_POSITION, head.asBlockVector3());
+                entity.setDataProperty(EntityDataTypes.BED_POSITION, head.position.asBlockVector3());
                 entity.setDataFlag(EntityFlag.BODY_ROTATION_BLOCKED);
             }
         }

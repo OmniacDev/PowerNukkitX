@@ -72,8 +72,8 @@ public class TickingAreaCommand extends VanillaCommand {
                     return 0;
                 }
                 TickingArea area = new TickingArea(name, level.getName());
-                for (int chunkX = Math.min(from.getChunkX(), to.getChunkX()); chunkX <= Math.max(from.getChunkX(), to.getChunkX()); chunkX++) {
-                    for (int chunkZ = Math.min(from.getChunkZ(), to.getChunkZ()); chunkZ <= Math.max(from.getChunkZ(), to.getChunkZ()); chunkZ++) {
+                for (int chunkX = Math.min(from.position.getChunkX(), to.position.getChunkX()); chunkX <= Math.max(from.position.getChunkX(), to.position.getChunkX()); chunkX++) {
+                    for (int chunkZ = Math.min(from.position.getChunkZ(), to.position.getChunkZ()); chunkZ <= Math.max(from.position.getChunkZ(), to.position.getChunkZ()); chunkZ++) {
                         area.addChunk(new TickingArea.ChunkPos(chunkX, chunkZ));
                     }
                 }
@@ -93,10 +93,10 @@ public class TickingAreaCommand extends VanillaCommand {
                 }
                 //计算出哪些区块和圆重合
                 TickingArea area = new TickingArea(name, level.getName());
-                Vector2 centerVec2 = new Vector2(center.getChunkX(), center.getChunkZ());
+                Vector2 centerVec2 = new Vector2(center.position.getChunkX(), center.position.getChunkZ());
                 int radiusSquared = radius * radius;
-                for (int chunkX = center.getChunkX() - radius; chunkX <= center.getChunkX() + radius; chunkX++) {
-                    for (int chunkZ = center.getChunkZ() - radius; chunkZ <= center.getChunkZ() + radius; chunkZ++) {
+                for (int chunkX = center.position.getChunkX() - radius; chunkX <= center.position.getChunkX() + radius; chunkX++) {
+                    for (int chunkZ = center.position.getChunkZ() - radius; chunkZ <= center.position.getChunkZ() + radius; chunkZ++) {
                         double distanceSquared = new Vector2(chunkX, chunkZ).distanceSquared(centerVec2);
                         if (distanceSquared <= radiusSquared) {
                             area.addChunk(new TickingArea.ChunkPos(chunkX, chunkZ));

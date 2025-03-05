@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 /**
  * @author MagicDroidX (Nukkit Project)
  */
-public class Vector3 implements Cloneable {
+public class Vector3 implements Cloneable, IVector3 {
 
 
     public static final Vector3 ZERO = new Vector3(0, 0, 0);

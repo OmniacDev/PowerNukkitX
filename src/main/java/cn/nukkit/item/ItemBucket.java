@@ -293,7 +293,7 @@ public class ItemBucket extends Item {
 
             if (!ev.isCancelled()) {
                 player.getLevel().setBlock(placementBlock.position, placementBlock.layer, targetBlock, true, true);
-                player.getLevel().sendBlocks(new Player[]{player}, new Vector3[]{target.getLevelBlockAtLayer(1).position}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
+                player.getLevel().sendBlocks(new Player[]{player}, new Block[]{target.getLevelBlockAtLayer(1)}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
                 target.getLevel().getVibrationManager().callVibrationEvent(new VibrationEvent(player, target.position.add(0.5, 0.5, 0.5), VibrationType.FLUID_PLACE));
                 updateBucketItem(player, ev);
 
@@ -308,7 +308,7 @@ public class ItemBucket extends Item {
                 player.getLevel().addLevelSoundEvent(target.position, LevelSoundEventPacket.SOUND_FIZZ);
                 player.getLevel().addParticle(new ExplodeParticle(target.position.add(0.5, 1, 0.5)));
             } else {
-                player.getLevel().sendBlocks(new Player[]{player}, new Vector3[]{block.getLevelBlockAtLayer(1).position}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
+                player.getLevel().sendBlocks(new Player[]{player}, new Block[]{block.getLevelBlockAtLayer(1)}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
                 player.getInventory().sendContents(player);
             }
         } else if (targetBlock instanceof BlockPowderSnow) {

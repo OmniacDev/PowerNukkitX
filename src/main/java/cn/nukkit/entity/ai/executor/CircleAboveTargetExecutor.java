@@ -5,7 +5,7 @@ import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.level.Transform;
-import cn.nukkit.math.GetVector3;
+import cn.nukkit.math.IVector3;
 import cn.nukkit.math.Vector3;
 import lombok.Getter;
 
@@ -14,7 +14,7 @@ import lombok.Getter;
 public class CircleAboveTargetExecutor implements EntityControl, IBehaviorExecutor {
 
     //指示执行器应该从哪个Memory获取目标位置
-    protected MemoryType<? extends GetVector3> memory;
+    protected MemoryType<? extends IVector3> memory;
     protected float speed;
     protected Vector3 oldTarget;
     protected boolean updateRouteImmediatelyWhenTargetChange;
@@ -26,15 +26,15 @@ public class CircleAboveTargetExecutor implements EntityControl, IBehaviorExecut
     private int circleLoc = 0;
 
 
-    public CircleAboveTargetExecutor(MemoryType<? extends GetVector3> memory, float speed) {
+    public CircleAboveTargetExecutor(MemoryType<? extends IVector3> memory, float speed) {
         this(memory, speed, false);
     }
 
-    public CircleAboveTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange) {
+    public CircleAboveTargetExecutor(MemoryType<? extends IVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange) {
         this(memory, speed, updateRouteImmediatelyWhenTargetChange, false);
     }
 
-    public CircleAboveTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange,boolean clearDataWhenLose) {
+    public CircleAboveTargetExecutor(MemoryType<? extends IVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, boolean clearDataWhenLose) {
         this.memory = memory;
         this.speed = speed;
         this.updateRouteImmediatelyWhenTargetChange = updateRouteImmediatelyWhenTargetChange;

@@ -190,7 +190,7 @@ public class TeleportCommand extends VanillaCommand {
                 for (Entity victim : victims) {
                     sb.append(victim.getName()).append(" ");
                 }
-                Transform target = Transform.fromObject(pos, pos.level, xRot, yRot);
+                Transform target = Transform.fromObject(pos.position, pos.level, xRot, yRot);
                 if (checkForBlocks) {
                     if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {
                         for (Entity victim : victims) {
@@ -226,7 +226,7 @@ public class TeleportCommand extends VanillaCommand {
                     sb.append(victim.getName()).append(" ");
                 }
                 BVector3 bv = BVector3.fromPos(new Vector3(lookAtLocator.position.x - pos.position.x, lookAtLocator.position.y - pos.position.y, lookAtLocator.position.z - pos.position.z));
-                Transform target = Transform.fromObject(pos, pos.level, bv.getYaw(), bv.getPitch());
+                Transform target = Transform.fromObject(pos.position, pos.level, bv.getYaw(), bv.getPitch());
                 if (checkForBlocks) {
                     if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {
                         for (Entity victim : victims) {
@@ -271,8 +271,8 @@ public class TeleportCommand extends VanillaCommand {
                 for (Entity victim : victims) {
                     sb.append(victim.getName()).append(" ");
                 }
-                BVector3 bv = BVector3.fromPos(lookAtPosition.subtract(pos));
-                Transform target = Transform.fromObject(pos, pos.level, bv.getYaw(), bv.getPitch());
+                BVector3 bv = BVector3.fromPos(lookAtPosition.subtract(pos.position));
+                Transform target = Transform.fromObject(pos.position, pos.level, bv.getYaw(), bv.getPitch());
                 if (checkForBlocks) {
                     if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {
                         for (Entity victim : victims) {
@@ -310,7 +310,7 @@ public class TeleportCommand extends VanillaCommand {
                 if (list.hasResult(3)) {
                     checkForBlocks = list.getResult(3);
                 }
-                Transform target = Transform.fromObject(pos, pos.level, xRot, yRot);
+                Transform target = Transform.fromObject(pos.position, pos.level, xRot, yRot);
                 if (checkForBlocks) {
                     if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {
                         sender.asEntity().teleport(target);
@@ -338,7 +338,7 @@ public class TeleportCommand extends VanillaCommand {
                     checkForBlocks = list.getResult(3);
                 }
                 BVector3 bv = BVector3.fromPos(new Vector3(lookAtLocator.position.x - pos.position.x, lookAtLocator.position.y - pos.position.y, lookAtLocator.position.z - pos.position.z));
-                Transform target = Transform.fromObject(pos, pos.level, bv.getYaw(), bv.getPitch());
+                Transform target = Transform.fromObject(pos.position, pos.level, bv.getYaw(), bv.getPitch());
                 if (checkForBlocks) {
                     if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {
                         sender.asEntity().teleport(target);
@@ -374,8 +374,8 @@ public class TeleportCommand extends VanillaCommand {
                 if (list.hasResult(3)) {
                     checkForBlocks = list.getResult(3);
                 }
-                BVector3 bv = BVector3.fromPos(lookAtPosition.subtract(pos));
-                Transform target = Transform.fromObject(pos, pos.level, bv.getYaw(), bv.getPitch());
+                BVector3 bv = BVector3.fromPos(lookAtPosition.subtract(pos.position));
+                Transform target = Transform.fromObject(pos.position, pos.level, bv.getYaw(), bv.getPitch());
                 if (checkForBlocks) {
                     if (!target.getLevelBlock().isSolid() && !target.add(0, 1, 0).getLevelBlock().isSolid()) {
                         sender.asEntity().teleport(target);

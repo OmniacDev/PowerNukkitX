@@ -4,8 +4,7 @@ import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
-import cn.nukkit.level.Locator;
-import cn.nukkit.math.GetVector3;
+import cn.nukkit.math.IVector3;
 import cn.nukkit.math.Vector3;
 import lombok.Getter;
 
@@ -14,7 +13,7 @@ import lombok.Getter;
 public class FleeFromTargetExecutor implements EntityControl, IBehaviorExecutor {
 
     //指示执行器应该从哪个Memory获取目标位置
-    protected MemoryType<? extends GetVector3> memory;
+    protected MemoryType<? extends IVector3> memory;
     protected float speed;
     protected Vector3 oldTarget;
     protected boolean updateRouteImmediatelyWhenTargetChange;
@@ -22,19 +21,19 @@ public class FleeFromTargetExecutor implements EntityControl, IBehaviorExecutor 
     protected float minDistance;
     protected boolean clearDataWhenLose;
 
-    public FleeFromTargetExecutor(MemoryType<? extends GetVector3> memory, float speed) {
+    public FleeFromTargetExecutor(MemoryType<? extends IVector3> memory, float speed) {
         this(memory, speed, false);
     }
 
-    public FleeFromTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange) {
+    public FleeFromTargetExecutor(MemoryType<? extends IVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange) {
         this(memory, speed, updateRouteImmediatelyWhenTargetChange, -1);
     }
 
-    public FleeFromTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float minDistance) {
+    public FleeFromTargetExecutor(MemoryType<? extends IVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float minDistance) {
         this(memory, speed, updateRouteImmediatelyWhenTargetChange, minDistance, false);
     }
 
-    public FleeFromTargetExecutor(MemoryType<? extends GetVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float minDistance, boolean clearDataWhenLose) {
+    public FleeFromTargetExecutor(MemoryType<? extends IVector3> memory, float speed, boolean updateRouteImmediatelyWhenTargetChange, float minDistance, boolean clearDataWhenLose) {
         this.memory = memory;
         this.speed = speed;
         this.updateRouteImmediatelyWhenTargetChange = updateRouteImmediatelyWhenTargetChange;

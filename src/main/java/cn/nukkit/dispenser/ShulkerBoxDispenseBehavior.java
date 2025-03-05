@@ -35,8 +35,8 @@ public class ShulkerBoxDispenseBehavior extends DefaultDispenseBehavior {
         BlockFace shulkerBoxFace = shulkerBox.down().isTransparent() ? face : BlockFace.UP;
         
         if (success = shulkerBox.place(item, target, target.getSide(shulkerBoxFace.getOpposite()), shulkerBoxFace, 0, 0, 0, null)) {
-            block.level.updateComparatorOutputLevel(target);
-            block.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, target.add(0.5, 0.5 , 0.5), VibrationType.BLOCK_PLACE));
+            block.level.updateComparatorOutputLevel(target.position);
+            block.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, target.position.add(0.5, 0.5 , 0.5), VibrationType.BLOCK_PLACE));
         }
 
         return null;

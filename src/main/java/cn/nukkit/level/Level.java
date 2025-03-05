@@ -1333,28 +1333,28 @@ public class Level implements Metadatable {
         Server.broadcastPacket(players, pk);
     }
 
-    public void sendBlocks(Player[] target, Vector3[] blocks) {
+    public void sendBlocks(Player[] target, IVector3[] blocks) {
         this.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_NONE, 0);
         this.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_NONE, 1);
     }
 
-    public void sendBlocks(Player[] target, Vector3[] blocks, int flags) {
+    public void sendBlocks(Player[] target, IVector3[] blocks, int flags) {
         this.sendBlocks(target, blocks, flags, 0);
         this.sendBlocks(target, blocks, flags, 1);
     }
 
-    public void sendBlocks(Player[] target, Vector3[] blocks, int flags, boolean optimizeRebuilds) {
+    public void sendBlocks(Player[] target, IVector3[] blocks, int flags, boolean optimizeRebuilds) {
         this.sendBlocks(target, blocks, flags, 0, optimizeRebuilds);
         this.sendBlocks(target, blocks, flags, 1, optimizeRebuilds);
     }
 
-    public void sendBlocks(Player[] target, Vector3[] blocks, int flags, int dataLayer) {
+    public void sendBlocks(Player[] target, IVector3[] blocks, int flags, int dataLayer) {
         this.sendBlocks(target, blocks, flags, dataLayer, false);
     }
 
-    public void sendBlocks(Player[] target, Vector3[] blocks, int flags, int dataLayer, boolean optimizeRebuilds) {
+    public void sendBlocks(Player[] target, IVector3[] blocks, int flags, int dataLayer, boolean optimizeRebuilds) {
         int size = 0;
-        for (Vector3 block : blocks) {
+        for (IVector3 block : blocks) {
             if (block != null) size++;
         }
         var packets = new ArrayList<UpdateBlockPacket>(size);
@@ -1362,24 +1362,26 @@ public class Level implements Metadatable {
         if (optimizeRebuilds) {
             chunks = new LongOpenHashSet();
         }
-        for (Vector3 b : blocks) {
+        for (IVector3 b : blocks) {
             if (b == null) {
                 continue;
             }
             boolean first = !optimizeRebuilds;
 
+            Vector3 pos = b.getVector3();
             if (optimizeRebuilds) {
-                long index = Level.chunkHash((int) b.x >> 4, (int) b.z >> 4);
+                long index = Level.chunkHash(pos.getChunkX(), pos.getChunkZ());
                 if (!chunks.contains(index)) {
                     chunks.add(index);
                     first = true;
                 }
             }
 
+            BlockVector3 bPos = pos.asBlockVector3();
             UpdateBlockPacket updateBlockPacket = new UpdateBlockPacket();
-            updateBlockPacket.x = (int) b.x;
-            updateBlockPacket.y = (int) b.y;
-            updateBlockPacket.z = (int) b.z;
+            updateBlockPacket.x = bPos.x;
+            updateBlockPacket.y = bPos.y;
+            updateBlockPacket.z = bPos.z;
             updateBlockPacket.flags = first ? flags : UpdateBlockPacket.FLAG_NONE;
             updateBlockPacket.dataLayer = dataLayer;
             int runtimeId;
@@ -1392,7 +1394,7 @@ public class Level implements Metadatable {
                     runtimeId = vRid.getRuntimeIdLayer1();
                 }
             } else {
-                int hash = getBlockRuntimeId((int) b.x, (int) b.y, (int) b.z, dataLayer);
+                int hash = getBlockRuntimeId(bPos.x, bPos.y, bPos.z, dataLayer);
                 if (hash == Integer.MIN_VALUE) {
                     continue;
                 }
@@ -1599,11 +1601,11 @@ public class Level implements Metadatable {
     }
 
     public void scheduleUpdate(Block pos, int delay) {
-        this.scheduleUpdate(pos, pos, delay, 0, true);
+        this.scheduleUpdate(pos, pos.position, delay, 0, true);
     }
 
     public void scheduleUpdate(Block pos, int delay, boolean checkBlockWhenUpdate) {
-        this.scheduleUpdate(pos, pos, delay, 0, true, checkBlockWhenUpdate);
+        this.scheduleUpdate(pos, pos.position, delay, 0, true, checkBlockWhenUpdate);
     }
 
     public void scheduleUpdate(Block block, Vector3 pos, int delay) {
@@ -1734,15 +1736,15 @@ public class Level implements Metadatable {
         return collides.toArray(Block.EMPTY_ARRAY);
     }
 
-    public boolean isFullBlock(Vector3 pos) {
+    public boolean isFullBlock(IVector3 pos) {
         AxisAlignedBB bb;
-        if (pos instanceof Block) {
-            if (((Block) pos).isSolid()) {
+        if (pos instanceof Block block) {
+            if (block.isSolid()) {
                 return true;
             }
-            bb = ((Block) pos).getBoundingBox();
+            bb = block.getBoundingBox();
         } else {
-            bb = this.getBlock(pos).getBoundingBox();
+            bb = this.getBlock(pos.getVector3()).getBoundingBox();
         }
 
         return bb != null && bb.getAverageEdgeLength() >= 1;
@@ -2353,7 +2355,7 @@ public class Level implements Metadatable {
 
         if (update) {
             if (server.getSettings().chunkSettings().lightUpdates()) {
-                updateAllLight(block);
+                updateAllLight(block.position);
             }
 
             BlockUpdateEvent ev = new BlockUpdateEvent(block);
@@ -2369,7 +2371,7 @@ public class Level implements Metadatable {
                 this.updateAround(x, y, z);
 
                 if (block.hasComparatorInputOverride()) {
-                    this.updateComparatorOutputLevel(block);
+                    this.updateComparatorOutputLevel(block.position);
                 }
             }
         }
@@ -2382,8 +2384,8 @@ public class Level implements Metadatable {
         if(block.level == this) {
             this.setBlock(block.position, Block.get(Block.AIR));
             Locator locator = block.add(0.5, 0.5, 0.5);
-            this.addParticle(new DestroyBlockParticle(locator, block));
-            this.getVibrationManager().callVibrationEvent(new VibrationEvent(null, locator, VibrationType.BLOCK_DESTROY));
+            this.addParticle(new DestroyBlockParticle(locator.position, block));
+            this.getVibrationManager().callVibrationEvent(new VibrationEvent(null, locator.position, VibrationType.BLOCK_DESTROY));
         }
     }
 
@@ -2497,40 +2499,40 @@ public class Level implements Metadatable {
         return itemEntity;
     }
 
-    public Item useBreakOn(@NotNull Vector3 vector) {
+    public Item useBreakOn(@NotNull IVector3 vector) {
         return this.useBreakOn(vector, null);
     }
 
-    public Item useBreakOn(@NotNull Vector3 vector, @Nullable Item item) {
+    public Item useBreakOn(@NotNull IVector3 vector, @Nullable Item item) {
         return this.useBreakOn(vector, item, null);
     }
 
-    public Item useBreakOn(@NotNull Vector3 vector, @Nullable Item item, @Nullable Player player) {
+    public Item useBreakOn(@NotNull IVector3 vector, @Nullable Item item, @Nullable Player player) {
         return this.useBreakOn(vector, item, player, false);
     }
 
-    public Item useBreakOn(@NotNull Vector3 vector, @Nullable Item item, @Nullable Player player, boolean createParticles) {
+    public Item useBreakOn(@NotNull IVector3 vector, @Nullable Item item, @Nullable Player player, boolean createParticles) {
         return useBreakOn(vector, null, item, player, createParticles);
     }
 
-    public Item useBreakOn(@NotNull Vector3 vector, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player, boolean createParticles) {
+    public Item useBreakOn(@NotNull IVector3 vector, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player, boolean createParticles) {
         return useBreakOn(vector, face, item, player, createParticles, false);
     }
 
-    public Item useBreakOn(@NotNull Vector3 vector, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player, boolean createParticles, boolean immediateDestroy) {
+    public Item useBreakOn(@NotNull IVector3 vector, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player, boolean createParticles, boolean immediateDestroy) {
         if (vector instanceof Block b) {
             return useBreakOn(b.position, b.layer, face, item, player, createParticles, immediateDestroy);
         } else {
-            return useBreakOn(vector, 0, face, item, player, createParticles, immediateDestroy);
+            return useBreakOn(vector.getVector3(), 0, face, item, player, createParticles, immediateDestroy);
         }
     }
 
-    public Item useBreakOn(@NotNull Vector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player, boolean createParticles, boolean immediateDestroy) {
+    public Item useBreakOn(@NotNull IVector3 vector, int layer, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player, boolean createParticles, boolean immediateDestroy) {
         if (player != null && player.getGamemode() > 2) {
             return null;
         }
 
-        Block target = this.getBlock(vector, layer);
+        Block target = this.getBlock(vector.getVector3(), layer);
 
         if (player != null && !target.isBlockChangeAllowed(player)) {
             return null;
@@ -2543,11 +2545,11 @@ public class Level implements Metadatable {
             item = Item.AIR;
         }
 
-        if (!target.isBreakable(vector, layer, face, item, player)) {
+        if (!target.isBreakable(vector.getVector3(), layer, face, item, player)) {
             return null;
         }
 
-        boolean isSilkTouch = target.isSilkTouch(vector, layer, face, item, player) ||
+        boolean isSilkTouch = target.isSilkTouch(vector.getVector3(), layer, face, item, player) ||
                 (item.getEnchantment(Enchantment.ID_SILK_TOUCH) != null && item.applyEnchantments());
 
         if (player != null) {
@@ -2583,7 +2585,7 @@ public class Level implements Metadatable {
                 //thisBreak-lastBreak < breakTime-1000ms = the player is hacker (fastBreak)
                 boolean fastBreak = Long.sum(player.lastBreak, (long) breakTime * 1000) > Long.sum(System.currentTimeMillis(), 1000);
                 BlockBreakEvent ev = new BlockBreakEvent(player, target, face, item, eventDrops, player.isCreative(), fastBreak);
-                if (!player.isOp() && isInSpawnRadius(target)) {
+                if (!player.isOp() && isInSpawnRadius(target.position)) {
                     ev.setCancelled();
                 } else if (!ev.getInstaBreak() && ev.isFastBreak()) {
                     ev.setCancelled();
@@ -2621,7 +2623,7 @@ public class Level implements Metadatable {
             if (player != null && immediateDestroy) {
                 players.remove(player.getLoaderId());
             }
-            this.addParticle(new DestroyBlockParticle(target.add(0.5), target), players.values());
+            this.addParticle(new DestroyBlockParticle(target.position.add(0.5), target), players.values());
         }
 
         // Close BlockEntity before we check onBreak
@@ -2631,13 +2633,13 @@ public class Level implements Metadatable {
                 blockEntity.onBreak(isSilkTouch);
                 blockEntity.close();
 
-                this.updateComparatorOutputLevel(target);
+                this.updateComparatorOutputLevel(target.position);
             }
         }
 
         target.onBreak(item);
 
-        this.getVibrationManager().callVibrationEvent(new VibrationEvent(player, target.add(0.5, 0.5, 0.5), VibrationType.BLOCK_DESTROY));
+        this.getVibrationManager().callVibrationEvent(new VibrationEvent(player, target.position.add(0.5, 0.5, 0.5), VibrationType.BLOCK_DESTROY));
 
         item.useOn(target);
         if (item.isTool() && item.getDamage() >= item.getMaxDurability()) {
@@ -2649,12 +2651,12 @@ public class Level implements Metadatable {
 
         if (this.gameRules.getBoolean(GameRule.DO_TILE_DROPS)) {
             if (!isSilkTouch && (player != null && ((player.isSurvival() || player.isAdventure() || immediateDestroy))) && dropExp > 0) {
-                this.dropExpOrb(vector.add(0.5, 0.5, 0.5), dropExp);
+                this.dropExpOrb(vector.getVector3().add(0.5, 0.5, 0.5), dropExp);
             }
 
             for (Item drop : drops) {
                 if (drop.getCount() > 0) {
-                    this.dropItem(vector.add(0.5, 0.5, 0.5), drop);
+                    this.dropItem(vector.getVector3().add(0.5, 0.5, 0.5), drop);
                 }
             }
         }
@@ -2736,7 +2738,7 @@ public class Level implements Metadatable {
         if (player != null) {
             PlayerInteractEvent ev = new PlayerInteractEvent(player, item, target, face, target.isAir() ? Action.RIGHT_CLICK_AIR : Action.RIGHT_CLICK_BLOCK);
             //                                handle spawn protect
-            if (player.getGamemode() > 2 || (!player.isOp() && isInSpawnRadius(target))) {
+            if (player.getGamemode() > 2 || (!player.isOp() && isInSpawnRadius(target.position))) {
                 ev.setCancelled();
             }
 
@@ -2821,7 +2823,7 @@ public class Level implements Metadatable {
                 ++realCount;
             }
             if (player != null) {
-                var diff = player.getNextPosition().subtract(player.getPosition());
+                var diff = player.getNextPosition().position.subtract(player.getPosition().position);
                 var aabb = player.getBoundingBox().getOffsetBoundingBox(diff.x, diff.y, diff.z);
                 if (aabb.intersectsWith(hand.getBoundingBox().shrink(0.02, 0.02, 0.02))) {
                     ++realCount;
@@ -2858,7 +2860,7 @@ public class Level implements Metadatable {
                     event.setCancelled();
                 }
             }
-            if (!player.isOp() && isInSpawnRadius(target)) {
+            if (!player.isOp() && isInSpawnRadius(target.position)) {
                 event.setCancelled();
             }
 
@@ -2891,14 +2893,14 @@ public class Level implements Metadatable {
         }
 
         if (playSound) {
-            this.addLevelSoundEvent(hand, LevelSoundEventPacket.SOUND_PLACE, hand.getRuntimeId());
+            this.addLevelSoundEvent(hand.position, LevelSoundEventPacket.SOUND_PLACE, hand.getRuntimeId());
         }
 
         if (item.getCount() <= 0) {
             item = Item.AIR;
         }
 
-        this.getVibrationManager().callVibrationEvent(new VibrationEvent(player, block.add(0.5, 0.5, 0.5), VibrationType.BLOCK_PLACE));
+        this.getVibrationManager().callVibrationEvent(new VibrationEvent(player, block.position.add(0.5, 0.5, 0.5), VibrationType.BLOCK_PLACE));
         return item;
     }
 
@@ -3817,7 +3819,7 @@ public class Level implements Metadatable {
 
     public Locator getSafeSpawn(Vector3 spawn, int horizontalMaxOffset, boolean allowWaterUnder) {
         if (spawn == null)
-            spawn = this.getFuzzySpawnLocation();
+            spawn = this.getFuzzySpawnLocation().position;
         if (spawn == null)
             return null;
         if (standable(spawn, true))
@@ -3828,17 +3830,17 @@ public class Level implements Metadatable {
 
         for (int horizontalOffset = 0; horizontalOffset <= horizontalMaxOffset; horizontalOffset++) {
             for (int y = maxY; y >= minY; y--) {
-                Locator pos = Locator.fromObject(spawn, this);
+                Vector3 pos = spawn.clone();
                 pos.setY(y);
-                Locator newSpawn;
+                Vector3 newSpawn;
                 if (standable(newSpawn = pos.add(horizontalOffset, 0, horizontalOffset), allowWaterUnder))
-                    return newSpawn;
+                    return new Locator(newSpawn, this);
                 if (standable(newSpawn = pos.add(horizontalOffset, 0, -horizontalOffset), allowWaterUnder))
-                    return newSpawn;
+                    return new Locator(newSpawn, this);
                 if (standable(newSpawn = pos.add(-horizontalOffset, 0, horizontalOffset), allowWaterUnder))
-                    return newSpawn;
+                    return new Locator(newSpawn, this);
                 if (standable(newSpawn = pos.add(-horizontalOffset, 0, -horizontalOffset), allowWaterUnder))
-                    return newSpawn;
+                    return new Locator(newSpawn, this);
             }
         }
 
@@ -4302,16 +4304,16 @@ public class Level implements Metadatable {
         return getDimensionData().getMaxHeight();
     }
 
-    public int getStrongPower(Vector3 pos, BlockFace direction) {
-        return this.getBlock(pos).getStrongPower(direction);
+    public int getStrongPower(IVector3 pos, BlockFace direction) {
+        return this.getBlock(pos.getVector3()).getStrongPower(direction);
     }
 
-    public int getStrongPower(Vector3 pos) {
-        if (pos instanceof BlockPistonBase || this.getBlock(pos) instanceof BlockPistonBase) return 0;
+    public int getStrongPower(IVector3 pos) {
+        if (pos instanceof BlockPistonBase || this.getBlock(pos.getVector3()) instanceof BlockPistonBase) return 0;
 
         int i = 0;
         for (BlockFace face : BlockFace.values()) {
-            i = Math.max(i, this.getStrongPower(temporalVector.setComponentsAdding(pos, face), face));
+            i = Math.max(i, this.getStrongPower(temporalVector.setComponentsAdding(pos.getVector3(), face), face));
 
             if (i >= 15) {
                 return i;
@@ -4321,7 +4323,7 @@ public class Level implements Metadatable {
         return i;
     }
 
-    public boolean isSidePowered(Vector3 pos, BlockFace face) {
+    public boolean isSidePowered(IVector3 pos, BlockFace face) {
         return this.getRedstonePower(pos, face) > 0;
     }
 
@@ -4331,13 +4333,13 @@ public class Level implements Metadatable {
      * @param pos  the block pos
      * @param face Only be used on block with not isNormalBlock, such as redstone torch
      */
-    public int getRedstonePower(Vector3 pos, BlockFace face) {
+    public int getRedstonePower(IVector3 pos, BlockFace face) {
         Block block;
 
         if (pos instanceof Block b) {
             block = b;
         } else {
-            block = this.getBlock(pos);
+            block = this.getBlock(pos.getVector3());
         }
 
         return block.isNormalBlock() ? this.getStrongPower(pos) : block.getWeakPower(face);

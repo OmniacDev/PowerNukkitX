@@ -50,7 +50,7 @@ import cn.nukkit.level.GameRule;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
-import cn.nukkit.math.GetVector3;
+import cn.nukkit.math.IVector3;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.AnimateEntityPacket;
@@ -314,7 +314,7 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
 
     protected static class PiglinFleeFromTargetExecutor extends FleeFromTargetExecutor {
 
-        public PiglinFleeFromTargetExecutor(MemoryType<? extends GetVector3> memory) {
+        public PiglinFleeFromTargetExecutor(MemoryType<? extends IVector3> memory) {
             super(memory, 0.5f, true, 8);
         }
 

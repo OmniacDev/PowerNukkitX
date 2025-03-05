@@ -18,7 +18,7 @@ public class RM implements ISelectorArgument {
         ParseUtils.singleArgument(arguments, getKeyName());
         ParseUtils.cannotReversed(arguments[0]);
         final var rm = Double.parseDouble(arguments[0]);
-        return entity -> entity.pos.distanceSquared(basePos) > Math.pow(rm, 2);
+        return entity -> entity.pos.distanceSquared(basePos.position) > Math.pow(rm, 2);
     }
 
     @Override

@@ -2,17 +2,17 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.mob.EntityMob;
-import cn.nukkit.math.GetVector3;
+import cn.nukkit.math.IVector3;
 
 
 public class LookAtTargetExecutor implements EntityControl, IBehaviorExecutor {
 
     //指示执行器应该从哪个Memory获取目标位置
-    protected MemoryType<? extends GetVector3> memory;
+    protected MemoryType<? extends IVector3> memory;
     protected int duration;
     protected int currentTick;
 
-    public LookAtTargetExecutor(MemoryType<? extends GetVector3> memory, int duration) {
+    public LookAtTargetExecutor(MemoryType<? extends IVector3> memory, int duration) {
         this.memory = memory;
         this.duration = duration;
     }

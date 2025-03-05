@@ -2,21 +2,21 @@ package cn.nukkit.entity.ai.evaluator;
 
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.mob.EntityMob;
-import cn.nukkit.math.GetVector3;
+import cn.nukkit.math.IVector3;
 import cn.nukkit.math.Vector3;
 
 public class DistanceEvaluator implements IBehaviorEvaluator {
 
-    private final MemoryType<? extends GetVector3> type;
+    private final MemoryType<? extends IVector3> type;
     private final double maxDistance;
     private final double minDistance ;
 
 
-    public DistanceEvaluator(MemoryType<? extends GetVector3> type, double maxDistance) {
+    public DistanceEvaluator(MemoryType<? extends IVector3> type, double maxDistance) {
         this(type, maxDistance, -1);
     }
 
-    public DistanceEvaluator(MemoryType<? extends GetVector3> type, double maxDistance, double minDistance) {
+    public DistanceEvaluator(MemoryType<? extends IVector3> type, double maxDistance, double minDistance) {
         this.type = type;
         this.maxDistance = maxDistance;
         this.minDistance = minDistance;

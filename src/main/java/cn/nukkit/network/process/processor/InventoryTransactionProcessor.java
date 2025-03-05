@@ -298,8 +298,8 @@ public class InventoryTransactionProcessor extends DataPacketProcessor<Inventory
                 }
                 Block target = player.level.getBlock(blockVector.asVector3());
                 Block block = target.getSide(face);
-                player.level.sendBlocks(new Player[]{player}, new Vector3[]{target.position, block.position}, UpdateBlockPacket.FLAG_NOGRAPHIC);
-                player.level.sendBlocks(new Player[]{player}, new Vector3[]{target.getLevelBlockAtLayer(1).position, block.getLevelBlockAtLayer(1).position}, UpdateBlockPacket.FLAG_NOGRAPHIC, 1);
+                player.level.sendBlocks(new Player[]{player}, new Block[]{target, block}, UpdateBlockPacket.FLAG_NOGRAPHIC);
+                player.level.sendBlocks(new Player[]{player}, new Block[]{target.getLevelBlockAtLayer(1), block.getLevelBlockAtLayer(1)}, UpdateBlockPacket.FLAG_NOGRAPHIC, 1);
             }
             case InventoryTransactionPacket.USE_ITEM_ACTION_BREAK_BLOCK -> {
                 //Creative mode use PlayerActionPacket.ACTION_CREATIVE_PLAYER_DESTROY_BLOCK

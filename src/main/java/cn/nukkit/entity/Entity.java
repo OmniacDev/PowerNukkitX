@@ -83,7 +83,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @author MagicDroidX
  */
-public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, GetVector3 {
+public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, IVector3 {
     public static final String TAG_CHESTED = "Chested";
     public static final String TAG_COLOR = "Color";
     public static final String TAG_COLOR2 = "Color2";
