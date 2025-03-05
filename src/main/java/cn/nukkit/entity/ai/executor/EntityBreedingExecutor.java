@@ -3,7 +3,6 @@ package cn.nukkit.entity.ai.executor;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
-import cn.nukkit.entity.mob.EntityMob;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -145,7 +144,7 @@ public class EntityBreedingExecutor<T extends EntityMob> implements IBehaviorExe
     }
 
     protected void bear(T entity) {
-        T baby = (T) Entity.createEntity(entity.getNetworkId(), entity.getPosition());
+        T baby = (T) Entity.createEntity(entity.getNetworkId(), entity.getLocator());
         baby.setBaby(true);
         //防止小屁孩去生baby
         baby.getMemoryStorage().put(CoreMemoryTypes.LAST_IN_LOVE_TIME, entity.level.getTick());

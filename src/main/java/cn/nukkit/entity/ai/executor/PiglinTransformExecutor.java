@@ -4,7 +4,6 @@ import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.effect.Effect;
 import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.humanoid_monster.EntityZombiePigman;
 import cn.nukkit.inventory.Inventory;
 import cn.nukkit.level.Sound;
@@ -45,7 +44,7 @@ public class PiglinTransformExecutor implements EntityControl, IBehaviorExecutor
     private void transform(EntityMob entity) {
         entity.saveNBT();
         entity.close();
-        EntityZombiePigman entityZombiePigman = new EntityZombiePigman(entity.getPosition().getChunk(), entity.namedTag);
+        EntityZombiePigman entityZombiePigman = new EntityZombiePigman(entity.getLocator().getChunk(), entity.namedTag);
         entityZombiePigman.setPosition(entity.pos);
         entityZombiePigman.setRotation(entity.rotation.yaw, entity.rotation.pitch);
         entityZombiePigman.spawnToAll();

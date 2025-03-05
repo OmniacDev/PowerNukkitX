@@ -60,17 +60,17 @@ public class EntityHopperMinecart extends EntityMinecartAbstract implements Inve
 
         this.updatePickupArea();
 
-        Block blockSide = this.getPosition().getSide(BlockFace.UP).getTickCachedLevelBlock();
+        Block blockSide = this.getLocator().getSide(BlockFace.UP).getTickCachedLevelBlock();
         BlockEntity blockEntity = this.level.getBlockEntity(temporalVector.setComponentsAdding(this.pos, BlockFace.UP));
 
         boolean changed;
 
         if (blockEntity instanceof InventoryHolder || blockSide instanceof BlockComposter) {
             //从容器中拉取物品
-            changed = pullItems(this, this.getPosition());
+            changed = pullItems(this, this.getLocator());
         } else {
             //收集掉落物
-            changed = pickupItems(this, this.getPosition(), pickupArea);
+            changed = pickupItems(this, this.getLocator(), pickupArea);
         }
 
         if (changed) {
@@ -167,7 +167,7 @@ public class EntityHopperMinecart extends EntityMinecartAbstract implements Inve
     }
 
     public void checkDisabled() {
-        if (this.getPosition().getLevelBlock() instanceof BlockActivatorRail rail) {
+        if (this.getLocator().getLevelBlock() instanceof BlockActivatorRail rail) {
             setDisabled(rail.isActive());
         }
     }

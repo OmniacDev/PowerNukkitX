@@ -70,7 +70,7 @@ public class EntityWindCharge extends EntityProjectile {
             if(directionChanged == entity) return;
         }
         entity.attack(new EntityDamageByEntityEvent(this, entity, EntityDamageEvent.DamageCause.PROJECTILE, 1f));
-        level.addLevelSoundEvent(entity.getPosition().position.add(0, 1), LevelSoundEventPacket.SOUND_WIND_CHARGE_BURST);
+        level.addLevelSoundEvent(entity.getLocator().position.add(0, 1), LevelSoundEventPacket.SOUND_WIND_CHARGE_BURST);
         this.level.addParticle(new GenericParticle(this.pos, Particle.TYPE_WIND_EXPLOSION));
         knockBack(entity);
         this.kill();

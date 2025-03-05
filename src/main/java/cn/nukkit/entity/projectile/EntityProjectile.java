@@ -228,7 +228,7 @@ public abstract class EntityProjectile extends Entity {
                 }
             }
 
-            Locator locator = getPosition();
+            Locator locator = getLocator();
             Vector3 motion = getMotion();
             this.move(this.motion.x, this.motion.y, this.motion.z);
 

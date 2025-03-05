@@ -81,7 +81,7 @@ public class BlockEntityPistonArm extends BlockEntitySpawnable {
         //玩家客户端会自动处理移动
         if (diff == 0 || !entity.canBePushed() || entity instanceof Player)
             return;
-        EntityMoveByPistonEvent event = new EntityMoveByPistonEvent(entity, entity.getPosition().position);
+        EntityMoveByPistonEvent event = new EntityMoveByPistonEvent(entity, entity.getLocator().position);
         this.level.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled())
             return;

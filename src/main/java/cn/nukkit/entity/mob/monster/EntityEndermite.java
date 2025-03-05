@@ -75,7 +75,7 @@ public class EntityEndermite extends EntityMonster implements EntityWalkable, En
     @Override
     public boolean onUpdate(int currentTick) {
         if(currentTick%10 == 0) {
-            if(this.getPosition().getLevelBlock().down() instanceof BlockSoulSand) {
+            if(this.getLocator().getLevelBlock().down() instanceof BlockSoulSand) {
                 this.attack(new EntityDamageEvent(this, EntityDamageEvent.DamageCause.SUFFOCATION, 1));
             }
         }

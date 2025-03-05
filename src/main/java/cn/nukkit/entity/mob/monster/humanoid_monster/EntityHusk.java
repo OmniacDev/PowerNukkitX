@@ -122,7 +122,7 @@ public class EntityHusk extends EntityZombie {
     @Override
     protected void transform() {
         this.close();
-        EntityZombie drowned = new EntityZombie(this.getPosition().getChunk(), this.namedTag);
+        EntityZombie drowned = new EntityZombie(this.getLocator().getChunk(), this.namedTag);
         drowned.setPosition(this.pos);
         drowned.setRotation(this.rotation.yaw, this.rotation.pitch);
         drowned.spawnToAll();

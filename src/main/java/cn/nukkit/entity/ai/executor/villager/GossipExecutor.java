@@ -41,7 +41,7 @@ public class GossipExecutor implements EntityControl, IBehaviorExecutor {
                             Item item = villager.getInventory().getUnclonedItem(i);
                             item.setCount(item.getCount()/2);
                             if(item.getId() == Block.WHEAT) item = Item.get(Block.WHEAT, 0, item.getCount()/3);
-                            villager.getLevel().dropItem(villager.getPosition().position.add(0, villager.getEyeHeight(), 0), item, new Vector3(entity1.pos.x - entity.pos.x, entity1.pos.y - entity.pos.y, entity1.pos.z - entity.pos.z).normalize().multiply(0.4));
+                            villager.getLevel().dropItem(villager.getLocator().position.add(0, villager.getEyeHeight(), 0), item, new Vector3(entity1.pos.x - entity.pos.x, entity1.pos.y - entity.pos.y, entity1.pos.z - entity.pos.z).normalize().multiply(0.4));
                         }
                     }
                 }

@@ -146,7 +146,7 @@ public class EntitySlime extends EntityMonster implements EntityWalkable, Entity
     public void kill() {
         if(getVariant() != SIZE_SMALL) {
             for(int i = 1; i < Utils.rand(2, 5); i++) {
-                EntitySlime slime = new EntitySlime(this.getPosition().getChunk(), this.namedTag);
+                EntitySlime slime = new EntitySlime(this.getLocator().getChunk(), this.namedTag);
                 slime.setPosition(this.pos.add(Utils.rand(-0.5, 0.5), 0, Utils.rand(-0.5, 0.5)));
                 slime.setRotation(this.rotation.yaw, this.rotation.pitch);
                 slime.setVariant(getSmaller());

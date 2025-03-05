@@ -93,7 +93,7 @@ public class EntitySmallFireball extends EntityProjectile {
         var affect = false;
         for (Block collisionBlock : level.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1)))
             affect = onCollideWithBlock(locator, motion, collisionBlock);
-        if (!affect && this.getPosition().getLevelBlock().getId() == BlockID.AIR) {
+        if (!affect && this.getLocator().getLevelBlock().getId() == BlockID.AIR) {
             BlockFire fire = (BlockFire) Block.get(BlockID.FIRE);
             fire.position.x = this.pos.x;
             fire.position.y = this.pos.y;
@@ -101,7 +101,7 @@ public class EntitySmallFireball extends EntityProjectile {
             fire.level = level;
 
             if (fire.isBlockTopFacingSurfaceSolid(fire.down()) || fire.canNeighborBurn()) {
-                BlockIgniteEvent e = new BlockIgniteEvent(this.getPosition().getLevelBlock(), null, null, BlockIgniteEvent.BlockIgniteCause.FIREBALL);
+                BlockIgniteEvent e = new BlockIgniteEvent(this.getLocator().getLevelBlock(), null, null, BlockIgniteEvent.BlockIgniteCause.FIREBALL);
                 level.getServer().getPluginManager().callEvent(e);
                 if (!e.isCancelled()) {
                     level.setBlock(fire.position, fire, true);

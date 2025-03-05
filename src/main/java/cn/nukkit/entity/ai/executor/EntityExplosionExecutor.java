@@ -4,7 +4,6 @@ import cn.nukkit.Server;
 import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityCreeper;
 import cn.nukkit.event.entity.EntityExplosionPrimeEvent;
 import cn.nukkit.level.Explosion;
@@ -75,7 +74,7 @@ public class EntityExplosionExecutor implements IBehaviorExecutor {
         Server.getInstance().getPluginManager().callEvent(ev);
 
         if (!ev.isCancelled()) {
-            Explosion explosion = new Explosion(entity.getPosition(), (float) ev.getForce(), entity);
+            Explosion explosion = new Explosion(entity.getLocator(), (float) ev.getForce(), entity);
 
             if (ev.isBlockBreaking() && entity.level.getGameRules().getBoolean(GameRule.MOB_GRIEFING)) {
                 explosion.explodeA();

@@ -294,7 +294,7 @@ public class EntityThrownTrident extends EntityAbstractArrow {
 
         if (this.hasChanneling) {
             if (this.level.isThundering() && this.level.canBlockSeeSky(this.pos)) {
-                Locator pos = this.getPosition();
+                Locator pos = this.getLocator();
                 EntityLightningBolt lighting = new EntityLightningBolt(pos.getChunk(), getDefaultNBT(pos.position));
                 lighting.spawnToAll();
                 this.getLevel().addSound(this.pos, Sound.ITEM_TRIDENT_THUNDER);

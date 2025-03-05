@@ -14,28 +14,21 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.player.PlayerChangeArmorStandEvent;
 import cn.nukkit.inventory.BaseInventory;
 import cn.nukkit.inventory.EntityArmorInventory;
-import cn.nukkit.inventory.EntityEquipmentInventory;
-import cn.nukkit.inventory.EntityInventoryHolder;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemArmor;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.item.ItemShield;
-import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.level.particle.DestroyBlockParticle;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
 import cn.nukkit.math.Vector3;
-import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.network.protocol.SetEntityDataPacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 public class EntityArmorStand extends EntityMob implements EntityInteractable, EntityNameable {
@@ -311,7 +304,7 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
         EntityDamageEvent lastDamageCause = this.lastDamageCause;
         boolean byAttack = lastDamageCause != null && lastDamageCause.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK;
 
-        Vector3 pos = getPosition().position;
+        Vector3 pos = getLocator().position;
 
         pos.y += 0.2;
         level.dropItem(pos, getBoots());

@@ -78,7 +78,7 @@ public class NPCCommandSender implements CommandSender {
 
     @Override
     @NotNull public Locator getLocator() {
-        return npc.getPosition();
+        return npc.getLocator();
     }
 
     @Override

@@ -1277,7 +1277,7 @@ public class Level implements Metadatable {
         }
 
         if (!list.isEmpty()) {
-            return list.get(ThreadLocalRandom.current().nextInt(list.size())).getPosition().position;
+            return list.get(ThreadLocalRandom.current().nextInt(list.size())).getLocator().position;
         } else {
             if (pos.getY() == -1) {
                 pos = pos.up(2);

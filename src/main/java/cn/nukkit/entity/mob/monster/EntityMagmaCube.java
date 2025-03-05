@@ -155,7 +155,7 @@ public class EntityMagmaCube extends EntityMonster implements EntityWalkable, En
     public void kill() {
         if(getVariant() != SIZE_SMALL) {
             for(int i = 1; i < Utils.rand(2, 5); i++) {
-                EntityMagmaCube magmaCube = new EntityMagmaCube(this.getPosition().getChunk(), this.namedTag);
+                EntityMagmaCube magmaCube = new EntityMagmaCube(this.getLocator().getChunk(), this.namedTag);
                 magmaCube.setPosition(this.pos.add(Utils.rand(-0.5, 0.5), 0, Utils.rand(-0.5, 0.5)));
                 magmaCube.setRotation(this.rotation.yaw, this.rotation.pitch);
                 magmaCube.setVariant(getSmaller());

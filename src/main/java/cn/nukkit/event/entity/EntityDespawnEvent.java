@@ -28,7 +28,7 @@ public class EntityDespawnEvent extends EntityEvent implements Cancellable {
     }
 
     public Locator getPosition() {
-        return this.entity.getPosition();
+        return this.entity.getLocator();
     }
 
     public int getType() {

@@ -81,7 +81,7 @@ public class ExecutorCommandSender implements CommandSender {
 
     @Override
     @NotNull public Locator getLocator() {
-        return (executeTransform == null ? entity.getPosition() : executeTransform).clone();
+        return (executeTransform == null ? entity.getLocator() : executeTransform).clone();
     }
 
     @Override

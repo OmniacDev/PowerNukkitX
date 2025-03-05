@@ -61,7 +61,7 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
         this.liveTime = ThreadLocalRandom.current().nextInt(3) + 1;
 
         if (isEffect && this.level.gameRules.getBoolean(GameRule.DO_FIRE_TICK) && (this.server.getDifficulty() >= 2)) {
-            Block block = this.getPosition().getLevelBlock();
+            Block block = this.getLocator().getLevelBlock();
             if (block.isAir() || block.getId().equals(BlockID.TALL_GRASS)) {
                 BlockFire fire = (BlockFire) Block.get(BlockID.FIRE);
                 fire.position = block.position.clone();
@@ -190,7 +190,7 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
                 this.state = 1;
 
                 if (this.isEffect && this.level.gameRules.getBoolean(GameRule.DO_FIRE_TICK)) {
-                    Block block = this.getPosition().getLevelBlock();
+                    Block block = this.getLocator().getLevelBlock();
 
                     if (block.isAir() || block.getId().equals(Block.TALL_GRASS)) {
                         BlockIgniteEvent event = new BlockIgniteEvent(block, null, this, BlockIgniteEvent.BlockIgniteCause.LIGHTNING);

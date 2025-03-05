@@ -201,7 +201,7 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
      */
 
     public double getPassableBlockFrictionFactor() {
-        var block = this.getPosition().getTickCachedLevelBlock();
+        var block = this.getLocator().getTickCachedLevelBlock();
         if (block.collidesWithBB(this.getBoundingBox(), true)) return block.getPassableBlockFrictionFactor();
         return Block.DEFAULT_AIR_FLUID_FRICTION;
     }

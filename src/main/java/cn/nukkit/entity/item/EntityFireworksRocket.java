@@ -104,7 +104,7 @@ public class EntityFireworksRocket extends Entity {
             this.motion.x *= 1.15D;
             this.motion.z *= 1.15D;
             this.motion.y += 0.04D;
-            Locator locator = getPosition();
+            Locator locator = getLocator();
             Vector3 motion = getMotion();
             this.move(this.motion.x, this.motion.y, this.motion.z);
 

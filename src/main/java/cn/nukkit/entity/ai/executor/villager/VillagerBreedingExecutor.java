@@ -68,7 +68,7 @@ public class VillagerBreedingExecutor extends EntityBreedingExecutor {
             sendInLoveParticles(another);
         }
 
-        EntityVillagerV2 baby = (EntityVillagerV2) Entity.createEntity(entity.getNetworkId(), entity.getPosition());
+        EntityVillagerV2 baby = (EntityVillagerV2) Entity.createEntity(entity.getNetworkId(), entity.getLocator());
         baby.setBaby(true);
         //防止小屁孩去生baby
         baby.getMemoryStorage().put(CoreMemoryTypes.LAST_IN_LOVE_TIME, entity.level.getTick());

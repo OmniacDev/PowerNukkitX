@@ -55,7 +55,7 @@ public class EntityMoveToOwnerExecutor implements EntityControl, IBehaviorExecut
             if (!target.level.getName().equals(entity.level.getName()))
                 return false;
 
-            if (entity.getPosition().position.floor().equals(oldTarget)) return false;
+            if (entity.getLocator().position.floor().equals(oldTarget)) return false;
 
             var distanceSquared = entity.pos.distanceSquared(player.pos);
             if (distanceSquared <= maxFollowRangeSquared) {

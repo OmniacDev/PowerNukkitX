@@ -94,7 +94,7 @@ public class EntityEnderCrystal extends Entity implements EntityExplosive {
         if (!this.detonated) {
             this.detonated = true;
 
-            Locator pos = this.getPosition();
+            Locator pos = this.getLocator();
             Explosion explode = new Explosion(pos, 6, this);
 
             this.close();

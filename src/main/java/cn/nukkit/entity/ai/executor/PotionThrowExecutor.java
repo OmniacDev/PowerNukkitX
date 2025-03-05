@@ -72,7 +72,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
             }
         }
 
-        if (!this.target.getPosition().equals(newTarget.getPosition())) {
+        if (!this.target.getLocator().equals(newTarget.getLocator())) {
             target = newTarget;
         }
 

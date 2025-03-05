@@ -1,6 +1,5 @@
 package cn.nukkit.entity.projectile;
 
-import cn.nukkit.Player;
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.event.entity.ProjectileHitEvent;
@@ -13,7 +12,6 @@ import cn.nukkit.nbt.tag.CompoundTag;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.function.Predicate;
 
 /**
  * 这个抽象类代表较为细长的投射物实体(例如弓箭,三叉戟),它通过重写{@link Entity#move}方法实现这些实体较为准确的碰撞箱计算。
@@ -174,7 +172,7 @@ public abstract class SlenderProjectile extends EntityProjectile {
                 block = collisionBlock;
             }
             this.server.getPluginManager().callEvent(new ProjectileHitEvent(this, lastHitBlock = MovingObjectPosition.fromBlock(block.position.getFloorX(), block.position.getFloorY(), block.position.getFloorZ(), blockFace, this.pos)));
-            onCollideWithBlock(getPosition(), getMotion());
+            onCollideWithBlock(getLocator(), getMotion());
             addHitEffect();
         }
         return true;

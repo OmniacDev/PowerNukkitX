@@ -51,7 +51,7 @@ public class ExecuteCommandOld extends VanillaCommand {
             case "default" -> {
                 String command = list.getResult(2);
                 for (Entity entity : entities) {
-                    Locator pos = ((PositionNode) list.get(1)).get(entity.getPosition());
+                    Locator pos = ((PositionNode) list.get(1)).get(entity.getLocator());
                     ExecutorCommandSender executeSender = new ExecutorCommandSender(sender, entity, Transform.fromObject(pos.position, pos.level));
                     int n = executeSender.getServer().executeCommand(executeSender, command);
                     if (n == 0) {
@@ -64,7 +64,7 @@ public class ExecuteCommandOld extends VanillaCommand {
                 int meta = list.getResult(5);
                 String command = list.getResult(6);
                 for (Entity entity : entities) {
-                    Locator pos = ((PositionNode) list.get(1)).get(entity.getPosition());
+                    Locator pos = ((PositionNode) list.get(1)).get(entity.getLocator());
                     Locator detect = ((PositionNode) list.get(3)).get(pos);
                     if (detect.getLevelBlock().getId() == blockId && detect.getLevelBlock().getBlockState().specialValue() == meta) {
                         ExecutorCommandSender executeSender = new ExecutorCommandSender(sender, entity, Transform.fromObject(pos.position, pos.level));

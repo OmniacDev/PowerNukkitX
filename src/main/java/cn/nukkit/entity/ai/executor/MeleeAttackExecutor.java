@@ -114,7 +114,7 @@ public class MeleeAttackExecutor implements EntityControl, IBehaviorExecutor {
 
 
         //update target and look target
-        if (!this.target.getPosition().equals(newTarget.getPosition())) {
+        if (!this.target.getLocator().equals(newTarget.getLocator())) {
             target = newTarget;
         }
         if (!this.lookTarget.equals(newTarget.getTransform())) {

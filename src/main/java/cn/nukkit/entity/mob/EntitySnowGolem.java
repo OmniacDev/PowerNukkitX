@@ -120,15 +120,15 @@ public class EntitySnowGolem extends EntityGolem {
     public boolean onUpdate(int currentTick) {
         this.waterTicks++;
         if(this.level.getGameRules().getBoolean(GameRule.MOB_GRIEFING)) {
-            if(this.getPosition().getLevelBlock().isAir()) {
-                Block support = this.getPosition().getLevelBlock().down();
+            if(this.getLocator().getLevelBlock().isAir()) {
+                Block support = this.getLocator().getLevelBlock().down();
                 if(support.isFullBlock() && !support.isAir()){
-                    this.getLevel().setBlock(this.getPosition().getLevelBlock().position, Block.get(Block.SNOW_LAYER));
+                    this.getLevel().setBlock(this.getLocator().getLevelBlock().position, Block.get(Block.SNOW_LAYER));
                 }
             }
         }
         if(this.waterTicks >= 20) {
-            if((this.level.isRaining() && !this.isUnderBlock()) || this.getPosition().getLevelBlock() instanceof BlockLiquid || Registries.BIOME.get(getLevel().getBiomeId(this.pos.getFloorX(), this.pos.getFloorY(), this.pos.getFloorZ())).temperature() > 1.0) {
+            if((this.level.isRaining() && !this.isUnderBlock()) || this.getLocator().getLevelBlock() instanceof BlockLiquid || Registries.BIOME.get(getLevel().getBiomeId(this.pos.getFloorX(), this.pos.getFloorY(), this.pos.getFloorZ())).temperature() > 1.0) {
                 this.attack(new EntityDamageEvent(this, EntityDamageEvent.DamageCause.WEATHER, 1));
             }
             this.waterTicks = 0;

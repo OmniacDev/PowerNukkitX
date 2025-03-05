@@ -149,7 +149,7 @@ public class TeleportCommand extends VanillaCommand {
                     sb.append(victim.getName()).append(" ");
                 }
                 if (checkForBlocks) {
-                    if (!target.getPosition().getLevelBlock().isSolid() && !target.getPosition().add(0, 1, 0).getLevelBlock().isSolid()) {
+                    if (!target.getLocator().getLevelBlock().isSolid() && !target.getLocator().add(0, 1, 0).getLevelBlock().isSolid()) {
                         for (Entity victim : victims) {
                             victim.teleport(target.getTransform().setYaw(victim.rotation.yaw).setPitch(victim.rotation.pitch));
                         }

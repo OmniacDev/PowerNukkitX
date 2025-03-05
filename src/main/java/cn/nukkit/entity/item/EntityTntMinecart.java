@@ -122,7 +122,7 @@ public class EntityTntMinecart extends EntityMinecartAbstract implements EntityE
         if (event.isCancelled()) {
             return;
         }
-        Explosion explosion = new Explosion(this.getPosition(), event.getForce(), this);
+        Explosion explosion = new Explosion(this.getLocator(), event.getForce(), this);
         explosion.setFireChance(event.getFireChance());
         if (event.isBlockBreaking()) {
             explosion.explodeA();

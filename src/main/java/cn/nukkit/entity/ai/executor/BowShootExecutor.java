@@ -82,7 +82,7 @@ public class BowShootExecutor implements EntityControl, IBehaviorExecutor {
             }
         }
 
-        if (!this.target.getPosition().equals(newTarget.getPosition())) {
+        if (!this.target.getLocator().equals(newTarget.getLocator())) {
             //更新目标
             target = newTarget;
         }

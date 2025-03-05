@@ -61,7 +61,7 @@ public class EntityFireball extends EntitySmallFireball implements EntityExplosi
         boolean affect = false;
         for (Block collisionBlock : level.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1)))
             affect = onCollideWithBlock(locator, motion, collisionBlock);
-        if (!affect && this.getPosition().getLevelBlock().isAir()) {
+        if (!affect && this.getLocator().getLevelBlock().isAir()) {
             explode();
         }
     }
@@ -90,7 +90,7 @@ public class EntityFireball extends EntitySmallFireball implements EntityExplosi
         ev.setFireChance(.4);
         this.server.getPluginManager().callEvent(ev);
         if (!ev.isCancelled()) {
-            Explosion explosion = new Explosion(this.getPosition(), (float) ev.getForce(), this.shootingEntity);
+            Explosion explosion = new Explosion(this.getLocator(), (float) ev.getForce(), this.shootingEntity);
             explosion.setFireChance(ev.getFireChance());
             if (ev.isBlockBreaking() && this.level.getGameRules().getBoolean(GameRule.MOB_GRIEFING)) {
                 explosion.explodeA();

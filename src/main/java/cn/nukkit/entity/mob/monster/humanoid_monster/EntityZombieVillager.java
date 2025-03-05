@@ -122,7 +122,7 @@ public class EntityZombieVillager extends EntityZombie implements EntityWalkable
     protected void transformVillager() {
         this.close();
         getEquipment().getContents().values().forEach(i -> getLevel().dropItem(this.pos, i));
-        EntityVillagerV2 villager = new EntityVillagerV2(this.getPosition().getChunk(), this.namedTag);
+        EntityVillagerV2 villager = new EntityVillagerV2(this.getLocator().getChunk(), this.namedTag);
         villager.addEffect(Effect.get(EffectType.NAUSEA).setDuration(200));
         villager.setPosition(this.pos);
         villager.setRotation(this.rotation.yaw, this.rotation.pitch);

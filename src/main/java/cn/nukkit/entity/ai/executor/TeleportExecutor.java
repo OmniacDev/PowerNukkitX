@@ -3,7 +3,6 @@ package cn.nukkit.entity.ai.executor;
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.level.Locator;
-import cn.nukkit.level.Transform;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
 import lombok.AllArgsConstructor;

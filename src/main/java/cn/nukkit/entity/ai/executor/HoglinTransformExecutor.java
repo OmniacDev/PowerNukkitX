@@ -4,7 +4,6 @@ import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.data.EntityFlag;
 import cn.nukkit.entity.effect.Effect;
 import cn.nukkit.entity.effect.EffectType;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.EntityZoglin;
 import cn.nukkit.level.Sound;
 
@@ -44,7 +43,7 @@ public class HoglinTransformExecutor implements EntityControl, IBehaviorExecutor
     private void transform(EntityMob entity) {
         entity.saveNBT();
         entity.close();
-        EntityZoglin zoglin = new EntityZoglin(entity.getPosition().getChunk(), entity.namedTag);
+        EntityZoglin zoglin = new EntityZoglin(entity.getLocator().getChunk(), entity.namedTag);
         zoglin.setPosition(entity.pos);
         zoglin.setRotation(entity.rotation.yaw, entity.rotation.pitch);
         zoglin.setBaby(entity.isBaby());

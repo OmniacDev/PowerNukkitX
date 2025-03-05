@@ -414,7 +414,7 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
         EntityExplosionPrimeEvent ev = new EntityExplosionPrimeEvent(this, 7);
         this.server.getPluginManager().callEvent(ev);
         if (!ev.isCancelled()) {
-            Explosion explosion = new Explosion(this.getPosition(), (float) ev.getForce(), this);
+            Explosion explosion = new Explosion(this.getLocator(), (float) ev.getForce(), this);
             if (ev.isBlockBreaking() && this.level.getGameRules().getBoolean(GameRule.MOB_GRIEFING)) {
                 explosion.explodeA();
             }
