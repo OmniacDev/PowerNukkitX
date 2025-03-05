@@ -52,18 +52,18 @@ public class BlockKelp extends BlockFlowable {
                 (layer1Block instanceof BlockFlowingWater flowingWater && flowingWater.isSourceOrFlowingDown())
         ) {
             if (((BlockFlowingWater) layer1Block).isFlowingDown()) {
-                this.getLevel().setBlock(this, 1, get(FLOWING_WATER), true, false);
+                this.getLevel().setBlock(this.position, 1, get(FLOWING_WATER), true, false);
             }
 
             int maxAge = KELP_AGE.getMax();
             if (down.getId().equals(KELP) && down.getPropertyValue(KELP_AGE) != maxAge - 1) {
                 setAge(maxAge - 1);
-                this.getLevel().setBlock(down, down, true, true);
+                this.getLevel().setBlock(down.position, down, true, true);
             }
 
             //Placing it by hand gives it a random age value between 0 and 24.
             setAge(ThreadLocalRandom.current().nextInt(maxAge));
-            this.getLevel().setBlock(this, this, true, true);
+            this.getLevel().setBlock(this.position, this, true, true);
             return true;
         } else {
             return false;
@@ -76,18 +76,18 @@ public class BlockKelp extends BlockFlowable {
             Block blockLayer1 = getLevelBlockAtLayer(1);
             if (!(blockLayer1 instanceof BlockFrostedIce) &&
                     (!(blockLayer1 instanceof BlockFlowingWater) || !((BlockFlowingWater) blockLayer1).isSourceOrFlowingDown())) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return type;
             }
 
             Block down = down();
             if ((!down.isSolid() && !down.getId().equals(KELP)) || down.getId().equals(MAGMA) || down.getId().equals(ICE) || down.getId().equals(SOUL_SAND)) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return type;
             }
 
             if (blockLayer1 instanceof BlockFlowingWater w && w.isFlowingDown()) {
-                this.getLevel().setBlock(this, 1, get(FLOWING_WATER), true, false);
+                this.getLevel().setBlock(this.position, 1, get(FLOWING_WATER), true, false);
             }
             return type;
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
@@ -110,9 +110,9 @@ public class BlockKelp extends BlockFlowable {
                 Server.getInstance().getPluginManager().callEvent(ev);
                 if (!ev.isCancelled()) {
                     this.setAge(maxValue);
-                    this.getLevel().setBlock(this, 0, this, true, true);
-                    this.getLevel().setBlock(up, 1, get(FLOWING_WATER), true, false);
-                    this.getLevel().setBlock(up, 0, ev.getNewState(), true, true);
+                    this.getLevel().setBlock(this.position, 0, this, true, true);
+                    this.getLevel().setBlock(up.position, 1, get(FLOWING_WATER), true, false);
+                    this.getLevel().setBlock(up.position, 0, ev.getNewState(), true, true);
                     return true;
                 }
             }
@@ -125,9 +125,9 @@ public class BlockKelp extends BlockFlowable {
         Block down = down();
         if (down.getId().equals(KELP)) {
             BlockKelp blockKelp = new BlockKelp(blockstate.setPropertyValue(PROPERTIES, KELP_AGE.createValue(ThreadLocalRandom.current().nextInt(KELP_AGE.getMax()))));
-            this.getLevel().setBlock(down, blockKelp, true, true);
+            this.getLevel().setBlock(down.position, blockKelp, true, true);
         }
-        this.getLevel().setBlock(this, get(AIR), true, true);
+        this.getLevel().setBlock(this.position, get(AIR), true, true);
         return true;
     }
 
@@ -135,9 +135,9 @@ public class BlockKelp extends BlockFlowable {
     public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
         //Bone meal
         if (item.isFertilizer()) {
-            int x = (int) this.x;
-            int z = (int) this.z;
-            for (int y = (int) this.y + 1; y < 255; y++) {
+            int x = (int) this.position.x;
+            int z = (int) this.position.z;
+            for (int y = (int) this.position.y + 1; y < 255; y++) {
                 Block blockAbove = getLevel().getBlock(x, y, z);
                 String blockIdAbove = blockAbove.getId();
                 if (!Objects.equals(blockIdAbove, KELP)) {
@@ -145,7 +145,7 @@ public class BlockKelp extends BlockFlowable {
                         if (water.isSourceOrFlowingDown()) {
                             BlockKelp highestKelp = (BlockKelp) getLevel().getBlock(x, y - 1, z);
                             if (highestKelp.grow()) {
-                                this.level.addParticle(new BoneMealParticle(this));
+                                this.level.addParticle(new BoneMealParticle(this.position));
 
                                 if (player != null && (player.gamemode & 0x01) == 0) {
                                     item.count--;

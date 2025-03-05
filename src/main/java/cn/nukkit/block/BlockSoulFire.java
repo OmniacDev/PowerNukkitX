@@ -31,7 +31,7 @@ public class BlockSoulFire extends BlockFire {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             String downId = down().getId();
             if (!downId.equals(Block.SOUL_SAND) && !downId.equals(Block.SOUL_SOIL)) {
-                this.getLevel().setBlock(this, Block.get(FIRE).setPropertyValue(AGE_16, this.getAge()));
+                this.getLevel().setBlock(this.position, Block.get(FIRE).setPropertyValue(AGE_16, this.getAge()));
             }
             return type;
         }

@@ -72,7 +72,7 @@ public class BlockEndPortalFrame extends BlockTransparent implements Faceable {
 
     @Override
     public double getMaxY() {
-        return this.y + (this.isEndPortalEye() ? 1 : 0.8125);
+        return this.position.y + (this.isEndPortalEye() ? 1 : 0.8125);
     }
 
     @Override
@@ -104,8 +104,8 @@ public class BlockEndPortalFrame extends BlockTransparent implements Faceable {
     public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
         if (!this.isEndPortalEye() && player != null && item.getId().equals(Item.ENDER_EYE)) {
             this.setEndPortalEye(true);
-            this.getLevel().setBlock(this, this, true, true);
-            this.getLevel().addSound(this, Sound.BLOCK_END_PORTAL_FRAME_FILL);
+            this.getLevel().setBlock(this.position, this, true, true);
+            this.getLevel().addSound(this.position, Sound.BLOCK_END_PORTAL_FRAME_FILL);
             this.createPortal();
             return true;
         }
@@ -143,8 +143,8 @@ public class BlockEndPortalFrame extends BlockTransparent implements Faceable {
         for (int x = -2; x <= 2; x++) {
             if (x == 0)
                 continue;
-            Block block = this.getLevel().getBlock(this.add(x, 0, 0));
-            Block iBlock = this.getLevel().getBlock(this.add(x * 2, 0, 0));
+            Block block = this.getLevel().getBlock(this.position.add(x, 0, 0));
+            Block iBlock = this.getLevel().getBlock(this.position.add(x * 2, 0, 0));
             if (this.checkFrame(block) && !visited.contains(block)) {
                 visited.add(block);
                 if ((x == -1 || x == 1) && this.checkFrame(iBlock))
@@ -152,9 +152,9 @@ public class BlockEndPortalFrame extends BlockTransparent implements Faceable {
                 for (int z = -4; z <= 4; z++) {
                     if (z == 0)
                         continue;
-                    block = this.getLevel().getBlock(this.add(x, 0, z));
+                    block = this.getLevel().getBlock(this.position.add(x, 0, z));
                     if (this.checkFrame(block)) {
-                        return this.add((double) x / 2, 0, (double) z / 2);
+                        return this.position.add((double) x / 2, 0, (double) z / 2);
                     }
                 }
             }
@@ -162,8 +162,8 @@ public class BlockEndPortalFrame extends BlockTransparent implements Faceable {
         for (int z = -2; z <= 2; z++) {
             if (z == 0)
                 continue;
-            Block block = this.getLevel().getBlock(this.add(0, 0, z));
-            Block iBlock = this.getLevel().getBlock(this.add(0, 0, z * 2));
+            Block block = this.getLevel().getBlock(this.position.add(0, 0, z));
+            Block iBlock = this.getLevel().getBlock(this.position.add(0, 0, z * 2));
             if (this.checkFrame(block) && !visited.contains(block)) {
                 visited.add(block);
                 if ((z == -1 || z == 1) && this.checkFrame(iBlock))
@@ -171,9 +171,9 @@ public class BlockEndPortalFrame extends BlockTransparent implements Faceable {
                 for (int x = -4; x <= 4; x++) {
                     if (x == 0)
                         continue;
-                    block = this.getLevel().getBlock(this.add(x, 0, z));
+                    block = this.getLevel().getBlock(this.position.add(x, 0, z));
                     if (this.checkFrame(block)) {
-                        return this.add((double) x / 2, 0, (double) z / 2);
+                        return this.position.add((double) x / 2, 0, (double) z / 2);
                     }
                 }
             }
@@ -216,7 +216,7 @@ public class BlockEndPortalFrame extends BlockTransparent implements Faceable {
         } else {
             setBlockFace(player.getDirection().getOpposite());
         }
-        this.getLevel().setBlock(block, this, true);
+        this.getLevel().setBlock(block.position, this, true);
         return true;
     }
 

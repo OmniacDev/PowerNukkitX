@@ -497,11 +497,11 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
                 int breakTick = (int) Math.ceil(miningTimeRequired * 20);
                 LevelEventPacket pk = new LevelEventPacket();
                 pk.evid = LevelEventPacket.EVENT_BLOCK_UPDATE_BREAK;
-                pk.x = (float) this.breakingBlock.x;
-                pk.y = (float) this.breakingBlock.y;
-                pk.z = (float) this.breakingBlock.z;
+                pk.x = (float) this.breakingBlock.position.x;
+                pk.y = (float) this.breakingBlock.position.y;
+                pk.z = (float) this.breakingBlock.position.z;
                 pk.data = 65535 / breakTick;
-                this.getLevel().addChunkPacket(this.breakingBlock.getFloorX() >> 4, this.breakingBlock.getFloorZ() >> 4, pk);
+                this.getLevel().addChunkPacket(this.breakingBlock.position.getFloorX() >> 4, this.breakingBlock.position.getFloorZ() >> 4, pk);
                 this.level.addParticle(new PunchBlockParticle(pos, block));
                 if (this.breakingBlock instanceof CustomBlock) {
                     var timeDiff = time - breakingBlockTime;
@@ -525,14 +525,14 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
         }
 
         Block target = this.level.getBlock(pos);
-        PlayerInteractEvent playerInteractEvent = new PlayerInteractEvent(this, this.inventory.getItemInHand(), target, face,
+        PlayerInteractEvent playerInteractEvent = new PlayerInteractEvent(this, this.inventory.getItemInHand(), target.position, face,
                 target.isAir() ? Action.LEFT_CLICK_AIR : Action.LEFT_CLICK_BLOCK);
         this.getServer().getPluginManager().callEvent(playerInteractEvent);
         if (playerInteractEvent.isCancelled()) {
             this.inventory.sendHeldItem(this);
-            this.getLevel().sendBlocks(new Player[]{this}, new Block[]{target}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0);
+            this.getLevel().sendBlocks(new Player[]{this}, new Vector3[]{target.position}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0);
             if (target.getLevelBlockAtLayer(1) instanceof BlockLiquid) {
-                this.getLevel().sendBlocks(new Player[]{this}, new Block[]{target.getLevelBlockAtLayer(1)}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
+                this.getLevel().sendBlocks(new Player[]{this}, new Vector3[]{target.getLevelBlockAtLayer(1).position}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
             }
             return;
         }
@@ -541,14 +541,14 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
 
         Block block = target.getSide(face);
         if (block.getId().equals(Block.FIRE) || block.getId().equals(BlockID.SOUL_FIRE)) {
-            this.level.setBlock(block, Block.get(BlockID.AIR), true);
+            this.level.setBlock(block.position, Block.get(BlockID.AIR), true);
             this.level.addLevelSoundEvent(block, LevelSoundEventPacket.SOUND_EXTINGUISH_FIRE);
             return;
         }
 
         if (block.getId().equals(BlockID.SWEET_BERRY_BUSH) && block.isDefaultState()) {
             Item oldItem = playerInteractEvent.getItem();
-            Item i = this.level.useBreakOn(block, oldItem, this, true);
+            Item i = this.level.useBreakOn(block.position, oldItem, this, true);
             if (this.isSurvival() || this.isAdventure()) {
                 this.getFoodData().exhaust(0.005);
                 if (!i.equals(oldItem) || i.getCount() != oldItem.getCount()) {
@@ -697,7 +697,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
             this.spawnPoint = new Locator(this.namedTag.getInt("SpawnX"), this.namedTag.getInt("SpawnY"), this.namedTag.getInt("SpawnZ"), level);
         } else {
             this.spawnPoint = level.getSafeSpawn();
-            log.info("Player {} cannot find the saved spawnpoint, reset the spawnpoint to {} {} {} / {}", this.getName(), this.spawnPoint.x, this.spawnPoint.y, this.spawnPoint.z, this.spawnPoint.getLevel().getName());
+            log.info("Player {} cannot find the saved spawnpoint, reset the spawnpoint to {} {} {} / {}", this.getName(), this.spawnPoint.position.x, this.spawnPoint.position.y, this.spawnPoint.position.z, this.spawnPoint.getLevel().getName());
         }
         setDataFlag(EntityFlag.HIDDEN_WHEN_INVISIBLE);
         setDataFlag(EntityFlag.PUSH_TOWARDS_CLOSEST_SPACE);
@@ -773,9 +773,9 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
             //update compass
             SetSpawnPositionPacket pk = new SetSpawnPositionPacket();
             pk.spawnType = SetSpawnPositionPacket.TYPE_WORLD_SPAWN;
-            pk.x = this.getSpawn().first().getFloorX();
-            pk.y = this.getSpawn().first().getFloorY();
-            pk.z = this.getSpawn().first().getFloorZ();
+            pk.x = this.getSpawn().first().position.getFloorX();
+            pk.y = this.getSpawn().first().position.getFloorY();
+            pk.z = this.getSpawn().first().position.getFloorZ();
             pk.dimension = this.getSpawn().first().getLevel().getDimension();
             this.dataPacket(pk);
         }
@@ -1001,9 +1001,9 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
         //update server-side position and rotation and aabb
         Transform last = new Transform(this.prevPos.x, this.prevPos.y, this.prevPos.z, this.prevRotation.yaw, this.prevRotation.pitch, this.prevHeadYaw, this.level);
         Transform now = this.getLocation();
-        this.prevPos.x = now.x;
-        this.prevPos.y = now.y;
-        this.prevPos.z = now.z;
+        this.prevPos.x = now.position.x;
+        this.prevPos.y = now.position.y;
+        this.prevPos.z = now.position.z;
         this.prevRotation.yaw = now.yaw;
         this.prevRotation.pitch = now.pitch;
         this.prevHeadYaw = now.headYaw;
@@ -1029,7 +1029,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
                         this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, ev.getTo().clone(), VibrationType.TELEPORT));
                     this.teleport(ev.getTo(), null);
                 } else {
-                    if (this.getGamemode() != Player.SPECTATOR && (last.x != now.x || last.y != now.y || last.z != now.z)) {
+                    if (this.getGamemode() != Player.SPECTATOR && (last.position.x != now.position.x || last.position.y != now.position.y || last.position.z != now.position.z)) {
                         if (this.isOnGround() && this.isGliding()) {
                             this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.getVector3(), VibrationType.ELYTRA_GLIDE));
                         } else if (this.isOnGround() && !(this.getPosition().getSide(BlockFace.DOWN).getLevelBlock() instanceof BlockWool) && !this.isSneaking()) {
@@ -1048,9 +1048,9 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
 
         //update speed
         if (this.speed == null) {
-            this.speed = new Vector3(last.x - now.x, last.y - now.y, last.z - now.z);
+            this.speed = new Vector3(last.position.x - now.position.x, last.position.y - now.position.y, last.position.z - now.position.z);
         } else {
-            this.speed.setComponents(last.x - now.x, last.y - now.y, last.z - now.z);
+            this.speed.setComponents(last.position.x - now.position.x, last.position.y - now.position.y, last.position.z - now.position.z);
         }
 
         handleLogicInMove(invalidMotion, distance);
@@ -1131,8 +1131,8 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
                         WaterFrostEvent ev = new WaterFrostEvent(block, this);
                         server.getPluginManager().callEvent(ev);
                         if (!ev.isCancelled()) {
-                            level.setBlock(block, layer, Block.get(Block.FROSTED_ICE), true, false);
-                            level.scheduleUpdate(level.getBlock(block, layer), ThreadLocalRandom.current().nextInt(20, 40));
+                            level.setBlock(block.position, layer, Block.get(Block.FROSTED_ICE), true, false);
+                            level.scheduleUpdate(level.getBlock(block.position, layer), ThreadLocalRandom.current().nextInt(20, 40));
                         }
                     }
                 }
@@ -1246,9 +1246,9 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
             nbt.putString("Level", this.level.getName());
             Locator spawnLocation = this.level.getSafeSpawn();
             nbt.getList("Pos", FloatTag.class)
-                    .add(new FloatTag(spawnLocation.x))
-                    .add(new FloatTag(spawnLocation.y))
-                    .add(new FloatTag(spawnLocation.z));
+                    .add(new FloatTag(spawnLocation.position.x))
+                    .add(new FloatTag(spawnLocation.position.y))
+                    .add(new FloatTag(spawnLocation.position.z));
         } else {
             this.setLevel(level);
         }
@@ -1434,7 +1434,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
                     int charge = respawnAnchor.getCharge();
                     if (charge > 0) {
                         respawnAnchor.setCharge(charge - 1);
-                        respawnAnchor.getLevel().setBlock(respawnAnchor, spawnBlock);
+                        respawnAnchor.getLevel().setBlock(respawnAnchor.position, spawnBlock);
                         respawnAnchor.getLevel().scheduleUpdate(respawnAnchor, 10);
                         respawnAnchor.getLevel().addSound(this.pos, Sound.RESPAWN_ANCHOR_DEPLETE, 1, 1, this);
                     }
@@ -2274,13 +2274,13 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     public void setSpawn(Locator pos, SpawnPointType spawnPointType) {
         Preconditions.checkNotNull(pos);
         Preconditions.checkNotNull(pos.level);
-        this.spawnPoint = new Locator(pos.x, pos.y, pos.z, level);
+        this.spawnPoint = new Locator(pos.position.x, pos.position.y, pos.position.z, level);
         this.spawnPointType = spawnPointType;
         SetSpawnPositionPacket pk = new SetSpawnPositionPacket();
         pk.spawnType = SetSpawnPositionPacket.TYPE_PLAYER_SPAWN;
-        pk.x = (int) this.spawnPoint.x;
-        pk.y = (int) this.spawnPoint.y;
-        pk.z = (int) this.spawnPoint.z;
+        pk.x = (int) this.spawnPoint.position.x;
+        pk.y = (int) this.spawnPoint.position.y;
+        pk.z = (int) this.spawnPoint.position.z;
         pk.dimension = this.spawnPoint.level.getDimension();
         this.dataPacket(pk);
     }
@@ -2918,7 +2918,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
                 Block block;
                 while (itr.hasNext()) {
                     block = itr.next();
-                    entity = getEntityAtPosition(nearbyEntities, block.getFloorX(), block.getFloorY(), block.getFloorZ());
+                    entity = getEntityAtPosition(nearbyEntities, block.position.getFloorX(), block.position.getFloorY(), block.position.getFloorZ());
                     if (entity != null) {
                         break;
                     }
@@ -3623,9 +3623,9 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
                     .remove("SpawnLevel")
                     .remove("SpawnDimension");
         } else {
-            namedTag.putInt("SpawnX", this.spawnPoint.getFloorX())
-                    .putInt("SpawnY", this.spawnPoint.getFloorY())
-                    .putInt("SpawnZ", this.spawnPoint.getFloorZ());
+            namedTag.putInt("SpawnX", this.spawnPoint.position.getFloorX())
+                    .putInt("SpawnY", this.spawnPoint.position.getFloorY())
+                    .putInt("SpawnZ", this.spawnPoint.position.getFloorZ());
             if (this.spawnPoint.getLevel() != null) {
                 this.namedTag.putString("SpawnLevel", this.spawnPoint.getLevel().getName());
                 this.namedTag.putInt("SpawnDimension", this.spawnPoint.getLevel().getDimension());
@@ -3895,9 +3895,9 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
 
             RespawnPacket pk = new RespawnPacket();
             Locator pos = this.getSpawn().left();
-            pk.x = (float) pos.x;
-            pk.y = (float) pos.y;
-            pk.z = (float) pos.z;
+            pk.x = (float) pos.position.x;
+            pk.y = (float) pos.position.y;
+            pk.z = (float) pos.position.z;
             pk.respawnState = RespawnPacket.STATE_SEARCHING_FOR_SPAWN;
             pk.runtimeEntityId = this.getId();
             this.dataPacket(pk);
@@ -4444,17 +4444,17 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
                     UpdateBlockPacket setAir = new UpdateBlockPacket();
                     setAir.blockRuntimeId = BlockAir.STATE.blockStateHash();
                     setAir.flags = UpdateBlockPacket.FLAG_NETWORK;
-                    setAir.x = b.getFloorX();
-                    setAir.y = b.getFloorY();
-                    setAir.z = b.getFloorZ();
+                    setAir.x = b.position.getFloorX();
+                    setAir.y = b.position.getFloorY();
+                    setAir.z = b.position.getFloorZ();
                     this.dataPacket(setAir);
 
                     UpdateBlockPacket revertAir = new UpdateBlockPacket();
                     revertAir.blockRuntimeId = b.getBlock().getRuntimeId();
                     revertAir.flags = UpdateBlockPacket.FLAG_NETWORK;
-                    revertAir.x = b.getFloorX();
-                    revertAir.y = b.getFloorY();
-                    revertAir.z = b.getFloorZ();
+                    revertAir.x = b.position.getFloorX();
+                    revertAir.y = b.position.getFloorY();
+                    revertAir.z = b.position.getFloorZ();
                     this.dataPacket(revertAir);
                     blockEntitySpawnable.spawnTo(this);
                 }
@@ -4937,9 +4937,9 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
             SetSpawnPositionPacket spawnPosition = new SetSpawnPositionPacket();
             spawnPosition.spawnType = SetSpawnPositionPacket.TYPE_WORLD_SPAWN;
             Locator spawn = level.getSpawnLocation();
-            spawnPosition.x = spawn.getFloorX();
-            spawnPosition.y = spawn.getFloorY();
-            spawnPosition.z = spawn.getFloorZ();
+            spawnPosition.x = spawn.position.getFloorX();
+            spawnPosition.y = spawn.position.getFloorY();
+            spawnPosition.z = spawn.position.getFloorZ();
             spawnPosition.dimension = spawn.getLevel().getDimension();
             this.dataPacket(spawnPosition);
 

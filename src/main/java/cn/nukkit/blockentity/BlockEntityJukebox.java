@@ -53,10 +53,10 @@ public class BlockEntityJukebox extends BlockEntitySpawnable {
             packet.name = itemRecord.getSoundId();
             packet.volume = 1;
             packet.pitch = 1;
-            packet.x = this.getFloorX();
-            packet.y = this.getFloorY();
-            packet.z = this.getFloorZ();
-            this.getLevel().addChunkPacket(this.getFloorX() >> 4, this.getFloorZ() >> 4, packet);
+            packet.x = this.position.getFloorX();
+            packet.y = this.position.getFloorY();
+            packet.z = this.position.getFloorZ();
+            this.getLevel().addChunkPacket(this.position.getFloorX() >> 4, this.position.getFloorZ() >> 4, packet);
         }
     }
 
@@ -66,14 +66,14 @@ public class BlockEntityJukebox extends BlockEntitySpawnable {
             StopSoundPacket packet = new StopSoundPacket();
             packet.name = itemRecord.getSoundId();
             packet.stopAll = false;
-            this.getLevel().addChunkPacket(this.getFloorX() >> 4, this.getFloorZ() >> 4, packet);
+            this.getLevel().addChunkPacket(this.position.getFloorX() >> 4, this.position.getFloorZ() >> 4, packet);
         }
     }
 
     public void dropItem() {
         if (!this.recordItem.isNull()) {
             stop();
-            this.level.dropItem(this.up(), this.recordItem);
+            this.level.dropItem(this.position.up(), this.recordItem);
             this.recordItem = Item.AIR;
         }
     }

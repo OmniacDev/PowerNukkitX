@@ -46,7 +46,7 @@ public class BlockGrassPath extends BlockGrassBlock {
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (this.up().isSolid()) {
-                this.level.setBlock(this, Block.get(BlockID.DIRT), false, true);
+                this.level.setBlock(this.position, Block.get(BlockID.DIRT), false, true);
             }
 
             return Level.BLOCK_UPDATE_NORMAL;
@@ -58,7 +58,7 @@ public class BlockGrassPath extends BlockGrassBlock {
     public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
         if (item.isHoe()) {
             item.useOn(this);
-            this.getLevel().setBlock(this, get(FARMLAND), true);
+            this.getLevel().setBlock(this.position, get(FARMLAND), true);
             if (player != null) {
                 player.getLevel().addSound(player.pos, Sound.USE_GRASS);
             }

@@ -51,19 +51,19 @@ public class SpawnpointCommand extends VanillaCommand {
                 if (level != null) {
                     Locator locator = list.getResult(1);
                     if (level.isOverWorld()) {
-                        if (locator.y < -64) locator.y = -64;
-                        if (locator.y > 320) locator.y = 320;
+                        if (locator.position.y < -64) locator.position.y = -64;
+                        if (locator.position.y > 320) locator.position.y = 320;
                     } else {
-                        if (locator.y < 0) locator.y = 0;
-                        if (locator.y > 255) locator.y = 255;
+                        if (locator.position.y < 0) locator.position.y = 0;
+                        if (locator.position.y > 255) locator.position.y = 255;
                     }
                     for (Player player : players) {
                         player.setSpawn(locator, SpawnPointType.PLAYER);
                     }
                     log.addSuccess("commands.spawnpoint.success.multiple.specific", players.stream().map(Player::getName).collect(Collectors.joining(" ")),
-                            round2.format(locator.x),
-                            round2.format(locator.y),
-                            round2.format(locator.z)).successCount(players.size()).output(true);
+                            round2.format(locator.position.x),
+                            round2.format(locator.position.y),
+                            round2.format(locator.position.z)).successCount(players.size()).output(true);
                     return players.size();
                 }
             }
@@ -74,9 +74,9 @@ public class SpawnpointCommand extends VanillaCommand {
             Locator pos = players.get(0).getPosition();
             players.get(0).setSpawn(pos, SpawnPointType.PLAYER);
             log.addSuccess("commands.spawnpoint.success.single", sender.getName(),
-                    round2.format(pos.x),
-                    round2.format(pos.y),
-                    round2.format(pos.z)).output(true);
+                    round2.format(pos.position.x),
+                    round2.format(pos.position.y),
+                    round2.format(pos.position.z)).output(true);
             return 1;
         } else {
             sender.sendMessage(new TranslationContainer(TextFormat.RED + "%commands.generic.noTargetMatch"));

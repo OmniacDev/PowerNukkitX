@@ -101,7 +101,7 @@ public abstract class BlockVinesNether extends BlockTransparent {
                 return Level.BLOCK_UPDATE_RANDOM;
             }
             case Level.BLOCK_UPDATE_SCHEDULED -> {
-                getLevel().useBreakOn(this, null, null, true);
+                getLevel().useBreakOn(this.position, null, null, true);
                 return Level.BLOCK_UPDATE_SCHEDULED;
             }
             case Level.BLOCK_UPDATE_NORMAL -> {
@@ -122,14 +122,14 @@ public abstract class BlockVinesNether extends BlockTransparent {
      */
     public boolean grow() {
         Block pos = getSide(getGrowthDirection());
-        if (!pos.isAir() || pos.y < 0 || 255 < pos.y) {
+        if (!pos.isAir() || pos.position.y < 0 || 255 < pos.position.y) {
             return false;
         }
 
         BlockVinesNether growing = clone();
-        growing.x = pos.x;
-        growing.y = pos.y;
-        growing.z = pos.z;
+        growing.position.x = pos.position.x;
+        growing.position.y = pos.position.y;
+        growing.position.z = pos.position.z;
         growing.setVineAge(Math.min(getVineAge() + 1, getMaxVineAge()));
 
         BlockGrowEvent ev = new BlockGrowEvent(this, growing);
@@ -138,8 +138,8 @@ public abstract class BlockVinesNether extends BlockTransparent {
         if (ev.isCancelled()) {
             return false;
         }
-        
-        if (level.setBlock(pos, growing)) {
+
+        if (level.setBlock(pos.position, growing)) {
             increaseRootAge();
             return true;
         }
@@ -163,14 +163,14 @@ public abstract class BlockVinesNether extends BlockTransparent {
         int grew = 0;
         for (int distance = 1; distance <= blocksToGrow; distance++) {
             Block pos = getSide(growthDirection, distance);
-            if (!pos.isAir() || pos.y < 0 || 255 < pos.y) {
+            if (!pos.isAir() || pos.position.y < 0 || 255 < pos.position.y) {
                 break;
             }
 
             growing.setVineAge(Math.min(age++, maxAge));
-            growing.x = pos.x;
-            growing.y = pos.y;
-            growing.z = pos.z;
+            growing.position.x = pos.position.x;
+            growing.position.y = pos.position.y;
+            growing.position.z = pos.position.z;
 
             BlockGrowEvent ev = new BlockGrowEvent(this, growing.clone());
             Server.getInstance().getPluginManager().callEvent(ev);
@@ -179,7 +179,7 @@ public abstract class BlockVinesNether extends BlockTransparent {
                 break;
             }
 
-            if (!level.setBlock(pos, ev.getNewState())) {
+            if (!level.setBlock(pos.position, ev.getNewState())) {
                 break;
             }
 
@@ -259,7 +259,7 @@ public abstract class BlockVinesNether extends BlockTransparent {
         int vineAge = baseVine.getVineAge();
         if (vineAge < baseVine.getMaxVineAge()) {
             baseVine.setVineAge(vineAge + 1);
-            if (getLevel().setBlock(baseVine, baseVine)) {
+            if (getLevel().setBlock(baseVine.position, baseVine)) {
                 return OptionalBoolean.TRUE;
             }
         }
@@ -273,7 +273,7 @@ public abstract class BlockVinesNether extends BlockTransparent {
             return false;
         }
 
-        getLevel().addParticle(new BoneMealParticle(this));
+        getLevel().addParticle(new BoneMealParticle(this.position));
         findVineBlock(false).ifPresent(BlockVinesNether::growMultiple);
 
         if (player != null && !player.isCreative()) {

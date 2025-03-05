@@ -112,12 +112,12 @@ public class Transform extends Locator {
 
     @Override
     public String toString() {
-        return "Location (level=" + this.getLevel().getName() + ", x=" + this.x + ", y=" + this.y + ", z=" + this.z + ", yaw=" + this.yaw + ", pitch=" + this.pitch + ", headYaw=" + this.headYaw + ")";
+        return "Location (level=" + this.getLevel().getName() + ", x=" + this.position.x + ", y=" + this.position.y + ", z=" + this.position.z + ", yaw=" + this.yaw + ", pitch=" + this.pitch + ", headYaw=" + this.headYaw + ")";
     }
 
     @Override
     @NotNull public Transform getLocation() {
-        return new Transform(this.x, this.y, this.z, this.yaw, this.pitch, this.headYaw, this.level);
+        return new Transform(this.position.x, this.position.y, this.position.z, this.yaw, this.pitch, this.headYaw, this.level);
     }
 
     @Override
@@ -132,12 +132,12 @@ public class Transform extends Locator {
 
     @Override
     public Transform add(double x, double y, double z) {
-        return new Transform(this.x + x, this.y + y, this.z + z, this.yaw, this.pitch, this.headYaw, this.level);
+        return new Transform(this.position.x + x, this.position.y + y, this.position.z + z, this.yaw, this.pitch, this.headYaw, this.level);
     }
 
     @Override
     public Transform add(Vector3 x) {
-        return new Transform(this.x + x.getX(), this.y + x.getY(), this.z + x.getZ(), this.yaw, this.pitch, this.headYaw, this.level);
+        return new Transform(this.position.x + x.getX(), this.position.y + x.getY(), this.position.z + x.getZ(), this.yaw, this.pitch, this.headYaw, this.level);
     }
 
     @Override
@@ -162,32 +162,32 @@ public class Transform extends Locator {
 
     @Override
     public Transform multiply(double number) {
-        return new Transform(this.x * number, this.y * number, this.z * number, this.yaw, this.pitch, this.headYaw, this.level);
+        return new Transform(this.position.x * number, this.position.y * number, this.position.z * number, this.yaw, this.pitch, this.headYaw, this.level);
     }
 
     @Override
     public Transform divide(double number) {
-        return new Transform(this.x / number, this.y / number, this.z / number, this.yaw, this.pitch, this.headYaw, this.level);
+        return new Transform(this.position.x / number, this.position.y / number, this.position.z / number, this.yaw, this.pitch, this.headYaw, this.level);
     }
 
     @Override
     public Transform ceil() {
-        return new Transform((int) Math.ceil(this.x), (int) Math.ceil(this.y), (int) Math.ceil(this.z), this.yaw, this.pitch, this.headYaw, this.level);
+        return new Transform((int) Math.ceil(this.position.x), (int) Math.ceil(this.position.y), (int) Math.ceil(this.position.z), this.yaw, this.pitch, this.headYaw, this.level);
     }
 
     @Override
     public Transform floor() {
-        return new Transform(this.getFloorX(), this.getFloorY(), this.getFloorZ(), this.yaw, this.pitch, this.headYaw, this.level);
+        return new Transform(this.position.getFloorX(), this.position.getFloorY(), this.position.getFloorZ(), this.yaw, this.pitch, this.headYaw, this.level);
     }
 
     @Override
     public Transform round() {
-        return new Transform(Math.round(this.x), Math.round(this.y), Math.round(this.z), this.yaw, this.pitch, this.headYaw, this.level);
+        return new Transform(Math.round(this.position.x), Math.round(this.position.y), Math.round(this.position.z), this.yaw, this.pitch, this.headYaw, this.level);
     }
 
     @Override
     public Transform abs() {
-        return new Transform((int) Math.abs(this.x), (int) Math.abs(this.y), (int) Math.abs(this.z), this.yaw, this.pitch, this.headYaw, this.level);
+        return new Transform((int) Math.abs(this.position.x), (int) Math.abs(this.position.y), (int) Math.abs(this.position.z), this.yaw, this.pitch, this.headYaw, this.level);
     }
 
     @Override

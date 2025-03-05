@@ -78,7 +78,7 @@ public class TickingAreaCommand extends VanillaCommand {
                     }
                 }
                 manager.addTickingArea(area);
-                log.addSuccess("commands.tickingarea-add-bounds.success", (int) from.x + "," + (int) from.y + "," + (int) from.z, (int) to.x + "," + (int) to.y + "," + (int) to.z).output();
+                log.addSuccess("commands.tickingarea-add-bounds.success", (int) from.position.x + "," + (int) from.position.y + "," + (int) from.position.z, (int) to.position.x + "," + (int) to.position.y + "," + (int) to.position.z).output();
                 return 1;
             }
             case "add-circle" -> {
@@ -104,13 +104,13 @@ public class TickingAreaCommand extends VanillaCommand {
                     }
                 }
                 manager.addTickingArea(area);
-                log.addSuccess("commands.tickingarea-add-circle.success", (int) center.x + "," + (int) center.y + "," + (int) center.z, String.valueOf(radius)).output();
+                log.addSuccess("commands.tickingarea-add-circle.success", (int) center.position.x + "," + (int) center.position.y + "," + (int) center.position.z, String.valueOf(radius)).output();
                 return 1;
             }
             case "remove-pos" -> {
                 Locator pos = list.getResult(1);
                 if (manager.getTickingAreaByPos(pos) == null) {
-                    log.addSuccess("commands.tickingarea-remove.failure", String.valueOf((int) pos.x), String.valueOf((int) pos.y), String.valueOf((int) pos.z)).output();
+                    log.addSuccess("commands.tickingarea-remove.failure", String.valueOf((int) pos.position.x), String.valueOf((int) pos.position.y), String.valueOf((int) pos.position.z)).output();
                     return 0;
                 }
                 manager.removeTickingArea(manager.getTickingAreaByPos(pos).getName());

@@ -140,11 +140,11 @@ public class BlockTripWire extends BlockTransparent {
         }
 
         this.setPowered(true);
-        this.level.setBlock(this, this, true, false);
+        this.level.setBlock(this.position, this, true, false);
         this.updateHook(false);
 
         this.level.scheduleUpdate(this, 10);
-        this.level.updateComparatorOutputLevelSelective(this, true);
+        this.level.updateComparatorOutputLevelSelective(this.position, true);
     }
 
     private void updateHook(boolean scheduleUpdate) {
@@ -194,10 +194,10 @@ public class BlockTripWire extends BlockTransparent {
             }
 
             this.setPowered(false);
-            this.level.setBlock(this, this, true, false);
+            this.level.setBlock(this.position, this, true, false);
             this.updateHook(false);
 
-            this.level.updateComparatorOutputLevelSelective(this, true);
+            this.level.updateComparatorOutputLevelSelective(this.position, true);
 
             return type;
         }
@@ -207,7 +207,7 @@ public class BlockTripWire extends BlockTransparent {
 
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        this.getLevel().setBlock(this, this, true, true);
+        this.getLevel().setBlock(this.position, this, true, true);
         this.updateHook(false);
 
         return true;
@@ -217,17 +217,17 @@ public class BlockTripWire extends BlockTransparent {
     public boolean onBreak(Item item) {
         if (item instanceof ItemShears) {
             this.setDisarmed(true);
-            this.level.setBlock(this, this, true, false);
+            this.level.setBlock(this.position, this, true, false);
             this.updateHook(false);
-            this.getLevel().setBlock(this, Block.get(BlockID.AIR), true, true);
+            this.getLevel().setBlock(this.position, Block.get(BlockID.AIR), true, true);
             //todo: initiator should be a entity
             level.getVibrationManager().callVibrationEvent(new VibrationEvent(
-                    this, this.add(0.5, 0.5, 0.5), VibrationType.SHEAR));
+                    this, this.position.add(0.5, 0.5, 0.5), VibrationType.SHEAR));
             return true;
         }
 
         this.setPowered(true);
-        this.getLevel().setBlock(this, Block.get(BlockID.AIR), true, true);
+        this.getLevel().setBlock(this.position, Block.get(BlockID.AIR), true, true);
         this.updateHook(true);
 
         return true;
@@ -235,7 +235,7 @@ public class BlockTripWire extends BlockTransparent {
 
     @Override
     public double getMaxY() {
-        return this.y + 0.5;
+        return this.position.y + 0.5;
     }
 
     @Override

@@ -27,11 +27,11 @@ public class BlockCrimsonDoor extends BlockWoodenDoor {
 
     @Override
     public void playOpenSound() {
-        level.addSound(this, Sound.OPEN_NETHER_WOOD_DOOR);
+        level.addSound(this.position, Sound.OPEN_NETHER_WOOD_DOOR);
     }
 
     @Override
     public void playCloseSound() {
-        level.addSound(this, Sound.CLOSE_NETHER_WOOD_DOOR);
+        level.addSound(this.position, Sound.CLOSE_NETHER_WOOD_DOOR);
     }
 }

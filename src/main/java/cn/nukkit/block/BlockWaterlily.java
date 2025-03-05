@@ -35,27 +35,27 @@ public class BlockWaterlily extends BlockFlowable {
 
     @Override
     public double getMinX() {
-        return this.x + 0.0625;
+        return this.position.x + 0.0625;
     }
 
     @Override
     public double getMinZ() {
-        return this.z + 0.0625;
+        return this.position.z + 0.0625;
     }
 
     @Override
     public double getMaxX() {
-        return this.x + 0.9375;
+        return this.position.x + 0.9375;
     }
 
     @Override
     public double getMaxY() {
-        return this.y + 0.015625;
+        return this.position.y + 0.015625;
     }
 
     @Override
     public double getMaxZ() {
-        return this.z + 0.9375;
+        return this.position.z + 0.9375;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class BlockWaterlily extends BlockFlowable {
         if (target instanceof BlockFlowingWater || target.getLevelBlockAtLayer(1) instanceof BlockFlowingWater) {
             Block up = target.up();
             if (up.isAir()) {
-                this.getLevel().setBlock(up, this, true, true);
+                this.getLevel().setBlock(up.position, this, true, true);
                 return true;
             }
         }
@@ -81,7 +81,7 @@ public class BlockWaterlily extends BlockFlowable {
             Block down = this.down();
             if (!(down instanceof BlockFlowingWater) && !(down.getLevelBlockAtLayer(1) instanceof BlockFlowingWater)
                     && !(down instanceof BlockFrostedIce) && !(down.getLevelBlockAtLayer(1) instanceof BlockFrostedIce)) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         }

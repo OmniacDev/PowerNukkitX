@@ -68,7 +68,7 @@ public class BlockPowderSnow extends BlockTransparent {
     @Override
     public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Locator locator, @NotNull Vector3 motion) {
         if (projectile instanceof EntitySmallFireball) {
-            this.getLevel().useBreakOn(this);
+            this.getLevel().useBreakOn(this.position);
             return true;
         }
         return false;

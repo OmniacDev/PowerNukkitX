@@ -28,9 +28,9 @@ public class ShulkerBoxDispenseBehavior extends DefaultDispenseBehavior {
         BlockUndyedShulkerBox shulkerBox = (BlockUndyedShulkerBox) item.getBlock().clone();
         shulkerBox.level = block.level;
         shulkerBox.layer = 0;
-        shulkerBox.x = target.x;
-        shulkerBox.y = target.y;
-        shulkerBox.z = target.z;
+        shulkerBox.position.x = target.position.x;
+        shulkerBox.position.y = target.position.y;
+        shulkerBox.position.z = target.position.z;
 
         BlockFace shulkerBoxFace = shulkerBox.down().isTransparent() ? face : BlockFace.UP;
         

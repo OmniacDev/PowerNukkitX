@@ -61,7 +61,7 @@ public class PlayerActionProcessor extends DataPacketProcessor<PlayerActionPacke
             case PlayerActionPacket.ACTION_CREATIVE_PLAYER_DESTROY_BLOCK -> {
                 // Used by client to get book from lecterns and items from item frame in creative mode since 1.20.70
                 Block blockLectern = playerHandle.player.getLevel().getBlock(pos);
-                if (blockLectern instanceof BlockLectern blockLecternI && blockLectern.distance(playerHandle.player.pos) <= 6) {
+                if (blockLectern instanceof BlockLectern blockLecternI && blockLectern.position.distance(playerHandle.player.pos) <= 6) {
                     blockLecternI.dropBook(playerHandle.player);
                 }
                 if (blockLectern instanceof BlockFrame blockFrame && blockFrame.getBlockEntity() != null) {

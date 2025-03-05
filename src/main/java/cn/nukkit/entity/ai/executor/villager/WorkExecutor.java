@@ -55,13 +55,13 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
                                 if(minDistance < 1.5f) {
                                     villager.getLevel().breakBlock(nearest);
                                     villager.getInventory().addItem(nearest.getDrops(Item.AIR));
-                                    villager.getLevel().setBlock(nearest, nearest.getProperties().getDefaultState().toBlock());
+                                    villager.getLevel().setBlock(nearest.position, nearest.getProperties().getDefaultState().toBlock());
                                     removeLookTarget(villager);
                                 } else {
                                     if(entity.getMoveTarget() == null) {
-                                        Vector2 horizontal = new Vector2(nearest.x - entity.pos.x, nearest.z - entity.pos.z);
+                                        Vector2 horizontal = new Vector2(nearest.position.x - entity.pos.x, nearest.position.z - entity.pos.z);
                                         horizontal = horizontal.multiply(1 - 1/horizontal.length());
-                                        Vector3 target = new Vector3(entity.pos.x + horizontal.x, nearest.y, entity.pos.z + horizontal.y);
+                                        Vector3 target = new Vector3(entity.pos.x + horizontal.x, nearest.position.y, entity.pos.z + horizontal.y);
                                         setLookTarget(entity, target);
                                         setRouteTarget(entity, target);
                                     }
@@ -84,9 +84,9 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
 
     public void setTarget(EntityMob entity) {
         Block site = entity.getMemoryStorage().get(CoreMemoryTypes.SITE_BLOCK);
-        Vector2 horizontal = new Vector2(site.x - entity.pos.x, site.z - entity.pos.z);
+        Vector2 horizontal = new Vector2(site.position.x - entity.pos.x, site.position.z - entity.pos.z);
         horizontal = horizontal.multiply(1 - 1/horizontal.length());
-        Vector3 target = new Vector3(entity.pos.x + horizontal.x, site.y, entity.pos.z + horizontal.y);
+        Vector3 target = new Vector3(entity.pos.x + horizontal.x, site.position.y, entity.pos.z + horizontal.y);
         setLookTarget(entity, target);
         setRouteTarget(entity, target);
     }

@@ -47,7 +47,7 @@ public class BlockDirtWithRoots extends BlockDirt {
 
     @Override
     public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
-        Vector3 vector = new Vector3(this.x, this.y - 1, this.z);
+        Vector3 vector = new Vector3(this.position.x, this.position.y - 1, this.position.z);
         if (!this.up().canBeReplaced()) {
             return false;
         }
@@ -55,14 +55,14 @@ public class BlockDirtWithRoots extends BlockDirt {
             if (player != null && (player.gamemode & 0x01) == 0) {
                 item.count--;
             }
-            this.level.addParticle(new BoneMealParticle(this));
+            this.level.addParticle(new BoneMealParticle(this.position));
             this.level.setBlock(vector, Block.get(HANGING_ROOTS));
             return true;
         }
         if (item.isHoe()) {
-            vector.setY(this.y+1);
+            vector.setY(this.position.y + 1);
             item.useOn(this);
-            this.getLevel().setBlock(this, Block.get(DIRT), true);
+            this.getLevel().setBlock(this.position, Block.get(DIRT), true);
             this.getLevel().dropItem(vector, new ItemBlock(Block.get(HANGING_ROOTS)));
             if (player != null) {
                 player.getLevel().addSound(player.pos, Sound.USE_GRASS);
@@ -70,7 +70,7 @@ public class BlockDirtWithRoots extends BlockDirt {
             return true;
         } else if (item.isShovel()) {
             item.useOn(this);
-            this.getLevel().setBlock(this, Block.get(GRASS_PATH));
+            this.getLevel().setBlock(this.position, Block.get(GRASS_PATH));
             if (player != null) {
                 player.getLevel().addSound(player.pos, Sound.USE_GRASS);
             }

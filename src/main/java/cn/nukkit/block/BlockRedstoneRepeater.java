@@ -26,7 +26,7 @@ public abstract class BlockRedstoneRepeater extends BlockRedstoneDiode {
             setPropertyValue(REPEATER_DELAY, repeaterDelay + 1);
         }
 
-        this.level.setBlock(this, this, true, true);
+        this.level.setBlock(this.position, this, true, true);
         return true;
     }
 
@@ -37,7 +37,7 @@ public abstract class BlockRedstoneRepeater extends BlockRedstoneDiode {
         }
         BlockFace blockFace = player != null ? BlockFace.fromHorizontalIndex(player.getDirection().getOpposite().getHorizontalIndex()) : BlockFace.SOUTH;
         setPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(blockFace));
-        if (!this.level.setBlock(block, this, true, true)) {
+        if (!this.level.setBlock(block.position, this, true, true)) {
             return false;
         }
 

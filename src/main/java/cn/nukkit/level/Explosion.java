@@ -147,9 +147,9 @@ public class Explosion {
                         vector.setComponents((double) i / (double) mRays * 2d - 1, (double) j / (double) mRays * 2d - 1, (double) k / (double) mRays * 2d - 1);
                         double len = vector.length();
                         vector.setComponents((vector.x / len) * this.STEP_LEN, (vector.y / len) * this.STEP_LEN, (vector.z / len) * this.STEP_LEN);
-                        double pointerX = this.source.x;
-                        double pointerY = this.source.y;
-                        double pointerZ = this.source.z;
+                        double pointerX = this.source.position.x;
+                        double pointerY = this.source.position.y;
+                        double pointerZ = this.source.position.z;
 
                         for (double blastForce = this.size * (random.nextInt(700, 1301)) / 1000d; blastForce > 0; blastForce -= this.STEP_LEN * 0.75d) {
                             int x = (int) pointerX;
@@ -201,7 +201,7 @@ public class Explosion {
         LongArraySet updateBlocks = new LongArraySet();
         List<Vector3> send = new ArrayList<>();
 
-        Vector3 source = (new Vector3(this.source.x, this.source.y, this.source.z)).floor();
+        Vector3 source = (new Vector3(this.source.position.x, this.source.position.y, this.source.position.z)).floor();
         double yield = (1d / this.size) * 100d;
 
         if (affectedBlocks == null) {
@@ -235,22 +235,22 @@ public class Explosion {
         }
 
         double explosionSize = this.size * 2d;
-        double minX = NukkitMath.floorDouble(this.source.x - explosionSize - 1);
-        double maxX = NukkitMath.ceilDouble(this.source.x + explosionSize + 1);
-        double minY = NukkitMath.floorDouble(this.source.y - explosionSize - 1);
-        double maxY = NukkitMath.ceilDouble(this.source.y + explosionSize + 1);
-        double minZ = NukkitMath.floorDouble(this.source.z - explosionSize - 1);
-        double maxZ = NukkitMath.ceilDouble(this.source.z + explosionSize + 1);
+        double minX = NukkitMath.floorDouble(this.source.position.x - explosionSize - 1);
+        double maxX = NukkitMath.ceilDouble(this.source.position.x + explosionSize + 1);
+        double minY = NukkitMath.floorDouble(this.source.position.y - explosionSize - 1);
+        double maxY = NukkitMath.ceilDouble(this.source.position.y + explosionSize + 1);
+        double minZ = NukkitMath.floorDouble(this.source.position.z - explosionSize - 1);
+        double maxZ = NukkitMath.ceilDouble(this.source.position.z + explosionSize + 1);
 
         AxisAlignedBB explosionBB = new SimpleAxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
         Entity[] list = this.level.getNearbyEntities(explosionBB, this.what instanceof Entity ? (Entity) this.what : null);
         for (Entity entity : list) {
-            double distance = entity.pos.distance(this.source) / explosionSize;
+            double distance = entity.pos.distance(this.source.position) / explosionSize;
 
             if (distance <= 1) {
-                Vector3 motion = entity.pos.subtract(this.source).normalize();
+                Vector3 motion = entity.pos.subtract(this.source.position).normalize();
 
-                float blockDensity = level.getBlockDensity(this.source, entity.boundingBox);
+                float blockDensity = level.getBlockDensity(this.source.position, entity.boundingBox);
                 double force = this.size * 2.0F;
                 double d = entity.pos.distance(source) / force;
                 double impact = (1.0D - d) * blockDensity;
@@ -282,34 +282,34 @@ public class Explosion {
         for (Block block : this.affectedBlocks) {
             if (block instanceof BlockTnt tnt) {
                 tnt.prime(random.nextInt(10, 31), this.what instanceof Entity ? (Entity) this.what : null);
-            } else if ((container = block.getLevel().getBlockEntity(block)) instanceof InventoryHolder inventoryHolder) {
+            } else if ((container = block.getLevel().getBlockEntity(block.position)) instanceof InventoryHolder inventoryHolder) {
                 if (container instanceof BlockEntityShulkerBox) {
-                    this.level.dropItem(block.add(0.5, 0.5, 0.5), block.toItem());
+                    this.level.dropItem(block.position.add(0.5, 0.5, 0.5), block.toItem());
                     inventoryHolder.getInventory().clearAll();
                 } else {
                     for (Item drop : inventoryHolder.getInventory().getContents().values()) {
-                        this.level.dropItem(block.add(0.5, 0.5, 0.5), drop);
+                        this.level.dropItem(block.position.add(0.5, 0.5, 0.5), drop);
                     }
                     inventoryHolder.getInventory().clearAll();
                 }
             } else if (random.nextDouble() * 100 < yield) {
                 for (Item drop : block.getDrops(air)) {
-                    this.level.dropItem(block.add(0.5, 0.5, 0.5), drop);
+                    this.level.dropItem(block.position.add(0.5, 0.5, 0.5), drop);
                 }
             }
 
             if (random.nextInt(8) == 0) {
-                smokePositions.add(block);
+                smokePositions.add(block.position);
             }
 
-            this.level.setBlock(new Vector3((int) block.x, (int) block.y, (int) block.z),
+            this.level.setBlock(new Vector3((int) block.position.x, (int) block.position.y, (int) block.position.z),
                     block.layer, Block.get(BlockID.AIR));
 
             if (block.layer != 0) {
                 continue;
             }
 
-            Vector3 pos = new Vector3(block.x, block.y, block.z);
+            Vector3 pos = new Vector3(block.position.x, block.position.y, block.position.z);
 
             for (BlockFace side : BlockFace.values()) {
                 Vector3 sideBlock = pos.getSide(side);
@@ -331,23 +331,23 @@ public class Explosion {
                     updateBlocks.add(index);
                 }
             }
-            send.add(new Vector3(block.x - source.x, block.y - source.y, block.z - source.z));
+            send.add(new Vector3(block.position.x - source.x, block.position.y - source.y, block.position.z - source.z));
         }
 
         if(fireIgnitions != null) {
-            for (Vector3 remainingPos : fireIgnitions) {
-                Block toIgnite = level.getBlock(remainingPos);
+            for (Block remainingPos : fireIgnitions) {
+                Block toIgnite = level.getBlock(remainingPos.position);
                 if (toIgnite.isAir() && toIgnite.down().isSolid(BlockFace.UP)) {
-                    level.setBlock(toIgnite, Block.get(BlockID.FIRE));
+                    level.setBlock(toIgnite.position, Block.get(BlockID.FIRE));
                 }
             }
         }
 
         int count = smokePositions.size();
         CompoundTag data = new CompoundTag(new Object2ObjectOpenHashMap<>(count, 0.999999f))
-                .putFloat("originX", (float) this.source.x)
-                .putFloat("originY", (float) this.source.y)
-                .putFloat("originZ", (float) this.source.z)
+                .putFloat("originX", (float) this.source.position.x)
+                .putFloat("originY", (float) this.source.position.y)
+                .putFloat("originZ", (float) this.source.position.z)
                 .putFloat("radius", (float) this.size)
                 .putInt("size", count);
         for (int i = 0; i < count; i++) {
@@ -357,9 +357,9 @@ public class Explosion {
             data.putFloat(prefix + "y", (float) pos.y);
             data.putFloat(prefix + "z", (float) pos.z);
         }
-        this.level.addSound(this.source, Sound.RANDOM_EXPLODE);
-        this.level.addLevelEvent(this.source, LevelEventPacket.EVENT_PARTICLE_EXPLOSION, Math.round((float) this.size));
-        this.level.addLevelEvent(this.source, LevelEventPacket.EVENT_PARTICLE_BLOCK_EXPLOSION, data);
+        this.level.addSound(this.source.position, Sound.RANDOM_EXPLODE);
+        this.level.addLevelEvent(this.source.position, LevelEventPacket.EVENT_PARTICLE_EXPLOSION, Math.round((float) this.size));
+        this.level.addLevelEvent(this.source.position, LevelEventPacket.EVENT_PARTICLE_BLOCK_EXPLOSION, data);
 
         return true;
     }

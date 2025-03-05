@@ -52,7 +52,7 @@ public final class EnchantmentHelper {
                 for (int y = 0; y <= 1; y++) {
                     // Calculate the coordinates of the space between the bookshelf and the enchanting table
                     if (world.getBlock(
-                            tablePos.add(Math.max(Math.min(x, 1), -1), y, Math.max(Math.min(z, 1), -1))
+                            tablePos.position.add(Math.max(Math.min(x, 1), -1), y, Math.max(Math.min(z, 1), -1))
                     ).getId() != BlockID.AIR) {
                         continue outer;
                     }
@@ -60,7 +60,7 @@ public final class EnchantmentHelper {
 
                 // Finally, check the number of bookshelves at the current position
                 for (int y = 0; y <= 1; y++) {
-                    if (world.getBlock(tablePos.add(x, y, z)).getId() == BlockID.BOOKSHELF) {
+                    if (world.getBlock(tablePos.position.add(x, y, z)).getId() == BlockID.BOOKSHELF) {
                         bookshelfCount++;
                         if (bookshelfCount == MAX_BOOKSHELF_COUNT) {
                             return bookshelfCount;

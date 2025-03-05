@@ -60,38 +60,38 @@ public class BlockCandleCake extends BlockTransparent {
 
     @Override
     public double getMinX() {
-        return this.x + (1 + blockstate.specialValue() * 2) / 16d;
+        return this.position.x + (1 + blockstate.specialValue() * 2) / 16d;
     }
 
     @Override
     public double getMinY() {
-        return this.y;
+        return this.position.y;
     }
 
     @Override
     public double getMinZ() {
-        return this.z + 0.0625;
+        return this.position.z + 0.0625;
     }
 
     @Override
     public double getMaxX() {
-        return this.x - 0.0625 + 1;
+        return this.position.x - 0.0625 + 1;
     }
 
     @Override
     public double getMaxY() {
-        return this.y + 0.5;
+        return this.position.y + 0.5;
     }
 
     @Override
     public double getMaxZ() {
-        return this.z - 0.0625 + 1;
+        return this.position.z - 0.0625 + 1;
     }
 
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         if (!down().isAir()) {
-            getLevel().setBlock(block, this, true, true);
+            getLevel().setBlock(block.position, this, true, true);
             return true;
         }
         return false;
@@ -101,7 +101,7 @@ public class BlockCandleCake extends BlockTransparent {
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (down().isAir()) {
-                getLevel().setBlock(this, Block.get(BlockID.AIR), true);
+                getLevel().setBlock(this.position, Block.get(BlockID.AIR), true);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         }
@@ -123,19 +123,19 @@ public class BlockCandleCake extends BlockTransparent {
     public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
         if (getPropertyValue(CommonBlockProperties.LIT) && !Objects.equals(item.getId(), ItemID.FLINT_AND_STEEL)) {
             setPropertyValue(CommonBlockProperties.LIT, false);
-            getLevel().addSound(this, Sound.RANDOM_FIZZ);
-            getLevel().setBlock(this, this, true, true);
+            getLevel().addSound(this.position, Sound.RANDOM_FIZZ);
+            getLevel().setBlock(this.position, this, true, true);
             return true;
         } else if (!getPropertyValue(CommonBlockProperties.LIT) && Objects.equals(item.getId(), ItemID.FLINT_AND_STEEL)) {
             setPropertyValue(CommonBlockProperties.LIT, true);
-            getLevel().addSound(this, Sound.FIRE_IGNITE);
-            getLevel().setBlock(this, this, true, true);
+            getLevel().addSound(this.position, Sound.FIRE_IGNITE);
+            getLevel().setBlock(this.position, this, true, true);
             return true;
         } else if (player != null && (player.getFoodData().isHungry() || player.isCreative())) {
             final Block cake = new BlockCake();
-            this.getLevel().setBlock(this, cake, true, true);
-            this.getLevel().dropItem(this.add(0.5, 0.5, 0.5), getDrops(null)[0]);
-            return this.getLevel().getBlock(this).onActivate(Item.get(AIR), player, blockFace, fx, fy, fz);
+            this.getLevel().setBlock(this.position, cake, true, true);
+            this.getLevel().dropItem(this.position.add(0.5, 0.5, 0.5), getDrops(null)[0]);
+            return this.getLevel().getBlock(this.position).onActivate(Item.get(AIR), player, blockFace, fx, fy, fz);
         }
         return false;
     }

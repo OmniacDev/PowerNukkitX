@@ -135,12 +135,12 @@ public class BlockDispenser extends BlockSolid implements RedstoneComponent, Fac
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         if (player != null) {
-            if (Math.abs(player.pos.x - this.x) < 2 && Math.abs(player.pos.z - this.z) < 2) {
+            if (Math.abs(player.pos.x - this.position.x) < 2 && Math.abs(player.pos.z - this.position.z) < 2) {
                 double y = player.pos.y + player.getEyeHeight();
 
-                if (y - this.y > 2) {
+                if (y - this.position.y > 2) {
                     setBlockFace(BlockFace.UP);
-                } else if (this.y - y > 0) {
+                } else if (this.position.y - y > 0) {
                     setBlockFace(BlockFace.DOWN);
                 } else {
                     setBlockFace(player.getHorizontalFacing().getOpposite());
@@ -181,11 +181,11 @@ public class BlockDispenser extends BlockSolid implements RedstoneComponent, Fac
 
             if (this.isGettingPower() && !triggered) {
                 this.setTriggered(true);
-                this.level.setBlock(this, this, false, false);
-                level.scheduleUpdate(this, this, 4);
+                this.level.setBlock(this.position, this, false, false);
+                level.scheduleUpdate(this, this.position, 4);
             } else if (!this.isGettingPower() && triggered) {
                 this.setTriggered(false);
-                this.level.setBlock(this, this, false, false);
+                this.level.setBlock(this.position, this, false, false);
             }
 
             return type;
@@ -225,18 +225,18 @@ public class BlockDispenser extends BlockSolid implements RedstoneComponent, Fac
         pk.z = 0.5f + facing.getZOffset() * 0.7f;
 
         if (target == null) {
-            this.level.addSound(this, Sound.RANDOM_CLICK, 1.0f, 1.2f);
+            this.level.addSound(this.position, Sound.RANDOM_CLICK, 1.0f, 1.2f);
             getBlockEntity().setDirty();
             return;
         } else {
             if (!(getDispenseBehavior(target) instanceof DropperDispenseBehavior)
                     && !(getDispenseBehavior(target) instanceof FlintAndSteelDispenseBehavior))
-                this.level.addSound(this, Sound.RANDOM_CLICK, 1.0f, 1.0f);
+                this.level.addSound(this.position, Sound.RANDOM_CLICK, 1.0f, 1.0f);
         }
 
         pk.evid = LevelEventPacket.EVENT_PARTICLE_SHOOT;
         pk.data = 7;
-        this.level.addChunkPacket(getChunkX(), getChunkZ(), pk);
+        this.level.addChunkPacket(this.position.getChunkX(), this.position.getChunkZ(), pk);
 
         Item origin = target;
         target = target.clone();
@@ -253,7 +253,7 @@ public class BlockDispenser extends BlockSolid implements RedstoneComponent, Fac
 
                 if (fit.length > 0) {
                     for (Item drop : fit) {
-                        this.level.dropItem(this, drop);
+                        this.level.dropItem(this.position, drop);
                     }
                 }
             } else {
@@ -283,7 +283,7 @@ public class BlockDispenser extends BlockSolid implements RedstoneComponent, Fac
 
     public Vector3 getDispensePosition() {
         BlockFace facing = getBlockFace();
-        return this.add(
+        return this.position.add(
                 0.5 + 0.7 * facing.getXOffset(),
                 0.5 + 0.7 * facing.getYOffset(),
                 0.5 + 0.7 * facing.getZOffset()

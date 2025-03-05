@@ -57,7 +57,7 @@ public class BlockLightningRod extends BlockTransparent implements Faceable {
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         this.setBlockFace(face);
-        this.getLevel().setBlock(block, this, true, true);
+        this.getLevel().setBlock(block.position, this, true, true);
         return true;
     }
 

@@ -142,7 +142,7 @@ public class BlockEntityShulkerBox extends BlockEntitySpawnable implements Block
 
     @Override
     public CompoundTag getSpawnCompound() {
-        CompoundTag c = getDefaultCompound(this, SHULKER_BOX)
+        CompoundTag c = getDefaultCompound(this.position, SHULKER_BOX)
                 .putBoolean("isMovable", this.isMovable())
                 .putBoolean("Findable", false)
                 .putList("Items", this.namedTag.getList("Items", CompoundTag.class))

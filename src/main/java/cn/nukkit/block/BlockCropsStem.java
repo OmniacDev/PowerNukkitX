@@ -70,13 +70,13 @@ public abstract class BlockCropsStem extends BlockCrops implements Faceable {
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (this.down().getId() != FARMLAND) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
             BlockFace blockFace = getBlockFace();
             if (blockFace.getAxis().isHorizontal() && getSide(blockFace).getId() != getFruitId()) {
                 setBlockFace(BlockFace.DOWN);
-                getLevel().setBlock(this, this);
+                getLevel().setBlock(this.position, this);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
             return 0;
@@ -87,7 +87,7 @@ public abstract class BlockCropsStem extends BlockCrops implements Faceable {
         }
         
         if (ThreadLocalRandom.current().nextInt(1, 3) != 1 
-                || getLevel().getFullLight(this) < MINIMUM_LIGHT_LEVEL) {
+                || getLevel().getFullLight(this.position) < MINIMUM_LIGHT_LEVEL) {
             return Level.BLOCK_UPDATE_RANDOM;
         }
         
@@ -98,7 +98,7 @@ public abstract class BlockCropsStem extends BlockCrops implements Faceable {
             BlockGrowEvent ev = new BlockGrowEvent(this, block);
             Server.getInstance().getPluginManager().callEvent(ev);
             if (!ev.isCancelled()) {
-                this.getLevel().setBlock(this, ev.getNewState(), true);
+                this.getLevel().setBlock(this.position, ev.getNewState(), true);
             }
             return Level.BLOCK_UPDATE_RANDOM;
         }
@@ -123,9 +123,9 @@ public abstract class BlockCropsStem extends BlockCrops implements Faceable {
             BlockGrowEvent ev = new BlockGrowEvent(side, Block.get(fruitId));
             Server.getInstance().getPluginManager().callEvent(ev);
             if (!ev.isCancelled()) {
-                this.getLevel().setBlock(side, ev.getNewState(), true);
+                this.getLevel().setBlock(side.position, ev.getNewState(), true);
                 setBlockFace(sideFace);
-                this.getLevel().setBlock(this, this, true);
+                this.getLevel().setBlock(this.position, this, true);
             }
         }
         return true;

@@ -82,7 +82,7 @@ public class BlockLoom extends BlockSolid implements Faceable, BlockInventoryHol
         if (player != null) {
             setBlockFace(player.getDirection().getOpposite());
         }
-        this.level.setBlock(this, this, true, true);
+        this.level.setBlock(this.position, this, true, true);
         return true;
     }
 

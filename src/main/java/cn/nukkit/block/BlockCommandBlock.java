@@ -69,11 +69,11 @@ public class BlockCommandBlock extends BlockSolid implements Faceable, BlockEnti
         if (player != null) {
             if (!player.isCreative())
                 return false;
-            if (Math.abs(player.pos.getFloorX() - this.x) < 2 && Math.abs(player.pos.getFloorZ() - this.z) < 2) {
+            if (Math.abs(player.pos.getFloorX() - this.position.x) < 2 && Math.abs(player.pos.getFloorZ() - this.position.z) < 2) {
                 double y = player.pos.y + player.getEyeHeight();
-                if (y - this.y > 2) {
+                if (y - this.position.y > 2) {
                     this.setBlockFace(BlockFace.UP);
-                } else if (this.y - y > 0) {
+                } else if (this.position.y - y > 0) {
                     this.setBlockFace(BlockFace.DOWN);
                 } else {
                     this.setBlockFace(player.getHorizontalFacing().getOpposite());

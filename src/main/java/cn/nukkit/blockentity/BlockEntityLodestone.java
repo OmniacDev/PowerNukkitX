@@ -4,6 +4,7 @@ import cn.nukkit.Server;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.level.Locator;
 import cn.nukkit.level.format.IChunk;
+import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.positiontracking.PositionTracking;
 import cn.nukkit.positiontracking.PositionTrackingService;
@@ -45,7 +46,7 @@ public class BlockEntityLodestone extends BlockEntitySpawnable {
     public int requestTrackingHandler() throws IOException {
         OptionalInt opt = getTrackingHandler();
         PositionTrackingService positionTrackingService = getLevel().getServer().getPositionTrackingService();
-        Locator floor = floor();
+        Locator floor = this.clone();
         if (opt.isPresent()) {
             int handler = opt.getAsInt();
             PositionTracking position = positionTrackingService.getPosition(handler);

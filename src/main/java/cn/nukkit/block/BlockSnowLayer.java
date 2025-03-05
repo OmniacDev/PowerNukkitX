@@ -122,13 +122,13 @@ public class BlockSnowLayer extends BlockFallable {
         if (increment.isPresent()) {
             BlockSnowLayer other = increment.get();
             if (Arrays.stream(level.getCollidingEntities(new SimpleAxisAlignedBB(
-                    other.x, other.y, other.z,
-                    other.x + 1, other.y + 1, other.z + 1
+                    other.position.x, other.position.y, other.position.z,
+                    other.position.x + 1, other.position.y + 1, other.position.z + 1
             ))).anyMatch(e -> e instanceof EntityLiving)) {
                 return false;
             }
             other.setSnowHeight(other.getSnowHeight() + 1);
-            return level.setBlock(other, other, true);
+            return level.setBlock(other.position, other, true);
         }
 
         Block down = down();
@@ -142,17 +142,17 @@ public class BlockSnowLayer extends BlockFallable {
             }
             case GRASS_BLOCK -> setCovered(true);
             case TALL_GRASS -> {
-                if (!level.setBlock(this, 0, this, true)) {
+                if (!level.setBlock(this.position, 0, this, true)) {
                     return false;
                 }
-                level.setBlock(block, 1, block, true, false);
+                level.setBlock(block.position, 1, block, true, false);
                 return true;
             }
             default -> {
             }
         }
 
-        return this.getLevel().setBlock(block, this, true);
+        return this.getLevel().setBlock(block.position, this, true);
     }
 
     @Override
@@ -160,7 +160,7 @@ public class BlockSnowLayer extends BlockFallable {
         if (layer != 0) {
             return super.onBreak(item);
         }
-        return this.getLevel().setBlock(this, 0, getLevelBlockAtLayer(1), true, true);
+        return this.getLevel().setBlock(this.position, 0, getLevelBlockAtLayer(1), true, true);
     }
 
     @Override
@@ -176,18 +176,18 @@ public class BlockSnowLayer extends BlockFallable {
 
         // Clear the layer1 block and do a small hack as workaround a vanilla client rendering bug
         Level level = getLevel();
-        level.setBlock(this, 0, layer1, true, false);
-        level.setBlock(this, 1, get(AIR), true, false);
-        level.setBlock(this, 0, newBlock, true, false);
+        level.setBlock(this.position, 0, layer1, true, false);
+        level.setBlock(this.position, 1, get(AIR), true, false);
+        level.setBlock(this.position, 0, newBlock, true, false);
         getLevel().getScheduler().scheduleDelayedTask(InternalPlugin.INSTANCE, () -> {
-            Player[] target = level.getChunkPlayers(getChunkX(), getChunkZ()).values().toArray(Player.EMPTY_ARRAY);
-            Vector3[] blocks = {getLocation()};
+            Player[] target = level.getChunkPlayers(this.position.getChunkX(), this.position.getChunkZ()).values().toArray(Player.EMPTY_ARRAY);
+            Vector3[] blocks = {getLocation().position};
             level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0, false);
             level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1, false);
         }, 10);
 
-        Player[] target = level.getChunkPlayers(getChunkX(), getChunkZ()).values().toArray(Player.EMPTY_ARRAY);
-        Vector3[] blocks = {getLocation()};
+        Player[] target = level.getChunkPlayers(this.position.getChunkX(), this.position.getChunkZ()).values().toArray(Player.EMPTY_ARRAY);
+        Vector3[] blocks = {getLocation().position};
         level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 0, false);
         level.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1, false);
     }
@@ -196,7 +196,7 @@ public class BlockSnowLayer extends BlockFallable {
     public int onUpdate(int type) {
         super.onUpdate(type);
         if (type == Level.BLOCK_UPDATE_RANDOM) {
-            BiomeRegistry.BiomeDefinition biomeDefinition = Registries.BIOME.get(getLevel().getBiomeId(getFloorX(), this.getFloorY(), getFloorZ()));
+            BiomeRegistry.BiomeDefinition biomeDefinition = Registries.BIOME.get(getLevel().getBiomeId(getFloorX(), this.position.getFloorY(), getFloorZ()));
             if (biomeDefinition.tags().contains(BiomeTags.WARM) || this.getLevel().getBlockLightAt(getFloorX(), getFloorY(), getFloorZ()) >= 10) {
                 melt();
                 return Level.BLOCK_UPDATE_RANDOM;
@@ -205,7 +205,7 @@ public class BlockSnowLayer extends BlockFallable {
             boolean covered = down().getId().equals(GRASS_BLOCK);
             if (isCovered() != covered) {
                 setCovered(covered);
-                level.setBlock(this, this, true);
+                level.setBlock(this.position, this, true);
                 return type;
             }
         }
@@ -236,7 +236,7 @@ public class BlockSnowLayer extends BlockFallable {
             return false;
         }
 
-        return level.setBlock(toMelt, event.getNewState(), true);
+        return level.setBlock(toMelt.position, event.getNewState(), true);
     }
 
     @Override

@@ -229,7 +229,7 @@ public class ExecuteCommand extends VanillaCommand {
                 Vector3 pos = list.getResult(1);
                 String chainCommand = list.getResult(2);
                 Transform source = sender.getLocation();
-                BVector3 bv = BVector3.fromPos(pos.x - source.x, pos.y - source.y, pos.z - source.z);
+                BVector3 bv = BVector3.fromPos(pos.x - source.position.x, pos.y - source.position.y, pos.z - source.position.z);
                 source.setPitch(bv.getPitch());
                 source.setYaw(bv.getYaw());
                 ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), source);
@@ -246,7 +246,7 @@ public class ExecuteCommand extends VanillaCommand {
                 String chainCommand = list.getResult(4);
                 for (Entity target : targets) {
                     Transform source = sender.getLocation();
-                    BVector3 bv = BVector3.fromPos(target.pos.x - source.x, target.pos.y + (anchorAtEyes ? target.getEyeHeight() : 0) - source.y, target.pos.z - source.z);
+                    BVector3 bv = BVector3.fromPos(target.pos.x - source.position.x, target.pos.y + (anchorAtEyes ? target.getEyeHeight() : 0) - source.position.y, target.pos.z - source.position.z);
                     source.setPitch(bv.getPitch());
                     source.setYaw(bv.getYaw());
                     ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), source);
@@ -288,9 +288,9 @@ public class ExecuteCommand extends VanillaCommand {
                 Transform transform = sender.getLocation();
                 for (char c : axes.toCharArray()) {
                     switch (c) {
-                        case 'x' -> transform.x = transform.getFloorX();
-                        case 'y' -> transform.y = transform.getFloorY();
-                        case 'z' -> transform.z = transform.getFloorZ();
+                        case 'x' -> transform.position.x = transform.position.getFloorX();
+                        case 'y' -> transform.position.y = transform.position.getFloorY();
+                        case 'z' -> transform.position.z = transform.position.getFloorZ();
                     }
                 }
                 ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), transform);

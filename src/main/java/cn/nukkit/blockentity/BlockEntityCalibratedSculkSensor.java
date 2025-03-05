@@ -6,6 +6,7 @@ import cn.nukkit.level.Locator;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationListener;
+import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 
 public class BlockEntityCalibratedSculkSensor extends BlockEntity implements VibrationListener {
@@ -50,8 +51,8 @@ public class BlockEntityCalibratedSculkSensor extends BlockEntity implements Vib
     }
 
     @Override
-    public Locator getListenerVector() {
-        return this.clone().setLevel(this.level).floor().add(0.5f, 0.5f, 0.5f);
+    public Vector3 getListenerVector() {
+        return this.clone().position.floor().add(0.5f, 0.5f, 0.5f);
     }
 
     @Override
@@ -114,7 +115,7 @@ public class BlockEntityCalibratedSculkSensor extends BlockEntity implements Vib
             return;
         }
         comparatorPower = event.type().frequency;
-        power = Math.max(1, 15 - (int) Math.floor(event.source().distance(this.add(0.5, 0.5, 0.5)) * 1.875));
+        power = Math.max(1, 15 - (int) Math.floor(event.source().distance(this.position.add(0.5, 0.5, 0.5)) * 1.875));
     }
 }
 

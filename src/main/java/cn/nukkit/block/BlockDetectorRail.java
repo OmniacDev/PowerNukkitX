@@ -89,7 +89,7 @@ public class BlockDetectorRail extends BlockRail implements RedstoneComponent {
             //每20gt检查一遍
             level.scheduleUpdate(this, 20);
             //更新比较器输出
-            level.updateComparatorOutputLevel(this);
+            level.updateComparatorOutputLevel(this.position);
         }
     }
 

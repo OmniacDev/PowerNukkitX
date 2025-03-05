@@ -25,7 +25,7 @@ public abstract class BlockMushroom extends BlockFlowable implements BlockFlower
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!canStay()) {
-                getLevel().useBreakOn(this);
+                getLevel().useBreakOn(this.position);
 
                 return Level.BLOCK_UPDATE_NORMAL;
             }
@@ -36,7 +36,7 @@ public abstract class BlockMushroom extends BlockFlowable implements BlockFlower
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         if (canStay()) {
-            getLevel().setBlock(block, this, true, true);
+            getLevel().setBlock(block.position, this, true, true);
             return true;
         }
         return false;
@@ -58,37 +58,37 @@ public abstract class BlockMushroom extends BlockFlowable implements BlockFlower
                 this.grow();
             }
 
-            this.level.addParticle(new BoneMealParticle(this));
+            this.level.addParticle(new BoneMealParticle(this.position));
             return true;
         }
         return false;
     }
 
     public boolean grow() {
-        this.level.setBlock(this, Block.get(BlockID.AIR), true, false);
+        this.level.setBlock(this.position, Block.get(BlockID.AIR), true, false);
 
         ObjectBigMushroom generator = new ObjectBigMushroom(getType());
 
         BlockManager chunkManager = new BlockManager(this.level);
-        if (generator.generate(chunkManager, RandomSourceProvider.create(), this)) {
+        if (generator.generate(chunkManager, RandomSourceProvider.create(), this.position)) {
             StructureGrowEvent ev = new StructureGrowEvent(this, chunkManager.getBlocks());
             this.level.getServer().getPluginManager().callEvent(ev);
             if (ev.isCancelled()) {
                 return false;
             }
             for(Block block : ev.getBlockList()) {
-                this.level.setBlock(new Vector3(block.getFloorX(), block.getFloorY(), block.getFloorZ()), block);
+                this.level.setBlock(new Vector3(block.position.getFloorX(), block.position.getFloorY(), block.position.getFloorZ()), block);
             }
             return true;
         } else {
-            this.level.setBlock(this, this, true, false);
+            this.level.setBlock(this.position, this, true, false);
             return false;
         }
     }
 
     public boolean canStay() {
         Block block = this.down();
-        return block.getId().equals(MYCELIUM) || block.getId().equals(PODZOL) || block instanceof BlockNylium || (!block.isTransparent() && this.level.getFullLight(this) < 13);
+        return block.getId().equals(MYCELIUM) || block.getId().equals(PODZOL) || block instanceof BlockNylium || (!block.isTransparent() && this.level.getFullLight(this.position) < 13);
     }
 
     @Override

@@ -87,27 +87,27 @@ public class BlockEnderChest extends BlockTransparent implements Faceable, Block
 
     @Override
     public double getMinX() {
-        return this.x + 0.0625;
+        return this.position.x + 0.0625;
     }
 
     @Override
     public double getMinZ() {
-        return this.z + 0.0625;
+        return this.position.z + 0.0625;
     }
 
     @Override
     public double getMaxX() {
-        return this.x + 0.9375;
+        return this.position.x + 0.9375;
     }
 
     @Override
     public double getMaxY() {
-        return this.y + 0.9475;
+        return this.position.y + 0.9475;
     }
 
     @Override
     public double getMaxZ() {
-        return this.z + 0.9375;
+        return this.position.z + 0.9375;
     }
 
     @Override

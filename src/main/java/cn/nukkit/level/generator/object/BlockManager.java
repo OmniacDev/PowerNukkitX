@@ -110,7 +110,7 @@ public class BlockManager {
 
     public void applyBlockUpdate() {
         for (var b : this.places.values()) {
-            this.level.setBlock(b, b, true, true);
+            this.level.setBlock(b.position, b, true, true);
         }
     }
 
@@ -129,13 +129,13 @@ public class BlockManager {
         HashMap<IChunk, ArrayList<Block>> chunks = new HashMap<>();
         HashMap<SubChunkEntry, UpdateSubChunkBlocksPacket> batchs = new HashMap<>();
         for (var b : blockList) {
-            ArrayList<Block> chunk = chunks.computeIfAbsent(level.getChunk(b.getChunkX(), b.getChunkZ(), true), c -> new ArrayList<>());
+            ArrayList<Block> chunk = chunks.computeIfAbsent(level.getChunk(b.position.getChunkX(), b.position.getChunkZ(), true), c -> new ArrayList<>());
             chunk.add(b);
-            UpdateSubChunkBlocksPacket batch = batchs.computeIfAbsent(new SubChunkEntry(b.getChunkX() << 4, (b.getFloorY() >> 4) << 4, b.getChunkZ() << 4), s -> new UpdateSubChunkBlocksPacket(s.x, s.y, s.z));
+            UpdateSubChunkBlocksPacket batch = batchs.computeIfAbsent(new SubChunkEntry(b.position.getChunkX() << 4, (b.position.getFloorY() >> 4) << 4, b.position.getChunkZ() << 4), s -> new UpdateSubChunkBlocksPacket(s.x, s.y, s.z));
             if (b.layer == 1) {
-                batch.extraBlocks.add(new BlockChangeEntry(b.asBlockVector3(), b.getBlockState().unsignedBlockStateHash(), ProtocolInfo.UPDATE_BLOCK_PACKET, -1, BlockChangeEntry.MessageType.NONE));
+                batch.extraBlocks.add(new BlockChangeEntry(b.position.asBlockVector3(), b.getBlockState().unsignedBlockStateHash(), ProtocolInfo.UPDATE_BLOCK_PACKET, -1, BlockChangeEntry.MessageType.NONE));
             } else {
-                batch.standardBlocks.add(new BlockChangeEntry(b.asBlockVector3(), b.getBlockState().unsignedBlockStateHash(), ProtocolInfo.UPDATE_BLOCK_PACKET, -1, BlockChangeEntry.MessageType.NONE));
+                batch.standardBlocks.add(new BlockChangeEntry(b.position.asBlockVector3(), b.getBlockState().unsignedBlockStateHash(), ProtocolInfo.UPDATE_BLOCK_PACKET, -1, BlockChangeEntry.MessageType.NONE));
             }
         }
         chunks.entrySet().parallelStream().forEach(entry -> {
@@ -143,7 +143,7 @@ public class BlockManager {
             final var value = entry.getValue();
             key.batchProcess(unsafeChunk -> {
                 value.forEach(b -> {
-                    unsafeChunk.setBlockState(b.getFloorX() & 15, b.getFloorY(), b.getFloorZ() & 15, b.getBlockState(), b.layer);
+                    unsafeChunk.setBlockState(b.position.getFloorX() & 15, b.position.getFloorY(), b.position.getFloorZ() & 15, b.getBlockState(), b.layer);
                 });
                 unsafeChunk.recalculateHeightMap();
             });

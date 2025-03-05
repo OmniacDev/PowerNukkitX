@@ -94,26 +94,26 @@ public class BlockStandingBanner extends BlockTransparent implements Faceable, B
             return false;
         }
 
-        Block layer0 = level.getBlock(this, 0);
-        Block layer1 = level.getBlock(this, 1);
+        Block layer0 = level.getBlock(this.position, 0);
+        Block layer1 = level.getBlock(this.position, 1);
 
         if (face == BlockFace.UP) {
             CompassRoseDirection direction = CompassRoseDirection.from(
                     (int) Math.floor((((player != null ? player.rotation.yaw : 0) + 180) * 16 / 360) + 0.5) & 0x0f
             );
             setDirection(direction);
-            if (!this.getLevel().setBlock(block, this, true)) {
+            if (!this.getLevel().setBlock(block.position, this, true)) {
                 return false;
             }
         } else {
             BlockStandingBanner wall = (BlockStandingBanner) Block.get(BlockID.WALL_BANNER);
             wall.setBlockFace(face);
-            if (!this.getLevel().setBlock(block, wall, true)) {
+            if (!this.getLevel().setBlock(block.position, wall, true)) {
                 return false;
             }
         }
 
-        CompoundTag nbt = BlockEntity.getDefaultCompound(this, BlockEntity.BANNER)
+        CompoundTag nbt = BlockEntity.getDefaultCompound(this.position, BlockEntity.BANNER)
                 .putInt("Base", item.getDamage() & 0xf);
 
         Tag type = item.getNamedTagEntry("Type");
@@ -130,8 +130,8 @@ public class BlockStandingBanner extends BlockTransparent implements Faceable, B
             return true;
         } catch (Exception e) {
             log.error("Failed to create the block entity {} at {}", getBlockEntityType(), getLocation(), e);
-            level.setBlock(layer0, 0, layer0, true);
-            level.setBlock(layer0, 1, layer1, true);
+            level.setBlock(layer0.position, 0, layer0, true);
+            level.setBlock(layer0.position, 1, layer1, true);
             return false;
         }
     }
@@ -140,7 +140,7 @@ public class BlockStandingBanner extends BlockTransparent implements Faceable, B
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (this.down().getId() == BlockID.AIR) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
 
                 return Level.BLOCK_UPDATE_NORMAL;
             }

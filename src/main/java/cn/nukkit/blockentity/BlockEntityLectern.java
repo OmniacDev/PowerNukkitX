@@ -63,7 +63,7 @@ public class BlockEntityLectern extends BlockEntitySpawnable {
 
     @Override
     public void onBreak(boolean isSilkTouch) {
-        level.dropItem(this, getBook());
+        level.dropItem(this.position, getBook());
     }
 
     public boolean hasBook() {
@@ -106,7 +106,7 @@ public class BlockEntityLectern extends BlockEntitySpawnable {
 
     public void setRawPage(int page) {
         this.namedTag.putInt("page", Math.min(page, totalPages));
-        this.getLevel().updateAround(this);
+        this.getLevel().updateAround(this.position);
     }
 
     public int getRawPage() {

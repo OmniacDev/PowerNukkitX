@@ -20,8 +20,8 @@ public class DropperDispenseBehavior extends DefaultDispenseBehavior {
     public Item dispense(BlockDispenser block, BlockFace face, Item item) {
         Block target = block.getSide(face);
 
-        if (block.level.getBlockEntityIfLoaded(target) instanceof InventoryHolder) {
-            InventoryHolder invHolder = (InventoryHolder) block.level.getBlockEntityIfLoaded(target);
+        if (block.level.getBlockEntityIfLoaded(target.position) instanceof InventoryHolder) {
+            InventoryHolder invHolder = (InventoryHolder) block.level.getBlockEntityIfLoaded(target.position);
             Inventory inv = invHolder.getInventory();
             Item clone = item.clone();
             clone.count = 1;
@@ -32,7 +32,7 @@ public class DropperDispenseBehavior extends DefaultDispenseBehavior {
                 return clone;
             }
         } else {
-            block.level.addSound(block, Sound.RANDOM_CLICK);
+            block.level.addSound(block.position, Sound.RANDOM_CLICK);
             return super.dispense(block, face, item);
         }
         return null;

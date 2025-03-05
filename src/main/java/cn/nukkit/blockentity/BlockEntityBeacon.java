@@ -81,13 +81,13 @@ public class BlockEntityBeacon extends BlockEntitySpawnable implements BlockEnti
         //Skip beacons that do not have a pyramid or sky access
         if (newPowerLevel < 1 || !hasSkyAccess()) {
             if (oldPowerLevel > 0) {
-                this.getLevel().addSound(this, Sound.BEACON_DEACTIVATE);
+                this.getLevel().addSound(this.position, Sound.BEACON_DEACTIVATE);
             }
             return true;
         } else if (oldPowerLevel < 1) {
-            this.getLevel().addSound(this, Sound.BEACON_ACTIVATE);
+            this.getLevel().addSound(this.position, Sound.BEACON_ACTIVATE);
         } else {
-            this.getLevel().addSound(this, Sound.BEACON_AMBIENT);
+            this.getLevel().addSound(this.position, Sound.BEACON_AMBIENT);
         }
 
         //Get all players in game
@@ -105,7 +105,7 @@ public class BlockEntityBeacon extends BlockEntitySpawnable implements BlockEnti
             Player p = entry.getValue();
 
             //If the player is in range
-            if (p.pos.distance(this) < range) {
+            if (p.pos.distance(this.position) < range) {
                 Effect e;
 
                 if (getPrimaryPower() != 0) {
@@ -248,7 +248,7 @@ public class BlockEntityBeacon extends BlockEntitySpawnable implements BlockEnti
         this.setPrimaryPower(primary);
         this.setSecondaryPower(secondary);
 
-        this.getLevel().addSound(this, Sound.BEACON_POWER);
+        this.getLevel().addSound(this.position, Sound.BEACON_POWER);
 
         BeaconInventory inv = getInventory();
 

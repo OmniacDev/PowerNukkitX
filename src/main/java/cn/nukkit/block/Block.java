@@ -70,12 +70,12 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
     @NotNull
     public static Block get(String id, Locator pos) {
         id = id.contains(":") ? id : "minecraft:" + id;
-        Block block = Registries.BLOCK.get(id, pos.getFloorX(), pos.getFloorY(), pos.getFloorZ(), pos.level);
+        Block block = Registries.BLOCK.get(id, pos.position.getFloorX(), pos.position.getFloorY(), pos.position.getFloorZ(), pos.level);
         if (block == null) {
             BlockAir blockAir = new BlockAir();
-            blockAir.x = pos.getFloorX();
-            blockAir.y = pos.getFloorY();
-            blockAir.z = pos.getFloorZ();
+            blockAir.position.x = pos.position.getFloorX();
+            blockAir.position.y = pos.position.getFloorY();
+            blockAir.position.z = pos.position.getFloorZ();
             blockAir.level = pos.level;
             return blockAir;
         }
@@ -96,9 +96,9 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
         Block block = Registries.BLOCK.get(id, x, y, z, level);
         if (block == null) {
             BlockAir blockAir = new BlockAir();
-            blockAir.x = x;
-            blockAir.y = y;
-            blockAir.z = z;
+            blockAir.position.x = x;
+            blockAir.position.y = y;
+            blockAir.position.z = z;
             blockAir.level = level;
             return blockAir;
         }
@@ -124,7 +124,7 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
 
     @NotNull
     public static Block get(BlockState blockState, Locator pos) {
-        return get(blockState, pos.level, pos.getFloorX(), pos.getFloorY(), pos.getFloorZ());
+        return get(blockState, pos.level, pos.position.getFloorX(), pos.position.getFloorY(), pos.position.getFloorZ());
     }
 
     @NotNull
@@ -181,18 +181,18 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
      * @param block  The current block that is in the world and is getting replaced by this instance. It has the same x, y, z, layer, and level as this block.
      * @param target The block that was clicked to create the place action in this block position.
      * @param face   The face that was clicked in the target block
-     * @param fx     The detailed X coordinate of the clicked target block face
-     * @param fy     The detailed Y coordinate of the clicked target block face
-     * @param fz     The detailed Z coordinate of the clicked target block face
+     * @param fx     The detailed this.position.x coordinate of the clicked target block face
+     * @param fy     The detailed this.position.y coordinate of the clicked target block face
+     * @param fz     The detailed this.position.z coordinate of the clicked target block face
      * @param player The player that is placing the block. May be null.
      * @return {@code true} if the block was properly place. The implementation is responsible for reverting any partial change.
      */
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        return this.getLevel().setBlock(this, this, true, true);
+        return this.getLevel().setBlock(this.position, this, true, true);
     }
 
     public boolean onBreak(Item item) {
-        return this.getLevel().setBlock(this, layer, Block.get(AIR), true, true);
+        return this.getLevel().setBlock(this.position, layer, Block.get(AIR), true, true);
     }
 
     /**
@@ -529,9 +529,9 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
     }
 
     public final void position(Locator v) {
-        this.x = (int) v.x;
-        this.y = (int) v.y;
-        this.z = (int) v.z;
+        this.position.x = (int) v.position.x;
+        this.position.y = (int) v.position.y;
+        this.position.z = (int) v.position.z;
         this.level = v.level;
     }
 
@@ -756,14 +756,14 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
     }
 
     public Block getTickCachedSideAtLayer(int layer, BlockFace face) {
-        return this.getLevel().getTickCachedBlock((int) x + face.getXOffset(), (int) y + face.getYOffset(), (int) z + face.getZOffset(), layer);
+        return this.getLevel().getTickCachedBlock((int) this.position.x + face.getXOffset(), (int) this.position.y + face.getYOffset(), (int) this.position.z + face.getZOffset(), layer);
     }
 
     public Block getTickCachedSideAtLayer(int layer, BlockFace face, int step) {
         if (step == 1) {
-            return this.getLevel().getTickCachedBlock((int) x + face.getXOffset(), (int) y + face.getYOffset(), (int) z + face.getZOffset(), layer);
+            return this.getLevel().getTickCachedBlock((int) this.position.x + face.getXOffset(), (int) this.position.y + face.getYOffset(), (int) this.position.z + face.getZOffset(), layer);
         }
-        return this.getLevel().getTickCachedBlock((int) x + face.getXOffset() * step, (int) y + face.getYOffset() * step, (int) z + face.getZOffset() * step, layer);
+        return this.getLevel().getTickCachedBlock((int) this.position.x + face.getXOffset() * step, (int) this.position.y + face.getYOffset() * step, (int) this.position.z + face.getZOffset() * step, layer);
     }
 
     @Override
@@ -777,22 +777,20 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
     }
 
     public Block getSideAtLayer(int layer, BlockFace face) {
-        return this.getLevel().getBlock((int) x + face.getXOffset(), (int) y + face.getYOffset(), (int) z + face.getZOffset(), layer);
+        return this.getLevel().getBlock((int) this.position.x + face.getXOffset(), (int) this.position.y + face.getYOffset(), (int) this.position.z + face.getZOffset(), layer);
     }
 
     public Block getSideAtLayer(int layer, BlockFace face, int step) {
         if (step == 1) {
-            return this.getLevel().getBlock((int) x + face.getXOffset(), (int) y + face.getYOffset(), (int) z + face.getZOffset(), layer);
+            return this.getLevel().getBlock((int) this.position.x + face.getXOffset(), (int) this.position.y + face.getYOffset(), (int) this.position.z + face.getZOffset(), layer);
         }
-        return this.getLevel().getBlock((int) x + face.getXOffset() * step, (int) y + face.getYOffset() * step, (int) z + face.getZOffset() * step, layer);
+        return this.getLevel().getBlock((int) this.position.x + face.getXOffset() * step, (int) this.position.y + face.getYOffset() * step, (int) this.position.z + face.getZOffset() * step, layer);
     }
 
-    @Override
     public Block up() {
         return up(1);
     }
 
-    @Override
     public Block up(int step) {
         return getSide(BlockFace.UP, step);
     }
@@ -801,12 +799,10 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
         return getSideAtLayer(layer, BlockFace.UP, step);
     }
 
-    @Override
     public Block down() {
         return down(1);
     }
 
-    @Override
     public Block down(int step) {
         return getSide(BlockFace.DOWN, step);
     }
@@ -815,12 +811,10 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
         return getSideAtLayer(layer, BlockFace.DOWN, step);
     }
 
-    @Override
     public Block north() {
         return north(1);
     }
 
-    @Override
     public Block north(int step) {
         return getSide(BlockFace.NORTH, step);
     }
@@ -829,12 +823,10 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
         return getSideAtLayer(layer, BlockFace.NORTH, step);
     }
 
-    @Override
     public Block south() {
         return south(1);
     }
 
-    @Override
     public Block south(int step) {
         return getSide(BlockFace.SOUTH, step);
     }
@@ -843,12 +835,10 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
         return getSideAtLayer(layer, BlockFace.SOUTH, step);
     }
 
-    @Override
     public Block east() {
         return east(1);
     }
 
-    @Override
     public Block east(int step) {
         return getSide(BlockFace.EAST, step);
     }
@@ -857,12 +847,10 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
         return getSideAtLayer(layer, BlockFace.EAST, step);
     }
 
-    @Override
     public Block west() {
         return west(1);
     }
 
-    @Override
     public Block west(int step) {
         return getSide(BlockFace.WEST, step);
     }
@@ -909,32 +897,32 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
 
     @Override
     public double getMinX() {
-        return this.x;
+        return this.position.x;
     }
 
     @Override
     public double getMinY() {
-        return this.y;
+        return this.position.y;
     }
 
     @Override
     public double getMinZ() {
-        return this.z;
+        return this.position.z;
     }
 
     @Override
     public double getMaxX() {
-        return this.x + 1;
+        return this.position.x + 1;
     }
 
     @Override
     public double getMaxY() {
-        return this.y + 1;
+        return this.position.y + 1;
     }
 
     @Override
     public double getMaxZ() {
-        return this.z + 1;
+        return this.position.z + 1;
     }
 
     protected AxisAlignedBB recalculateCollisionBoundingBox() {
@@ -1021,7 +1009,7 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
             f = BlockFace.SOUTH;
         }
 
-        return MovingObjectPosition.fromBlock((int) this.x, (int) this.y, (int) this.z, f, vector.add(this.x, this.y, this.z));
+        return MovingObjectPosition.fromBlock((int) this.position.x, (int) this.position.y, (int) this.position.z, f, vector.add(this.position.x, this.position.y, this.position.z));
     }
 
     public String getSaveId() {
@@ -1094,7 +1082,7 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
     }
 
     public String getLocationHash() {
-        return this.getFloorX() + ":" + this.getFloorY() + ":" + this.getFloorZ();
+        return this.position.getFloorX() + ":" + this.position.getFloorY() + ":" + this.position.getFloorZ();
     }
 
     public int getDropExp() {
@@ -1270,7 +1258,7 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
     }
 
     public final boolean isBlockChangeAllowed() {
-        return getChunk().isBlockChangeAllowed(getFloorX() & 0xF, getFloorY(), getFloorZ() & 0xF);
+        return getChunk().isBlockChangeAllowed(this.position.getFloorX() & 0xF, this.position.getFloorY(), this.position.getFloorZ() & 0xF);
     }
 
     public final boolean isBlockChangeAllowed(@Nullable Player player) {
@@ -1346,11 +1334,11 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
         for (BlockFace side : BlockFace.values()) {
             Block b = this.getSide(side).getLevelBlock();
 
-            if (this.level.isSidePowered(b.getLocation(), side)) {
+            if (this.level.isSidePowered(b.getLocation().position, side)) {
                 return true;
             }
         }
-        return this.level.isBlockPowered(this.getLocation());
+        return this.level.isBlockPowered(this.getLocation().position);
     }
 
     public boolean cloneTo(Locator pos) {
@@ -1369,7 +1357,7 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
     @SuppressWarnings("null")
     public boolean cloneTo(Locator pos, boolean update) {
         //清除旧方块
-        level.setBlock(pos, this.layer, Block.get(Block.AIR), false, false);
+        level.setBlock(pos.position, this.layer, Block.get(Block.AIR), false, false);
         if (this instanceof BlockEntityHolder<?> holder && holder.getBlockEntity() != null) {
             var clonedBlock = this.clone();
             clonedBlock.position(pos);
@@ -1377,12 +1365,12 @@ public abstract class Block extends Locator implements Metadatable, AxisAlignedB
             //方块实体要求direct=true
             return BlockEntityHolder.setBlockAndCreateEntity((BlockEntityHolder<?>) clonedBlock, true, update, tag) != null;
         } else {
-            return pos.level.setBlock(pos, this.layer, this.clone(), true, update);
+            return pos.level.setBlock(pos.position, this.layer, this.clone(), true, update);
         }
     }
 
     @Override
     public int hashCode() {
-        return ((int) x ^ ((int) z << 12)) ^ ((int) (y + 64) << 23);
+        return ((int) this.position.x ^ ((int) this.position.z << 12)) ^ ((int) ( this.position.y + 64) << 23);
     }
 }

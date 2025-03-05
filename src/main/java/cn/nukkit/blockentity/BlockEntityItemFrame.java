@@ -39,7 +39,7 @@ public class BlockEntityItemFrame extends BlockEntitySpawnable {
         if (!namedTag.contains("ItemDropChance")) {
             namedTag.putFloat("ItemDropChance", 1.0f);
         }
-        this.level.updateComparatorOutputLevel(this);
+        this.level.updateComparatorOutputLevel(this.position);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class BlockEntityItemFrame extends BlockEntitySpawnable {
 
     public void setItemRotation(int itemRotation) {
         this.namedTag.putByte("ItemRotation", itemRotation);
-        this.level.updateComparatorOutputLevel(this);
+        this.level.updateComparatorOutputLevel(this.position);
         this.setDirty();
     }
 
@@ -75,7 +75,7 @@ public class BlockEntityItemFrame extends BlockEntitySpawnable {
         this.namedTag.putCompound("Item", NBTIO.putItemHelper(item));
         if (setChanged) {
             this.setDirty();
-        } else this.level.updateComparatorOutputLevel(this);
+        } else this.level.updateComparatorOutputLevel(this.position);
     }
 
     public float getItemDropChance() {
@@ -153,7 +153,7 @@ public class BlockEntityItemFrame extends BlockEntitySpawnable {
 
         EntityItem itemEntity = null;
         if (this.getItemDropChance() > ThreadLocalRandom.current().nextFloat()) {
-            itemEntity = level.dropAndGetItem(add(0.5, 0.25, 0.5), drop);
+            itemEntity = level.dropAndGetItem(this.position.add(0.5, 0.25, 0.5), drop);
             if (itemEntity == null) {
                 if (player != null) {
                     spawnTo(player);
@@ -165,7 +165,7 @@ public class BlockEntityItemFrame extends BlockEntitySpawnable {
         setItem(Item.get(BlockID.AIR, 0, 1), true);
         setItemRotation(0);
         spawnToAll();
-        level.addLevelEvent(this, LevelEventPacket.EVENT_SOUND_ITEMFRAME_BREAK);
+        level.addLevelEvent(this.position, LevelEventPacket.EVENT_SOUND_ITEMFRAME_BREAK);
 
         return itemEntity;
     }

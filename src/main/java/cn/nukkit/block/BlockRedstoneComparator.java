@@ -78,12 +78,12 @@ public abstract class BlockRedstoneComparator extends BlockRedstoneDiode impleme
 
     @Override
     public void updateState() {
-        if (!this.level.isBlockTickPending(this, this)) {
+        if (!this.level.isBlockTickPending(this.position, this)) {
             int output = this.calculateOutput();
             int power = getRedstoneSignal();
 
             if (output != power || this.isPowered() != this.shouldBePowered()) {
-                this.level.scheduleUpdate(this, this, 2);
+                this.level.scheduleUpdate(this, this.position, 2);
             }
         }
     }
@@ -134,9 +134,9 @@ public abstract class BlockRedstoneComparator extends BlockRedstoneDiode impleme
             setMode(Mode.SUBTRACT);
         }
 
-        this.level.addLevelEvent(this.add(0.5, 0.5, 0.5), LevelEventPacket.EVENT_ACTIVATE_BLOCK, this.getMode() == Mode.SUBTRACT ? 500 : 550);
-        this.level.setBlock(this, this, true, false);
-        this.level.updateComparatorOutputLevelSelective(this, true);
+        this.level.addLevelEvent(this.position.add(0.5, 0.5, 0.5), LevelEventPacket.EVENT_ACTIVATE_BLOCK, this.getMode() == Mode.SUBTRACT ? 500 : 550);
+        this.level.setBlock(this.position, this, true, false);
+        this.level.updateComparatorOutputLevelSelective(this.position, true);
         //bug?
 
         this.onChange();
@@ -174,11 +174,11 @@ public abstract class BlockRedstoneComparator extends BlockRedstoneDiode impleme
             boolean isPowered = this.isPowered();
 
             if (isPowered && !shouldBePowered) {
-                this.level.setBlock(this, getUnpowered(), true, false);
-                this.level.updateComparatorOutputLevelSelective(this, true);
+                this.level.setBlock(this.position, getUnpowered(), true, false);
+                this.level.updateComparatorOutputLevelSelective(this.position, true);
             } else if (!isPowered && shouldBePowered) {
-                this.level.setBlock(this, getPowered(), true, false);
-                this.level.updateComparatorOutputLevelSelective(this, true);
+                this.level.setBlock(this.position, getPowered(), true, false);
+                this.level.updateComparatorOutputLevelSelective(this.position, true);
             }
 
             Block side = this.getSide(getFacing().getOpposite());
@@ -189,8 +189,8 @@ public abstract class BlockRedstoneComparator extends BlockRedstoneDiode impleme
 
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        Block layer0 = level.getBlock(this, 0);
-        Block layer1 = level.getBlock(this, 1);
+        Block layer0 = level.getBlock(this.position, 0);
+        Block layer1 = level.getBlock(this.position, 1);
         if (!super.place(item, block, target, face, fx, fy, fz, player)) {
             return false;
         }
@@ -199,8 +199,8 @@ public abstract class BlockRedstoneComparator extends BlockRedstoneDiode impleme
             createBlockEntity(new CompoundTag().putList("Items", new ListTag<>()));
         } catch (Exception e) {
             log.warn("Failed to create the block entity {} at {}", getBlockEntityType(), getLocation(), e);
-            level.setBlock(layer0, 0, layer0, true);
-            level.setBlock(layer1, 1, layer1, true);
+            level.setBlock(layer0.position, 0, layer0, true);
+            level.setBlock(layer1.position, 1, layer1, true);
             return false;
         }
 

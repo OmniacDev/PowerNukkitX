@@ -48,7 +48,7 @@ public class EntityWindCharge extends EntityProjectile {
 
         if(collisionBlock instanceof BlockChorusFlower
                     || collisionBlock instanceof BlockDecoratedPot) {
-            this.getLevel().useBreakOn(collisionBlock, Item.AIR);
+            this.getLevel().useBreakOn(collisionBlock.position, Item.AIR);
         }
 
         for(Entity entity : level.getEntities()) {
@@ -58,7 +58,7 @@ public class EntityWindCharge extends EntityProjectile {
                 }
             }
         }
-        level.addLevelSoundEvent(locator.add(0, 1), LevelSoundEventPacket.SOUND_WIND_CHARGE_BURST);
+        level.addLevelSoundEvent(locator.position.add(0, 1), LevelSoundEventPacket.SOUND_WIND_CHARGE_BURST);
         this.kill();
 
         return true;
@@ -70,7 +70,7 @@ public class EntityWindCharge extends EntityProjectile {
             if(directionChanged == entity) return;
         }
         entity.attack(new EntityDamageByEntityEvent(this, entity, EntityDamageEvent.DamageCause.PROJECTILE, 1f));
-        level.addLevelSoundEvent(entity.getPosition().add(0, 1), LevelSoundEventPacket.SOUND_WIND_CHARGE_BURST);
+        level.addLevelSoundEvent(entity.getPosition().position.add(0, 1), LevelSoundEventPacket.SOUND_WIND_CHARGE_BURST);
         this.level.addParticle(new GenericParticle(this.pos, Particle.TYPE_WIND_EXPLOSION));
         knockBack(entity);
         this.kill();

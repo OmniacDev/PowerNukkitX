@@ -128,7 +128,7 @@ public class CloneCommand extends VanillaCommand {
                     ++count;
 
                     if (move) {
-                        level.setBlock(block, Block.get(Block.AIR));
+                        level.setBlock(block.position, Block.get(Block.AIR));
                     }
                 }
             }
@@ -142,7 +142,7 @@ public class CloneCommand extends VanillaCommand {
                         ++count;
 
                         if (move) {
-                            level.setBlock(block, Block.get(Block.AIR));
+                            level.setBlock(block.position, Block.get(Block.AIR));
                         }
                     }
                 }
@@ -157,7 +157,7 @@ public class CloneCommand extends VanillaCommand {
                         ++count;
 
                         if (move) {
-                            level.setBlock(block, Block.get(Block.AIR));
+                            level.setBlock(block.position, Block.get(Block.AIR));
                         }
                     }
                 }

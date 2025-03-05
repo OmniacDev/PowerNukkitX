@@ -84,9 +84,9 @@ public class PlaySoundCommand extends VanillaCommand {
                 packet.z = player.pos.getFloorZ();
             } else {
                 packet.volume = volume;
-                packet.x = locator.getFloorX();
-                packet.y = locator.getFloorY();
-                packet.z = locator.getFloorZ();
+                packet.x = locator.position.getFloorX();
+                packet.y = locator.position.getFloorY();
+                packet.z = locator.position.getFloorZ();
             }
 
             packet.name = sound;

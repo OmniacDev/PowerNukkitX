@@ -47,14 +47,14 @@ public class ItemArmorStand extends Item {
             return false;
         }
 
-        for (Entity collidingEntity : level.getCollidingEntities(new SimpleAxisAlignedBB(block.x, block.y, block.z, block.x + 1, block.y + 1, block.z + 1))) {
+        for (Entity collidingEntity : level.getCollidingEntities(new SimpleAxisAlignedBB(block.position.x, block.position.y, block.position.z, block.position.x + 1, block.position.y + 1, block.position.z + 1))) {
             if (collidingEntity instanceof EntityArmorStand) {
                 return false;
             }
         }
 
         CompassRoseDirection direction = CompassRoseDirection.getClosestFromYaw(player.rotation.yaw, PRIMARY_INTER_CARDINAL).getOppositeFace();
-        CompoundTag nbt = Entity.getDefaultNBT(block.add(0.5, 0, 0.5), new Vector3(), direction.getYaw(), 0f);
+        CompoundTag nbt = Entity.getDefaultNBT(block.position.add(0.5, 0, 0.5), new Vector3(), direction.getYaw(), 0f);
         if (this.hasCustomName()) {
             nbt.putString("CustomName", this.getCustomName());
         }
@@ -85,7 +85,7 @@ public class ItemArmorStand extends Item {
         return switch (block.getId()) {
             case BlockID.AIR -> true;
             case BlockID.SNOW_LAYER -> block.canBeReplaced();
-            default -> block.getLevel().setBlock(block, Block.get(BlockID.AIR));
+            default -> block.getLevel().setBlock(block.position, Block.get(BlockID.AIR));
         };
     }
 }

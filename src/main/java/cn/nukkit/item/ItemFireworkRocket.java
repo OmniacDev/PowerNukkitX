@@ -43,7 +43,7 @@ public class ItemFireworkRocket extends Item {
         }
 
         if (block.canPassThrough()) {
-            this.spawnFirework(level, block);
+            this.spawnFirework(level, block.position);
 
             if (!player.isCreative()) {
                 player.getInventory().decreaseCount(player.getInventory().getHeldItemIndex());

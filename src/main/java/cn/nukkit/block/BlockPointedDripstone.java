@@ -119,7 +119,7 @@ public class BlockPointedDripstone extends BlockFallable {
         if (!hanging) {
             Block down = down();
             if (!down.isSolid()) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
             }
         }
         tryDrop(hanging);
@@ -152,9 +152,9 @@ public class BlockPointedDripstone extends BlockFallable {
 
     @Override
     public boolean place(@Nullable Item item, @NotNull Block block, @Nullable Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        int placeX = block.getFloorX();
-        int placeY = block.getFloorY();
-        int placeZ = block.getFloorZ();
+        int placeX = block.position.getFloorX();
+        int placeY = block.position.getFloorY();
+        int placeZ = block.position.getFloorZ();
         String upBlockID = level.getBlockIdAt(placeX, placeY + 1, placeZ);
         String downBlockID = level.getBlockIdAt(placeX, placeY - 1, placeZ);
         if (Objects.equals(upBlockID, AIR) && Objects.equals(downBlockID, AIR)) return false;
@@ -214,9 +214,9 @@ public class BlockPointedDripstone extends BlockFallable {
 
     @Override
     public boolean onBreak(Item item) {
-        int x = this.getFloorX();
-        int y = this.getFloorY();
-        int z = this.getFloorZ();
+        int x = this.position.getFloorX();
+        int y = this.position.getFloorY();
+        int z = this.position.getFloorZ();
         level.setBlock(x, y, z, Block.get(AIR), true, true);
         boolean hanging = getPropertyValue(HANGING);
         DripstoneThickness thickness = getPropertyValue(DRIPSTONE_THICKNESS);
@@ -230,7 +230,7 @@ public class BlockPointedDripstone extends BlockFallable {
             if (length > 0) {
                 Block downBlock = down();
                 for (int i = 0; i <= length - 1; ++i) {
-                    level.setBlock(downBlock.down(i), Block.get(AIR), false, false);
+                    level.setBlock(downBlock.down(i).position, Block.get(AIR), false, false);
                 }
                 for (int i = length - 1; i >= 0; --i) {
                     place(null, downBlock.down(i), null, BlockFace.DOWN, 0, 0, 0, null);
@@ -242,7 +242,7 @@ public class BlockPointedDripstone extends BlockFallable {
             if (length > 0) {
                 Block upBlock = up();
                 for (int i = 0; i <= length - 1; ++i) {
-                    level.setBlock(upBlock.up(i), Block.get(AIR), false, false);
+                    level.setBlock(upBlock.up(i).position, Block.get(AIR), false, false);
                 }
                 for (int i = length - 1; i >= 0; --i) {
                     place(null, upBlock.up(i), null, BlockFace.DOWN, 0, 0, 0, null);
@@ -379,8 +379,8 @@ public class BlockPointedDripstone extends BlockFallable {
                         return;
                     cauldron.setCauldronLiquid(event.getLiquid());
                     cauldron.setFillLevel(cauldron.getFillLevel() + event.getLiquidLevelIncrement());
-                    cauldron.level.setBlock(cauldron, cauldron, true, true);
-                    this.getLevel().addSound(this.add(0.5, 1, 0.5), Sound.CAULDRON_DRIP_LAVA_POINTED_DRIPSTONE);
+                    cauldron.level.setBlock(cauldron.position, cauldron, true, true);
+                    this.getLevel().addSound(this.position.add(0.5, 1, 0.5), Sound.CAULDRON_DRIP_LAVA_POINTED_DRIPSTONE);
                 }
             }
             case FLOWING_WATER -> {
@@ -392,8 +392,8 @@ public class BlockPointedDripstone extends BlockFallable {
                         return;
                     cauldron.setCauldronLiquid(event.getLiquid());
                     cauldron.setFillLevel(cauldron.getFillLevel() + event.getLiquidLevelIncrement());
-                    cauldron.level.setBlock(cauldron, cauldron, true, true);
-                    this.getLevel().addSound(this.add(0.5, 1, 0.5), Sound.CAULDRON_DRIP_WATER_POINTED_DRIPSTONE);
+                    cauldron.level.setBlock(cauldron.position, cauldron, true, true);
+                    this.getLevel().addSound(this.position.add(0.5, 1, 0.5), Sound.CAULDRON_DRIP_WATER_POINTED_DRIPSTONE);
                 }
             }
         }

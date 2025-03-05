@@ -60,12 +60,12 @@ public class BlockBarrel extends BlockSolid implements Faceable, BlockEntityHold
         if (player == null) {
             setBlockFace(BlockFace.UP);
         } else {
-            if (Math.abs(player.pos.x - this.x) < 2 && Math.abs(player.pos.z - this.z) < 2) {
+            if (Math.abs(player.pos.x - this.position.x) < 2 && Math.abs(player.pos.z - this.position.z) < 2) {
                 double y = player.pos.y + player.getEyeHeight();
 
-                if (y - this.y > 2) {
+                if (y - this.position.y > 2) {
                     setBlockFace(BlockFace.UP);
-                } else if (this.y - y > 0) {
+                } else if (this.position.y - y > 0) {
                     setBlockFace(BlockFace.DOWN);
                 } else {
                     setBlockFace(player.getHorizontalFacing().getOpposite());

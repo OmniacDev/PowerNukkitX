@@ -28,7 +28,7 @@ public final class PlayerChunkManager {
     private final LongComparator chunkDistanceComparator = new LongComparator() {
         @Override
         public int compare(long chunkHash1, long chunkHash2) {
-            BlockVector3 floor = player.getPosition().asBlockVector3();
+            BlockVector3 floor = player.getPosition().position.asBlockVector3();
             var loaderChunkX = floor.x >> 4;
             var loaderChunkZ = floor.z >> 4;
             var chunkDX1 = loaderChunkX - Level.getHashX(chunkHash1);

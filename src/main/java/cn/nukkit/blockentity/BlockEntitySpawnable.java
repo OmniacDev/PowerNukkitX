@@ -46,9 +46,9 @@ public abstract class BlockEntitySpawnable extends BlockEntity {
         }
 
         BlockEntityDataPacket pk = new BlockEntityDataPacket();
-        pk.x = this.getFloorX();
-        pk.y = this.getFloorY();
-        pk.z = this.getFloorZ();
+        pk.x = this.position.getFloorX();
+        pk.y = this.position.getFloorY();
+        pk.z = this.position.getFloorZ();
         pk.namedTag = nbt;
 
         return pk;

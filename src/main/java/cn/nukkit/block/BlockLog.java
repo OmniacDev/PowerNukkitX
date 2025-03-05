@@ -27,7 +27,7 @@ public abstract class BlockLog extends BlockSolid implements IBlockWood {
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         setPillarAxis(face.getAxis());
-        getLevel().setBlock(block, this, true, true);
+        getLevel().setBlock(block.position, this, true, true);
         return true;
     }
 
@@ -42,7 +42,7 @@ public abstract class BlockLog extends BlockSolid implements IBlockWood {
             Block strippedBlock = Block.get(getStrippedState());
             strippedBlock.setPropertyValue(PILLAR_AXIS, this.getPillarAxis());
             item.useOn(this);
-            this.level.setBlock(this, strippedBlock, true, true);
+            this.level.setBlock(this.position, strippedBlock, true, true);
             return true;
         }
         return false;

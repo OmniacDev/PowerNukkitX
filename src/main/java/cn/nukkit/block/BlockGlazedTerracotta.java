@@ -42,7 +42,7 @@ public abstract class BlockGlazedTerracotta extends BlockSolid implements Faceab
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         int[] faces = {2, 5, 3, 4};
         this.setBlockFace(BlockFace.fromIndex(faces[player != null ? player.getDirection().getHorizontalIndex() : 0]));
-        return this.getLevel().setBlock(block, this, true, true);
+        return this.getLevel().setBlock(block.position, this, true, true);
     }
 
     @Override

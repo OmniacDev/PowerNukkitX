@@ -315,7 +315,7 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
                 var farmEvent = new FarmLandDecayEvent(this, down);
                 this.server.getPluginManager().callEvent(farmEvent);
                 if (farmEvent.isCancelled()) return;
-                this.level.setBlock(down, new BlockDirt(), false, true);
+                this.level.setBlock(down.position, new BlockDirt(), false, true);
                 return;
             }
 
@@ -354,7 +354,7 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
         this.motion.z = 0;
         this.setMoveTarget(null);
         this.setLookTarget(null);
-        this.move(clientLoc.x - this.pos.x, clientLoc.y - this.pos.y, clientLoc.z - this.pos.z);
+        this.move(clientLoc.position.x - this.pos.x, clientLoc.position.y - this.pos.y, clientLoc.position.z - this.pos.z);
         this.rotation.yaw = clientLoc.yaw;
         this.headYaw = clientLoc.headYaw;
         broadcastMovement(false);

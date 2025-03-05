@@ -137,9 +137,9 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
         potionTransform.setY(entity.pos.y + entity.getEyeHeight() + directionVector.getY());
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(potionTransform.x))
-                        .add(new FloatTag(potionTransform.y))
-                        .add(new FloatTag(potionTransform.z)))
+                        .add(new FloatTag(potionTransform.position.x))
+                        .add(new FloatTag(potionTransform.position.y))
+                        .add(new FloatTag(potionTransform.position.z)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(-Math.sin(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI)))
                         .add(new FloatTag(-Math.sin(entity.rotation.pitch / 180 * Math.PI)))

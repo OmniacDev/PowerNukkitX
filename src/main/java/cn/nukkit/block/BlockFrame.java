@@ -91,7 +91,7 @@ public class BlockFrame extends BlockTransparent implements BlockEntityHolder<Bl
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             Block support = this.getSideAtLayer(0, getFacing().getOpposite());
             if (!support.isSolid() && !support.getId().equals(COBBLESTONE_WALL)) {
-                this.level.useBreakOn(this);
+                this.level.useBreakOn(this.position);
                 return type;
             }
         }
@@ -139,9 +139,9 @@ public class BlockFrame extends BlockTransparent implements BlockEntityHolder<Bl
             itemFrame.setItem(itemOnFrame);
             if (Objects.equals(itemOnFrame.getId(), ItemID.FILLED_MAP)) {
                 setStoringMap(true);
-                this.getLevel().setBlock(this, this, true);
+                this.getLevel().setBlock(this.position, this, true);
             }
-            this.getLevel().addLevelEvent(this, LevelEventPacket.EVENT_SOUND_ITEMFRAME_ITEM_ADD);
+            this.getLevel().addLevelEvent(this.position, LevelEventPacket.EVENT_SOUND_ITEMFRAME_ITEM_ADD);
         } else {
             ItemFrameUseEvent event = new ItemFrameUseEvent(player, this, itemFrame, null, ItemFrameUseEvent.Action.ROTATION);
             this.getLevel().getServer().getPluginManager().callEvent(event);
@@ -149,9 +149,9 @@ public class BlockFrame extends BlockTransparent implements BlockEntityHolder<Bl
             itemFrame.setItemRotation((itemFrame.getItemRotation() + 1) % 8);
             if (isStoringMap()) {
                 setStoringMap(false);
-                this.getLevel().setBlock(this, this, true);
+                this.getLevel().setBlock(this.position, this, true);
             }
-            this.getLevel().addLevelEvent(this, LevelEventPacket.EVENT_SOUND_ITEMFRAME_ITEM_ROTATE);
+            this.getLevel().addLevelEvent(this.position, LevelEventPacket.EVENT_SOUND_ITEMFRAME_ITEM_ROTATE);
         }
         return true;
     }
@@ -180,21 +180,21 @@ public class BlockFrame extends BlockTransparent implements BlockEntityHolder<Bl
                 nbt.put(e.getKey(), e.getValue());
             }
         }
-        level.setBlock(block, this, true, true);
+        level.setBlock(block.position, this, true, true);
         BlockFrame levelBlock = (BlockFrame) block.getLevelBlock();
         BlockEntityItemFrame frame = levelBlock.getBlockEntity();
         if (frame == null) {
             frame = levelBlock.createBlockEntity(nbt);
         }
 
-        this.getLevel().addSound(this, Sound.BLOCK_ITEMFRAME_PLACE);
+        this.getLevel().addSound(this.position, Sound.BLOCK_ITEMFRAME_PLACE);
         return true;
     }
 
     @Override
     public boolean onBreak(Item item) {
-        this.getLevel().setBlock(this, layer, Block.get(BlockID.AIR), true, true);
-        this.getLevel().addLevelEvent(this, LevelEventPacket.EVENT_SOUND_ITEMFRAME_BREAK);
+        this.getLevel().setBlock(this.position, layer, Block.get(BlockID.AIR), true, true);
+        this.getLevel().addLevelEvent(this.position, LevelEventPacket.EVENT_SOUND_ITEMFRAME_BREAK);
         return true;
     }
 

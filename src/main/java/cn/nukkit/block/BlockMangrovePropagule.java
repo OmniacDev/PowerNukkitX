@@ -43,7 +43,7 @@ public class BlockMangrovePropagule extends BlockFlowable implements BlockFlower
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         //todo: 实现红树树苗放置逻辑
         if (BlockFlower.isSupportValid(down())) {
-            this.getLevel().setBlock(block, this, true, true);
+            this.getLevel().setBlock(block.position, this, true, true);
             return true;
         }
 
@@ -66,7 +66,7 @@ public class BlockMangrovePropagule extends BlockFlowable implements BlockFlower
                 item.count--;
             }
 
-            this.level.addParticle(new BoneMealParticle(this));
+            this.level.addParticle(new BoneMealParticle(this.position));
             if (ThreadLocalRandom.current().nextFloat() >= 0.45) {
                 return true;
             }
@@ -82,7 +82,7 @@ public class BlockMangrovePropagule extends BlockFlowable implements BlockFlower
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!BlockFlower.isSupportValid(down())) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) { //Growth
@@ -93,22 +93,22 @@ public class BlockMangrovePropagule extends BlockFlowable implements BlockFlower
 
     protected void grow() {
         BlockManager chunkManager = new BlockManager(this.level);
-        Vector3 vector3 = new Vector3(this.x, this.y - 1, this.z);
+        Vector3 vector3 = new Vector3(this.position.x, this.position.y - 1, this.position.z);
         var objectMangroveTree = new ObjectMangroveTree();
-        objectMangroveTree.generate(chunkManager, new NukkitRandom(), this);
+        objectMangroveTree.generate(chunkManager, new NukkitRandom(), this.position);
         StructureGrowEvent ev = new StructureGrowEvent(this, chunkManager.getBlocks());
         this.level.getServer().getPluginManager().callEvent(ev);
         if (ev.isCancelled()) {
             return;
         }
         chunkManager.applySubChunkUpdate(ev.getBlockList());
-        this.level.setBlock(this, Block.get(BlockID.AIR));
+        this.level.setBlock(this.position, Block.get(BlockID.AIR));
         if (this.level.getBlock(vector3).getId().equals(BlockID.DIRT_WITH_ROOTS)) {
             this.level.setBlock(vector3, Block.get(BlockID.DIRT));
         }
         for (Block block : ev.getBlockList()) {
             if (block.isAir()) continue;
-            this.level.setBlock(block, block);
+            this.level.setBlock(block.position, block);
         }
     }
 

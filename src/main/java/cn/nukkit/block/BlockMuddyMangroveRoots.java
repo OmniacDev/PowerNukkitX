@@ -60,7 +60,7 @@ public class BlockMuddyMangroveRoots extends BlockSolid implements Natural {
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         setPillarAxis(face.getAxis());
-        getLevel().setBlock(block, this, true, true);
+        getLevel().setBlock(block.position, this, true, true);
         return true;
     }
 }

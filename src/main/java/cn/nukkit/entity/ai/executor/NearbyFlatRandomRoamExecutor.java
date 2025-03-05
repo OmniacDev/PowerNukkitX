@@ -3,6 +3,7 @@ package cn.nukkit.entity.ai.executor;
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.mob.EntityMob;
+import cn.nukkit.math.GetVector3;
 import cn.nukkit.math.Vector3;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -10,17 +11,17 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class NearbyFlatRandomRoamExecutor extends FlatRandomRoamExecutor {
 
-    protected MemoryType<? extends Vector3> memory;
+    protected MemoryType<? extends GetVector3> memory;
 
-    public NearbyFlatRandomRoamExecutor(MemoryType<? extends Vector3> memory, float speed, int maxRoamRange, int frequency) {
+    public NearbyFlatRandomRoamExecutor(MemoryType<? extends GetVector3> memory, float speed, int maxRoamRange, int frequency) {
         this(memory, speed, maxRoamRange, frequency, false, 100);
     }
 
-    public NearbyFlatRandomRoamExecutor(MemoryType<? extends Vector3> memory, float speed, int maxRoamRange, int frequency, boolean calNextTargetImmediately, int runningTime) {
+    public NearbyFlatRandomRoamExecutor(MemoryType<? extends GetVector3> memory, float speed, int maxRoamRange, int frequency, boolean calNextTargetImmediately, int runningTime) {
         this(memory, speed, maxRoamRange, frequency, calNextTargetImmediately, runningTime, false, 10);
     }
 
-    public NearbyFlatRandomRoamExecutor(MemoryType<? extends Vector3> memory, float speed, int maxRoamRange, int frequency, boolean calNextTargetImmediately, int runningTime, boolean avoidWater, int maxRetryTime) {
+    public NearbyFlatRandomRoamExecutor(MemoryType<? extends GetVector3> memory, float speed, int maxRoamRange, int frequency, boolean calNextTargetImmediately, int runningTime, boolean avoidWater, int maxRetryTime) {
         super(speed, maxRoamRange, frequency, calNextTargetImmediately, runningTime, avoidWater, maxRetryTime);
         this.memory = memory;
     }
@@ -30,7 +31,7 @@ public class NearbyFlatRandomRoamExecutor extends FlatRandomRoamExecutor {
         currentTargetCalTick++;
         durationTick++;
 
-        Vector3 center = entity.getMemoryStorage().get(memory);
+        Vector3 center = entity.getMemoryStorage().get(memory).getVector3();
         if(center == null) return false;
 
         if (entity.isEnablePitch()) entity.setEnablePitch(false);

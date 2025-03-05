@@ -60,14 +60,14 @@ public class VexSummonExecutor extends FangLineExecutor {
     protected void summon(EntityMob entity) {
         if(!entity.getDataFlag(EntityFlag.CASTING)) return;
         Transform vexTransform = entity.getLocation();
-        vexTransform.x += ThreadLocalRandom.current().nextFloat(2);
-        vexTransform.y += ThreadLocalRandom.current().nextFloat(2);
-        vexTransform.z += ThreadLocalRandom.current().nextFloat(2);
+        vexTransform.position.x += ThreadLocalRandom.current().nextFloat(2);
+        vexTransform.position.y += ThreadLocalRandom.current().nextFloat(2);
+        vexTransform.position.z += ThreadLocalRandom.current().nextFloat(2);
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(vexTransform.x))
-                        .add(new FloatTag(vexTransform.y))
-                        .add(new FloatTag(vexTransform.z)))
+                        .add(new FloatTag(vexTransform.position.x))
+                        .add(new FloatTag(vexTransform.position.y))
+                        .add(new FloatTag(vexTransform.position.z)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(0))
                         .add(new FloatTag(0))

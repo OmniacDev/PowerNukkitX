@@ -389,9 +389,9 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
                         Block pos = check.getSide(blockFace, 2);
                         CompoundTag nbt = new CompoundTag()
                                 .putList("Pos", new ListTag<FloatTag>()
-                                        .add(new FloatTag(pos.x + 0.5))
-                                        .add(new FloatTag(pos.y))
-                                        .add(new FloatTag(pos.z + 0.5)))
+                                        .add(new FloatTag(pos.position.x + 0.5))
+                                        .add(new FloatTag(pos.position.y))
+                                        .add(new FloatTag(pos.position.z + 0.5)))
                                 .putList("Motion", new ListTag<FloatTag>()
                                         .add(new FloatTag(0))
                                         .add(new FloatTag(0))
@@ -400,7 +400,7 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
                                         .add(new FloatTag(0f))
                                         .add(new FloatTag(0f)));
 
-                        Entity wither = Entity.createEntity(EntityID.WITHER, check.level.getChunk(check.getChunkX(), check.getChunkZ()), nbt);
+                        Entity wither = Entity.createEntity(EntityID.WITHER, check.level.getChunk(check.position.getChunkX(), check.position.getChunkZ()), nbt);
                         wither.spawnToAll();
                         return true;
                     }

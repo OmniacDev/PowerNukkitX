@@ -53,14 +53,14 @@ public abstract class BlockCarpet extends BlockFlowable {
 
     @Override
     public double getMaxY() {
-        return this.y + 0.0625;
+        return this.position.y + 0.0625;
     }
 
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         Block down = this.down();
         if (!down.isAir()) {
-            this.getLevel().setBlock(block, this, true, true);
+            this.getLevel().setBlock(block.position, this, true, true);
             return true;
         }
         return false;
@@ -70,7 +70,7 @@ public abstract class BlockCarpet extends BlockFlowable {
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (this.down().isAir()) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
 
                 return Level.BLOCK_UPDATE_NORMAL;
             }

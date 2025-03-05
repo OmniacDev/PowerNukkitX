@@ -52,7 +52,7 @@ public class BlockPinkPetals extends BlockFlowable {
             setPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION, CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(player.getHorizontalFacing().getOpposite()));
         }
 
-        return this.getLevel().setBlock(this, this);
+        return this.getLevel().setBlock(this.position, this);
     }
 
     private static boolean isSupportValid(Block block) {
@@ -69,19 +69,19 @@ public class BlockPinkPetals extends BlockFlowable {
         if (item.isFertilizer()) {
             if (getPropertyValue(GROWTH) < 3) {
                 setPropertyValue(GROWTH, getPropertyValue(GROWTH) + 1);
-                getLevel().setBlock(this, this);
+                getLevel().setBlock(this.position, this);
             } else {
-                getLevel().dropItem(this, this.toItem());
+                getLevel().dropItem(this.position, this.toItem());
             }
 
-            this.level.addParticle(new BoneMealParticle(this));
+            this.level.addParticle(new BoneMealParticle(this.position));
             item.count--;
             return true;
         }
 
         if (Objects.equals(item.getBlockId(), PINK_PETALS) && getPropertyValue(GROWTH) < 3) {
             setPropertyValue(GROWTH, getPropertyValue(GROWTH) + 1);
-            getLevel().setBlock(this, this);
+            getLevel().setBlock(this.position, this);
             item.count--;
             return true;
         }

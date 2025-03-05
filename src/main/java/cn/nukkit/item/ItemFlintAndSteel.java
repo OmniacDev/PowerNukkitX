@@ -49,9 +49,9 @@ public class ItemFlintAndSteel extends ItemTool {
             }
 
             BlockFire fire = (BlockFire) Block.get(BlockID.FIRE);
-            fire.x = block.x;
-            fire.y = block.y;
-            fire.z = block.z;
+            fire.position.x = block.position.x;
+            fire.position.y = block.position.y;
+            fire.position.z = block.position.z;
             fire.level = level;
 
             if (fire.isBlockTopFacingSurfaceSolid(fire.down()) || fire.canNeighborBurn()) {
@@ -59,7 +59,7 @@ public class ItemFlintAndSteel extends ItemTool {
                 block.getLevel().getServer().getPluginManager().callEvent(e);
 
                 if (!e.isCancelled()) {
-                    level.setBlock(fire, fire, true);
+                    level.setBlock(fire.position, fire, true);
                     level.scheduleUpdate(fire, fire.tickRate() + ThreadLocalRandom.current().nextInt(10));
                 }
                 damageItem(player, block);
@@ -82,7 +82,7 @@ public class ItemFlintAndSteel extends ItemTool {
                 player.getInventory().setItemInHand(this);
             }
         }
-        block.getLevel().addSound(block, Sound.FIRE_IGNITE);
+        block.getLevel().addSound(block.position, Sound.FIRE_IGNITE);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class ItemFlintAndSteel extends ItemTool {
     @Override
     public boolean useOn(Block block) {
         //todo: initiator should be an entity who use it but not null
-        block.getLevel().getVibrationManager().callVibrationEvent(new VibrationEvent(null, block.add(0.5, 0.5, 0.5), VibrationType.BLOCK_PLACE));
+        block.getLevel().getVibrationManager().callVibrationEvent(new VibrationEvent(null, block.position.add(0.5, 0.5, 0.5), VibrationType.BLOCK_PLACE));
         return super.useOn(block);
     }
 }

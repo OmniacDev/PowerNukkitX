@@ -186,9 +186,9 @@ public final class AntiXraySystem {
         Vector3WithRuntimeId tmpVec;
         for (var each : BlockFace.values()) {
             if (each == face) continue;
-            var tmpX = target.getFloorX() + each.getXOffset();
-            var tmpY = target.getFloorY() + each.getYOffset();
-            var tmpZ = target.getFloorZ() + each.getZOffset();
+            var tmpX = target.position.getFloorX() + each.getXOffset();
+            var tmpY = target.position.getFloorY() + each.getYOffset();
+            var tmpZ = target.position.getFloorZ() + each.getZOffset();
             try {
                 tmpVec = new Vector3WithRuntimeId(tmpX, tmpY, tmpZ, level.getBlockRuntimeId(tmpX, tmpY, tmpZ, 0), level.getBlockRuntimeId(tmpX, tmpY, tmpZ, 1));
                 if (this.getRawFakeOreToPutRuntimeIdMap().containsKey(tmpVec.getRuntimeIdLayer0())) {

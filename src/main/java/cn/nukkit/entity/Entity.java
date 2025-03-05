@@ -286,7 +286,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
      */
     @Nullable
     public static Entity createEntity(Identifier identifier, @NotNull Locator pos, @Nullable Object... args) {
-        return createEntity(identifier.toString(), Objects.requireNonNull(pos.getChunk()), getDefaultNBT(pos), args);
+        return createEntity(identifier.toString(), Objects.requireNonNull(pos.getChunk()), getDefaultNBT(pos.position), args);
     }
 
     /**
@@ -301,7 +301,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
      */
     @Nullable
     public static Entity createEntity(@NotNull String name, @NotNull Locator pos, @Nullable Object... args) {
-        return createEntity(name, Objects.requireNonNull(pos.getChunk()), getDefaultNBT(pos), args);
+        return createEntity(name, Objects.requireNonNull(pos.getChunk()), getDefaultNBT(pos.position), args);
     }
 
     /**
@@ -318,7 +318,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     public static Entity createEntity(int type, @NotNull Locator pos, @Nullable Object... args) {
         String entityIdentifier = Registries.ENTITY.getEntityIdentifier(type);
         if (entityIdentifier == null) return null;
-        return createEntity(entityIdentifier, Objects.requireNonNull(pos.getChunk()), getDefaultNBT(pos), args);
+        return createEntity(entityIdentifier, Objects.requireNonNull(pos.getChunk()), getDefaultNBT(pos.position), args);
     }
 
     /**
@@ -369,12 +369,6 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
 
     @NotNull
     public static CompoundTag getDefaultNBT(@NotNull Vector3 pos, @Nullable Vector3 motion) {
-        Transform loc = pos instanceof Transform ? (Transform) pos : null;
-
-        if (loc != null) {
-            return getDefaultNBT(pos, motion, (float) loc.getYaw(), (float) loc.getPitch());
-        }
-
         return getDefaultNBT(pos, motion, 0, 0);
     }
 
@@ -1948,7 +1942,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
                 var farmEvent = new FarmLandDecayEvent(this, down);
                 this.server.getPluginManager().callEvent(farmEvent);
                 if (farmEvent.isCancelled()) return;
-                this.level.setBlock(down, Block.get(Block.DIRT), false, true);
+                this.level.setBlock(down.position, Block.get(Block.DIRT), false, true);
                 return;
             }
 
@@ -1967,7 +1961,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
         Event ev;
 
         if (this instanceof Player) {
-            ev = new PlayerInteractEvent((Player) this, null, block, null, Action.PHYSICAL);
+            ev = new PlayerInteractEvent((Player) this, null, block.position, null, Action.PHYSICAL);
         } else {
             ev = new EntityInteractEvent(this, block);
         }
@@ -2111,7 +2105,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
                 block instanceof BlockFlowingWater
                         || (layer1 = block1 instanceof BlockFlowingWater))) {
             BlockFlowingWater water = (BlockFlowingWater) (layer1 ? block1 : block);
-            double f = (block.y + 1) - (water.getFluidHeightPercent() - 0.1111111);
+            double f = (block.position.y + 1) - (water.getFluidHeightPercent() - 0.1111111);
             return y < f;
         }
 
@@ -2172,7 +2166,9 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
      */
     public boolean move(double dx, double dy, double dz) {
         if (dx == 0 && dz == 0 && dy == 0) {
-            this.onGround = !this.getLocation().setComponents(this.pos.down()).getTickCachedLevelBlock().canPassThrough();
+            Locator value = this.getLocation();
+            value.position.setComponents(this.pos.down());
+            this.onGround = !value.getTickCachedLevelBlock().canPassThrough();
             return true;
         }
 
@@ -2559,12 +2555,6 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
             return false;
         }
 
-        if (pos instanceof Locator && ((Locator) pos).level != null && ((Locator) pos).level != this.level) {
-            if (!this.switchLevel(((Locator) pos).getLevel())) {
-                return false;
-            }
-        }
-
         this.pos.x = pos.x;
         this.pos.y = pos.y;
         this.pos.z = pos.z;
@@ -2634,7 +2624,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     }
 
     public boolean teleport(Locator pos, PlayerTeleportEvent.TeleportCause cause) {
-        return this.teleport(Transform.fromObject(pos, pos.level, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw), cause);
+        return this.teleport(Transform.fromObject(pos.position, pos.level, this.rotation.yaw, this.rotation.pitch, this.rotation.yaw), cause);
     }
 
     public boolean teleport(Transform transform) {
@@ -2673,7 +2663,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
 
         this.setMotion(new Vector3());
 
-        if (this.setPositionAndRotation(to, yaw, pitch)) {
+        if (this.setPositionAndRotation(to.position, yaw, pitch)) {
             this.resetFallDistance();
             this.onGround = !this.noClip;
             this.updateMovement();

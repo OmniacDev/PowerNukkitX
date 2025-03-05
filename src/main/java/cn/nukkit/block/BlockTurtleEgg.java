@@ -110,17 +110,17 @@ public class BlockTurtleEgg extends BlockFlowable {
             if (placeEvent.isCancelled()) {
                 return false;
             }
-            if (!this.level.setBlock(this, placeEvent.getBlock(), true, true)) {
+            if (!this.level.setBlock(this.position, placeEvent.getBlock(), true, true)) {
                 return false;
             }
             Block placeBlock = placeEvent.getBlock();
-            this.level.addLevelSoundEvent(this,
+            this.level.addLevelSoundEvent(this.position,
                     LevelSoundEventPacket.SOUND_PLACE,
                     placeBlock.getRuntimeId());
             item.setCount(item.getCount() - 1);
 
             if (down().getId().equals(SAND)) {
-                this.level.addParticle(new BoneMealParticle(this));
+                this.level.addParticle(new BoneMealParticle(this.position));
             }
 
             return true;
@@ -178,8 +178,8 @@ public class BlockTurtleEgg extends BlockFlowable {
                         BlockGrowEvent event = new BlockGrowEvent(this, newState);
                         this.level.getServer().getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
-                            level.addSound(this, Sound.BLOCK_TURTLE_EGG_CRACK, 0.7f, 0.9f + random.nextFloat() * 0.2f);
-                            this.level.setBlock(this, event.getNewState(), true, true);
+                            level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK, 0.7f, 0.9f + random.nextFloat() * 0.2f);
+                            this.level.setBlock(this.position, event.getNewState(), true, true);
                         }
                     } else {
                         hatch();
@@ -206,12 +206,12 @@ public class BlockTurtleEgg extends BlockFlowable {
         this.level.getServer().getPluginManager().callEvent(turtleEggHatchEvent);
         int eggsHatching = turtleEggHatchEvent.getEggsHatching();
         if (!turtleEggHatchEvent.isCancelled()) {
-            level.addSound(this, Sound.BLOCK_TURTLE_EGG_CRACK);
+            level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK);
 
             boolean hasFailure = false;
             for (int i = 0; i < eggsHatching; i++) {
 
-                this.level.addSound(this, Sound.BLOCK_TURTLE_EGG_CRACK);
+                this.level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK);
 
                 CreatureSpawnEvent creatureSpawnEvent = new CreatureSpawnEvent(
                         Registries.ENTITY.getEntityNetworkId(EntityID.TURTLE),
@@ -246,7 +246,7 @@ public class BlockTurtleEgg extends BlockFlowable {
                 turtleEggHatchEvent.recalculateNewState();
             }
 
-            this.level.setBlock(this, turtleEggHatchEvent.getNewState(), true, true);
+            this.level.setBlock(this.position, turtleEggHatchEvent.getNewState(), true, true);
         }
     }
 
@@ -261,7 +261,7 @@ public class BlockTurtleEgg extends BlockFlowable {
             Event ev;
 
             if (entity instanceof Player) {
-                ev = new PlayerInteractEvent((Player) entity, null, this, null, PlayerInteractEvent.Action.PHYSICAL);
+                ev = new PlayerInteractEvent((Player) entity, null, this.position, null, PlayerInteractEvent.Action.PHYSICAL);
             } else {
                 ev = new EntityInteractEvent(entity, this);
             }
@@ -269,7 +269,7 @@ public class BlockTurtleEgg extends BlockFlowable {
             ev.setCancelled(ThreadLocalRandom.current().nextInt(200) > 0);
             this.level.getServer().getPluginManager().callEvent(ev);
             if (!ev.isCancelled()) {
-                this.level.useBreakOn(this, null, null, true);
+                this.level.useBreakOn(this.position, null, null, true);
             }
         }
     }
@@ -283,13 +283,13 @@ public class BlockTurtleEgg extends BlockFlowable {
     public boolean onBreak(Item item) {
         TurtleEggCount eggCount = getEggCount();
         if (item.getEnchantment(Enchantment.ID_SILK_TOUCH) == null) {
-            this.level.addSound(this, Sound.BLOCK_TURTLE_EGG_CRACK);
+            this.level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK);
         }
         if (eggCount == TurtleEggCount.ONE_EGG) {
             return super.onBreak(item);
         } else {
             setEggCount(eggCount.before());
-            return this.level.setBlock(this, this, true, true);
+            return this.level.setBlock(this.position, this, true, true);
         }
     }
 
@@ -299,9 +299,9 @@ public class BlockTurtleEgg extends BlockFlowable {
             return false;
         }
 
-        if (this.level.setBlock(this, this, true, true)) {
+        if (this.level.setBlock(this.position, this, true, true)) {
             if (down().getId().equals(BlockID.SAND)) {
-                this.level.addParticle(new BoneMealParticle(this));
+                this.level.addParticle(new BoneMealParticle(this.position));
             }
             return true;
         } else {

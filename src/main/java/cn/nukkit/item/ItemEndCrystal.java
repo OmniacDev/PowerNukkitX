@@ -40,7 +40,7 @@ public class ItemEndCrystal extends Item {
     public boolean onActivate(Level level, Player player, Block block, Block target, BlockFace face, double fx, double fy, double fz) {
         if (!(target instanceof BlockBedrock) && !(target instanceof BlockObsidian)) return false;
         IChunk chunk = level.getChunk((int) block.getX() >> 4, (int) block.getZ() >> 4);
-        Entity[] entities = level.getNearbyEntities(new SimpleAxisAlignedBB(target.x, target.y, target.z, target.x + 1, target.y + 2, target.z + 1));
+        Entity[] entities = level.getNearbyEntities(new SimpleAxisAlignedBB(target.position.x, target.position.y, target.position.z, target.position.x + 1, target.position.y + 2, target.position.z + 1));
         Block up = target.up();
 
         if (chunk == null || !up.getId().equals(BlockID.AIR) || !up.up().getId().equals(BlockID.AIR) || entities.length != 0) {
@@ -49,9 +49,9 @@ public class ItemEndCrystal extends Item {
 
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(target.x + 0.5))
-                        .add(new FloatTag(up.y))
-                        .add(new FloatTag(target.z + 0.5)))
+                        .add(new FloatTag(target.position.x + 0.5))
+                        .add(new FloatTag(up.position.y))
+                        .add(new FloatTag(target.position.z + 0.5)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(0))
                         .add(new FloatTag(0))

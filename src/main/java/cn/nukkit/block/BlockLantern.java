@@ -73,7 +73,7 @@ public class BlockLantern extends BlockFlowable {
 
         setHanging(hanging);
 
-        this.getLevel().setBlock(this, this, true, true);
+        this.getLevel().setBlock(this.position, this, true, true);
         return true;
     }
 
@@ -82,10 +82,10 @@ public class BlockLantern extends BlockFlowable {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!isHanging()) {
                 if (!isBlockUnderValid()) {
-                    level.useBreakOn(this, ItemTool.getBestTool(getToolType()));
+                    level.useBreakOn(this.position, ItemTool.getBestTool(getToolType()));
                 }
             } else if (!isBlockAboveValid()) {
-                level.useBreakOn(this, ItemTool.getBestTool(getToolType()));
+                level.useBreakOn(this.position, ItemTool.getBestTool(getToolType()));
             }
             return type;
         }

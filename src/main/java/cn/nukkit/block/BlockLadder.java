@@ -114,36 +114,36 @@ public class BlockLadder extends BlockTransparent implements Faceable {
     @Override
     public double getMinX() {
         calculateOffsets();
-        return this.x + offMinX;
+        return this.position.x + offMinX;
     }
 
     @Override
     public double getMinZ() {
         calculateOffsets();
-        return this.z + offMinZ;
+        return this.position.z + offMinZ;
     }
 
     @Override
     public double getMaxX() {
         calculateOffsets();
-        return this.x + offMaxX;
+        return this.position.x + offMaxX;
     }
 
     @Override
     public double getMaxZ() {
         calculateOffsets();
-        return this.z + offMaxZ;
+        return this.position.z + offMaxZ;
     }
 
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         if (target instanceof BlockLadder) {
             var opposite = face.getOpposite();
-            var oppositeB = this.getLevel().getBlock(target.add(face.getUnitVector()));
-            var targetBlock = this.getLevel().getBlock(target.add(face.getUnitVector().multiply(2)));
+            var oppositeB = this.getLevel().getBlock(target.position.add(face.getUnitVector()));
+            var targetBlock = this.getLevel().getBlock(target.position.add(face.getUnitVector().multiply(2)));
             if (isSupportValid(targetBlock, opposite)) {
                 //不设置damage是因为level#useItemOn中有逻辑设置
-                this.getLevel().setBlock(oppositeB, this, true, false);
+                this.getLevel().setBlock(oppositeB.position, this, true, false);
                 return true;
             }
         }
@@ -151,7 +151,7 @@ public class BlockLadder extends BlockTransparent implements Faceable {
             return false;
         }
         //不设置damage是因为level#useItemOn中有逻辑设置
-        this.getLevel().setBlock(block, this, true, true);
+        this.getLevel().setBlock(block.position, this, true, true);
         return true;
     }
 
@@ -176,7 +176,7 @@ public class BlockLadder extends BlockTransparent implements Faceable {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             BlockFace face = getBlockFace();
             if (!isSupportValid(this.getSide(face), face.getOpposite())) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         }

@@ -102,7 +102,7 @@ public class BlockEntityBrewingStand extends BlockEntitySpawnable implements Rec
     @Override
     public void onBreak(boolean isSilkTouch) {
         for (Item content : inventory.getContents().values()) {
-            level.dropItem(this, content);
+            level.dropItem(this.position, content);
         }
         this.inventory.clearAll();
     }
@@ -241,7 +241,7 @@ public class BlockEntityBrewingStand extends BlockEntitySpawnable implements Rec
             this.fuelAmount--;
             this.sendFuel();
 
-            this.getLevel().addSound(this, Sound.RANDOM_POTION_BREWED);
+            this.getLevel().addSound(this.position, Sound.RANDOM_POTION_BREWED);
         }
 
         stopBrewing();
@@ -355,7 +355,7 @@ public class BlockEntityBrewingStand extends BlockEntitySpawnable implements Rec
                 }
             }
         }
-        this.level.setBlock(block, block, false, false);
+        this.level.setBlock(block.position, block, false, false);
 
         if (brewTime != MAX_BREW_TIME && matchRecipes(true)[0] == null) {
             stopBrewing();

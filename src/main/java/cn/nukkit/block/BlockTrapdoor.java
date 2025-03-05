@@ -142,32 +142,32 @@ public class BlockTrapdoor extends BlockTransparent implements RedstoneComponent
 
     @Override
     public double getMinX() {
-        return this.x + getRelativeBoundingBox().getMinX();
+        return this.position.x + getRelativeBoundingBox().getMinX();
     }
 
     @Override
     public double getMaxX() {
-        return this.x + getRelativeBoundingBox().getMaxX();
+        return this.position.x + getRelativeBoundingBox().getMaxX();
     }
 
     @Override
     public double getMinY() {
-        return this.y + getRelativeBoundingBox().getMinY();
+        return this.position.y + getRelativeBoundingBox().getMinY();
     }
 
     @Override
     public double getMaxY() {
-        return this.y + getRelativeBoundingBox().getMaxY();
+        return this.position.y + getRelativeBoundingBox().getMaxY();
     }
 
     @Override
     public double getMinZ() {
-        return this.z + getRelativeBoundingBox().getMinZ();
+        return this.position.z + getRelativeBoundingBox().getMinZ();
     }
 
     @Override
     public double getMaxZ() {
-        return this.z + getRelativeBoundingBox().getMaxZ();
+        return this.position.z + getRelativeBoundingBox().getMaxZ();
     }
 
     @Override
@@ -211,7 +211,7 @@ public class BlockTrapdoor extends BlockTransparent implements RedstoneComponent
         setBlockFace(player == null ? face : player.getDirection().getOpposite());
         setTop(face.getAxis().isHorizontal() ? fy > 0.5 : face != BlockFace.UP);
 
-        if (!this.getLevel().setBlock(block, this, true, true)) {
+        if (!this.getLevel().setBlock(block.position, this, true, true)) {
             return false;
         }
 
@@ -254,7 +254,7 @@ public class BlockTrapdoor extends BlockTransparent implements RedstoneComponent
         player = event.getPlayer();
 
         setPropertyValue(CommonBlockProperties.OPEN_BIT, open);
-        if (!level.setBlock(this, this, true, true))
+        if (!level.setBlock(this.position, this, true, true))
             return false;
 
         if (player != null) {
@@ -278,11 +278,11 @@ public class BlockTrapdoor extends BlockTransparent implements RedstoneComponent
     }
 
     public void playOpenSound() {
-        this.level.addSound(this, Sound.RANDOM_DOOR_OPEN);
+        this.level.addSound(this.position, Sound.RANDOM_DOOR_OPEN);
     }
 
     public void playCloseSound() {
-        this.level.addSound(this, Sound.RANDOM_DOOR_CLOSE);
+        this.level.addSound(this.position, Sound.RANDOM_DOOR_CLOSE);
     }
 
     public boolean isOpen() {

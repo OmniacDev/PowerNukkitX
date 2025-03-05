@@ -82,7 +82,7 @@ public class BlockEntityChest extends BlockEntitySpawnableContainer {
                 this.namedTag.putBoolean("pairlead", false);
             } else if (this.doubleInventory == null) {
                 this.namedTag.putBoolean("pairlead", true);
-                if ((pair.x + ((int) pair.z << 15)) > (this.x + ((int) this.z << 15))) { //Order them correctly
+                if ((pair.position.x + ((int) pair.position.z << 15)) > (this.position.x + ((int) this.position.z << 15))) { //Order them correctly
                     this.doubleInventory = new DoubleChestInventory(pair, this);
                 } else {
                     this.doubleInventory = new DoubleChestInventory(this, pair);
@@ -104,7 +104,7 @@ public class BlockEntityChest extends BlockEntitySpawnableContainer {
 
     public BlockEntityChest getPair() {
         if (this.isPaired()) {
-            BlockEntity blockEntity = this.getLevel().getBlockEntityIfLoaded(new Vector3(this.namedTag.getInt("pairx"), this.y, this.namedTag.getInt("pairz")));
+            BlockEntity blockEntity = this.getLevel().getBlockEntityIfLoaded(new Vector3(this.namedTag.getInt("pairx"), this.position.y, this.namedTag.getInt("pairz")));
             if (blockEntity instanceof BlockEntityChest) {
                 return (BlockEntityChest) blockEntity;
             }
@@ -121,7 +121,7 @@ public class BlockEntityChest extends BlockEntitySpawnableContainer {
             int z1 = namedTag.getInt("pairz");
             int z2 = chest.namedTag.getInt("pairz");
 
-            if(!(chest.isPaired() && (this.x == x2 && this.z == z2)) || !(this.isPaired() && (chest.x == x1 && chest.z == z1))) {
+            if(!(chest.isPaired() && (this.position.x == x2 && this.position.z == z2)) || !(this.isPaired() && (chest.position.x == x1 && chest.position.z == z1))) {
                 return false;
             }
         }
@@ -136,10 +136,10 @@ public class BlockEntityChest extends BlockEntitySpawnableContainer {
     }
 
     public void createPair(BlockEntityChest chest) {
-        this.namedTag.putInt("pairx", (int) chest.x);
-        this.namedTag.putInt("pairz", (int) chest.z);
-        chest.namedTag.putInt("pairx", (int) this.x);
-        chest.namedTag.putInt("pairz", (int) this.z);
+        this.namedTag.putInt("pairx", (int) chest.position.x);
+        this.namedTag.putInt("pairz", (int) chest.position.z);
+        chest.namedTag.putInt("pairx", (int) this.position.x);
+        chest.namedTag.putInt("pairz", (int) this.position.z);
     }
 
     public boolean unpair() {

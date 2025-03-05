@@ -80,13 +80,13 @@ public class BlockTnt extends BlockSolid implements RedstoneComponent, Natural {
     }
 
     public void prime(int fuse, Entity source) {
-        this.getLevel().setBlock(this, Block.get(BlockID.AIR), true);
+        this.getLevel().setBlock(this.position, Block.get(BlockID.AIR), true);
         double mot = (new NukkitRandom()).nextFloat() * Math.PI * 2;
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(this.x + 0.5))
-                        .add(new FloatTag(this.y))
-                        .add(new FloatTag(this.z + 0.5)))
+                        .add(new FloatTag(this.position.x + 0.5))
+                        .add(new FloatTag(this.position.y))
+                        .add(new FloatTag(this.position.z + 0.5)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(-Math.sin(mot) * 0.02))
                         .add(new FloatTag(0.2))
@@ -96,7 +96,7 @@ public class BlockTnt extends BlockSolid implements RedstoneComponent, Natural {
                         .add(new FloatTag(0)))
                 .putShort("Fuse", fuse);
         Entity tnt = Entity.createEntity(Entity.TNT,
-                this.getLevel().getChunk(this.getFloorX() >> 4, this.getFloorZ() >> 4),
+                this.getLevel().getChunk(this.position.getFloorX() >> 4, this.position.getFloorZ() >> 4),
                 nbt, source
         );
         if (tnt == null) {
@@ -104,7 +104,7 @@ public class BlockTnt extends BlockSolid implements RedstoneComponent, Natural {
         }
         tnt.spawnToAll();
         this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(
-                source != null ? source : this, this.add(0.5, 0.5, 0.5), VibrationType.PRIME_FUSE));
+                source != null ? source : this, this.position.add(0.5, 0.5, 0.5), VibrationType.PRIME_FUSE));
     }
 
     @Override

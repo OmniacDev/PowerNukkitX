@@ -61,7 +61,7 @@ public class CommandBlockUpdateProcessor extends DataPacketProcessor<CommandBloc
                         commandBlock.trigger();
                     }
                     commandBlock.getLevelBlockAround().forEach(b -> b.onUpdate(Level.BLOCK_UPDATE_REDSTONE));//update redstone
-                    playerHandle.player.level.setBlock(commandBlock, cmdBlock, true);
+                    playerHandle.player.level.setBlock(commandBlock.position, cmdBlock, true);
                 }
             }
         }

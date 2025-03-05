@@ -143,13 +143,13 @@ public class BlockEntityFurnace extends BlockEntitySpawnable implements RecipeIn
     @Override
     public void onBreak(boolean isSilkTouch) {
         for (Item content : inventory.getContents().values()) {
-            level.dropItem(this, content);
+            level.dropItem(this.position, content);
         }
         this.inventory.clearAll();
         var xp = calculateXpDrop();
         if (xp > 0) {
             setStoredXP(0);
-            level.dropExpOrb(this, xp);
+            level.dropExpOrb(this.position, xp);
         }
     }
 
@@ -230,10 +230,10 @@ public class BlockEntityFurnace extends BlockEntitySpawnable implements RecipeIn
     protected void setBurning(boolean burning) {
         if (burning) {
             if (this.getBlock().getId().equals(getIdleBlockId())) {
-                this.getLevel().setBlock(this, Block.getWithState(getBurningBlockId(), this.getBlock().getBlockState()), true);
+                this.getLevel().setBlock(this.position, Block.getWithState(getBurningBlockId(), this.getBlock().getBlockState()), true);
             }
         } else if (this.getBlock().getId().equals(getBurningBlockId())) {
-            this.getLevel().setBlock(this, Block.getWithState(getIdleBlockId(), this.getBlock().getBlockState()), true);
+            this.getLevel().setBlock(this.position, Block.getWithState(getIdleBlockId(), this.getBlock().getBlockState()), true);
         }
     }
 
@@ -303,7 +303,7 @@ public class BlockEntityFurnace extends BlockEntitySpawnable implements RecipeIn
 
             if (this.crackledTime-- <= 0) {
                 this.crackledTime = ThreadLocalRandom.current().nextInt(20, 100);
-                this.getLevel().addSound(this.add(0.5, 0.5, 0.5), Sound.BLOCK_FURNACE_LIT);
+                this.getLevel().addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_FURNACE_LIT);
             }
 
             if (smelt != null && canSmelt) {

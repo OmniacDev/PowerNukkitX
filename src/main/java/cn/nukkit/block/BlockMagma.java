@@ -91,9 +91,9 @@ public class BlockMagma extends BlockSolid {
                 BlockFormEvent event = new BlockFormEvent(up, new BlockBubbleColumn().setPropertyValue(CommonBlockProperties.DRAG_DOWN, true));
                 if (!event.isCancelled()) {
                     if (event.getNewState().getWaterloggingLevel() > 0) {
-                        this.getLevel().setBlock(up, 1, new BlockFlowingWater(), true, false);
+                        this.getLevel().setBlock(up.position, 1, new BlockFlowingWater(), true, false);
                     }
-                    this.getLevel().setBlock(up, 0, event.getNewState(), true, true);
+                    this.getLevel().setBlock(up.position, 0, event.getNewState(), true, true);
                 }
             }
         }

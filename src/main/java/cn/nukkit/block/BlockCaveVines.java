@@ -67,7 +67,7 @@ public class BlockCaveVines extends BlockTransparent {
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!isValidSupport(this)) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
             }
             return type;
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
@@ -81,7 +81,7 @@ public class BlockCaveVines extends BlockTransparent {
                     BlockGrowEvent ev = new BlockGrowEvent(this, block);
                     Server.getInstance().getPluginManager().callEvent(ev);
                     if (!ev.isCancelled()) {
-                        this.getLevel().setBlock(this, ev.getNewState(), false, true);
+                        this.getLevel().setBlock(this.position, ev.getNewState(), false, true);
                     } else {
                         return type;
                     }
@@ -94,7 +94,7 @@ public class BlockCaveVines extends BlockTransparent {
                     BlockGrowEvent ev = new BlockGrowEvent(this, block);
                     Server.getInstance().getPluginManager().callEvent(ev);
                     if (!ev.isCancelled()) {
-                        this.getLevel().setBlock(this, ev.getNewState(), false, true);
+                        this.getLevel().setBlock(this.position, ev.getNewState(), false, true);
                     } else {
                         return type;
                     }
@@ -110,7 +110,7 @@ public class BlockCaveVines extends BlockTransparent {
                 BlockGrowEvent ev = new BlockGrowEvent(this, block);
                 Server.getInstance().getPluginManager().callEvent(ev);
                 if (!ev.isCancelled()) {
-                    this.getLevel().setBlock(this.down(), ev.getNewState(), false, true);
+                    this.getLevel().setBlock(this.down().position, ev.getNewState(), false, true);
                 } else {
                     return type;
                 }
@@ -120,7 +120,7 @@ public class BlockCaveVines extends BlockTransparent {
                 BlockGrowEvent ev = new BlockGrowEvent(this, block);
                 Server.getInstance().getPluginManager().callEvent(ev);
                 if (!ev.isCancelled()) {
-                    this.getLevel().setBlock(this.down(), ev.getNewState(), false, true);
+                    this.getLevel().setBlock(this.down().position, ev.getNewState(), false, true);
                 }
             }
             return type;
@@ -144,8 +144,8 @@ public class BlockCaveVines extends BlockTransparent {
                 if (ev.isCancelled()) {
                     return false;
                 }
-                this.getLevel().setBlock(this, ev.getNewState(), false, true);
-                this.level.addParticle(new BoneMealParticle(this));
+                this.getLevel().setBlock(this.position, ev.getNewState(), false, true);
+                this.level.addParticle(new BoneMealParticle(this.position));
                 if (player != null && !player.isCreative()) {
                     item.count--;
                 }
@@ -156,8 +156,8 @@ public class BlockCaveVines extends BlockTransparent {
             if (this.getGrowth() == 25) {
                 BlockCaveVines block = new BlockCaveVines();
                 block.setGrowth(0);
-                this.getLevel().setBlock(this, block, false, true);
-                this.getLevel().dropItem(this, Item.get(ItemID.GLOW_BERRIES));
+                this.getLevel().setBlock(this.position, block, false, true);
+                this.getLevel().dropItem(this.position, Item.get(ItemID.GLOW_BERRIES));
             }
             return true;
         }

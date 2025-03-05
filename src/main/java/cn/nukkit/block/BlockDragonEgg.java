@@ -81,25 +81,25 @@ public class BlockDragonEgg extends BlockFallable {
     public void teleport() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         for (int i = 0; i < 1000; ++i) {
-            Block to = this.getLevel().getBlock(this.add(random.nextInt(-16, 16), random.nextInt(0, 16), random.nextInt(-16, 16)));
+            Block to = this.getLevel().getBlock(this.position.add(random.nextInt(-16, 16), random.nextInt(0, 16), random.nextInt(-16, 16)));
             if (to.isAir()) {
                 BlockFromToEvent event = new BlockFromToEvent(this, to);
                 this.level.getServer().getPluginManager().callEvent(event);
                 if (event.isCancelled()) return;
                 to = event.getTo();
 
-                int diffX = this.getFloorX() - to.getFloorX();
-                int diffY = this.getFloorY() - to.getFloorY();
-                int diffZ = this.getFloorZ() - to.getFloorZ();
+                int diffX = this.position.getFloorX() - to.position.getFloorX();
+                int diffY = this.position.getFloorY() - to.position.getFloorY();
+                int diffZ = this.position.getFloorZ() - to.position.getFloorZ();
                 LevelEventPacket pk = new LevelEventPacket();
                 pk.evid = LevelEventPacket.EVENT_PARTICLE_DRAGON_EGG;
                 pk.data = (((((Math.abs(diffX) << 16) | (Math.abs(diffY) << 8)) | Math.abs(diffZ)) | ((diffX < 0 ? 1 : 0) << 24)) | ((diffY < 0 ? 1 : 0) << 25)) | ((diffZ < 0 ? 1 : 0) << 26);
-                pk.x = this.getFloorX();
-                pk.y = this.getFloorY();
-                pk.z = this.getFloorZ();
-                this.getLevel().addChunkPacket(this.getFloorX() >> 4, this.getFloorZ() >> 4, pk);
-                this.getLevel().setBlock(this, get(AIR), true);
-                this.getLevel().setBlock(to, this, true);
+                pk.x = this.position.getFloorX();
+                pk.y = this.position.getFloorY();
+                pk.z = this.position.getFloorZ();
+                this.getLevel().addChunkPacket(this.position.getFloorX() >> 4, this.position.getFloorZ() >> 4, pk);
+                this.getLevel().setBlock(this.position, get(AIR), true);
+                this.getLevel().setBlock(to.position, this, true);
                 return;
             }
         }

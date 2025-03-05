@@ -39,7 +39,7 @@ public abstract class BlockRedstoneDiode extends BlockFlowable implements Redsto
 
     @Override
     public boolean onBreak(Item item) {
-        this.level.setBlock(this, Block.get(BlockID.AIR), true, true);
+        this.level.setBlock(this.position, Block.get(BlockID.AIR), true, true);
 
         if (this.level.getServer().getSettings().levelSettings().enableRedstone()) {
             updateAllAroundRedstone();
@@ -54,7 +54,7 @@ public abstract class BlockRedstoneDiode extends BlockFlowable implements Redsto
         }
 
         setBlockFace(player != null ? player.getDirection().getOpposite() : BlockFace.SOUTH);
-        if (!this.level.setBlock(block, this, true, true)) {
+        if (!this.level.setBlock(block.position, this, true, true)) {
             return false;
         }
 
@@ -78,7 +78,7 @@ public abstract class BlockRedstoneDiode extends BlockFlowable implements Redsto
             }
 
             if (!this.isLocked()) {
-                Vector3 pos = getLocation();
+                Vector3 pos = getLocation().position;
                 boolean shouldBePowered = this.shouldBePowered();
 
                 if (this.isPowered && !shouldBePowered) {
@@ -94,13 +94,13 @@ public abstract class BlockRedstoneDiode extends BlockFlowable implements Redsto
                     RedstoneComponent.updateAroundRedstone(side);
 
                     if (!shouldBePowered) {
-                        level.scheduleUpdate(getPowered(), this, this.getDelay());
+                        level.scheduleUpdate(getPowered(), this.position, this.getDelay());
                     }
                 }
             }
         } else if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) {
             if (type == Level.BLOCK_UPDATE_NORMAL && !isSupportValid(down())) {
-                this.level.useBreakOn(this);
+                this.level.useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             } else if (this.level.getServer().getSettings().levelSettings().enableRedstone()) {
                 // Redstone event
@@ -121,7 +121,7 @@ public abstract class BlockRedstoneDiode extends BlockFlowable implements Redsto
         if (!this.isLocked()) {
             boolean shouldPowered = this.shouldBePowered();
 
-            if ((this.isPowered && !shouldPowered || !this.isPowered && shouldPowered) && !this.level.isBlockTickPending(this, this)) {
+            if ((this.isPowered && !shouldPowered || !this.isPowered && shouldPowered) && !this.level.isBlockTickPending(this.position, this)) {
                 /*int priority = -1;
 
                 if (this.isFacingTowardsRepeater()) {
@@ -130,7 +130,7 @@ public abstract class BlockRedstoneDiode extends BlockFlowable implements Redsto
                     priority = -2;
                 }*/
 
-                this.level.scheduleUpdate(this, this, this.getDelay());
+                this.level.scheduleUpdate(this, this.position, this.getDelay());
             }
         }
     }
@@ -141,7 +141,7 @@ public abstract class BlockRedstoneDiode extends BlockFlowable implements Redsto
 
     protected int calculateInputStrength() {
         BlockFace face = getFacing();
-        Vector3 pos = this.getLocation().getSide(face);
+        Vector3 pos = this.getLocation().getSide(face).position;
         int power = this.level.getRedstonePower(pos, face);
 
         if (power >= 15) {
@@ -153,7 +153,7 @@ public abstract class BlockRedstoneDiode extends BlockFlowable implements Redsto
     }
 
     protected int getPowerOnSides() {
-        Vector3 pos = getLocation();
+        Vector3 pos = getLocation().position;
 
         BlockFace face = getFacing();
         BlockFace face1 = face.rotateY();
@@ -188,7 +188,7 @@ public abstract class BlockRedstoneDiode extends BlockFlowable implements Redsto
 
     @Override
     public double getMaxY() {
-        return this.y + 0.125;
+        return this.position.y + 0.125;
     }
 
     @Override
@@ -235,7 +235,7 @@ public abstract class BlockRedstoneDiode extends BlockFlowable implements Redsto
 
     @Override
     protected AxisAlignedBB recalculateBoundingBox() {
-        return new SimpleAxisAlignedBB(this.x, this.y, this.z, this.x + 1, this.y + 0.125, this.z + 1);
+        return new SimpleAxisAlignedBB(this.position.x, this.position.y, this.position.z, this.position.x + 1, this.position.y + 0.125, this.position.z + 1);
     }
 
     @Override

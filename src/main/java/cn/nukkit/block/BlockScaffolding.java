@@ -81,7 +81,7 @@ public class BlockScaffolding extends BlockFallable {
         }
 
         setStabilityCheck(true);
-        this.getLevel().setBlock(this, this, true, true);
+        this.getLevel().setBlock(this.position, this, true, true);
         return true;
     }
 
@@ -92,7 +92,7 @@ public class BlockScaffolding extends BlockFallable {
             if (down.isSolid()) {
                 if (!isDefaultState()) {
                     setPropertyValues(STABILITY.createValue(0), STABILITY_CHECK.createValue(false));
-                    this.getLevel().setBlock(this, this, true, true);
+                    this.getLevel().setBlock(this.position, this, true, true);
                 }
                 return type;
             }
@@ -128,10 +128,10 @@ public class BlockScaffolding extends BlockFallable {
 
             setStabilityCheck(false);
             setStability(stability);
-            this.getLevel().setBlock(this, this, true, true);
+            this.getLevel().setBlock(this.position, this, true, true);
             return type;
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            this.getLevel().useBreakOn(this);
+            this.getLevel().useBreakOn(this.position);
             return type;
         }
 
@@ -212,7 +212,7 @@ public class BlockScaffolding extends BlockFallable {
 
     @Override
     public double getMinY() {
-        return this.y + (14.0 / 16);
+        return this.position.y + (14.0 / 16);
     }
 
     @Override

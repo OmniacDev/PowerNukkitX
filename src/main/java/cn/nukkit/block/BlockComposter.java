@@ -100,7 +100,7 @@ public class BlockComposter extends BlockSolid {
     public boolean incrementLevel() {
         int fillLevel = getPropertyValue(COMPOSTER_FILL_LEVEL) + 1;
         setPropertyValue(COMPOSTER_FILL_LEVEL, fillLevel);
-        this.level.setBlock(this, this, true, true);
+        this.level.setBlock(this.position, this, true, true);
         return fillLevel == 8;
     }
 
@@ -124,9 +124,9 @@ public class BlockComposter extends BlockSolid {
             this.level.getServer().getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
                 setPropertyValue(COMPOSTER_FILL_LEVEL, event.getNewLevel());
-                this.level.setBlock(this, this, true, true);
-                this.level.dropItem(add(0.5, 0.85, 0.5), event.getDrop(), event.getMotion(), false, 10);
-                this.level.addSound(add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_EMPTY);
+                this.level.setBlock(this.position, this, true, true);
+                this.level.dropItem(this.position.add(0.5, 0.85, 0.5), event.getDrop(), event.getMotion(), false, 10);
+                this.level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_EMPTY);
             }
             return true;
         }
@@ -150,12 +150,12 @@ public class BlockComposter extends BlockSolid {
 
         if (event.isSuccess()) {
             if (incrementLevel()) {
-                level.addSound(this.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_READY);
+                level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_READY);
             } else {
-                level.addSound(this.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_FILL_SUCCESS);
+                level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_FILL_SUCCESS);
             }
         } else {
-            level.addSound(this.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_FILL);
+            level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_FILL);
         }
 
         return true;
@@ -170,11 +170,11 @@ public class BlockComposter extends BlockSolid {
         this.level.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             setPropertyValue(COMPOSTER_FILL_LEVEL, event.getNewLevel());
-            this.level.setBlock(this, this, true, true);
+            this.level.setBlock(this.position, this, true, true);
             if (item != null) {
-                this.level.dropItem(add(0.5, 0.85, 0.5), event.getDrop(), event.getMotion(), false, 10);
+                this.level.dropItem(this.position.add(0.5, 0.85, 0.5), event.getDrop(), event.getMotion(), false, 10);
             }
-            this.level.addSound(add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_EMPTY);
+            this.level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_COMPOSTER_EMPTY);
             return event.getDrop();
         }
         return null;

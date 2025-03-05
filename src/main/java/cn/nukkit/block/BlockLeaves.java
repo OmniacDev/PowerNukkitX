@@ -70,7 +70,7 @@ public abstract class BlockLeaves extends BlockTransparent {
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         this.setPersistent(true);
-        this.getLevel().setBlock(this, this, true);
+        this.getLevel().setBlock(this.position, this, true);
         return true;
     }
 
@@ -132,12 +132,12 @@ public abstract class BlockLeaves extends BlockTransparent {
             if (isCheckDecay()) {
                 if (isPersistent() || findLog(this, 7, null)) {
                     setCheckDecay(false);
-                    getLevel().setBlock(this, this, false, false);
+                    getLevel().setBlock(this.position, this, false, false);
                 } else {
                     LeavesDecayEvent ev = new LeavesDecayEvent(this);
                     Server.getInstance().getPluginManager().callEvent(ev);
                     if (!ev.isCancelled()) {
-                        getLevel().useBreakOn(this);
+                        getLevel().useBreakOn(this.position);
                     }
                 }
                 return type;
@@ -145,7 +145,7 @@ public abstract class BlockLeaves extends BlockTransparent {
         } else if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_SCHEDULED) {
             if (!isCheckDecay()) {
                 setCheckDecay(true);
-                getLevel().setBlock(this, this, false, false);
+                getLevel().setBlock(this.position, this, false, false);
             }
 
             // Slowly propagates the need to update instead of peaking down the TPS for huge trees
@@ -173,7 +173,7 @@ public abstract class BlockLeaves extends BlockTransparent {
         if (distance == 0 || !(current instanceof BlockLeaves)) {
             return false;
         }
-        long hash = Hash.hashBlock(current);
+        long hash = Hash.hashBlock(current.position);
         if (visited.get(hash) >= distance) {
             return false;
         }

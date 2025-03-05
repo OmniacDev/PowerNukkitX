@@ -64,9 +64,9 @@ public class BlockEntityPistonArm extends BlockEntitySpawnable {
                 be.moveCollidedEntities(this, pushDirection);
         }
         var bb = new SimpleAxisAlignedBB(0, 0, 0, 1, 1, 1).getOffsetBoundingBox(
-                this.x + (pushDirection.getXOffset() * progress),
-                this.y + (pushDirection.getYOffset() * progress),
-                this.z + (pushDirection.getZOffset() * progress)
+                this.position.x + (pushDirection.getXOffset() * progress),
+                this.position.y + (pushDirection.getYOffset() * progress),
+                this.position.z + (pushDirection.getZOffset() * progress)
                 //带动站在移动方块上的实体
         ).addCoord(0, pushDirection.getAxis().isHorizontal() ? 0.25 : 0, 0);
         for (var entity : this.level.getCollidingEntities(bb))
@@ -81,7 +81,7 @@ public class BlockEntityPistonArm extends BlockEntitySpawnable {
         //玩家客户端会自动处理移动
         if (diff == 0 || !entity.canBePushed() || entity instanceof Player)
             return;
-        EntityMoveByPistonEvent event = new EntityMoveByPistonEvent(entity, entity.getPosition());
+        EntityMoveByPistonEvent event = new EntityMoveByPistonEvent(entity, entity.getPosition().position);
         this.level.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled())
             return;
@@ -157,15 +157,15 @@ public class BlockEntityPistonArm extends BlockEntitySpawnable {
                     movingBlock.close();
                     var moved = movingBlockBlockEntity.getMovingBlock();
                     moved.position(movingBlock);
-                    this.level.setBlock(movingBlock, 1, Block.get(BlockID.AIR), true, false);
+                    this.level.setBlock(movingBlock.position, 1, Block.get(BlockID.AIR), true, false);
                     //普通方块更新
-                    this.level.setBlock(movingBlock, moved, true, true);
+                    this.level.setBlock(movingBlock.position, moved, true, true);
                     var movedBlockEntity = movingBlockBlockEntity.getMovingBlockEntityCompound();
                     if (movedBlockEntity != null) {
-                        movedBlockEntity.putInt("x", movingBlock.getFloorX());
-                        movedBlockEntity.putInt("y", movingBlock.getFloorY());
-                        movedBlockEntity.putInt("z", movingBlock.getFloorZ());
-                        BlockEntity.createBlockEntity(movedBlockEntity.getString("id"), this.level.getChunk(movingBlock.getChunkX(), movingBlock.getChunkZ()), movedBlockEntity);
+                        movedBlockEntity.putInt("x", movingBlock.position.getFloorX());
+                        movedBlockEntity.putInt("y", movingBlock.position.getFloorY());
+                        movedBlockEntity.putInt("z", movingBlock.position.getFloorZ());
+                        BlockEntity.createBlockEntity(movedBlockEntity.getString("id"), this.level.getChunk(movingBlock.position.getChunkX(), movingBlock.position.getChunkZ()), movedBlockEntity);
                     }
                     //活塞更新
                     moved.onUpdate(Level.BLOCK_UPDATE_MOVED);
@@ -179,14 +179,14 @@ public class BlockEntityPistonArm extends BlockEntitySpawnable {
             if (!extending) {
                 //未伸出的活塞可以被推动
                 this.movable = true;
-                if (this.level.getBlock(pos) instanceof BlockPistonArmCollision) {
-                    this.level.setBlock(pos, 1, Block.get(Block.AIR), true, false);
+                if (this.level.getBlock(pos.position) instanceof BlockPistonArmCollision) {
+                    this.level.setBlock(pos.position, 1, Block.get(Block.AIR), true, false);
                     //方块更新
-                    this.level.setBlock(pos, Block.get(Block.AIR), true);
+                    this.level.setBlock(pos.position, Block.get(Block.AIR), true);
                 }
             }
             //对和活塞直接接触的观察者进行更新
-            this.level.updateAroundObserver(this);
+            this.level.updateAroundObserver(this.position);
             //下一计划刻再自检一遍，防止出错
             this.level.scheduleUpdate(this.getLevelBlock(), 1);
             this.attachedBlocks.clear();
@@ -282,7 +282,7 @@ public class BlockEntityPistonArm extends BlockEntitySpawnable {
         var packet = this.getSpawnPacket();
         if (!immediately) {
             if (packet != null)
-                this.level.addChunkPacket(getChunkX(), getChunkZ(), packet);
+                this.level.addChunkPacket(this.position.getChunkX(), this.position.getChunkZ(), packet);
         } else {
             Server.broadcastPacket(this.level.getChunkPlayers(this.chunk.getX(), this.chunk.getZ()).values(), packet);
         }

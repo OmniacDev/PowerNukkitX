@@ -78,7 +78,7 @@ public class BlockUnlitRedstoneTorch extends BlockTorch implements RedstoneCompo
 
     private boolean checkState() {
         if (!this.isPoweredFromSide()) {
-            this.level.setBlock(getLocation(), Block.get(BlockID.REDSTONE_TORCH).setPropertyValues(getPropertyValues()), false, true);
+            this.level.setBlock(getLocation().position, Block.get(BlockID.REDSTONE_TORCH).setPropertyValues(getPropertyValues()), false, true);
             updateAllAroundRedstone(getBlockFace().getOpposite());
             return true;
         }
@@ -96,7 +96,7 @@ public class BlockUnlitRedstoneTorch extends BlockTorch implements RedstoneCompo
             return true;
         }
 
-        return this.level.isSidePowered(side, face);
+        return this.level.isSidePowered(side.position, face);
     }
 
     @Override

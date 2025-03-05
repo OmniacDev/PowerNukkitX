@@ -295,7 +295,7 @@ public class EntityThrownTrident extends EntityAbstractArrow {
         if (this.hasChanneling) {
             if (this.level.isThundering() && this.level.canBlockSeeSky(this.pos)) {
                 Locator pos = this.getPosition();
-                EntityLightningBolt lighting = new EntityLightningBolt(pos.getChunk(), getDefaultNBT(pos));
+                EntityLightningBolt lighting = new EntityLightningBolt(pos.getChunk(), getDefaultNBT(pos.position));
                 lighting.spawnToAll();
                 this.getLevel().addSound(this.pos, Sound.ITEM_TRIDENT_THUNDER);
             }
@@ -324,7 +324,7 @@ public class EntityThrownTrident extends EntityAbstractArrow {
         }
 
         for (Block collisionBlock : level.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1))) {
-            this.setStuckToBlockPos(new BlockVector3(collisionBlock.getFloorX(), collisionBlock.getFloorY(), collisionBlock.getFloorZ()));
+            this.setStuckToBlockPos(new BlockVector3(collisionBlock.position.getFloorX(), collisionBlock.position.getFloorY(), collisionBlock.position.getFloorZ()));
             if (this.canReturnToShooter()) {
                 this.getLevel().addSound(this.pos, Sound.ITEM_TRIDENT_RETURN);
                 this.setNoClip(true);

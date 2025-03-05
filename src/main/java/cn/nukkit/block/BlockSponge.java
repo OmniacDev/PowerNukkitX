@@ -60,7 +60,7 @@ public class BlockSponge extends BlockSolid {
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         if ((block instanceof BlockFlowingWater || block.getLevelBlockAround().stream().anyMatch(b -> b instanceof BlockFlowingWater)) && performWaterAbsorb(block)) {
-            level.setBlock(block, new BlockWetSponge(), true, true);
+            level.setBlock(block.position, new BlockWetSponge(), true, true);
 
             LevelEventPacket packet = new LevelEventPacket();
             packet.evid = LevelEventPacket.EVENT_PARTICLE_DESTROY_BLOCK;
@@ -70,7 +70,7 @@ public class BlockSponge extends BlockSolid {
             packet.data = Block.get(BlockID.FLOWING_WATER).blockstate.blockStateHash();
 
             for (int i = 0; i < 4; i++) {
-                level.addChunkPacket(getChunkX(), getChunkZ(), packet);
+                level.addChunkPacket(this.position.getChunkX(), this.position.getChunkZ(), packet);
             }
 
             return true;
@@ -97,8 +97,8 @@ public class BlockSponge extends BlockSolid {
                 Block layer1 = layer0.getLevelBlockAtLayer(1);
 
                 if (layer0 instanceof BlockFlowingWater) {
-                    this.getLevel().setBlockStateAt(layer0.getFloorX(), layer0.getFloorY(), layer0.getFloorZ(), BlockAir.PROPERTIES.getDefaultState());
-                    this.getLevel().updateAround(layer0);
+                    this.getLevel().setBlockStateAt(layer0.position.getFloorX(), layer0.position.getFloorY(), layer0.position.getFloorZ(), BlockAir.PROPERTIES.getDefaultState());
+                    this.getLevel().updateAround(layer0.position);
                     waterRemoved++;
                     if (entry.distance < 6) {
                         entries.add(new Entry(layer0, entry.distance + 1));
@@ -107,10 +107,10 @@ public class BlockSponge extends BlockSolid {
                     if (BlockID.KELP.equals(layer0.getId()) ||
                             BlockID.SEAGRASS.equals(layer0.getId()) ||
                             BlockID.SEA_PICKLE.equals(layer0.getId()) || layer0 instanceof BlockCoralFan) {
-                        layer0.getLevel().useBreakOn(layer0);
+                        layer0.getLevel().useBreakOn(layer0.position);
                     }
-                    this.getLevel().setBlockStateAt(layer1.getFloorX(), layer1.getFloorY(), layer1.getFloorZ(), 1, BlockAir.PROPERTIES.getDefaultState());
-                    this.getLevel().updateAround(layer1);
+                    this.getLevel().setBlockStateAt(layer1.position.getFloorX(), layer1.position.getFloorY(), layer1.position.getFloorZ(), 1, BlockAir.PROPERTIES.getDefaultState());
+                    this.getLevel().updateAround(layer1.position);
                     waterRemoved++;
                     if (entry.distance < 6) {
                         entries.add(new Entry(layer1, entry.distance + 1));

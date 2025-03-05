@@ -119,8 +119,8 @@ public class BlockBubbleColumn extends BlockTransparent {
                 
                 ThreadLocalRandom random = ThreadLocalRandom.current();
                 for(int i = 0; i < 2; ++i) {
-                    level.addParticle(new SplashParticle(add(random.nextFloat(), random.nextFloat() + 1, random.nextFloat())));
-                    level.addParticle(new BubbleParticle(add(random.nextFloat(), random.nextFloat() + 1, random.nextFloat())));
+                    level.addParticle(new SplashParticle(this.position.add(random.nextFloat(), random.nextFloat() + 1, random.nextFloat())));
+                    level.addParticle(new BubbleParticle(this.position.add(random.nextFloat(), random.nextFloat() + 1, random.nextFloat())));
                 }
                 
             } else {
@@ -140,8 +140,8 @@ public class BlockBubbleColumn extends BlockTransparent {
         if (down().getId().equals(MAGMA)) {
             setDragDown(true);
         }
-        this.getLevel().setBlock(this, 1, new BlockFlowingWater(), true, false);
-        this.getLevel().setBlock(this, this, true, true);
+        this.getLevel().setBlock(this.position, 1, new BlockFlowingWater(), true, false);
+        this.getLevel().setBlock(this.position, this, true, true);
         return true;
     }
     
@@ -176,23 +176,23 @@ public class BlockBubbleColumn extends BlockTransparent {
 
             if (water.blockstate.specialValue() == 8) {
                 w.setLiquidDepth(0);
-                this.getLevel().setBlock(this, 1, water, true, false);
+                this.getLevel().setBlock(this.position, 1, water, true, false);
             }
 
             Block down = down();
             if (down instanceof BlockBubbleColumn bubbleColumn) {
                 if (bubbleColumn.isDragDown() != this.isDragDown()) {
-                    this.getLevel().setBlock(this, down, true, true);
+                    this.getLevel().setBlock(this.position, down, true, true);
                 }
             } else if (down.getId().equals(MAGMA)) {
                 if (!this.isDragDown()) {
                     setDragDown(true);
-                    this.getLevel().setBlock(this, this, true, true);
+                    this.getLevel().setBlock(this.position, this, true, true);
                 }
             } else if (down.getId().equals(SOUL_SAND)) {
                 if (this.isDragDown()) {//!= false == true
                     setDragDown(false);
-                    this.getLevel().setBlock(this, this, true, true);
+                    this.getLevel().setBlock(this.position, this, true, true);
                 }
             } else {
                 fadeOut(water);
@@ -203,8 +203,8 @@ public class BlockBubbleColumn extends BlockTransparent {
             if (up instanceof BlockFlowingWater && (up.blockstate.specialValue() == 0 || up.blockstate.specialValue() == 8)) {
                 BlockFromToEvent event = new BlockFromToEvent(this, up);
                 if (!event.isCancelled()) {
-                    this.getLevel().setBlock(up, 1, new BlockFlowingWater(), true, false);
-                    this.getLevel().setBlock(up, 0, new BlockBubbleColumn(this.blockstate), true, true);
+                    this.getLevel().setBlock(up.position, 1, new BlockFlowingWater(), true, false);
+                    this.getLevel().setBlock(up.position, 0, new BlockBubbleColumn(this.blockstate), true, true);
                 }
             }
 
@@ -225,8 +225,8 @@ public class BlockBubbleColumn extends BlockTransparent {
     private void fadeOut(Block water) {
         BlockFadeEvent event = new BlockFadeEvent(this, water.clone());
         if (!event.isCancelled()) {
-            this.getLevel().setBlock(this, 1, new BlockAir(), true, false);
-            this.getLevel().setBlock(this, 0, event.getNewState(), true, true);
+            this.getLevel().setBlock(this.position, 1, new BlockAir(), true, false);
+            this.getLevel().setBlock(this.position, 0, event.getNewState(), true, true);
         }
     }
 }

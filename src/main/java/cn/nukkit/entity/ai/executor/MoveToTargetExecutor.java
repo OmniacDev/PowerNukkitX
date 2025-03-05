@@ -55,12 +55,12 @@ public class MoveToTargetExecutor implements EntityControl, IBehaviorExecutor {
         //获取目标位置（这个clone很重要）
         Vector3 target = entity.getBehaviorGroup().getMemoryStorage().get(memory).getVector3();
 
-        if (target instanceof Locator locator && !locator.level.getName().equals(entity.level.getName()))
-            return false;
-
-        if(target instanceof Block) {
-            target = target.add(0.5f, 0, 0.5f);
-        }
+//        if (target instanceof Locator locator && !locator.level.getName().equals(entity.level.getName()))
+//            return false;
+//
+//        if(target instanceof Block) {
+//            target = target.add(0.5f, 0, 0.5f);
+//        }
 
         if (enableRangeTest) {
             var distanceSquared = target.distanceSquared(entity.pos);

@@ -48,7 +48,7 @@ public class BlockFarmland extends BlockTransparent {
 
     @Override
     public double getMaxY() {
-        return this.y + 1;
+        return this.position.y + 1;
     }
 
     @Override
@@ -59,13 +59,13 @@ public class BlockFarmland extends BlockTransparent {
                 this.level.getServer().getPluginManager().callEvent(farmEvent);
                 if (farmEvent.isCancelled()) return 0;
 
-                this.level.setBlock(this, Block.get(BlockID.DIRT), false, true);
+                this.level.setBlock(this.position, Block.get(BlockID.DIRT), false, true);
 
                 return type;
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             Vector3 v = new Vector3();
-            if (this.level.getBlock(v.setComponents(x, this.y + 1, z)) instanceof BlockCrops) {
+            if (this.level.getBlock(v.setComponents(x, this.position.y + 1, z)) instanceof BlockCrops) {
                 return 0;
             }
 
@@ -75,10 +75,10 @@ public class BlockFarmland extends BlockTransparent {
                 found = true;
             } else {
                 end:
-                for (int x = (int) this.x - 4; x <= this.x + 4; x++) {
-                    for (int z = (int) this.z - 4; z <= this.z + 4; z++) {
-                        for (int y = (int) this.y; y <= this.y + 1; y++) {
-                            if (z == this.z && x == this.x && y == this.y) {
+                for (int x = (int) this.position.x - 4; x <= this.position.x + 4; x++) {
+                    for (int z = (int) this.position.z - 4; z <= this.position.z + 4; z++) {
+                        for (int y = (int) this.position.y; y <= this.position.y + 1; y++) {
+                            if (z == this.position.z && x == this.position.x && y == this.position.y) {
                                 continue;
                             }
 
@@ -104,19 +104,19 @@ public class BlockFarmland extends BlockTransparent {
             if (found || block instanceof BlockFlowingWater || block instanceof BlockFrostedIce) {
                 if (getMoistureAmount() < 7) {
                     setMoistureAmount(7);
-                    this.level.setBlock(this, this, false, getMoistureAmount() == 0);
+                    this.level.setBlock(this.position, this, false, getMoistureAmount() == 0);
                 }
                 return Level.BLOCK_UPDATE_RANDOM;
             }
 
             if (getMoistureAmount() > 0) {
                 this.setMoistureAmount(getMoistureAmount() - 1);
-                this.level.setBlock(this, this, false, getMoistureAmount() == 1);
+                this.level.setBlock(this.position, this, false, getMoistureAmount() == 1);
             } else {
                 var farmEvent = new FarmLandDecayEvent(null, this);
                 this.level.getServer().getPluginManager().callEvent(farmEvent);
                 if (farmEvent.isCancelled()) return 0;
-                this.level.setBlock(this, Block.get(Block.DIRT), false, true);
+                this.level.setBlock(this.position, Block.get(Block.DIRT), false, true);
             }
 
             return Level.BLOCK_UPDATE_RANDOM;

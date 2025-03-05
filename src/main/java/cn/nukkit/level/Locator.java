@@ -33,6 +33,31 @@ public class Locator implements NamedPosition, Cloneable {
         this.level = level;
     }
 
+
+    public double x;
+    public double y;
+    public double z;
+
+    public int getFloorX() {
+        return this.position.getFloorX();
+    }
+
+    public int getFloorY() {
+        return this.position.getFloorY();
+    }
+
+    public int getFloorZ() {
+        return this.position.getFloorZ();
+    }
+
+    public Vector3 getVector3() {
+        return this.position.clone();
+    }
+
+    public Locator getPosition() {
+        return this.clone();
+    }
+
     @SneakyThrows
     @Override
     public Locator clone() {
@@ -152,5 +177,13 @@ public class Locator implements NamedPosition, Cloneable {
 
     public IChunk getChunk() {
         return this.getLevel().getChunk(position.getChunkX(), position.getChunkZ());
+    }
+
+    public Locator add(double x, double y, double z) {
+        return new Locator(this.position.add(x, y, z), this.level);
+    }
+
+    public Locator subtract(double x, double y, double z) {
+        return this.add(-x, -y, -z);
     }
 }

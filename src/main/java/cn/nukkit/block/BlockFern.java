@@ -54,7 +54,7 @@ public class BlockFern extends BlockFlowable implements BlockFlowerPot.FlowerPot
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         if (BlockSweetBerryBush.isSupportValid(down())) {
-            this.getLevel().setBlock(block, this, true);
+            this.getLevel().setBlock(block.position, this, true);
             return true;
         }
         return false;
@@ -64,7 +64,7 @@ public class BlockFern extends BlockFlowable implements BlockFlowerPot.FlowerPot
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!BlockSweetBerryBush.isSupportValid(down(1, 0))) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         }
@@ -84,12 +84,12 @@ public class BlockFern extends BlockFlowable implements BlockFlowerPot.FlowerPot
                 BlockLargeFern doublePlant = new BlockLargeFern();
                 doublePlant.setTopHalf(false);
 
-                this.level.addParticle(new BoneMealParticle(this));
-                this.level.setBlock(this, doublePlant, true, false);
+                this.level.addParticle(new BoneMealParticle(this.position));
+                this.level.setBlock(this.position, doublePlant, true, false);
 
                 doublePlant.setTopHalf(true);
-                this.level.setBlock(up, doublePlant, true);
-                this.level.updateAround(this);
+                this.level.setBlock(up.position, doublePlant, true);
+                this.level.updateAround(this.position);
             }
 
             return true;

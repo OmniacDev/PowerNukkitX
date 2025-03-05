@@ -31,7 +31,7 @@ public class CreatureSpawnEvent extends Event implements Cancellable {
         this.reason = reason;
         this.entityNetworkId = networkId;
         this.locator = locator;
-        this.compoundTag = Entity.getDefaultNBT(locator);
+        this.compoundTag = Entity.getDefaultNBT(locator.position);
     }
 
     public SpawnReason getReason() {

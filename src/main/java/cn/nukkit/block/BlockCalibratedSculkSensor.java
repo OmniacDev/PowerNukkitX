@@ -64,7 +64,7 @@ public class BlockCalibratedSculkSensor extends BlockFlowable implements BlockEn
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         setBlockFace(player != null ? BlockFace.fromHorizontalIndex(player.getDirection().getHorizontalIndex()) : BlockFace.SOUTH);
 
-        this.getLevel().setBlock(block, this, true, true);
+        this.getLevel().setBlock(block.position, this, true, true);
         return true;
     }
 
@@ -102,10 +102,10 @@ public class BlockCalibratedSculkSensor extends BlockFlowable implements BlockEn
     }
 
     public void setPhase(int phase) {
-        if (phase == 1) this.level.addSound(this.add(0.5, 0.5, 0.5), Sound.POWER_ON_SCULK_SENSOR);
-        else this.level.addSound(this.add(0.5, 0.5, 0.5), Sound.POWER_OFF_SCULK_SENSOR);
+        if (phase == 1) this.level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.POWER_ON_SCULK_SENSOR);
+        else this.level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.POWER_OFF_SCULK_SENSOR);
         this.setPropertyValue(SCULK_SENSOR_PHASE, phase);
-        this.level.setBlock(this, this, true, false);
+        this.level.setBlock(this.position, this, true, false);
     }
 
     @Override

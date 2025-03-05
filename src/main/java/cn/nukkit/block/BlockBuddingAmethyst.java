@@ -75,19 +75,19 @@ public class BlockBuddingAmethyst extends BlockSolid {
         if (side.canBeReplaced()) {
             tmp = new BlockSmallAmethystBud();
             tmp.setBlockFace(face);
-            this.getLevel().setBlock(side, tmp, true, true);
+            this.getLevel().setBlock(side.position, tmp, true, true);
         } else if (side instanceof BlockSmallAmethystBud) {
             tmp = new BlockMediumAmethystBud();
             tmp.setBlockFace(face);
-            this.getLevel().setBlock(side, tmp, true, true);
+            this.getLevel().setBlock(side.position, tmp, true, true);
         } else if (side instanceof BlockMediumAmethystBud) {
             tmp = new BlockLargeAmethystBud();
             tmp.setBlockFace(face);
-            this.getLevel().setBlock(side, tmp, true, true);
+            this.getLevel().setBlock(side.position, tmp, true, true);
         } else if (side instanceof BlockLargeAmethystBud) {
             tmp = new BlockAmethystCluster();
             tmp.setBlockFace(face);
-            this.getLevel().setBlock(side, tmp, true, true);
+            this.getLevel().setBlock(side.position, tmp, true, true);
         } else {
             tryGrow(time + 1);
         }

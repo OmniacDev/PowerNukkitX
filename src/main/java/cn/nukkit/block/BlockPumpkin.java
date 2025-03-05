@@ -71,8 +71,8 @@ public class BlockPumpkin extends BlockSolid implements Faceable, Natural {
                 carvedPumpkin.setBlockFace(player.getDirection().getOpposite());
             }
             item.useOn(this);
-            this.level.setBlock(this, carvedPumpkin, true, true);
-            this.getLevel().dropItem(add(0.5, 0.5, 0.5), Item.get(ItemID.PUMPKIN_SEEDS)); // TODO: Get correct drop item position
+            this.level.setBlock(this.position, carvedPumpkin, true, true);
+            this.getLevel().dropItem(this.position.add(0.5, 0.5, 0.5), Item.get(ItemID.PUMPKIN_SEEDS)); // TODO: Get correct drop item position
             return true;
         }
         return false;
@@ -85,7 +85,7 @@ public class BlockPumpkin extends BlockSolid implements Faceable, Natural {
         } else {
             setBlockFace(player.getDirection().getOpposite());
         }
-        this.level.setBlock(block, this, true, true);
+        this.level.setBlock(block.position, this, true, true);
         EntitySnowGolem.checkAndSpawnGolem(this);
         return true;
     }

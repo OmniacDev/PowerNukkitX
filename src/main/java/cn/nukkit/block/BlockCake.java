@@ -60,38 +60,38 @@ public class BlockCake extends BlockTransparent {
 
     @Override
     public double getMinX() {
-        return this.x + (1 + getBiteCount() * 2) / 16;
+        return this.position.x + (1 + getBiteCount() * 2) / 16;
     }
 
     @Override
     public double getMinY() {
-        return this.y;
+        return this.position.y;
     }
 
     @Override
     public double getMinZ() {
-        return this.z + 0.0625;
+        return this.position.z + 0.0625;
     }
 
     @Override
     public double getMaxX() {
-        return this.x - 0.0625 + 1;
+        return this.position.x - 0.0625 + 1;
     }
 
     @Override
     public double getMaxY() {
-        return this.y + 0.5;
+        return this.position.y + 0.5;
     }
 
     @Override
     public double getMaxZ() {
-        return this.z - 0.0625 + 1;
+        return this.position.z - 0.0625 + 1;
     }
 
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         if (!down().isAir()) {
-            getLevel().setBlock(block, this, true, true);
+            getLevel().setBlock(block.position, this, true, true);
 
             return true;
         }
@@ -102,7 +102,7 @@ public class BlockCake extends BlockTransparent {
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (down().isAir()) {
-                getLevel().setBlock(this, Block.get(BlockID.AIR), true);
+                getLevel().setBlock(this.position, Block.get(BlockID.AIR), true);
 
                 return Level.BLOCK_UPDATE_NORMAL;
             }
@@ -126,13 +126,13 @@ public class BlockCake extends BlockTransparent {
         if (player != null && (player.getFoodData().isHungry() || player.isCreative() || player.getServer().getDifficulty() == 0)) {
             if (damage < BITE_COUNTER.getMax()) setBiteCount(damage + 1);
             if (damage >= BITE_COUNTER.getMax()) {
-                getLevel().setBlock(this, Block.get(BlockID.AIR), true);
+                getLevel().setBlock(this.position, Block.get(BlockID.AIR), true);
             } else {
                 player.getFoodData().addFood(2, 0.4F);
-                getLevel().setBlock(this, this, true);
+                getLevel().setBlock(this.position, this, true);
             }
-            this.level.addLevelSoundEvent(this, LevelSoundEventPacket.SOUND_BURP );
-            this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(player, this.add(0.5, 0.5, 0.5), VibrationType.EAT));
+            this.level.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_BURP );
+            this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(player, this.position.add(0.5, 0.5, 0.5), VibrationType.EAT));
             return true;
         }
         return false;

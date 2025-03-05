@@ -110,21 +110,21 @@ public class BlockCampfire extends BlockTransparent implements Faceable, BlockEn
             return false;
         }
 
-        final Block layer0 = level.getBlock(this, 0);
-        final Block layer1 = level.getBlock(this, 1);
+        final Block layer0 = level.getBlock(this.position, 0);
+        final Block layer1 = level.getBlock(this.position, 1);
 
         setBlockFace(player != null ? player.getDirection().getOpposite() : null);
         boolean defaultLayerCheck = (block instanceof BlockFlowingWater w && w.isSourceOrFlowingDown()) || block instanceof BlockFrostedIce;
         boolean layer1Check = (layer1 instanceof BlockFlowingWater w && w.isSourceOrFlowingDown()) || layer1 instanceof BlockFrostedIce;
         if (defaultLayerCheck || layer1Check) {
             setExtinguished(true);
-            this.level.addSound(this, Sound.RANDOM_FIZZ, 0.5f, 2.2f);
-            this.level.setBlock(this, 1, defaultLayerCheck ? block : layer1, false, false);
+            this.level.addSound(this.position, Sound.RANDOM_FIZZ, 0.5f, 2.2f);
+            this.level.setBlock(this.position, 1, defaultLayerCheck ? block : layer1, false, false);
         } else {
-            this.level.setBlock(this, 1, Block.get(BlockID.AIR), false, false);
+            this.level.setBlock(this.position, 1, Block.get(BlockID.AIR), false, false);
         }
 
-        this.level.setBlock(block, this, true, true);
+        this.level.setBlock(block.position, this, true, true);
         try {
             CompoundTag nbt = new CompoundTag();
 
@@ -138,12 +138,12 @@ public class BlockCampfire extends BlockTransparent implements Faceable, BlockEn
             createBlockEntity(nbt);
         } catch (Exception e) {
             log.warn("Failed to create the block entity {} at {}", getBlockEntityType(), getLocation(), e);
-            level.setBlock(layer0, 0, layer0, true);
-            level.setBlock(layer1, 0, layer1, true);
+            level.setBlock(layer0.position, 0, layer0, true);
+            level.setBlock(layer1.position, 0, layer1, true);
             return false;
         }
 
-        this.level.updateAround(this);
+        this.level.updateAround(this.position);
         return true;
     }
 
@@ -157,7 +157,7 @@ public class BlockCampfire extends BlockTransparent implements Faceable, BlockEn
         if (isExtinguished()) {
             if (entity.isOnFire()) {
                 setExtinguished(false);
-                level.setBlock(this, this, true);
+                level.setBlock(this.position, this, true);
             }
             return;
         }
@@ -192,8 +192,8 @@ public class BlockCampfire extends BlockTransparent implements Faceable, BlockEn
                 Block layer1 = getLevelBlockAtLayer(1);
                 if (layer1 instanceof BlockFlowingWater || layer1 instanceof BlockFrostedIce) {
                     setExtinguished(true);
-                    this.level.setBlock(this, this, true, true);
-                    this.level.addSound(this, Sound.RANDOM_FIZZ, 0.5f, 2.2f);
+                    this.level.setBlock(this.position, this, true, true);
+                    this.level.addSound(this.position, Sound.RANDOM_FIZZ, 0.5f, 2.2f);
                 }
             }
             return type;
@@ -213,16 +213,16 @@ public class BlockCampfire extends BlockTransparent implements Faceable, BlockEn
         if (!isExtinguished()) {
             if (item.isShovel()) {
                 setExtinguished(true);
-                this.level.setBlock(this, this, true, true);
-                this.level.addSound(this, Sound.RANDOM_FIZZ, 0.5f, 2.2f);
+                this.level.setBlock(this.position, this, true, true);
+                this.level.addSound(this.position, Sound.RANDOM_FIZZ, 0.5f, 2.2f);
                 itemUsed = true;
             }
         } else if (Objects.equals(item.getId(), ItemID.FLINT_AND_STEEL) || item.getEnchantment(Enchantment.ID_FIRE_ASPECT) != null) {
             item.useOn(this);
             setExtinguished(false);
-            this.level.setBlock(this, this, true, true);
+            this.level.setBlock(this.position, this, true, true);
             campfire.scheduleUpdate();
-            this.level.addSound(this, Sound.FIRE_IGNITE);
+            this.level.addSound(this.position, Sound.FIRE_IGNITE);
             itemUsed = true;
         }
 
@@ -245,12 +245,12 @@ public class BlockCampfire extends BlockTransparent implements Faceable, BlockEn
     public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Locator locator, @NotNull Vector3 motion) {
         if ((projectile instanceof EntitySmallFireball || (projectile.isOnFire() && projectile instanceof EntityArrow)) && isExtinguished()) {
             setExtinguished(false);
-            level.setBlock(this, this, true);
+            level.setBlock(this.position, this, true);
             return true;
         } else if (projectile instanceof EntitySplashPotion && !isExtinguished()
                 && ((EntitySplashPotion) projectile).potionId == 0) {
             setExtinguished(true);
-            level.setBlock(this, this, true);
+            level.setBlock(this.position, this, true);
             return true;
         }
         return false;

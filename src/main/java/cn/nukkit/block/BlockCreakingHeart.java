@@ -75,7 +75,7 @@ public class BlockCreakingHeart extends BlockSolid implements RedstoneComponent,
 
             if (state != getState()) {
                 setPropertyValue(CommonBlockProperties.CREAKING_HEART_STATE, state);
-                getLevel().setBlock(this, this);
+                getLevel().setBlock(this.position, this);
             }
         }
     }
@@ -131,7 +131,7 @@ public class BlockCreakingHeart extends BlockSolid implements RedstoneComponent,
         BlockEntityCreakingHeart entityCreakingHeart = getOrCreateBlockEntity();
         EntityCreaking creaking = entityCreakingHeart.getLinkedCreaking();
         if(creaking != null) {
-            return (int) (15 - ((creaking.pos.distance(this) / 32) * 15));
+            return (int) (15 - ((creaking.pos.distance(this.position) / 32) * 15));
         } else return 0;
     }
 

@@ -27,7 +27,7 @@ public class BlockWater extends BlockFlowingWater {
 
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        return this.getLevel().setBlock(this, this, true, false);
+        return this.getLevel().setBlock(this.position, this, true, false);
     }
 
     @Override

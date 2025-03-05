@@ -104,12 +104,12 @@ public class BlockBell extends BlockTransparent implements RedstoneComponent, Fa
         double u = up ? 1 : 0.75;
 
         return new SimpleAxisAlignedBB(
-                this.x + w,
-                this.y + d,
-                this.z + n,
-                this.x + e,
-                this.y + u,
-                this.z + s
+                this.position.x + w,
+                this.position.y + d,
+                this.position.z + n,
+                this.position.x + e,
+                this.position.y + u,
+                this.position.z + s
         );
     }
 
@@ -131,7 +131,7 @@ public class BlockBell extends BlockTransparent implements RedstoneComponent, Fa
                         (blockBoundingBox.getMaxZ() - blockBoundingBox.getMinZ()) / 2
                 );
                 Vector3 entityPos = entity.pos.add(entityCenter);
-                Vector3 blockPos = this.add(
+                Vector3 blockPos = this.position.add(
                         blockBoundingBox.getMinX() - x + blockCenter.x,
                         blockBoundingBox.getMinY() - y + blockCenter.y,
                         blockBoundingBox.getMinZ() - z + blockCenter.z
@@ -183,7 +183,7 @@ public class BlockBell extends BlockTransparent implements RedstoneComponent, Fa
             if (causeEntity != null) {
                 if (causeEntity instanceof EntityItem) {
                     Locator blockMid = add(0.5, 0.5, 0.5);
-                    Vector3 vector = causeEntity.pos.subtract(blockMid).normalize();
+                    Vector3 vector = causeEntity.pos.subtract(blockMid.position).normalize();
                     int x = vector.x < 0 ? -1 : vector.x > 0 ? 1 : 0;
                     int z = vector.z < 0 ? -1 : vector.z > 0 ? 1 : 0;
                     if (x != 0 && z != 0) {
@@ -296,19 +296,19 @@ public class BlockBell extends BlockTransparent implements RedstoneComponent, Fa
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!checkSupport()) {
-                this.level.useBreakOn(this);
+                this.level.useBreakOn(this.position);
             }
             return type;
         } else if (type == Level.BLOCK_UPDATE_REDSTONE && this.level.getServer().getSettings().levelSettings().enableRedstone()) {
             if (this.isGettingPower()) {
                 if (!isToggled()) {
                     setToggled(true);
-                    this.level.setBlock(this, this, true, true);
+                    this.level.setBlock(this.position, this, true, true);
                     ring(null, BellRingEvent.RingCause.REDSTONE);
                 }
             } else if (isToggled()) {
                 setToggled(false);
-                this.level.setBlock(this, this, true, true);
+                this.level.setBlock(this.position, this, true, true);
             }
             return type;
         }
@@ -322,16 +322,16 @@ public class BlockBell extends BlockTransparent implements RedstoneComponent, Fa
         for (BlockFace side : BlockFace.values()) {
             Block b = this.getSide(side);
 
-            if (b.getId().equals(Block.REDSTONE_WIRE) && b.getBlockState().getPropertyValue(REDSTONE_SIGNAL) > 0 && b.y >= this.getY()) {
+            if (b.getId().equals(Block.REDSTONE_WIRE) && b.getBlockState().getPropertyValue(REDSTONE_SIGNAL) > 0 && b.position.y >= this.getY()) {
                 return true;
             }
 
-            if (this.level.isSidePowered(b, side)) {
+            if (this.level.isSidePowered(b.position, side)) {
                 return true;
             }
         }
 
-        return this.level.isBlockPowered(this.getLocation());
+        return this.level.isBlockPowered(this.getLocation().position);
     }
 
     @Override

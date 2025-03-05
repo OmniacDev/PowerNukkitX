@@ -89,21 +89,21 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
     private AxisAlignedBB recalculateBoundingBoxWithPos(BlockFace pos) {
         if (pos.getAxisDirection() == AxisDirection.NEGATIVE) {
             return new SimpleAxisAlignedBB(
-                    this.x,
-                    this.y,
-                    this.z,
-                    this.x + 1 + pos.getXOffset() - (THICKNESS * pos.getXOffset()),
-                    this.y + 1,
-                    this.z + 1 + pos.getZOffset() - (THICKNESS * pos.getZOffset())
+                    this.position.x,
+                    this.position.y,
+                    this.position.z,
+                    this.position.x + 1 + pos.getXOffset() - (THICKNESS * pos.getXOffset()),
+                    this.position.y + 1,
+                    this.position.z + 1 + pos.getZOffset() - (THICKNESS * pos.getZOffset())
             );
         } else {
             return new SimpleAxisAlignedBB(
-                    this.x + pos.getXOffset() - (THICKNESS * pos.getXOffset()),
-                    this.y,
-                    this.z + pos.getZOffset() - (THICKNESS * pos.getZOffset()),
-                    this.x + 1,
-                    this.y + 1,
-                    this.z + 1
+                    this.position.x + pos.getXOffset() - (THICKNESS * pos.getXOffset()),
+                    this.position.y,
+                    this.position.z + pos.getZOffset() - (THICKNESS * pos.getZOffset()),
+                    this.position.x + 1,
+                    this.position.y + 1,
+                    this.position.z + 1
             );
         }
     }
@@ -128,7 +128,7 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
         if (isTop()) {
 
             if (!down.getId().equals(this.getId()) || down.getPropertyValue(CommonBlockProperties.UPPER_BLOCK_BIT)) {
-                level.setBlock(this, Block.get(AIR), false);
+                level.setBlock(this.position, Block.get(AIR), false);
             }
 
             /* Doesn't work with redstone
@@ -141,7 +141,7 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
         }
 
         if (down.getId().equals(AIR)) {
-            level.useBreakOn(this, getToolType() == ItemTool.TYPE_PICKAXE ? Item.get(ItemID.DIAMOND_PICKAXE) : null);
+            level.useBreakOn(this.position, getToolType() == ItemTool.TYPE_PICKAXE ? Item.get(ItemID.DIAMOND_PICKAXE) : null);
         }
     }
 
@@ -207,18 +207,18 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
             Block blockDown = down.getSide(side).getLevelBlock();
             Block blockUp = up.getSide(side).getLevelBlock();
 
-            if (this.level.isSidePowered(blockDown.getLocation(), side)
-                    || this.level.isSidePowered(blockUp.getLocation(), side)) {
+            if (this.level.isSidePowered(blockDown.getLocation().position, side)
+                    || this.level.isSidePowered(blockUp.getLocation().position, side)) {
                 return true;
             }
         }
 
-        return this.level.isBlockPowered(down) || this.level.isBlockPowered(up);
+        return this.level.isBlockPowered(down.position) || this.level.isBlockPowered(up.position);
     }
 
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
-        if (this.y > this.level.getMaxHeight() - 1 || face != BlockFace.UP) {
+        if (this.position.y > this.level.getMaxHeight() - 1 || face != BlockFace.UP) {
             return false;
         }
 
@@ -239,18 +239,18 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
 
         setTop(false);
 
-        level.setBlock(block, this, true, false); //Bottom
+        level.setBlock(block.position, this, true, false); //Bottom
 
         if (blockUp instanceof BlockLiquid liquid && liquid.usesWaterLogging()) {
-            level.setBlock(blockUp, 1, blockUp, true, false);
+            level.setBlock(blockUp.position, 1, blockUp, true, false);
         }
 
         BlockDoor doorTop = (BlockDoor) clone();
-        doorTop.y++;
+        doorTop.position.y++;
         doorTop.setTop(true);
-        level.setBlock(doorTop, doorTop, true, true); //Top
+        level.setBlock(doorTop.position, doorTop, true, true); //Top
 
-        level.updateAround(block);
+        level.updateAround(block.position);
 
         if (level.getServer().getSettings().levelSettings().enableRedstone() && !this.isOpen() && this.isGettingPower()) {
             this.setOpen(null, true);
@@ -265,15 +265,15 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
         if (isTop()) {
             Block down = this.down();
             if (down.getId().equals(this.getId()) && !down.getPropertyValue(CommonBlockProperties.UPPER_BLOCK_BIT)) {
-                level.setBlock(down, Block.get(AIR), true);
+                level.setBlock(down.position, Block.get(AIR), true);
             }
         } else {
             Block up = this.up();
             if (up.getId().equals(this.getId()) && up.getPropertyValue(CommonBlockProperties.UPPER_BLOCK_BIT)) {
-                level.setBlock(up, Block.get(BlockID.AIR), true);
+                level.setBlock(up.position, Block.get(BlockID.AIR), true);
             }
         }
-        this.getLevel().setBlock(this, Block.get(BlockID.AIR), true);
+        this.getLevel().setBlock(this.position, Block.get(BlockID.AIR), true);
 
         return true;
     }
@@ -304,11 +304,11 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
     }
 
     public void playOpenSound() {
-        level.addSound(this, Sound.RANDOM_DOOR_OPEN);
+        level.addSound(this.position, Sound.RANDOM_DOOR_OPEN);
     }
 
     public void playCloseSound() {
-        level.addSound(this, Sound.RANDOM_DOOR_CLOSE);
+        level.addSound(this.position, Sound.RANDOM_DOOR_CLOSE);
     }
 
     public boolean toggle(Player player) {
@@ -344,10 +344,10 @@ public abstract class BlockDoor extends BlockTransparent implements RedstoneComp
         }
 
         up.setPropertyValue(CommonBlockProperties.OPEN_BIT, open);
-        up.level.setBlock(up, up, true, true);
+        up.level.setBlock(up.position, up, true, true);
 
         down.setPropertyValue(CommonBlockProperties.OPEN_BIT, open);
-        down.level.setBlock(down, down, true, true);
+        down.level.setBlock(down.position, down, true, true);
 
         if (player != null) {
             this.setManualOverride(this.isGettingPower() || isOpen());

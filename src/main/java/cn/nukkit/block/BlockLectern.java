@@ -136,7 +136,7 @@ public class BlockLectern extends BlockTransparent implements RedstoneComponent,
         newBook.setCount(1);
         lectern.setBook(newBook);
         lectern.spawnToAll();
-        this.getLevel().addSound(this.add(0.5, 0.5, 0.5), Sound.ITEM_BOOK_PUT);
+        this.getLevel().addSound(this.position.add(0.5, 0.5, 0.5), Sound.ITEM_BOOK_PUT);
         return true;
     }
 
@@ -155,15 +155,15 @@ public class BlockLectern extends BlockTransparent implements RedstoneComponent,
 
     public void executeRedstonePulse() {
         if (isActivated()) {
-            level.cancelSheduledUpdate(this, this);
+            level.cancelSheduledUpdate(this.position, this);
         } else {
             this.level.getServer().getPluginManager().callEvent(new BlockRedstoneEvent(this, 0, 15));
         }
 
-        level.scheduleUpdate(this, this, 4);
+        level.scheduleUpdate(this, this.position, 4);
         setActivated(true);
-        level.setBlock(this, this, true, false);
-        level.addSound(this.add(0.5, 0.5, 0.5), Sound.ITEM_BOOK_PAGE_TURN);
+        level.setBlock(this.position, this, true, false);
+        level.addSound(this.position.add(0.5, 0.5, 0.5), Sound.ITEM_BOOK_PAGE_TURN);
 
         updateAroundRedstone();
         RedstoneComponent.updateAroundRedstone(getSide(BlockFace.DOWN), BlockFace.UP);
@@ -186,7 +186,7 @@ public class BlockLectern extends BlockTransparent implements RedstoneComponent,
                 this.level.getServer().getPluginManager().callEvent(new BlockRedstoneEvent(this, 15, 0));
 
                 setActivated(false);
-                level.setBlock(this, this, true, false);
+                level.setBlock(this.position, this, true, false);
                 updateAroundRedstone();
                 RedstoneComponent.updateAroundRedstone(getSide(BlockFace.DOWN), BlockFace.UP);
             }
@@ -216,6 +216,6 @@ public class BlockLectern extends BlockTransparent implements RedstoneComponent,
 
         lectern.setBook(Item.AIR);
         lectern.spawnToAll();
-        this.level.dropItem(lectern.add(0.5f, 0.6f, 0.5f), dropBookEvent.getBook());
+        this.level.dropItem(lectern.position.add(0.5f, 0.6f, 0.5f), dropBookEvent.getBook());
     }
 }

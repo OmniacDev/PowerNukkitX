@@ -60,7 +60,7 @@ public class BlockReeds extends BlockFlowable {
             int count = 1;
 
             for (int i = 1; i <= 2; i++) {
-                String id = this.level.getBlockIdAt(this.getFloorX(), this.getFloorY() - i, this.getFloorZ());
+                String id = this.level.getBlockIdAt(this.position.getFloorX(), this.position.getFloorY() - i, this.position.getFloorZ());
 
                 if (Objects.equals(id, REEDS)) {
                     count++;
@@ -78,7 +78,7 @@ public class BlockReeds extends BlockFlowable {
                         Server.getInstance().getPluginManager().callEvent(ev);
 
                         if (!ev.isCancelled()) {
-                            this.getLevel().setBlock(block, ev.getNewState(), true);
+                            this.getLevel().setBlock(block.position, ev.getNewState(), true);
                             success = true;
                         }
                     } else if (!block.getId().equals(REEDS)) {
@@ -91,7 +91,7 @@ public class BlockReeds extends BlockFlowable {
                         item.count--;
                     }
 
-                    this.level.addParticle(new BoneMealParticle(this));
+                    this.level.addParticle(new BoneMealParticle(this.position));
                 }
             }
 
@@ -110,7 +110,7 @@ public class BlockReeds extends BlockFlowable {
 
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
             if (!isSupportValid()) {
-                level.useBreakOn(this);
+                level.useBreakOn(this.position);
             }
             return type;
         }
@@ -122,7 +122,7 @@ public class BlockReeds extends BlockFlowable {
             }
             if (getAge() < 15) {
                 setAge(this.getAge() + 1);
-                level.setBlock(this, this, false);
+                level.setBlock(this.position, this, false);
                 return type;
             }
             Block up = up();
@@ -145,12 +145,12 @@ public class BlockReeds extends BlockFlowable {
                 return type;
             }
 
-            if (!level.setBlock(up, Block.get(BlockID.REEDS), false)) {
+            if (!level.setBlock(up.position, Block.get(BlockID.REEDS), false)) {
                 return type;
             }
 
             setAge(0);
-            level.setBlock(this, this, false);
+            level.setBlock(this.position, this, false);
             return type;
         }
         return 0;
@@ -162,7 +162,7 @@ public class BlockReeds extends BlockFlowable {
             return false;
         }
         if (isSupportValid()) {
-            this.getLevel().setBlock(block, this, true);
+            this.getLevel().setBlock(block.position, this, true);
             return true;
         }
         return false;

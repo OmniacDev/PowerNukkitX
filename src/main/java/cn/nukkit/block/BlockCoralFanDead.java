@@ -22,7 +22,7 @@ public abstract class BlockCoralFanDead extends BlockCoralFan {
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!getSide(getRootsFace()).isSolid()) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
             }
             return type;
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {

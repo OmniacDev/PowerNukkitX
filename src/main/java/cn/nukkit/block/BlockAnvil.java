@@ -97,14 +97,14 @@ public class BlockAnvil extends BlockFallable implements Faceable, BlockInventor
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         setBlockFace(player != null ? player.getDirection().rotateYCCW() : BlockFace.SOUTH);
-        this.getLevel().setBlock(this, this, true);
+        this.getLevel().setBlock(this.position, this, true);
         if (player == null) {
-            this.getLevel().addSound(this, Sound.RANDOM_ANVIL_LAND, 1, 0.8F);
+            this.getLevel().addSound(this.position, Sound.RANDOM_ANVIL_LAND, 1, 0.8F);
         } else {
-            Collection<Player> players = getLevel().getChunkPlayers(getChunkX(), getChunkZ()).values();
+            Collection<Player> players = getLevel().getChunkPlayers(this.position.getChunkX(), this.position.getChunkZ()).values();
             players.remove(player);
             if (!players.isEmpty()) {
-                getLevel().addSound(this, Sound.RANDOM_ANVIL_LAND, 1, 0.8F, players);
+                getLevel().addSound(this.position, Sound.RANDOM_ANVIL_LAND, 1, 0.8F, players);
             }
         }
         return true;
@@ -147,7 +147,7 @@ public class BlockAnvil extends BlockFallable implements Faceable, BlockInventor
         BlockFace face = getBlockFace().rotateY();
         double xOffset = Math.abs(face.getXOffset()) * (2 / 16.0);
         double zOffset = Math.abs(face.getZOffset()) * (2 / 16.0);
-        return new SimpleAxisAlignedBB(x + xOffset, y, z + zOffset, x + 1 - xOffset, y + 1, z + 1 - zOffset);
+        return new SimpleAxisAlignedBB(this.position.x + xOffset, this.position.y, this.position.z + zOffset, this.position.x + 1 - xOffset, this.position.y + 1, this.position.z + 1 - zOffset);
     }
 
     @Override

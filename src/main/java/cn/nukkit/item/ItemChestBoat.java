@@ -66,7 +66,7 @@ public class ItemChestBoat extends Item {
     public boolean onActivate(Level level, Player player, Block block, Block target, BlockFace face, double fx, double fy, double fz) {
         if (face != BlockFace.UP || block instanceof BlockFlowingWater) return false;
         EntityChestBoat boat = (EntityChestBoat) Entity.createEntity(Entity.CHEST_BOAT,
-                level.getChunk(block.getFloorX() >> 4, block.getFloorZ() >> 4), new CompoundTag()
+                level.getChunk(block.position.getFloorX() >> 4, block.position.getFloorZ() >> 4), new CompoundTag()
                         .putList("Pos", new ListTag<FloatTag>()
                                 .add(new FloatTag(block.getX() + 0.5))
                                 .add(new FloatTag(block.getY() - (target instanceof BlockFlowingWater ? 0.375 : 0)))

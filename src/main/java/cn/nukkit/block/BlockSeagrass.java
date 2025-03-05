@@ -43,9 +43,9 @@ public class BlockSeagrass extends BlockFlowable {
                 (layer1Block instanceof BlockFlowingWater water && ((waterDamage = (water.getLiquidDepth())) == 0 || waterDamage == 8))
         ) {
             if (waterDamage == 8) {
-                this.getLevel().setBlock(this, 1, new BlockFlowingWater(), true, false);
+                this.getLevel().setBlock(this.position, 1, new BlockFlowingWater(), true, false);
             }
-            this.getLevel().setBlock(this, 0, this, true, true);
+            this.getLevel().setBlock(this.position, 0, this, true, true);
             return true;
         }
         return false;
@@ -58,7 +58,7 @@ public class BlockSeagrass extends BlockFlowable {
             int damage;
             if (!(blockLayer1 instanceof BlockFrostedIce)
                     && (!(blockLayer1 instanceof BlockFlowingWater) || ((damage = blockLayer1.blockstate.specialValue()) != 0 && damage != 8))) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
 
@@ -66,18 +66,18 @@ public class BlockSeagrass extends BlockFlowable {
             SeaGrassType propertyValue = getPropertyValue(SEA_GRASS_TYPE);
             if (propertyValue == SeaGrassType.DEFAULT || propertyValue == SeaGrassType.DOUBLE_BOT) {
                 if (!down.isSolid() || down.getId().equals(MAGMA) || down.getId().equals(SOUL_SAND)) {
-                    this.getLevel().useBreakOn(this);
+                    this.getLevel().useBreakOn(this.position);
                     return Level.BLOCK_UPDATE_NORMAL;
                 }
 
                 if (propertyValue == SeaGrassType.DOUBLE_BOT) {
                     Block up = up();
                     if (!up.getId().equals(getId()) || up.getPropertyValue(SEA_GRASS_TYPE) != SeaGrassType.DOUBLE_TOP) {
-                        this.getLevel().useBreakOn(this);
+                        this.getLevel().useBreakOn(this.position);
                     }
                 }
             } else if (!down.getId().equals(getId()) || down.getPropertyValue(SEA_GRASS_TYPE) != SeaGrassType.DOUBLE_BOT) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
             }
 
             return Level.BLOCK_UPDATE_NORMAL;
@@ -101,10 +101,10 @@ public class BlockSeagrass extends BlockFlowable {
                     item.count--;
                 }
 
-                this.level.addParticle(new BoneMealParticle(this));
-                this.level.setBlock(this, new BlockSeagrass().setPropertyValue(SEA_GRASS_TYPE, SeaGrassType.DOUBLE_BOT), true, false);
-                this.level.setBlock(up, 1, up, true, false);
-                this.level.setBlock(up, 0, new BlockSeagrass().setPropertyValue(SEA_GRASS_TYPE, SeaGrassType.DOUBLE_TOP), true);
+                this.level.addParticle(new BoneMealParticle(this.position));
+                this.level.setBlock(this.position, new BlockSeagrass().setPropertyValue(SEA_GRASS_TYPE, SeaGrassType.DOUBLE_BOT), true, false);
+                this.level.setBlock(up.position, 1, up, true, false);
+                this.level.setBlock(up.position, 0, new BlockSeagrass().setPropertyValue(SEA_GRASS_TYPE, SeaGrassType.DOUBLE_TOP), true);
                 return true;
             }
         }

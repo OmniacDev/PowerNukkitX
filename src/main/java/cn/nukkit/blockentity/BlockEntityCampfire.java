@@ -69,7 +69,7 @@ public class BlockEntityCampfire extends BlockEntitySpawnable implements BlockEn
                     if (recipe == null) {
                         inventory.setItem(slot, Item.AIR);
                         ThreadLocalRandom random = ThreadLocalRandom.current();
-                        this.level.dropItem(add(random.nextFloat(), 0.5, random.nextFloat()), item);
+                        this.level.dropItem(this.position.add(random.nextFloat(), 0.5, random.nextFloat()), item);
                         burnTime[slot] = 0;
                         recipes[slot] = null;
                         continue;
@@ -86,7 +86,7 @@ public class BlockEntityCampfire extends BlockEntitySpawnable implements BlockEn
                     if (!event.isCancelled()) {
                         inventory.setItem(slot, Item.AIR);
                         ThreadLocalRandom random = ThreadLocalRandom.current();
-                        this.level.dropItem(add(random.nextFloat(), 0.5, random.nextFloat()), event.getResult());
+                        this.level.dropItem(this.position.add(random.nextFloat(), 0.5, random.nextFloat()), event.getResult());
                         burnTime[slot] = 0;
                         recipes[slot] = null;
                     } else if (event.getKeepItem()) {
@@ -154,7 +154,7 @@ public class BlockEntityCampfire extends BlockEntitySpawnable implements BlockEn
     @Override
     public void onBreak(boolean isSilkTouch) {
         for (Item content : inventory.getContents().values()) {
-            level.dropItem(this, content);
+            level.dropItem(this.position, content);
         }
     }
 

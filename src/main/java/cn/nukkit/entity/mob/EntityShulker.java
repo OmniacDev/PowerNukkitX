@@ -131,7 +131,7 @@ public class EntityShulker extends EntityMob implements EntityVariant {
         this.setMaxHealth(30);
         super.initEntity();
         if(getMemoryStorage().get(CoreMemoryTypes.VARIANT) == null) setVariant(16);
-        setDataProperty(EntityDataTypes.SHULKER_ATTACH_POS, this.getPosition().getLevelBlock().getSide(BlockFace.UP).asBlockVector3());
+        setDataProperty(EntityDataTypes.SHULKER_ATTACH_POS, this.getPosition().getLevelBlock().getSide(BlockFace.UP).position.asBlockVector3());
     }
 
     @Override
@@ -160,7 +160,7 @@ public class EntityShulker extends EntityMob implements EntityVariant {
                     Transform transform = block.up().getLocation();
                     getLevel().addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_TELEPORT, -1, getIdentifier(), false, false);
                     teleport(transform, PlayerTeleportEvent.TeleportCause.SHULKER);
-                    getLevel().addLevelSoundEvent(transform, LevelSoundEventPacket.SOUND_SPAWN, -1, getIdentifier(), false, false);
+                    getLevel().addLevelSoundEvent(transform.position, LevelSoundEventPacket.SOUND_SPAWN, -1, getIdentifier(), false, false);
                 }
         );
     }

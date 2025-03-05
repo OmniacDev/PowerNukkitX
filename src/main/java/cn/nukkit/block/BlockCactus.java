@@ -58,37 +58,37 @@ public class BlockCactus extends BlockTransparent implements BlockFlowerPot.Flow
 
     @Override
     public double getMinX() {
-        return this.x + 0.0625;
+        return this.position.x + 0.0625;
     }
 
     @Override
     public double getMinY() {
-        return this.y;
+        return this.position.y;
     }
 
     @Override
     public double getMinZ() {
-        return this.z + 0.0625;
+        return this.position.z + 0.0625;
     }
 
     @Override
     public double getMaxX() {
-        return this.x + 0.9375;
+        return this.position.x + 0.9375;
     }
 
     @Override
     public double getMaxY() {
-        return this.y + 0.9375;
+        return this.position.y + 0.9375;
     }
 
     @Override
     public double getMaxZ() {
-        return this.z + 0.9375;
+        return this.position.z + 0.9375;
     }
 
     @Override
     protected AxisAlignedBB recalculateCollisionBoundingBox() {
-        return new SimpleAxisAlignedBB(this.x, this.y, this.z, this.x + 1, this.y + 1, this.z + 1);
+        return new SimpleAxisAlignedBB(this.position.x, this.position.y, this.position.z, this.position.x + 1, this.position.y + 1, this.position.z + 1);
     }
 
     @Override
@@ -102,13 +102,13 @@ public class BlockCactus extends BlockTransparent implements BlockFlowerPot.Flow
             Block down = down();
             if (!ItemTags.getItemSet(ItemTags.SAND).contains(down.getId())
                     && !(down instanceof BlockCactus)) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return 0;
             }
             for (int side = 2; side <= 5; ++side) {
                 Block block = getSide(BlockFace.fromIndex(side));
                 if (!block.canBeFlowedInto()) {
-                    this.getLevel().useBreakOn(this);
+                    this.getLevel().useBreakOn(this.position);
                 }
             }
             return 0;
@@ -117,16 +117,16 @@ public class BlockCactus extends BlockTransparent implements BlockFlowerPot.Flow
             if (down() instanceof BlockCactus) { return 0; }
             if (this.getAge() < getMaxAge()) {
                 this.setAge(this.getAge() + 1);
-                this.getLevel().setBlock(this, this);
+                this.getLevel().setBlock(this.position, this);
                 return 0;
             }
             for (int y = 1; y < 3; ++y) {
-                Block b = this.getLevel().getBlock(new Vector3(this.x, this.y + y, this.z));
+                Block b = this.getLevel().getBlock(new Vector3(this.position.x, this.position.y + y, this.position.z));
                 if (!b.isAir()) { continue; }
                 BlockGrowEvent event = new BlockGrowEvent(b, Block.get(BlockID.CACTUS));
                 Server.getInstance().getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
-                    this.getLevel().setBlock(b, event.getNewState(), true);
+                    this.getLevel().setBlock(b.position, event.getNewState(), true);
                 }
                 break;
             }
@@ -148,7 +148,7 @@ public class BlockCactus extends BlockTransparent implements BlockFlowerPot.Flow
         Block block2 = west();
         Block block3 = east();
         if (block0.canBeFlowedInto() && block1.canBeFlowedInto() && block2.canBeFlowedInto() && block3.canBeFlowedInto()) {
-            this.getLevel().setBlock(this, this, true);
+            this.getLevel().setBlock(this.position, this, true);
             return true;
         }
         return false;

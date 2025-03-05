@@ -235,15 +235,15 @@ public class EntityFallingBlock extends Entity {
                             if (fallDistance > 8) {
                                 BlockAnvil anvil = (BlockAnvil) eventTo;
                                 if (anvil.getAnvilDamage() == Damage.VERY_DAMAGED) {
-                                    getLevel().setBlock(eventTo, BlockAir.STATE.toBlock(), true);
+                                    getLevel().setBlock(eventTo.position, BlockAir.STATE.toBlock(), true);
                                 } else {
                                     anvil.setAnvilDamage(anvil.getAnvilDamage().next());
-                                    getLevel().setBlock(eventTo, anvil, true);
+                                    getLevel().setBlock(eventTo.position, anvil, true);
                                 }
                             }
-                            getLevel().addLevelEvent(eventTo, LevelEventPacket.EVENT_SOUND_ANVIL_LAND);
+                            getLevel().addLevelEvent(eventTo.position, LevelEventPacket.EVENT_SOUND_ANVIL_LAND);
                         } else if (eventTo.getId().equals(BlockID.POINTED_DRIPSTONE)) {
-                            getLevel().addLevelEvent(block, LevelEventPacket.EVENT_SOUND_POINTED_DRIPSTONE_LAND);
+                            getLevel().addLevelEvent(block.position, LevelEventPacket.EVENT_SOUND_POINTED_DRIPSTONE_LAND);
 
                             Entity[] e = level.getCollidingEntities(new SimpleAxisAlignedBB(pos, pos.add(1, 1, 1)));
                             for (Entity entity : e) {

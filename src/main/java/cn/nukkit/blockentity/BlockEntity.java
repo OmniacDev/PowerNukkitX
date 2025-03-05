@@ -38,12 +38,12 @@ public abstract class BlockEntity extends Locator implements BlockEntityID {
     protected Server server;
 
     public static BlockEntity createBlockEntity(String type, Locator locator, Object... args) {
-        return createBlockEntity(type, locator, BlockEntity.getDefaultCompound(locator, type), args);
+        return createBlockEntity(type, locator, BlockEntity.getDefaultCompound(locator.position, type), args);
     }
 
 
     public static BlockEntity createBlockEntity(String type, Locator pos, CompoundTag nbt, Object... args) {
-        return createBlockEntity(type, pos.getLevel().getChunk(pos.getFloorX() >> 4, pos.getFloorZ() >> 4), nbt, args);
+        return createBlockEntity(type, pos.getLevel().getChunk(pos.position.getFloorX() >> 4, pos.position.getFloorZ() >> 4), nbt, args);
     }
 
     public static BlockEntity createBlockEntity(String type, IChunk chunk, CompoundTag nbt, Object... args) {
@@ -112,9 +112,9 @@ public abstract class BlockEntity extends Locator implements BlockEntityID {
         this.namedTag = nbt;
         this.name = "";
         this.id = BlockEntity.count++;
-        this.x = this.namedTag.getInt("x");
-        this.y = this.namedTag.getInt("y");
-        this.z = this.namedTag.getInt("z");
+        this.position.x = this.namedTag.getInt("x");
+        this.position.y = this.namedTag.getInt("y");
+        this.position.z = this.namedTag.getInt("z");
         this.movable = this.namedTag.getBoolean("isMovable");
 
 
@@ -206,7 +206,7 @@ public abstract class BlockEntity extends Locator implements BlockEntityID {
                 @Override
                 public void onRun(int currentTick) {
                     if (isBlockEntityValid()) {
-                        getLevel().updateComparatorOutputLevelSelective(BlockEntity.this, isObservable());
+                        getLevel().updateComparatorOutputLevelSelective(BlockEntity.this.position, isObservable());
                     }
                 }
             });

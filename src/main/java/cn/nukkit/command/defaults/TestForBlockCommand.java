@@ -49,15 +49,15 @@ public class TestForBlockCommand extends VanillaCommand {
             return 0;
         }
 
-        Block block = level.getBlock(locator, false);
+        Block block = level.getBlock(locator.position, false);
         String id = block.getId();
         int meta = block.getBlockState().specialValue();
 
         if (id == tileId && meta == dataValue) {
-            log.addSuccess("commands.testforblock.success", String.valueOf(locator.getFloorX()), String.valueOf(locator.getFloorY()), String.valueOf(locator.getFloorZ())).output();
+            log.addSuccess("commands.testforblock.success", String.valueOf(locator.position.getFloorX()), String.valueOf(locator.position.getFloorY()), String.valueOf(locator.position.getFloorZ())).output();
             return 1;
         } else {
-            log.addError("commands.testforblock.failed.tile", String.valueOf(locator.getFloorX()), String.valueOf(locator.getFloorY()), String.valueOf(locator.getFloorZ()), String.valueOf(id), String.valueOf(tileId))
+            log.addError("commands.testforblock.failed.tile", String.valueOf(locator.position.getFloorX()), String.valueOf(locator.position.getFloorY()), String.valueOf(locator.position.getFloorZ()), String.valueOf(id), String.valueOf(tileId))
                     .output();
             return 0;
         }

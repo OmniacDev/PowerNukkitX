@@ -48,6 +48,6 @@ public class BlockMangroveRoots extends BlockTransparent {
 
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        return level.setBlock(this, this);
+        return level.setBlock(this.position, this);
     }
 }

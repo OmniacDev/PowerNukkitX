@@ -24,12 +24,12 @@ public abstract class BlockStairs extends BlockTransparent implements Faceable {
 
     @Override
     public double getMinY() {
-        return this.y + (isUpsideDown() ? 0.5 : 0);
+        return this.position.y + (isUpsideDown() ? 0.5 : 0);
     }
 
     @Override
     public double getMaxY() {
-        return this.y + (isUpsideDown() ? 1 : 0.5);
+        return this.position.y + (isUpsideDown() ? 1 : 0.5);
     }
 
     @Override
@@ -46,7 +46,7 @@ public abstract class BlockStairs extends BlockTransparent implements Faceable {
         if ((fy > 0.5 && face != BlockFace.UP) || face == BlockFace.DOWN) {
             setUpsideDown(true);
         }
-        this.getLevel().setBlock(block, this, true, true);
+        this.getLevel().setBlock(block.position, this, true, true);
 
         return true;
     }
@@ -67,48 +67,48 @@ public abstract class BlockStairs extends BlockTransparent implements Faceable {
         }
 
         if (bb.intersectsWith(new SimpleAxisAlignedBB(
-                this.x,
-                this.y + minSlabY,
-                this.z,
-                this.x + 1,
-                this.y + maxSlabY,
-                this.z + 1
+                this.position.x,
+                this.position.y + minSlabY,
+                this.position.z,
+                this.position.x + 1,
+                this.position.y + maxSlabY,
+                this.position.z + 1
         ))) {
             return true;
         }
 
         return switch (face) {
             case EAST -> bb.intersectsWith(new SimpleAxisAlignedBB(
-                    this.x + 0.5,
-                    this.y + minHalfSlabY,
-                    this.z,
-                    this.x + 1,
-                    this.y + maxHalfSlabY,
-                    this.z + 1
+                    this.position.x + 0.5,
+                    this.position.y + minHalfSlabY,
+                    this.position.z,
+                    this.position.x + 1,
+                    this.position.y + maxHalfSlabY,
+                    this.position.z + 1
             ));
             case WEST -> bb.intersectsWith(new SimpleAxisAlignedBB(
-                    this.x,
-                    this.y + minHalfSlabY,
-                    this.z,
-                    this.x + 0.5,
-                    this.y + maxHalfSlabY,
-                    this.z + 1
+                    this.position.x,
+                    this.position.y + minHalfSlabY,
+                    this.position.z,
+                    this.position.x + 0.5,
+                    this.position.y + maxHalfSlabY,
+                    this.position.z + 1
             ));
             case SOUTH -> bb.intersectsWith(new SimpleAxisAlignedBB(
-                    this.x,
-                    this.y + minHalfSlabY,
-                    this.z + 0.5,
-                    this.x + 1,
-                    this.y + maxHalfSlabY,
-                    this.z + 1
+                    this.position.x,
+                    this.position.y + minHalfSlabY,
+                    this.position.z + 0.5,
+                    this.position.x + 1,
+                    this.position.y + maxHalfSlabY,
+                    this.position.z + 1
             ));
             case NORTH -> bb.intersectsWith(new SimpleAxisAlignedBB(
-                    this.x,
-                    this.y + minHalfSlabY,
-                    this.z,
-                    this.x + 1,
-                    this.y + maxHalfSlabY,
-                    this.z + 0.5
+                    this.position.x,
+                    this.position.y + minHalfSlabY,
+                    this.position.z,
+                    this.position.x + 1,
+                    this.position.y + maxHalfSlabY,
+                    this.position.z + 0.5
             ));
             default -> false;
         };

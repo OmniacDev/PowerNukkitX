@@ -49,7 +49,7 @@ public class BlockTorch extends BlockFlowable implements Faceable {
 
             Block support = this.getSide(torchAttachment.getAttachedFace());
             if (!BlockLever.isSupportValid(support, torchAttachment.getTorchDirection())) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
 
                 return Level.BLOCK_UPDATE_NORMAL;
             }
@@ -87,7 +87,7 @@ public class BlockTorch extends BlockFlowable implements Faceable {
         }
 
         this.setBlockFace(face);
-        this.getLevel().setBlock(block, this, true, true);
+        this.getLevel().setBlock(block.position, this, true, true);
         return true;
     }
 

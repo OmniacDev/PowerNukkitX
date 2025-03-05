@@ -147,11 +147,11 @@ public class BlockHopper extends BlockTransparent implements RedstoneComponent, 
         }
 
         if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) {
-            boolean disabled = this.level.isBlockPowered(this.getLocation());
+            boolean disabled = this.level.isBlockPowered(this.getLocation().position);
 
             if (disabled == this.isEnabled()) {
                 this.setEnabled(!disabled);
-                this.level.setBlock(this, this, false, true);
+                this.level.setBlock(this.position, this, false, true);
                 BlockEntityHopper be = getBlockEntity();
                 if (be != null) {
                     be.setDisabled(disabled);
@@ -207,7 +207,7 @@ public class BlockHopper extends BlockTransparent implements RedstoneComponent, 
                 return false;
 
             Block blockSide = hopperPos.getSide(BlockFace.UP).getTickCachedLevelBlock();
-            BlockEntity blockEntity = hopperPos.level.getBlockEntity(new Vector3().setComponentsAdding(hopperPos, BlockFace.UP));
+            BlockEntity blockEntity = hopperPos.level.getBlockEntity(new Vector3().setComponentsAdding(hopperPos.position, BlockFace.UP));
 
             if (blockEntity instanceof InventoryHolder holder) {
                 Inventory inv = holder instanceof cn.nukkit.inventory.RecipeInventoryHolder recipeInventoryHolder ? recipeInventoryHolder.getProductView() : holder.getInventory();

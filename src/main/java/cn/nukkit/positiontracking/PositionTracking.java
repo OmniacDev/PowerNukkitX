@@ -35,7 +35,7 @@ public class PositionTracking extends Vector3 implements NamedPosition {
     }
 
     public PositionTracking(@NotNull Locator pos) {
-        this(pos.getLevel(), pos.x, pos.y, pos.z);
+        this(pos.getLevel(), pos.position.x, pos.position.y, pos.position.z);
     }
 
     public PositionTracking(@NotNull NamedPosition pos) {

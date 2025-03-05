@@ -43,7 +43,7 @@ public abstract class BlockEntitySpawnableContainer extends BlockEntitySpawnable
     @Override
     public void onBreak(boolean isSilkTouch) {
         for (Item content : inventory.getContents().values()) {
-            level.dropItem(this, content);
+            level.dropItem(this.position, content);
         }
         inventory.clearAll(); // Stop items from being moved around by another player in the inventory
     }

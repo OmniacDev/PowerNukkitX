@@ -37,8 +37,8 @@ public class ItemGlowBerries extends ItemFood {
         if (BlockCaveVines.isValidSupport(block) && face.equals(BlockFace.DOWN)) {
             var tmp = new BlockCaveVines();
             tmp.setPropertyValue(CommonBlockProperties.GROWING_PLANT_AGE, ThreadLocalRandom.current().nextInt(26));
-            level.setBlock(target.down(), tmp);
-            level.addSound(target.down(), Sound.DIG_CAVE_VINES);
+            level.setBlock(target.down().position, tmp);
+            level.addSound(target.down().position, Sound.DIG_CAVE_VINES);
             if (player.isAdventure() || player.isSurvival()) {
                 --this.count;
                 player.getInventory().setItemInHand(this);

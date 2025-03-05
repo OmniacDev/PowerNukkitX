@@ -83,7 +83,7 @@ public class BlockBed extends BlockTransparent implements Faceable, BlockEntityH
 
     @Override
     public double getMaxY() {
-        return this.y + 0.5625;
+        return this.position.y + 0.5625;
     }
 
     @Override
@@ -129,9 +129,9 @@ public class BlockBed extends BlockTransparent implements Faceable, BlockEntityH
                 return true;
             }
 
-            level.setBlock(this, get(AIR), false, false);
+            level.setBlock(this.position, get(AIR), false, false);
             onBreak(Item.AIR);
-            level.updateAround(this);
+            level.updateAround(this.position);
 
             Explosion explosion = new Explosion(this, event.getForce(), this);
             explosion.setFireChance(event.getFireChance());
@@ -146,7 +146,7 @@ public class BlockBed extends BlockTransparent implements Faceable, BlockEntityH
             return true;
         }
 
-        AxisAlignedBB accessArea = new SimpleAxisAlignedBB(head.x - 2, head.y - 5.5, head.z - 2, head.x + 3, head.y + 2.5, head.z + 3)
+        AxisAlignedBB accessArea = new SimpleAxisAlignedBB(head.position.x - 2, head.position.y - 5.5, head.position.z - 2, head.position.x + 3, head.position.y + 2.5, head.position.z + 3)
                 .addCoord(footPart.getXOffset(), 0, footPart.getZOffset());
 
         if (!accessArea.isVectorInside(player.pos)) {
@@ -154,7 +154,7 @@ public class BlockBed extends BlockTransparent implements Faceable, BlockEntityH
             return true;
         }
 
-        Transform spawn = Transform.fromObject(head.add(0.5, 0.5, 0.5), player.getLevel(), player.rotation.yaw, player.rotation.pitch);
+        Transform spawn = Transform.fromObject(this.position.add(0.5, 0.5, 0.5), player.getLevel(), player.rotation.yaw, player.rotation.pitch);
         if (!player.getSpawn().equals(spawn)) {
             player.setSpawn(this, SpawnPointType.BLOCK);
         }
@@ -170,7 +170,7 @@ public class BlockBed extends BlockTransparent implements Faceable, BlockEntityH
         }
 
         if (!player.isCreative()) {
-            AxisAlignedBB checkMonsterArea = new SimpleAxisAlignedBB(head.x - 8, head.y - 6.5, head.z - 8, head.x + 9, head.y + 5.5, head.z + 9)
+            AxisAlignedBB checkMonsterArea = new SimpleAxisAlignedBB(head.position.x - 8, head.position.y - 6.5, head.position.z - 8, head.position.x + 9, head.position.y + 5.5, head.position.z + 9)
                     .addCoord(footPart.getXOffset(), 0, footPart.getZOffset());
 
             for (Entity entity : this.level.getCollidingEntities(checkMonsterArea)) {
@@ -182,7 +182,7 @@ public class BlockBed extends BlockTransparent implements Faceable, BlockEntityH
             }
         }
 
-        if (!player.sleepOn(head)) {
+        if (!player.sleepOn(head.position)) {
             player.sendMessage(new TranslationContainer(TextFormat.GRAY + "%tile.bed.occupied"));
         }
 
@@ -204,21 +204,21 @@ public class BlockBed extends BlockTransparent implements Faceable, BlockEntityH
             return false;
         }
 
-        Block thisLayer0 = level.getBlock(this, 0);
-        Block thisLayer1 = level.getBlock(this, 1);
-        Block nextLayer0 = level.getBlock(next, 0);
-        Block nextLayer1 = level.getBlock(next, 1);
+        Block thisLayer0 = level.getBlock(this.position, 0);
+        Block thisLayer1 = level.getBlock(this.position, 1);
+        Block nextLayer0 = level.getBlock(next.position, 0);
+        Block nextLayer1 = level.getBlock(next.position, 1);
 
         setBlockFace(direction);
 
-        level.setBlock(block, this, true, true);
+        level.setBlock(block.position, this, true, true);
         if (next instanceof BlockLiquid && ((BlockLiquid) next).usesWaterLogging()) {
-            level.setBlock(next, 1, next, true, false);
+            level.setBlock(next.position, 1, next, true, false);
         }
 
         BlockBed head = (BlockBed) clone();
         head.setHeadPiece(true);
-        level.setBlock(next, head, true, true);
+        level.setBlock(next.position, head, true, true);
 
         BlockEntityBed thisBed = null;
         try {
@@ -230,10 +230,10 @@ public class BlockBed extends BlockTransparent implements Faceable, BlockEntityH
             if (thisBed != null) {
                 thisBed.close();
             }
-            level.setBlock(thisLayer0, 0, thisLayer0, true);
-            level.setBlock(thisLayer1, 1, thisLayer1, true);
-            level.setBlock(nextLayer0, 0, nextLayer0, true);
-            level.setBlock(nextLayer1, 1, nextLayer1, true);
+            level.setBlock(thisLayer0.position, 0, thisLayer0, true);
+            level.setBlock(thisLayer1.position, 1, thisLayer1, true);
+            level.setBlock(nextLayer0.position, 0, nextLayer0, true);
+            level.setBlock(nextLayer1.position, 1, nextLayer1, true);
             return false;
         }
         return true;
@@ -245,16 +245,16 @@ public class BlockBed extends BlockTransparent implements Faceable, BlockEntityH
         if (isHeadPiece()) { //This is the Top part of bed
             Block other = getSide(direction.getOpposite());
             if (other.getId().equals(getId()) && !((BlockBed) other).isHeadPiece() && direction.equals(((BlockBed) other).getBlockFace())) {
-                getLevel().setBlock(other, Block.get(BlockID.AIR), true, true);
+                getLevel().setBlock(other.position, Block.get(BlockID.AIR), true, true);
             }
         } else { //Bottom Part of Bed
             Block other = getSide(direction);
             if (other.getId().equals(getId()) && ((BlockBed) other).isHeadPiece() && direction.equals(((BlockBed) other).getBlockFace())) {
-                getLevel().setBlock(other, Block.get(BlockID.AIR), true, true);
+                getLevel().setBlock(other.position, Block.get(BlockID.AIR), true, true);
             }
         }
 
-        getLevel().setBlock(this, Block.get(BlockID.AIR), true, false); // Do not update both parts to prevent duplication bug if there is two fallable blocks top of the bed
+        getLevel().setBlock(this.position, Block.get(BlockID.AIR), true, false); // Do not update both parts to prevent duplication bug if there is two fallable blocks top of the bed
 
         return true;
     }

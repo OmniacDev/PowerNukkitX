@@ -213,7 +213,7 @@ public class PlayerAuthInputProcessor extends DataPacketProcessor<PlayerAuthInpu
     }
 
     private static boolean check(Transform clientLoc, Player player) {
-        var distance = clientLoc.distanceSquared(player.pos);
+        var distance = clientLoc.position.distanceSquared(player.pos);
         var updatePosition = (float) Math.sqrt(distance) > 0.1f;
         var updateRotation = (float) Math.abs(player.rotation.pitch - clientLoc.pitch) > 1
                 || (float) Math.abs(player.rotation.yaw - clientLoc.yaw) > 1

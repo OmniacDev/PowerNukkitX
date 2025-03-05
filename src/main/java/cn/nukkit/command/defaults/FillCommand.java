@@ -97,9 +97,9 @@ public class FillCommand extends VanillaCommand {
                             for (int z = NukkitMath.floorDouble(aabb.getMinZ()); z <= NukkitMath.floorDouble(aabb.getMaxZ()); z++) {
                                 for (int y = NukkitMath.floorDouble(aabb.getMinY()); y <= NukkitMath.floorDouble(aabb.getMaxY()); y++) {
 
-                                    boolean isBorderX = x == NukkitMath.floorDouble(from.x) || x == NukkitMath.floorDouble(to.x);
-                                    boolean isBorderZ = z == NukkitMath.floorDouble(from.z) || z == NukkitMath.floorDouble(to.z);
-                                    boolean isBorderY = y == NukkitMath.floorDouble(from.y) || y == NukkitMath.floorDouble(to.y);
+                                    boolean isBorderX = x == NukkitMath.floorDouble(from.position.x) || x == NukkitMath.floorDouble(to.position.x);
+                                    boolean isBorderZ = z == NukkitMath.floorDouble(from.position.z) || z == NukkitMath.floorDouble(to.position.z);
+                                    boolean isBorderY = y == NukkitMath.floorDouble(from.position.y) || y == NukkitMath.floorDouble(to.position.y);
 
                                     if (isBorderX || isBorderZ || isBorderY) {
                                         blockManager.setBlockStateAt(x, y, z, tileState);
@@ -114,9 +114,9 @@ public class FillCommand extends VanillaCommand {
                             for (int z = NukkitMath.floorDouble(aabb.getMinZ()); z <= NukkitMath.floorDouble(aabb.getMaxZ()); z++) {
                                 for (int y = NukkitMath.floorDouble(aabb.getMinY()); y <= NukkitMath.floorDouble(aabb.getMaxY()); y++) {
                                     Block block;
-                                    boolean isBorderX = x == NukkitMath.floorDouble(from.x) || x == NukkitMath.floorDouble(to.x);
-                                    boolean isBorderZ = z == NukkitMath.floorDouble(from.z) || z == NukkitMath.floorDouble(to.z);
-                                    boolean isBorderY = y == NukkitMath.floorDouble(from.y) || y == NukkitMath.floorDouble(to.y);
+                                    boolean isBorderX = x == NukkitMath.floorDouble(from.position.x) || x == NukkitMath.floorDouble(to.position.x);
+                                    boolean isBorderZ = z == NukkitMath.floorDouble(from.position.z) || z == NukkitMath.floorDouble(to.position.z);
+                                    boolean isBorderY = y == NukkitMath.floorDouble(from.position.y) || y == NukkitMath.floorDouble(to.position.y);
 
                                     if (isBorderX || isBorderZ || isBorderY) {
                                         block = tileState.toBlock();
@@ -133,16 +133,16 @@ public class FillCommand extends VanillaCommand {
                     case REPLACE -> {
                         blocks = getLevelBlocks(level, aabb);
                         for (Block block : blocks) {
-                            blockManager.setBlockStateAt(block.getFloorX(), block.getFloorY(), block.getFloorZ(), tileState);
+                            blockManager.setBlockStateAt(block.position.getFloorX(), block.position.getFloorY(), block.position.getFloorZ(), tileState);
                             ++count;
                         }
                     }
                     case DESTROY -> {
                         blocks = getLevelBlocks(level, aabb);
                         for (Block block : blocks) {
-                            Map<Integer, Player> players = level.getChunkPlayers((int) block.x >> 4, (int) block.z >> 4);
-                            level.addParticle(new DestroyBlockParticle(block.add(0.5), block), players.values());
-                            blockManager.setBlockStateAt(block.getFloorX(), block.getFloorY(), block.getFloorZ(), tileState);
+                            Map<Integer, Player> players = level.getChunkPlayers((int) block.position.x >> 4, (int) block.position.z >> 4);
+                            level.addParticle(new DestroyBlockParticle(block.position.add(0.5), block), players.values());
+                            blockManager.setBlockStateAt(block.position.getFloorX(), block.position.getFloorY(), block.position.getFloorZ(), tileState);
                             ++count;
                         }
                     }
@@ -150,7 +150,7 @@ public class FillCommand extends VanillaCommand {
                         blocks = getLevelBlocks(level, aabb);
                         for (Block block : blocks) {
                             if (block.isAir()) {
-                                blockManager.setBlockStateAt(block.getFloorX(), block.getFloorY(), block.getFloorZ(), tileState);
+                                blockManager.setBlockStateAt(block.position.getFloorX(), block.position.getFloorY(), block.position.getFloorZ(), tileState);
                                 ++count;
                             }
                         }
@@ -167,7 +167,7 @@ public class FillCommand extends VanillaCommand {
                 blocks = getLevelBlocks(level, aabb);
                 for (Block block : blocks) {
                     if (block.getId().equals(replaceBlock.getId())) {
-                        blockManager.setBlockStateAt(block.getFloorX(), block.getFloorY(), block.getFloorZ(), replaceState);
+                        blockManager.setBlockStateAt(block.position.getFloorX(), block.position.getFloorY(), block.position.getFloorZ(), replaceState);
                         ++count;
                     }
                 }

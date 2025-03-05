@@ -119,15 +119,15 @@ public interface BlockEntityHolder<E extends BlockEntity> {
             @Nullable Object... args) {
         Block block = holder.getBlock();
         Level level = block.getLevel();
-        Block layer0 = level.getBlock(block, 0);
-        Block layer1 = level.getBlock(block, 1);
-        if (level.setBlock(block, block, direct, update)) {
+        Block layer0 = level.getBlock(block.position, 0);
+        Block layer1 = level.getBlock(block.position, 1);
+        if (level.setBlock(block.position, block, direct, update)) {
             try {
                 return holder.createBlockEntity(initialData, args);
             } catch (Exception e) {
                 Loggers.logBlocKEntityHolder.warn("Failed to create block entity {} at {} at ", holder.getBlockEntityType(), holder.getLocation(), e);
-                level.setBlock(layer0, 0, layer0, direct, update);
-                level.setBlock(layer1, 1, layer1, direct, update);
+                level.setBlock(layer0.position, 0, layer0, direct, update);
+                level.setBlock(layer1.position, 1, layer1, direct, update);
                 throw e;
             }
         }

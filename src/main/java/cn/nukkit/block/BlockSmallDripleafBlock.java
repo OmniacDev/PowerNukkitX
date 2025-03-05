@@ -72,8 +72,8 @@ public class BlockSmallDripleafBlock extends BlockFlowable implements Faceable {
         dripleaf.setBlockFace(direction);
         dripleafTop.setBlockFace(direction);
         if (canKeepAlive(block)) {
-            this.level.setBlock(block, dripleaf, true, true);
-            this.level.setBlock(block.getSide(BlockFace.UP), dripleafTop, true, true);
+            this.level.setBlock(block.position, dripleaf, true, true);
+            this.level.setBlock(block.getSide(BlockFace.UP).position, dripleafTop, true, true);
             return true;
         }
         return false;
@@ -90,14 +90,14 @@ public class BlockSmallDripleafBlock extends BlockFlowable implements Faceable {
 
     @Override
     public boolean onBreak(@NotNull Item item) {
-        this.level.setBlock(this, new BlockAir(), true, true);
+        this.level.setBlock(this.position, new BlockAir(), true, true);
         if (item.isShears())
-            this.level.dropItem(this, this.toItem());
+            this.level.dropItem(this.position, this.toItem());
         if (this.getSide(BlockFace.UP).getId().equals(BlockID.SMALL_DRIPLEAF_BLOCK)) {
-            this.level.getBlock(this.getSide(BlockFace.UP)).onBreak(null);
+            this.level.getBlock(this.getSide(BlockFace.UP).position).onBreak(null);
         }
         if (this.getSide(BlockFace.DOWN).getId().equals(BlockID.SMALL_DRIPLEAF_BLOCK)) {
-            this.level.getBlock(this.getSide(BlockFace.DOWN)).onBreak(null);
+            this.level.getBlock(this.getSide(BlockFace.DOWN).position).onBreak(null);
         }
         return true;
     }
@@ -105,8 +105,8 @@ public class BlockSmallDripleafBlock extends BlockFlowable implements Faceable {
     @Override
     public int onUpdate(int type) {
         if (!canKeepAlive(this)) {
-            this.level.setBlock(this, new BlockAir(), true, true);
-            this.level.dropItem(this, this.toItem());
+            this.level.setBlock(this.position, new BlockAir(), true, true);
+            this.level.dropItem(this.position, this.toItem());
         }
         return super.onUpdate(type);
     }
@@ -135,11 +135,11 @@ public class BlockSmallDripleafBlock extends BlockFlowable implements Faceable {
             }
 
             for (int i = 0; i < height; i++) {
-                this.level.setBlock(buttom.add(0, i, 0), blockBigDripleafDown, true, true);
+                this.level.setBlock(buttom.position.add(0, i, 0), blockBigDripleafDown, true, true);
             }
-            this.level.setBlock(buttom.add(0, height, 0), blockBigDripleafHead, true, true);
+            this.level.setBlock(buttom.position.add(0, height, 0), blockBigDripleafHead, true, true);
 
-            this.level.addParticleEffect(this.add(0.5, 0.5, 0.5), ParticleEffect.CROP_GROWTH);
+            this.level.addParticleEffect(this.position.add(0.5, 0.5, 0.5), ParticleEffect.CROP_GROWTH);
             item.count--;
             return true;
         }
@@ -147,13 +147,13 @@ public class BlockSmallDripleafBlock extends BlockFlowable implements Faceable {
     }
 
     public boolean canKeepAlive(Locator pos) {
-        Block blockDown = this.level.getBlock(pos.getSide(BlockFace.DOWN));
-        Block blockHere = this.level.getBlock(pos, 1);
-        Block blockUp = this.level.getBlock(pos.getSide(BlockFace.UP));
-        if (this.level.getBlock(blockDown) instanceof BlockClay) {
+        Block blockDown = this.level.getBlock(pos.getSide(BlockFace.DOWN).position);
+        Block blockHere = this.level.getBlock(pos.position, 1);
+        Block blockUp = this.level.getBlock(pos.getSide(BlockFace.UP).position);
+        if (this.level.getBlock(blockDown.position) instanceof BlockClay) {
             return true;
         }
-        if (this.level.getBlock(blockDown) instanceof BlockSmallDripleafBlock && !((BlockSmallDripleafBlock) this.level.getBlock(blockDown)).isUpperBlock()) {
+        if (this.level.getBlock(blockDown.position) instanceof BlockSmallDripleafBlock && !((BlockSmallDripleafBlock) this.level.getBlock(blockDown.position)).isUpperBlock()) {
             return true;
         }
         if (blockHere instanceof BlockFlowingWater && (blockUp instanceof BlockAir || blockUp instanceof BlockSmallDripleafBlock) && (blockDown instanceof BlockGrassBlock || blockDown instanceof BlockDirt || blockDown instanceof BlockDirtWithRoots || blockDown instanceof BlockMossBlock)) {

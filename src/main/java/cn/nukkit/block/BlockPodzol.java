@@ -46,7 +46,7 @@ public class BlockPodzol extends BlockDirt {
 
         if (item.isShovel()) {
             item.useOn(this);
-            this.getLevel().setBlock(this, Block.get(BlockID.GRASS_PATH));
+            this.getLevel().setBlock(this.position, Block.get(BlockID.GRASS_PATH));
             if (player != null) {
                 player.getLevel().addSound(player.pos, Sound.USE_GRASS);
             }

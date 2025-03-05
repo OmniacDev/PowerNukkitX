@@ -47,11 +47,11 @@ public class BlockObserver extends BlockSolid implements RedstoneComponent, Face
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         if (player != null) {
-            if (Math.abs(player.pos.getFloorX() - this.x) <= 1 && Math.abs(player.pos.getFloorZ() - this.z) <= 1) {
+            if (Math.abs(player.pos.getFloorX() - this.position.x) <= 1 && Math.abs(player.pos.getFloorZ() - this.position.z) <= 1) {
                 double y = player.pos.y + player.getEyeHeight();
-                if (y - this.y > 2) {
+                if (y - this.position.y > 2) {
                     setBlockFace(BlockFace.DOWN);
-                } else if (this.y - y > 0) {
+                } else if (this.position.y - y > 0) {
                     setBlockFace(BlockFace.UP);
                 } else {
                     setBlockFace(player.getHorizontalFacing());
@@ -61,7 +61,7 @@ public class BlockObserver extends BlockSolid implements RedstoneComponent, Face
             }
         }
 
-        this.getLevel().setBlock(block, this, true, true);
+        this.getLevel().setBlock(block.position, this, true, true);
         return true;
     }
 
@@ -94,7 +94,7 @@ public class BlockObserver extends BlockSolid implements RedstoneComponent, Face
                 level.getServer().getPluginManager().callEvent(new BlockRedstoneEvent(this, 0, 15));
                 setPowered(true);
 
-                if (level.setBlock(this, this)) {
+                if (level.setBlock(this.position, this)) {
                     getSide(getBlockFace().getOpposite()).onUpdate(Level.BLOCK_UPDATE_REDSTONE);
                     RedstoneComponent.updateAroundRedstone(getSide(getBlockFace().getOpposite()));
                     level.scheduleUpdate(this, 2);
@@ -103,7 +103,7 @@ public class BlockObserver extends BlockSolid implements RedstoneComponent, Face
                 pluginManager.callEvent(new BlockRedstoneEvent(this, 15, 0));
                 setPowered(false);
 
-                level.setBlock(this, this);
+                level.setBlock(this.position, this);
                 getSide(getBlockFace().getOpposite()).onUpdate(Level.BLOCK_UPDATE_REDSTONE);
                 RedstoneComponent.updateAroundRedstone(getSide(getBlockFace().getOpposite()));
             }
@@ -116,7 +116,7 @@ public class BlockObserver extends BlockSolid implements RedstoneComponent, Face
     public void onNeighborChange(@NotNull BlockFace side) {
         Server server = level.getServer();
         BlockFace blockFace = getBlockFace();
-        if (!server.getSettings().levelSettings().enableRedstone() || side != blockFace || level.isUpdateScheduled(this, this)) {
+        if (!server.getSettings().levelSettings().enableRedstone() || side != blockFace || level.isUpdateScheduled(this.position, this)) {
             return;
         }
 

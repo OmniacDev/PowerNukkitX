@@ -50,16 +50,16 @@ public class BlockCherrySapling extends BlockSapling implements BlockFlowerPot.F
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (isSupportInvalid()) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) { //Growth
-            if (getLevel().getFullLight(add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
+            if (getLevel().getFullLight(this.position.add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
                 if (isAged()) {
                     this.grow();
                 } else {
                     setAged(true);
-                    this.getLevel().setBlock(this, this, true);
+                    this.getLevel().setBlock(this.position, this, true);
                     return Level.BLOCK_UPDATE_RANDOM;
                 }
             } else {
@@ -71,9 +71,9 @@ public class BlockCherrySapling extends BlockSapling implements BlockFlowerPot.F
 
     private void grow() {
         BlockManager blockManager = new BlockManager(this.level);
-        Vector3 vector3 = new Vector3(this.x, this.y - 1, this.z);
+        Vector3 vector3 = new Vector3(this.position.x, this.position.y - 1, this.position.z);
         var objectCherryTree = new ObjectCherryTree();
-        boolean generate = objectCherryTree.generate(blockManager, RandomSourceProvider.create(), this);
+        boolean generate = objectCherryTree.generate(blockManager, RandomSourceProvider.create(), this.position);
         if (generate) {
             StructureGrowEvent ev = new StructureGrowEvent(this, blockManager.getBlocks());
             this.level.getServer().getPluginManager().callEvent(ev);
@@ -97,7 +97,7 @@ public class BlockCherrySapling extends BlockSapling implements BlockFlowerPot.F
             return false;
         }
 
-        this.level.setBlock(this, this, true, true);
+        this.level.setBlock(this.position, this, true, true);
         return true;
     }
 
@@ -113,7 +113,7 @@ public class BlockCherrySapling extends BlockSapling implements BlockFlowerPot.F
                 item.count--;
             }
 
-            this.level.addParticle(new BoneMealParticle(this));
+            this.level.addParticle(new BoneMealParticle(this.position));
             if (ThreadLocalRandom.current().nextFloat() >= 0.45) {
                 return true;
             }

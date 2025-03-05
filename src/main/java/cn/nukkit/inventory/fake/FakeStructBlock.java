@@ -28,7 +28,7 @@ public class FakeStructBlock extends SingleFakeBlock {
 
     @Override
     public void create(Player player) {
-        var pos = player.getPosition().floor().asBlockVector3();
+        var pos = player.getPosition().position.floor().asBlockVector3();
         create(pos, pos, player);
     }
 

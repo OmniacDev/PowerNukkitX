@@ -83,7 +83,7 @@ public class BlockTarget extends BlockTransparent implements RedstoneComponent, 
 
         BlockEntityTarget target = getOrCreateBlockEntity();
         int previous = target.getActivePower();
-        level.cancelSheduledUpdate(this, this);
+        level.cancelSheduledUpdate(this.position, this);
         level.scheduleUpdate(this, ticks);
         target.setActivePower(power);
         if (previous != power) {
@@ -122,7 +122,7 @@ public class BlockTarget extends BlockTransparent implements RedstoneComponent, 
             ticks = 20;
         }
 
-        MovingObjectPosition intercept = calculateIntercept(locator, locator.add(motion.multiply(2)));
+        MovingObjectPosition intercept = calculateIntercept(locator.position, locator.position.add(motion.multiply(2)));
         if (intercept == null) {
             return false;
         }

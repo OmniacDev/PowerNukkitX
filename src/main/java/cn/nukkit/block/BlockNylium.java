@@ -27,7 +27,7 @@ public abstract class BlockNylium extends BlockSolid implements Natural {
     @Override
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_RANDOM && !up().isTransparent()) {
-            level.setBlock(this, Block.get(NETHERRACK), false);
+            level.setBlock(this.position, Block.get(NETHERRACK), false);
             return type;
         }
         return 0;
@@ -51,14 +51,14 @@ public abstract class BlockNylium extends BlockSolid implements Natural {
 
         grow();
 
-        level.addParticle(new BoneMealParticle(up));
+        level.addParticle(new BoneMealParticle(up.position));
 
         return true;
     }
 
     public boolean grow() {
         BlockManager blockManager = new BlockManager(this.level);
-        ObjectNyliumVegetation.growVegetation(blockManager, this, new NukkitRandom());
+        ObjectNyliumVegetation.growVegetation(blockManager, this.position, new NukkitRandom());
         blockManager.applySubChunkUpdate();
         return true;
     }

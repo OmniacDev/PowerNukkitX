@@ -81,11 +81,11 @@ public class BlockLodestone extends BlockSolid implements BlockEntityHolder<Bloc
             player.getInventory().setItemInHand(clone);
             for (Item failed : player.getInventory().addItem(compass)) {
                 added = false;
-                player.getLevel().dropItem(player.getPosition(), failed);
+                player.getLevel().dropItem(player.getPosition().position, failed);
             }
         }
-        
-        getLevel().addSound(player.getPosition(), Sound.LODESTONE_COMPASS_LINK_COMPASS_TO_LODESTONE);
+
+        getLevel().addSound(player.getPosition().position, Sound.LODESTONE_COMPASS_LINK_COMPASS_TO_LODESTONE);
         
         if (added) {
             try {

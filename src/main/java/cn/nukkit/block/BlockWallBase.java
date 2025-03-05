@@ -89,7 +89,7 @@ public abstract class BlockWallBase extends BlockTransparent implements BlockCon
         if (boundingBox == null) {
             return false;
         }
-        boundingBox = boundingBox.getOffsetBoundingBox(-above.x, -above.y, -above.z);
+        boundingBox = boundingBox.getOffsetBoundingBox(-above.position.x, -above.position.y, -above.position.z);
         if (boundingBox.getMinY() > 0) {
             return false;
         }
@@ -143,7 +143,7 @@ public abstract class BlockWallBase extends BlockTransparent implements BlockCon
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (autoConfigureState()) {
-                level.setBlock(this, this, true);
+                level.setBlock(this.position, this, true);
             }
             return type;
         }
@@ -391,12 +391,12 @@ public abstract class BlockWallBase extends BlockTransparent implements BlockCon
         }
 
         return new SimpleAxisAlignedBB(
-                this.x + w,
-                this.y,
-                this.z + n,
-                this.x + e,
-                this.y + 1.5,
-                this.z + s
+                this.position.x + w,
+                this.position.y,
+                this.position.z + n,
+                this.position.x + e,
+                this.position.y + 1.5,
+                this.position.z + s
         );
     }
 
@@ -411,13 +411,13 @@ public abstract class BlockWallBase extends BlockTransparent implements BlockCon
                     return true;
                 }
                 if (block instanceof BlockFenceGate fenceGate) {
-                    return fenceGate.getBlockFace().getAxis() != calculateAxis(this, block);
+                    return fenceGate.getBlockFace().getAxis() != calculateAxis(this.position, block.position);
                 }
                 if (block instanceof BlockStairs) {
-                    return ((BlockStairs) block).getBlockFace().getOpposite() == calculateFace(this, block);
+                    return ((BlockStairs) block).getBlockFace().getOpposite() == calculateFace(this.position, block.position);
                 }
                 if (block instanceof BlockTrapdoor trapdoor) {
-                    return trapdoor.isOpen() && trapdoor.getBlockFace() == calculateFace(this, trapdoor);
+                    return trapdoor.isOpen() && trapdoor.getBlockFace() == calculateFace(this.position, trapdoor.position);
                 }
                 return block.isSolid() && !block.isTransparent();
             }

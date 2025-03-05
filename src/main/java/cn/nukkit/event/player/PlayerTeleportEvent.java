@@ -50,8 +50,8 @@ public class PlayerTeleportEvent extends PlayerEvent implements Cancellable {
     }
 
     private Transform vectorToLocation(Level baseLevel, Vector3 vector) {
-        if (vector instanceof Transform) return (Transform) vector;
-        if (vector instanceof Locator) return ((Locator) vector).getLocation();
+//        if (vector instanceof Transform) return (Transform) vector;
+//        if (vector instanceof Locator) return ((Locator) vector).getLocation();
         return new Transform(vector.getX(), vector.getY(), vector.getZ(), 0, 0, baseLevel);
     }
 

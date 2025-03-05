@@ -71,14 +71,14 @@ public class BlockBrewingStand extends BlockTransparent implements BlockEntityHo
 
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        getLevel().setBlock(block, this, true, true);
+        getLevel().setBlock(block.position, this, true, true);
 
         CompoundTag nbt = new CompoundTag()
                 .putList("Items", new ListTag<>())
                 .putString("id", BlockEntity.BREWING_STAND)
-                .putInt("x", (int) this.x)
-                .putInt("y", (int) this.y)
-                .putInt("z", (int) this.z);
+                .putInt("x", (int) this.position.x)
+                .putInt("y", (int) this.position.y)
+                .putInt("z", (int) this.position.z);
 
         if (item.hasCustomName()) {
             nbt.putString("CustomName", item.getCustomName());
@@ -91,7 +91,7 @@ public class BlockBrewingStand extends BlockTransparent implements BlockEntityHo
             }
         }
 
-        BlockEntityBrewingStand brewing = (BlockEntityBrewingStand) BlockEntity.createBlockEntity(BlockEntity.BREWING_STAND, getLevel().getChunk((int) this.x >> 4, (int) this.z >> 4), nbt);
+        BlockEntityBrewingStand brewing = (BlockEntityBrewingStand) BlockEntity.createBlockEntity(BlockEntity.BREWING_STAND, getLevel().getChunk((int) this.position.x >> 4, (int) this.position.z >> 4), nbt);
         return brewing != null;
     }
 
@@ -102,7 +102,7 @@ public class BlockBrewingStand extends BlockTransparent implements BlockEntityHo
             if (player.isSneaking() && !(itemInHand.isTool() || itemInHand.isNull())) {
                 return false;
             }
-            BlockEntity t = getLevel().getBlockEntity(this);
+            BlockEntity t = getLevel().getBlockEntity(this.position);
             BlockEntityBrewingStand brewing;
             if (t instanceof BlockEntityBrewingStand) {
                 brewing = (BlockEntityBrewingStand) t;
@@ -110,10 +110,10 @@ public class BlockBrewingStand extends BlockTransparent implements BlockEntityHo
                 CompoundTag nbt = new CompoundTag()
                         .putList("Items", new ListTag<>())
                         .putString("id", BlockEntity.BREWING_STAND)
-                        .putInt("x", (int) this.x)
-                        .putInt("y", (int) this.y)
-                        .putInt("z", (int) this.z);
-                brewing = (BlockEntityBrewingStand) BlockEntity.createBlockEntity(BlockEntity.BREWING_STAND, this.getLevel().getChunk((int) (this.x) >> 4, (int) (this.z) >> 4), nbt);
+                        .putInt("x", (int) this.position.x)
+                        .putInt("y", (int) this.position.y)
+                        .putInt("z", (int) this.position.z);
+                brewing = (BlockEntityBrewingStand) BlockEntity.createBlockEntity(BlockEntity.BREWING_STAND, this.getLevel().getChunk((int) this.position.x >> 4, (int) this.position.z >> 4), nbt);
                 if (brewing == null) {
                     return false;
                 }
@@ -143,27 +143,27 @@ public class BlockBrewingStand extends BlockTransparent implements BlockEntityHo
 
     @Override
     public double getMinX() {
-        return this.x + 7 / 16.0;
+        return this.position.x + 7 / 16.0;
     }
 
     @Override
     public double getMinZ() {
-        return this.z + 7 / 16.0;
+        return this.position.z + 7 / 16.0;
     }
 
     @Override
     public double getMaxX() {
-        return this.x + 1 - 7 / 16.0;
+        return this.position.x + 1 - 7 / 16.0;
     }
 
     @Override
     public double getMaxY() {
-        return this.y + 1 - 2 / 16.0;
+        return this.position.y + 1 - 2 / 16.0;
     }
 
     @Override
     public double getMaxZ() {
-        return this.z + 1 - 7 / 16.0;
+        return this.position.z + 1 - 7 / 16.0;
     }
 
     @Override
@@ -173,7 +173,7 @@ public class BlockBrewingStand extends BlockTransparent implements BlockEntityHo
 
     @Override
     public int getComparatorInputOverride() {
-        BlockEntity blockEntity = this.level.getBlockEntity(this);
+        BlockEntity blockEntity = this.level.getBlockEntity(this.position);
 
         if (blockEntity instanceof BlockEntityBrewingStand) {
             return ContainerInventory.calculateRedstone(((BlockEntityBrewingStand) blockEntity).getInventory());

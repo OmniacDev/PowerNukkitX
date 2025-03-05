@@ -40,9 +40,9 @@ public class ShulkerAttackExecutor implements IBehaviorExecutor {
             Transform bulletTransform = entity.getLocation().clone().add(new Vector3(target.pos.x - entity.pos.x, target.pos.y - entity.pos.y, target.pos.z - entity.pos.z).normalize()).add(0, 0.5f, 0);
             CompoundTag nbt = new CompoundTag()
                     .putList("Pos", new ListTag<FloatTag>()
-                            .add(new FloatTag(bulletTransform.x))
-                            .add(new FloatTag(bulletTransform.y))
-                            .add(new FloatTag(bulletTransform.z)))
+                            .add(new FloatTag(bulletTransform.position.x))
+                            .add(new FloatTag(bulletTransform.position.y))
+                            .add(new FloatTag(bulletTransform.position.z)))
                     .putList("Motion", new ListTag<FloatTag>()
                             .add(new FloatTag(0))
                             .add(new FloatTag(0))

@@ -41,7 +41,7 @@ public class FloatingTextParticle extends Particle {
     }
 
     public FloatingTextParticle(Transform transform, String title, String text) {
-        this(transform.getLevel(), transform, title, text);
+        this(transform.getLevel(), transform.position, title, text);
     }
 
     public FloatingTextParticle(Vector3 pos, String title) {

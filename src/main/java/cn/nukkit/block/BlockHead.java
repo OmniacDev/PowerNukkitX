@@ -136,7 +136,7 @@ public abstract class BlockHead extends BlockTransparent implements RedstoneComp
 
     @Override
     protected AxisAlignedBB recalculateBoundingBox() {
-        AxisAlignedBB bb = new SimpleAxisAlignedBB(this.x + 0.25, this.y, this.z + 0.25, this.x + 1 - 0.25, this.y + 0.5, this.z + 1 - 0.25);
+        AxisAlignedBB bb = new SimpleAxisAlignedBB(this.position.x + 0.25, this.position.y, this.position.z + 0.25, this.position.x + 1 - 0.25, this.position.y + 0.5, this.position.z + 1 - 0.25);
         return switch (this.getBlockFace()) {
             case NORTH -> bb.offset(0, 0.25, 0.25);
             case SOUTH -> bb.offset(0, 0.25, -0.25);

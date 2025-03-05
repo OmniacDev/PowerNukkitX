@@ -46,7 +46,7 @@ public class BlockWallSign extends BlockStandingSign {
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (this.getSide(getBlockFace().getOpposite()).isAir()) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
             }
             return Level.BLOCK_UPDATE_NORMAL;
         }

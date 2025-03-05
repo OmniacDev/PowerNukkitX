@@ -59,13 +59,13 @@ public abstract class BlockSignBase extends BlockTransparent implements Faceable
     @Override
     public void onTouch(@NotNull Vector3 vector, @NotNull Item item, @NotNull BlockFace face, float fx, float fy, float fz, @Nullable Player player, PlayerInteractEvent.@NotNull Action action) {
         if(action== PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK){
-            var blockEntity = this.getLevel().getBlockEntity(this);
+            var blockEntity = this.getLevel().getBlockEntity(this.position);
             if (!(blockEntity instanceof BlockEntitySign sign)) {
                 return;
             }
             // If a sign is waxed, it cannot be modified.
             if (sign.isWaxed() || (Objects.requireNonNull(player).isSneaking() && !Objects.equals(item.getId(), AIR))) {
-                level.addLevelSoundEvent(this.add(0.5, 0.5, 0.5), LevelSoundEventPacket.SOUND_WAXED_SIGN_INTERACT_FAIL);
+                level.addLevelSoundEvent(this.position.add(0.5, 0.5, 0.5), LevelSoundEventPacket.SOUND_WAXED_SIGN_INTERACT_FAIL);
                 return;
             }
             boolean front = switch (getSignDirection()) {
@@ -81,7 +81,7 @@ public abstract class BlockSignBase extends BlockTransparent implements Faceable
             if (item instanceof ItemDye dye) {
                 BlockColor color = dye.getDyeColor().getColor();
                 if (color.equals(sign.getColor(front)) || sign.isEmpty(front)) {
-                    player.openSignEditor(this, front);
+                    player.openSignEditor(this.position, front);
                     return;
                 }
                 SignColorChangeEvent event = new SignColorChangeEvent(this, player, color);
@@ -92,14 +92,14 @@ public abstract class BlockSignBase extends BlockTransparent implements Faceable
                 }
                 sign.setColor(front, color);
                 sign.spawnToAll();
-                this.level.addLevelEvent(this, LevelEventPacket.EVENT_SOUND_DYE_USED);
+                this.level.addLevelEvent(this.position, LevelEventPacket.EVENT_SOUND_DYE_USED);
                 if ((player.getGamemode() & 0x01) == 0) {
                     item.count--;
                 }
                 return;
             } else if (item instanceof ItemGlowInkSac) {
                 if (sign.isGlowing(front) || sign.isEmpty(front)) {
-                    player.openSignEditor(this, front);
+                    player.openSignEditor(this.position, front);
                     return;
                 }
                 SignGlowEvent event = new SignGlowEvent(this, player, true);
@@ -110,7 +110,7 @@ public abstract class BlockSignBase extends BlockTransparent implements Faceable
                 }
                 sign.setGlowing(front, true);
                 sign.spawnToAll();
-                this.level.addLevelEvent(this, LevelEventPacket.EVENT_SOUND_INK_SACE_USED);
+                this.level.addLevelEvent(this.position, LevelEventPacket.EVENT_SOUND_INK_SACE_USED);
                 if ((player.getGamemode() & 0x01) == 0) {
                     item.count--;
                 }
@@ -124,13 +124,13 @@ public abstract class BlockSignBase extends BlockTransparent implements Faceable
                 }
                 sign.setWaxed(true);
                 sign.spawnToAll();
-                this.getLevel().addParticle(new WaxOnParticle(this));
+                this.getLevel().addParticle(new WaxOnParticle(this.position));
                 if ((player.getGamemode() & 0x01) == 0) {
                     item.count--;
                 }
                 return;
             }
-            player.openSignEditor(this, front);
+            player.openSignEditor(this.position, front);
         }
     }
 

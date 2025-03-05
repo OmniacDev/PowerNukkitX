@@ -46,29 +46,29 @@ public class BlockBambooSapling extends BlockSapling {
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (isSupportInvalid()) {
-                level.useBreakOn(this, null, null, true);
+                level.useBreakOn(this.position, null, null, true);
             } else {
                 Block up = up();
                 if (up.getId().equals(BAMBOO)) {
                     BlockBamboo upperBamboo = (BlockBamboo) up;
                     BlockBamboo newState = new BlockBamboo();
                     newState.setThick(upperBamboo.isThick());
-                    level.setBlock(this, newState, true, true);
+                    level.setBlock(this.position, newState, true, true);
                 }
             }
             return type;
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             Block up = up();
-            if (!isAge() && up.isAir() && level.getFullLight(up) >= BlockCrops.MINIMUM_LIGHT_LEVEL && ThreadLocalRandom.current().nextInt(3) == 0) {
+            if (!isAge() && up.isAir() && level.getFullLight(up.position) >= BlockCrops.MINIMUM_LIGHT_LEVEL && ThreadLocalRandom.current().nextInt(3) == 0) {
                 BlockBamboo newState = new BlockBamboo();
                 newState.setBambooLeafSize(BambooLeafSize.SMALL_LEAVES);
                 BlockGrowEvent blockGrowEvent = new BlockGrowEvent(up, newState);
                 level.getServer().getPluginManager().callEvent(blockGrowEvent);
                 if (!blockGrowEvent.isCancelled()) {
                     Block newState1 = blockGrowEvent.getNewState();
-                    newState1.y = up.y;
-                    newState1.x = x;
-                    newState1.z = z;
+                    newState1.position.y = up.position.y;
+                    newState1.position.x = x;
+                    newState1.position.z = z;
                     newState1.level = level;
                     newState1.place(toItem(), up, this, BlockFace.DOWN, 0.5, 0.5, 0.5, null);
                 }
@@ -88,7 +88,7 @@ public class BlockBambooSapling extends BlockSapling {
             return false;
         }
 
-        this.level.setBlock(this, this, true, true);
+        this.level.setBlock(this.position, this, true, true);
         return true;
     }
 
@@ -107,7 +107,7 @@ public class BlockBambooSapling extends BlockSapling {
                     item.count--;
                 }
 
-                level.addParticle(new BoneMealParticle(this));
+                level.addParticle(new BoneMealParticle(this.position));
             }
 
             return true;
@@ -117,9 +117,9 @@ public class BlockBambooSapling extends BlockSapling {
 
     public boolean grow(Block up) {
         BlockBamboo bamboo = new BlockBamboo();
-        bamboo.x = x;
-        bamboo.y = y;
-        bamboo.z = z;
+        bamboo.position.x = x;
+        bamboo.position.y = y;
+        bamboo.position.z = z;
         bamboo.level = level;
         return bamboo.grow(up);
     }

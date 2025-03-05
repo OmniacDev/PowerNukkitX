@@ -70,7 +70,7 @@ public abstract class BlockStairsCopperBase extends BlockStairs implements Waxab
             return true;
         }
 
-        return getLevel().setBlock(this, Block.get(getCopperId(isWaxed(), oxidizationLevel)).setPropertyValues(getPropertyValues()));
+        return getLevel().setBlock(this.position, Block.get(getCopperId(isWaxed(), oxidizationLevel)).setPropertyValues(getPropertyValues()));
     }
 
     @Override
@@ -78,7 +78,7 @@ public abstract class BlockStairsCopperBase extends BlockStairs implements Waxab
         if (isWaxed() == waxed) {
             return true;
         }
-        return getLevel().setBlock(this, Block.get(getCopperId(isWaxed(), getOxidizationLevel())).setPropertyValues(getPropertyValues()));
+        return getLevel().setBlock(this.position, Block.get(getCopperId(isWaxed(), getOxidizationLevel())).setPropertyValues(getPropertyValues()));
     }
 
     @Override

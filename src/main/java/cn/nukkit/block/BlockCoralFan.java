@@ -44,7 +44,7 @@ public abstract class BlockCoralFan extends BlockFlowable implements Faceable {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             Block side = getSide(getRootsFace());
             if (!side.isSolid() || side.getId().equals(MAGMA) || side.getId().equals(SOUL_SAND)) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
             } else {
                 this.getLevel().scheduleUpdate(this, 60 + ThreadLocalRandom.current().nextInt(40));
             }
@@ -52,14 +52,14 @@ public abstract class BlockCoralFan extends BlockFlowable implements Faceable {
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
             Block side = getSide(getRootsFace());
             if (side.getId().equals(ICE)) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return type;
             }
 
             if (!isDead() && !(getLevelBlockAtLayer(1) instanceof BlockFlowingWater) && !(getLevelBlockAtLayer(1) instanceof BlockFrostedIce)) {
                 BlockFadeEvent event = new BlockFadeEvent(this, getDeadCoralFan());
                 if (!event.isCancelled()) {
-                    this.getLevel().setBlock(this, event.getNewState(), true, true);
+                    this.getLevel().setBlock(this.position, event.getNewState(), true, true);
                 }
             }
             return type;
@@ -69,7 +69,7 @@ public abstract class BlockCoralFan extends BlockFlowable implements Faceable {
             } else {
                 setPropertyValue(CORAL_FAN_DIRECTION, 0);
             }
-            this.getLevel().setBlock(this, this, true, true);
+            this.getLevel().setBlock(this.position, this, true, true);
             return type;
         }
         return 0;
@@ -88,7 +88,7 @@ public abstract class BlockCoralFan extends BlockFlowable implements Faceable {
         }
 
         if (hasWater && layer1.blockstate.specialValue() == 8) {
-            this.getLevel().setBlock(this, 1, new BlockFlowingWater(), true, false);
+            this.getLevel().setBlock(this.position, 1, new BlockFlowingWater(), true, false);
         }
 
         if (!target.isSolid() || target.getId().equals(MAGMA) || target.getId().equals(SOUL_SAND)) {
@@ -102,10 +102,10 @@ public abstract class BlockCoralFan extends BlockFlowable implements Faceable {
             }
             int axisBit = rotation >= 0 && rotation < 12 || (342 <= rotation && rotation < 360) ? 0 : 1;
             setPropertyValue(CORAL_FAN_DIRECTION, axisBit);
-            this.getLevel().setBlock(this, 0, hasWater ? this.clone() : getDeadCoralFan().setPropertyValues(blockstate.getBlockPropertyValues()), true, true);
+            this.getLevel().setBlock(this.position, 0, hasWater ? this.clone() : getDeadCoralFan().setPropertyValues(blockstate.getBlockPropertyValues()), true, true);
         } else {
             Block deadBlock = getDeadCoralFan();
-            this.getLevel().setBlock(this, 0, deadBlock, true, true);
+            this.getLevel().setBlock(this.position, 0, deadBlock, true, true);
         }
 
         return true;

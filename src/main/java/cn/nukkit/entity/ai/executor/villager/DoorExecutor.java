@@ -13,7 +13,7 @@ public class DoorExecutor implements EntityControl, IBehaviorExecutor {
     public DoorExecutor() {}
     @Override
     public boolean execute(EntityMob entity) {
-        return entity.getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_DOOR) && entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_DOOR).asVector3f().equals(entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_BLOCK_2).asVector3f());
+        return entity.getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_DOOR) && entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_DOOR).position.asVector3f().equals(entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_BLOCK_2).position.asVector3f());
     }
 
     @Override

@@ -121,7 +121,7 @@ public class BlockGrindstone extends BlockTransparent implements Faceable, Block
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!checkSupport()) {
-                this.level.useBreakOn(this, Item.get(Item.DIAMOND_PICKAXE));
+                this.level.useBreakOn(this.position, Item.get(Item.DIAMOND_PICKAXE));
             }
             return type;
         }
@@ -150,7 +150,7 @@ public class BlockGrindstone extends BlockTransparent implements Faceable, Block
         if (!checkSupport()) {
             return false;
         }
-        this.level.setBlock(this, this, true, true);
+        this.level.setBlock(this.position, this, true, true);
         return true;
     }
 
@@ -190,12 +190,12 @@ public class BlockGrindstone extends BlockTransparent implements Faceable, Block
         double u = up ? 1 : 1 - pixels;
 
         return new SimpleAxisAlignedBB(
-                this.x + w,
-                this.y + d,
-                this.z + n,
-                this.x + e,
-                this.y + u,
-                this.z + s
+                this.position.x + w,
+                this.position.y + d,
+                this.position.z + n,
+                this.position.x + e,
+                this.position.y + u,
+                this.position.z + s
         );
     }
 

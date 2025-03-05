@@ -16,7 +16,7 @@ public class ShearsDispenseBehavior extends DefaultDispenseBehavior {
         var bb = new SimpleAxisAlignedBB(
                 0, 0, 0,
                 1, 1, 1)
-                .offset(target.x, target.y, target.z);
+                .offset(target.position.x, target.position.y, target.position.z);
         for (var entity : block.level.getCollidingEntities(bb)) {
             if (!(entity instanceof EntityShearable shearable)) { continue; }
             if (!shearable.shear()) { continue; }

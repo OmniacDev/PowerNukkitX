@@ -63,7 +63,7 @@ public abstract class BlockCoralBlock extends BlockSolid {
                 }
                 BlockFadeEvent event = new BlockFadeEvent(this, toDead());
                 if (!event.isCancelled()) {
-                    this.getLevel().setBlock(this, event.getNewState(), true, true);
+                    this.getLevel().setBlock(this.position, event.getNewState(), true, true);
                 }
             }
             return type;

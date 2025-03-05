@@ -56,7 +56,7 @@ public class BlockSeaPickle extends BlockFlowable {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             Block down = down();
             if (!down.isSolid() || down.getId().equals(ICE)) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return type;
             }
 
@@ -65,14 +65,14 @@ public class BlockSeaPickle extends BlockFlowable {
                 if (isDead() && (layer1.getId().equals(FROSTED_ICE) || layer1.getPropertyValue(CommonBlockProperties.LIQUID_DEPTH) == 0 || layer1.getPropertyValue(CommonBlockProperties.LIQUID_DEPTH) == 8)) {
                     BlockFadeEvent event = new BlockFadeEvent(this, new BlockSeaPickle().setPropertyValue(DEAD_BIT, !isDead()));
                     if (!event.isCancelled()) {
-                        this.getLevel().setBlock(this, event.getNewState(), true, true);
+                        this.getLevel().setBlock(this.position, event.getNewState(), true, true);
                     }
                     return type;
                 }
             } else if (!isDead()) {
                 BlockFadeEvent event = new BlockFadeEvent(this, new BlockSeaPickle().setPropertyValue(DEAD_BIT, !isDead()));
                 if (!event.isCancelled()) {
-                    this.getLevel().setBlock(this, event.getNewState(), true, true);
+                    this.getLevel().setBlock(this.position, event.getNewState(), true, true);
                 }
             }
 
@@ -86,7 +86,7 @@ public class BlockSeaPickle extends BlockFlowable {
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         if (target.getId().equals(SEA_PICKLE) && target.getPropertyValue(CLUSTER_COUNT) < 3) {
             target.setPropertyValue(CLUSTER_COUNT, target.getPropertyValue(CLUSTER_COUNT) + 1);
-            this.getLevel().setBlock(target, target, true, true);
+            this.getLevel().setBlock(target.position, target, true, true);
             return true;
         }
 
@@ -102,13 +102,13 @@ public class BlockSeaPickle extends BlockFlowable {
                 }
 
                 if (w.getLiquidDepth() == 8) {
-                    this.getLevel().setBlock(block, 1, new BlockFlowingWater(), true, false);
+                    this.getLevel().setBlock(block.position, 1, new BlockFlowingWater(), true, false);
                 }
             } else {
                 setDead(true);
             }
 
-            this.getLevel().setBlock(block, 0, this, true, true);
+            this.getLevel().setBlock(block.position, 0, this, true, true);
 
             return true;
         }
@@ -136,8 +136,8 @@ public class BlockSeaPickle extends BlockFlowable {
                 return false;
             }
 
-            this.getLevel().setBlock(this, blockGrowEvent.getNewState(), false, true);
-            this.level.addParticle(new BoneMealParticle(this));
+            this.getLevel().setBlock(this.position, blockGrowEvent.getNewState(), false, true);
+            this.level.addParticle(new BoneMealParticle(this.position));
 
             if (player != null && (player.gamemode & 0x01) == 0) {
                 item.count--;
@@ -150,11 +150,11 @@ public class BlockSeaPickle extends BlockFlowable {
                     Block up = blockNearby.up();
                     if (up instanceof BlockFlowingWater w &&
                             (w.getLiquidDepth() == 0 || w.getLiquidDepth() == 8) &&
-                            random.nextInt(6) == 0 && new Vector2(up.x, up.z).distance(new Vector2(this.x, this.z)) <= 2) {
+                            random.nextInt(6) == 0 && new Vector2(up.position.x, up.position.z).distance(new Vector2(this.position.x, this.position.z)) <= 2) {
                         BlockSpreadEvent blockSpreadEvent = new BlockSpreadEvent(up, this, new BlockSeaPickle().setPropertyValue(CLUSTER_COUNT, random.nextInt(3)));
                         if (!blockSpreadEvent.isCancelled()) {
-                            this.getLevel().setBlock(up, 1, new BlockFlowingWater(), true, false);
-                            this.getLevel().setBlock(up, blockSpreadEvent.getNewState(), true, true);
+                            this.getLevel().setBlock(up.position, 1, new BlockFlowingWater(), true, false);
+                            this.getLevel().setBlock(up.position, blockSpreadEvent.getNewState(), true, true);
                         }
                     }
                 }

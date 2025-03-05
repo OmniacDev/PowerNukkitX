@@ -215,16 +215,17 @@ public class ItemBucket extends Item {
                 PlayerBucketFillEvent ev;
                 player.getServer().getPluginManager().callEvent(ev = new PlayerBucketFillEvent(player, block, face, target, this, result));
                 if (!ev.isCancelled()) {
-                    player.getLevel().setBlock(target, target.layer, Block.get(BlockID.AIR), true, true);
+                    player.getLevel().setBlock(target.position, target.layer, Block.get(BlockID.AIR), true, true);
 
-                    level.getVibrationManager().callVibrationEvent(new VibrationEvent(player, target.add(0.5, 0.5, 0.5), VibrationType.FLUID_PICKUP));
+                    level.getVibrationManager().callVibrationEvent(new VibrationEvent(player, target.position.add(0.5, 0.5, 0.5), VibrationType.FLUID_PICKUP));
 
                     // When water is removed ensure any adjacent still water is replaced with water that can flow.
                     for (BlockFace side : Plane.HORIZONTAL) {
                         Block b = target.getSideAtLayer(0, side);
                         if (b.getId().equals(BlockID.WATER)) {
-                            level.setBlock(b, Block.get(BlockID.FLOWING_WATER));
-                        } else if (b.getId().equals(BlockID.LAVA)) level.setBlock(b, Block.get(BlockID.FLOWING_LAVA));
+                            level.setBlock(b.position, Block.get(BlockID.FLOWING_WATER));
+                        } else if (b.getId().equals(BlockID.LAVA))
+                            level.setBlock(b.position, Block.get(BlockID.FLOWING_LAVA));
                     }
 
                     if (player.isSurvival()) {
@@ -244,11 +245,11 @@ public class ItemBucket extends Item {
                     }
 
                     if (target instanceof BlockFlowingLava) {
-                        level.addSound(block, Sound.BUCKET_FILL_LAVA);
+                        level.addSound(block.position, Sound.BUCKET_FILL_LAVA);
                     } else if (target instanceof BlockFlowingWater) {
-                        level.addSound(block, Sound.BUCKET_FILL_WATER);
+                        level.addSound(block.position, Sound.BUCKET_FILL_WATER);
                     } else if (target instanceof BlockPowderSnow) {
-                        level.addSound(block, Sound.BUCKET_FILL_POWDER_SNOW);
+                        level.addSound(block.position, Sound.BUCKET_FILL_POWDER_SNOW);
                     }
 
                     return true;
@@ -291,9 +292,9 @@ public class ItemBucket extends Item {
             player.getServer().getPluginManager().callEvent(ev);
 
             if (!ev.isCancelled()) {
-                player.getLevel().setBlock(placementBlock, placementBlock.layer, targetBlock, true, true);
-                player.getLevel().sendBlocks(new Player[]{player}, new Block[]{target.getLevelBlockAtLayer(1)}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
-                target.getLevel().getVibrationManager().callVibrationEvent(new VibrationEvent(player, target.add(0.5, 0.5, 0.5), VibrationType.FLUID_PLACE));
+                player.getLevel().setBlock(placementBlock.position, placementBlock.layer, targetBlock, true, true);
+                player.getLevel().sendBlocks(new Player[]{player}, new Vector3[]{target.getLevelBlockAtLayer(1).position}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
+                target.getLevel().getVibrationManager().callVibrationEvent(new VibrationEvent(player, target.position.add(0.5, 0.5, 0.5), VibrationType.FLUID_PLACE));
                 updateBucketItem(player, ev);
 
                 afterUse(level, block);
@@ -304,10 +305,10 @@ public class ItemBucket extends Item {
                     this.setDamage(0); // Empty bucket
                     player.getInventory().setItemInHand(this);
                 }
-                player.getLevel().addLevelSoundEvent(target, LevelSoundEventPacket.SOUND_FIZZ);
-                player.getLevel().addParticle(new ExplodeParticle(target.add(0.5, 1, 0.5)));
+                player.getLevel().addLevelSoundEvent(target.position, LevelSoundEventPacket.SOUND_FIZZ);
+                player.getLevel().addParticle(new ExplodeParticle(target.position.add(0.5, 1, 0.5)));
             } else {
-                player.getLevel().sendBlocks(new Player[]{player}, new Block[]{block.getLevelBlockAtLayer(1)}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
+                player.getLevel().sendBlocks(new Player[]{player}, new Vector3[]{block.getLevelBlockAtLayer(1).position}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
                 player.getInventory().sendContents(player);
             }
         } else if (targetBlock instanceof BlockPowderSnow) {
@@ -320,12 +321,12 @@ public class ItemBucket extends Item {
             }
             PlayerBucketEmptyEvent ev = new PlayerBucketEmptyEvent(player, targetBlock, face, target, this, result);
             if (!ev.isCancelled()) {
-                target.getLevel().setBlock(target, targetBlock, true, true);
-                player.getLevel().addSound(target, Sound.BUCKET_FILL_POWDER_SNOW);
+                target.getLevel().setBlock(target.position, targetBlock, true, true);
+                player.getLevel().addSound(target.position, Sound.BUCKET_FILL_POWDER_SNOW);
 
                 updateBucketItem(player, ev);
 
-                target.getLevel().getVibrationManager().callVibrationEvent(new VibrationEvent(player, target.add(0.5, 0.5, 0.5), VibrationType.BLOCK_PLACE));
+                target.getLevel().getVibrationManager().callVibrationEvent(new VibrationEvent(player, target.position.add(0.5, 0.5, 0.5), VibrationType.BLOCK_PLACE));
             }
         }
 
@@ -364,9 +365,9 @@ public class ItemBucket extends Item {
      */
     protected void afterUse(Level level, Block block) {
         if (isLava()) {
-            level.addSound(block, Sound.BUCKET_EMPTY_LAVA);
+            level.addSound(block.position, Sound.BUCKET_EMPTY_LAVA);
         } else {
-            level.addSound(block, Sound.BUCKET_EMPTY_WATER);
+            level.addSound(block.position, Sound.BUCKET_EMPTY_WATER);
         }
 
         spawnFishEntity(block.add(0.5, 0.5, 0.5));

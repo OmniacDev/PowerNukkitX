@@ -53,21 +53,21 @@ public class BlockGrassBlock extends BlockDirt {
             if (player != null && (player.gamemode & 0x01) == 0) {
                 item.count--;
             }
-            this.level.addParticle(new BoneMealParticle(this));
+            this.level.addParticle(new BoneMealParticle(this.position));
             BlockManager blockManager = new BlockManager(this.level);
-            LegacyTallGrass.growGrass(blockManager, this, new NukkitRandom());
+            LegacyTallGrass.growGrass(blockManager, this.position, new NukkitRandom());
             blockManager.applyBlockUpdate();
             return true;
         } else if (item.isHoe()) {
             item.useOn(this);
-            this.getLevel().setBlock(this, Block.get(BlockID.FARMLAND));
+            this.getLevel().setBlock(this.position, Block.get(BlockID.FARMLAND));
             if (player != null) {
                 player.getLevel().addSound(player.pos, Sound.USE_GRASS);
             }
             return true;
         } else if (item.isShovel()) {
             item.useOn(this);
-            this.getLevel().setBlock(this, Block.get(BlockID.GRASS_PATH));
+            this.getLevel().setBlock(this.position, Block.get(BlockID.GRASS_PATH));
             if (player != null) {
                 player.getLevel().addSound(player.pos, Sound.USE_GRASS);
             }
@@ -89,7 +89,7 @@ public class BlockGrassBlock extends BlockDirt {
                 BlockFadeEvent ev = new BlockFadeEvent(this, Block.get(BlockID.DIRT));
                 Server.getInstance().getPluginManager().callEvent(ev);
                 if (!ev.isCancelled()) {
-                    this.getLevel().setBlock(this, ev.getNewState());
+                    this.getLevel().setBlock(this.position, ev.getNewState());
                     return type;
                 }
             }
@@ -99,25 +99,25 @@ public class BlockGrassBlock extends BlockDirt {
             // For a dirt block to accept grass from a nearby grass block, the following requirements must be met:
 
             // The source block must have a light level of 9 or brighter directly above it.
-            if (getLevel().getFullLight(add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
+            if (getLevel().getFullLight(this.position.add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
 
                 // The dirt block receiving grass must be within a 3×5×3 range of the source block
                 // where the source block is in the center of the second topmost layer of that range.
                 ThreadLocalRandom random = ThreadLocalRandom.current();
-                int x = random.nextInt((int) this.x - 1, (int) this.x + 1 + 1);
-                int y = random.nextInt((int) this.y - 3, (int) this.y + 1 + 1);
-                int z = random.nextInt((int) this.z - 1, (int) this.z + 1 + 1);
+                int x = random.nextInt((int) this.position.x - 1, (int) this.position.x + 1 + 1);
+                int y = random.nextInt((int) this.position.y - 3, (int) this.position.y + 1 + 1);
+                int z = random.nextInt((int) this.position.z - 1, (int) this.position.z + 1 + 1);
                 Block block = this.getLevel().getBlock(new Vector3(x, y, z));
                 if (block.getId().equals(Block.DIRT)
                         // The dirt block must have a light level of at least 4 above it.
-                        && getLevel().getFullLight(block) >= 4
+                        && getLevel().getFullLight(block.position) >= 4
 
                         // Any block directly above the dirt block must not reduce light by 2 levels or more.
                         && block.up().getLightFilter() < 2) {
                     BlockSpreadEvent ev = new BlockSpreadEvent(block, this, Block.get(BlockID.GRASS_BLOCK));
                     Server.getInstance().getPluginManager().callEvent(ev);
                     if (!ev.isCancelled()) {
-                        this.getLevel().setBlock(block, ev.getNewState());
+                        this.getLevel().setBlock(block.position, ev.getNewState());
                     }
                 }
             }

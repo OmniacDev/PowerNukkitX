@@ -100,7 +100,7 @@ public class BlockLitFurnace extends BlockSolid implements Faceable, BlockEntity
 
     @Override
     public boolean onBreak(Item item) {
-        this.getLevel().setBlock(this, Block.get(BlockID.AIR), true, true);
+        this.getLevel().setBlock(this.position, Block.get(BlockID.AIR), true, true);
         return true;
     }
 

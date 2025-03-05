@@ -23,7 +23,7 @@ public class StructureBlockUpdateProcessor extends DataPacketProcessor<Structure
                 Block sBlock = structBlock.getLevelBlock();
                 sBlock.setPropertyValue(STRUCTURE_BLOCK_TYPE, pk.editorData.getType());
                 structBlock.updateSetting(pk);
-                playerHandle.player.level.setBlock(structBlock, sBlock, true);
+                playerHandle.player.level.setBlock(structBlock.position, sBlock, true);
                 structBlock.spawnTo(playerHandle.player);
             }
         }

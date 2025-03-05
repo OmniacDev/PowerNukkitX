@@ -37,7 +37,7 @@ public abstract class BlockFallable extends BlockSolid {
     }
 
     public void drop(CompoundTag customNbt) {
-        this.level.setBlock(this, Block.get(Block.AIR), true, true);
+        this.level.setBlock(this.position, Block.get(Block.AIR), true, true);
         EntityFallingBlock fall = createFallingEntity(customNbt);
 
         fall.spawnToAll();
@@ -46,9 +46,9 @@ public abstract class BlockFallable extends BlockSolid {
     protected EntityFallingBlock createFallingEntity(CompoundTag customNbt) {
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(this.x + 0.5))
-                        .add(new FloatTag(this.y))
-                        .add(new FloatTag(this.z + 0.5)))
+                        .add(new FloatTag(this.position.x + 0.5))
+                        .add(new FloatTag(this.position.y))
+                        .add(new FloatTag(this.position.z + 0.5)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(0))
                         .add(new FloatTag(0))
@@ -62,7 +62,7 @@ public abstract class BlockFallable extends BlockSolid {
             nbt.put(e.getKey(), e.getValue().copy());
         }
 
-        EntityFallingBlock fall = (EntityFallingBlock) Entity.createEntity(Entity.FALLING_BLOCK, this.getLevel().getChunk((int) this.x >> 4, (int) this.z >> 4), nbt);
+        EntityFallingBlock fall = (EntityFallingBlock) Entity.createEntity(Entity.FALLING_BLOCK, this.getLevel().getChunk((int) this.position.x >> 4, (int) this.position.z >> 4), nbt);
 
         if (fall != null) {
             fall.spawnToAll();

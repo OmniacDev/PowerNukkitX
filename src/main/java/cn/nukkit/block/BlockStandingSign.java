@@ -67,7 +67,7 @@ public class BlockStandingSign extends BlockSignBase implements BlockEntityHolde
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (down().isAir()) {
-                getLevel().useBreakOn(this);
+                getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         }
@@ -88,8 +88,8 @@ public class BlockStandingSign extends BlockSignBase implements BlockEntityHolde
             return false;
         }
 
-        Block layer0 = level.getBlock(this, 0);
-        Block layer1 = level.getBlock(this, 1);
+        Block layer0 = level.getBlock(this.position, 0);
+        Block layer1 = level.getBlock(this.position, 1);
 
         CompoundTag nbt = new CompoundTag();
 
@@ -97,11 +97,11 @@ public class BlockStandingSign extends BlockSignBase implements BlockEntityHolde
             CompassRoseDirection direction = CompassRoseDirection.from((int) Math.floor((((player != null ? player.rotation.yaw : 0) + 180) * 16 / 360) + 0.5) & 0x0f);
             Block post = Block.get(getStandingSignId());
             post.setPropertyValue(GROUND_SIGN_DIRECTION, direction.getIndex());
-            getLevel().setBlock(block, post, true);
+            getLevel().setBlock(block.position, post, true);
         } else {
             Block wall = Block.get(getWallSignId());
             wall.setPropertyValue(FACING_DIRECTION, face.getIndex());
-            getLevel().setBlock(block, wall, true);
+            getLevel().setBlock(block.position, wall, true);
         }
         if (item.hasCustomBlockData()) {
             for (var e : item.getCustomBlockData().getEntrySet()) {
@@ -112,13 +112,13 @@ public class BlockStandingSign extends BlockSignBase implements BlockEntityHolde
         try {
             createBlockEntity(nbt);
             if (player != null) {
-                player.openSignEditor(this, true);
+                player.openSignEditor(this.position, true);
             }
             return true;
         } catch (Exception e) {
             log.warn("Failed to create block entity {} at {}", getBlockEntityType(), getLocation(), e);
-            level.setBlock(layer0, 0, layer0, true);
-            level.setBlock(layer1, 0, layer1, true);
+            level.setBlock(layer0.position, 0, layer0, true);
+            level.setBlock(layer1.position, 0, layer1, true);
             return false;
         }
     }

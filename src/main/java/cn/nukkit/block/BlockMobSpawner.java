@@ -86,7 +86,7 @@ public class BlockMobSpawner extends BlockSolid {
     public boolean setType(int networkId) {
         String identifier = Registries.ENTITY.getEntityIdentifier(networkId);
 
-        BlockEntity blockEntity = getLevel().getBlockEntity(this);
+        BlockEntity blockEntity = getLevel().getBlockEntity(this.position);
         if(blockEntity instanceof BlockEntityMobSpawner spawner) {
             spawner.setSpawnEntityType(identifier);
         } else {

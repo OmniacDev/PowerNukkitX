@@ -6,7 +6,7 @@ import cn.nukkit.level.format.IChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 
 
-public class BlockEntityBarrel extends BlockEntitySpawnableContainer{
+public class BlockEntityBarrel extends BlockEntitySpawnableContainer {
 
 
     public BlockEntityBarrel(IChunk chunk, CompoundTag nbt) {

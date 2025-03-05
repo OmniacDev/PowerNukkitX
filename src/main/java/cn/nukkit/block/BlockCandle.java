@@ -44,7 +44,7 @@ public class BlockCandle extends BlockFlowable {
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         if (target.getId().equals(BlockID.CAKE) && target.isDefaultState()) {//必须是完整的蛋糕才能插蜡烛
-            target.getLevel().setBlock(target, toCakeForm(), true, true);
+            target.getLevel().setBlock(target.position, toCakeForm(), true, true);
             return true;
         }
         if (!(target instanceof BlockCandle) && target.up() instanceof BlockCandle) {
@@ -53,7 +53,7 @@ public class BlockCandle extends BlockFlowable {
         if (target.getId().equals(getId())) {
             if (target.getPropertyValue(CANDLES) < 3) {
                 target.setPropertyValue(CANDLES, target.getPropertyValue(CANDLES) + 1);
-                getLevel().setBlock(target, target, true, true);
+                getLevel().setBlock(target.position, target, true, true);
                 return true;
             }
             return false;
@@ -62,7 +62,7 @@ public class BlockCandle extends BlockFlowable {
         }
 
         setPropertyValue(CANDLES, 0);
-        getLevel().setBlock(this, this, true, true);
+        getLevel().setBlock(this.position, this, true, true);
 
         return true;
     }
@@ -75,13 +75,13 @@ public class BlockCandle extends BlockFlowable {
 
         if (getPropertyValue(LIT) && !Objects.equals(item.getId(), ItemID.FLINT_AND_STEEL)) {
             setPropertyValue(LIT, false);
-            getLevel().addSound(this, Sound.RANDOM_FIZZ);
-            getLevel().setBlock(this, this, true, true);
+            getLevel().addSound(this.position, Sound.RANDOM_FIZZ);
+            getLevel().setBlock(this.position, this, true, true);
             return true;
         } else if (!getPropertyValue(LIT) && Objects.equals(item.getId(), ItemID.FLINT_AND_STEEL)) {
             setPropertyValue(LIT, true);
-            getLevel().addSound(this, Sound.FIRE_IGNITE);
-            getLevel().setBlock(this, this, true, true);
+            getLevel().addSound(this.position, Sound.FIRE_IGNITE);
+            getLevel().setBlock(this.position, this, true, true);
             return true;
         }
 

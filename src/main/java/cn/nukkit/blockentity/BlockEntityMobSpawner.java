@@ -99,11 +99,11 @@ public class BlockEntityMobSpawner extends BlockEntitySpawnable {
             boolean playerInRange = false;
             for (Entity entity : this.level.getEntities()) {
                 if (!playerInRange && entity instanceof Player && !((Player) entity).isSpectator()) {
-                    if (entity.pos.distance(this) <= this.requiredPlayerRange) {
+                    if (entity.pos.distance(this.position) <= this.requiredPlayerRange) {
                         playerInRange = true;
                     }
                 } else if (entity instanceof EntityAnimal || entity instanceof EntityMonster) {
-                    if (entity.pos.distance(this) <= this.requiredPlayerRange) {
+                    if (entity.pos.distance(this.position) <= this.requiredPlayerRange) {
                         nearbyEntities++;
                     }
                 }
@@ -113,12 +113,12 @@ public class BlockEntityMobSpawner extends BlockEntitySpawnable {
                 if (playerInRange && nearbyEntities <= this.maxNearbyEntities) {
                     Locator pos = new Locator
                             (
-                                    this.x + Utils.rand(-this.spawnRange, this.spawnRange),
+                                    this.position.x + Utils.rand(-this.spawnRange, this.spawnRange),
                                     this.getY(),
-                                    this.z + Utils.rand(-this.spawnRange, this.spawnRange),
+                                    this.position.z + Utils.rand(-this.spawnRange, this.spawnRange),
                                     this.level
                             );
-                    Block block = level.getBlock(pos);
+                    Block block = level.getBlock(pos.position);
                     //Mobs shouldn't spawn in walls and they shouldn't retry to
                     if (
                             !block.getId().equals(Block.AIR) && !(block instanceof BlockFlowable) &&

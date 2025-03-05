@@ -117,7 +117,7 @@ public class EntityCreaking extends EntityMonster {
                 if(side.isAir()) {
                     BlockResinClump clump = (BlockResinClump) Block.get(Block.RESIN_CLUMP);
                     clump.setPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS, clump.getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) | (0b000001 << face.getOpposite().getDUSWNEIndex()));
-                    side.getLevel().setBlock(side, clump);
+                    side.getLevel().setBlock(side.position, clump);
                     resinSpawned++;
                     if(resinSpawned >= maxResinSpawn) break logs;
                 }
@@ -135,9 +135,9 @@ public class EntityCreaking extends EntityMonster {
         tag.putFloat("CreakingY", (float) this.pos.y);
         tag.putFloat("CreakingZ", (float) this.pos.z);
         tag.putInt("HeartAmount", 1);
-        tag.putFloat("HeartX", (float) creakingHeart.x);
-        tag.putFloat("HeartY", (float) creakingHeart.y);
-        tag.putFloat("HeartZ", (float) creakingHeart.z);
+        tag.putFloat("HeartX", (float) creakingHeart.position.x);
+        tag.putFloat("HeartY", (float) creakingHeart.position.y);
+        tag.putFloat("HeartZ", (float) creakingHeart.position.z);
         packet.tag = tag;
         Server.broadcastPacket(this.getViewers().values(), packet);
     }
@@ -159,9 +159,9 @@ public class EntityCreaking extends EntityMonster {
     public void saveNBT() {
         if(creakingHeart != null) {
             CompoundTag tag = new CompoundTag();
-            tag.putInt("x", creakingHeart.getFloorX());
-            tag.putInt("y", creakingHeart.getFloorY());
-            tag.putInt("z", creakingHeart.getFloorZ());
+            tag.putInt("x", creakingHeart.position.getFloorX());
+            tag.putInt("y", creakingHeart.position.getFloorY());
+            tag.putInt("z", creakingHeart.position.getFloorZ());
             this.namedTag.putCompound("creakingHeart", tag);
         }
         super.saveNBT();
@@ -173,9 +173,9 @@ public class EntityCreaking extends EntityMonster {
             this.kill();
         }
         if(creakingHeart != null) {
-            if(this.pos.distance(creakingHeart) > 32) {
-                setMoveTarget(creakingHeart);
-                setLookTarget(creakingHeart);
+            if(this.pos.distance(creakingHeart.position) > 32) {
+                setMoveTarget(creakingHeart.position);
+                setLookTarget(creakingHeart.position);
             }
             if(getMemoryStorage().notEmpty(CoreMemoryTypes.LAST_BE_ATTACKED_TIME)) {
                 if(getLevel().getTick() - getMemoryStorage().get(CoreMemoryTypes.LAST_BE_ATTACKED_TIME) < 51) {

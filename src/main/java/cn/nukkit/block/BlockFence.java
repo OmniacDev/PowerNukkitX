@@ -46,12 +46,12 @@ public abstract class BlockFence extends BlockTransparent implements BlockConnec
         double w = west ? 0 : 0.375;
         double e = east ? 1 : 0.625;
         return new SimpleAxisAlignedBB(
-                this.x + w,
-                this.y,
-                this.z + n,
-                this.x + e,
-                this.y + 1.5,
-                this.z + s
+                this.position.x + w,
+                this.position.y,
+                this.position.z + n,
+                this.position.x + e,
+                this.position.y + 1.5,
+                this.position.z + s
         );
     }
 
@@ -74,7 +74,7 @@ public abstract class BlockFence extends BlockTransparent implements BlockConnec
             return true;
         }
         if (block instanceof BlockTrapdoor trapdoor) {
-            return trapdoor.isOpen() && trapdoor.getBlockFace() == calculateFace(this, trapdoor);
+            return trapdoor.isOpen() && trapdoor.getBlockFace() == calculateFace(this.position, trapdoor.position);
         }
         return block instanceof BlockFenceGate || block.isSolid() && !block.isTransparent();
     }

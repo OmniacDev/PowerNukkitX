@@ -47,9 +47,9 @@ public class ItemFireCharge extends Item {
             }
 
             BlockFire fire = (BlockFire) Block.get(BlockID.FIRE);
-            fire.x = block.x;
-            fire.y = block.y;
-            fire.z = block.z;
+            fire.position.x = block.position.x;
+            fire.position.y = block.position.y;
+            fire.position.z = block.position.z;
             fire.level = level;
 
             if (fire.isBlockTopFacingSurfaceSolid(fire.down()) || fire.canNeighborBurn()) {
@@ -57,8 +57,8 @@ public class ItemFireCharge extends Item {
                 block.getLevel().getServer().getPluginManager().callEvent(e);
 
                 if (!e.isCancelled()) {
-                    level.setBlock(fire, fire, true);
-                    level.addLevelEvent(block, LevelEventPacket.EVENT_SOUND_GHAST_FIREBALL, 78642);
+                    level.setBlock(fire.position, fire, true);
+                    level.addLevelEvent(block.position, LevelEventPacket.EVENT_SOUND_GHAST_FIREBALL, 78642);
                     level.scheduleUpdate(fire, fire.tickRate() + ThreadLocalRandom.current().nextInt(10));
                 }
                 if (player.isSurvival()) {

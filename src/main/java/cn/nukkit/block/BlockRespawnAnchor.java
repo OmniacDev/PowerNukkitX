@@ -71,8 +71,8 @@ public class BlockRespawnAnchor extends Block {
             }
 
             setCharge(charge + 1);
-            getLevel().setBlock(this, this);
-            getLevel().addSound(this, Sound.RESPAWN_ANCHOR_CHARGE);
+            getLevel().setBlock(this.position, this);
+            getLevel().addSound(this.position, Sound.RESPAWN_ANCHOR_CHARGE);
             return true;
         }
 
@@ -99,7 +99,7 @@ public class BlockRespawnAnchor extends Block {
             return false;
         }
         player.setSpawn(this, SpawnPointType.BLOCK);
-        getLevel().addSound(this, Sound.RESPAWN_ANCHOR_SET_SPAWN);
+        getLevel().addSound(this.position, Sound.RESPAWN_ANCHOR_SET_SPAWN);
         player.sendMessage(new TranslationContainer(TextFormat.GRAY + "%tile.respawn_anchor.respawnSet"));
         return true;
     }
@@ -111,7 +111,7 @@ public class BlockRespawnAnchor extends Block {
             return;
         }
 
-        level.setBlock(this, get(AIR));
+        level.setBlock(this.position, get(AIR));
         Explosion explosion = new Explosion(this, event.getForce(), this);
         explosion.setFireChance(event.getFireChance());
         if (event.isBlockBreaking()) {
@@ -161,7 +161,7 @@ public class BlockRespawnAnchor extends Block {
     @Override
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            getLevel().addSound(this, Sound.RESPAWN_ANCHOR_DEPLETE);
+            getLevel().addSound(this.position, Sound.RESPAWN_ANCHOR_DEPLETE);
             return type;
         }
         return super.onUpdate(type);

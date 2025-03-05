@@ -43,8 +43,8 @@ public class BlockResinClump extends BlockLichen {
     public void witherAtSide(BlockFace side) {
         if (isGrowthToSide(side)) {
             setPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS, getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) ^ (0b000001 << side.getDUSWNEIndex()));
-            getLevel().setBlock(this, this, true, true);
-            this.level.dropItem(this, toItem());
+            getLevel().setBlock(this.position, this, true, true);
+            this.level.dropItem(this.position, toItem());
         }
     }
 }

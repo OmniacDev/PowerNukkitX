@@ -184,7 +184,7 @@ public class EntitySelectorAPI {
             double min = Double.MAX_VALUE;
             for (var entity : entities) {
                 var distanceSquared = 0d;
-                if ((distanceSquared = senderLocation.distanceSquared(entity.pos)) < min) {
+                if ((distanceSquared = senderLocation.position.distanceSquared(entity.pos)) < min) {
                     min = distanceSquared;
                     nearest = entity;
                 }

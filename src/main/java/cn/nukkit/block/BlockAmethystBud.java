@@ -80,17 +80,17 @@ public abstract class BlockAmethystBud extends BlockTransparent implements Facea
         }
 
         setBlockFace(face);
-        this.level.setBlock(block, this, true, true);
+        this.level.setBlock(block.position, this, true, true);
         return true;
     }
 
     @Override
     public boolean onBreak(Item item) {
         if (item.isPickaxe()) {
-            Arrays.stream(this.getDrops(item)).forEach(item1 -> this.level.dropItem(this.add(0.5,0,0.5), item1));
-            this.getLevel().setBlock(this, layer, Block.get(BlockID.AIR), true, true);
+            Arrays.stream(this.getDrops(item)).forEach(item1 -> this.level.dropItem(this.position.add(0.5,0,0.5), item1));
+            this.getLevel().setBlock(this.position, layer, Block.get(BlockID.AIR), true, true);
         } else {
-            this.getLevel().setBlock(this, layer, Block.get(BlockID.AIR), true, true);
+            this.getLevel().setBlock(this.position, layer, Block.get(BlockID.AIR), true, true);
         }
 
         return true;

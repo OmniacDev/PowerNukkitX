@@ -107,7 +107,7 @@ public class BlockDaylightDetector extends BlockTransparent implements RedstoneC
     public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
         if(isNotActivate(player)) return false;
         BlockDaylightDetectorInverted block = new BlockDaylightDetectorInverted();
-        getLevel().setBlock(this, block, true, true);
+        getLevel().setBlock(this.position, block, true, true);
         if (this.level.getServer().getSettings().levelSettings().enableRedstone()) {
             block.updatePower();
         }
@@ -174,6 +174,6 @@ public class BlockDaylightDetector extends BlockTransparent implements RedstoneC
 
     @Override
     public double getMaxY() {
-        return this.y + 0.625;
+        return this.position.y + 0.625;
     }
 }

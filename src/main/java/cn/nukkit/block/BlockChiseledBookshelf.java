@@ -120,7 +120,7 @@ public class BlockChiseledBookshelf extends BlockBookshelf implements BlockEntit
                         blockEntity.setBook(itemClone, index);
                     }
                     this.setPropertyValue(BOOKS_STORED, blockEntity.getBooksStoredBit());
-                    this.getLevel().setBlock(this, this, true);
+                    this.getLevel().setBlock(this.position, this, true);
                 }
             }
         }

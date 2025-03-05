@@ -549,8 +549,8 @@ public class Level implements Metadatable {
     public void initLevel() {
         this.gameRules = this.requireProvider().getGamerules();
         Locator spawn = this.getSpawnLocation();
-        if (!getChunk(spawn.getChunkX(), spawn.getChunkZ(), true).getChunkState().canSend()) {
-            this.generateChunk(spawn.getChunkX(), spawn.getChunkZ());
+        if (!getChunk(spawn.position.getChunkX(), spawn.position.getChunkZ(), true).getChunkState().canSend()) {
+            this.generateChunk(spawn.position.getChunkX(), spawn.position.getChunkZ());
         }
         this.subTickThread.start();
         if(getServer().getSettings().levelSettings().levelThread()) {
@@ -1044,7 +1044,7 @@ public class Level implements Metadatable {
 
             while (!this.normalUpdateQueue.isEmpty()) {
                 QueuedUpdate queuedUpdate = this.normalUpdateQueue.poll();
-                Block block = getBlock(queuedUpdate.block, queuedUpdate.block.layer);
+                Block block = getBlock(queuedUpdate.block.position, queuedUpdate.block.layer);
                 BlockUpdateEvent event = new BlockUpdateEvent(block);
                 this.server.getPluginManager().callEvent(event);
 
@@ -1277,7 +1277,7 @@ public class Level implements Metadatable {
         }
 
         if (!list.isEmpty()) {
-            return list.get(ThreadLocalRandom.current().nextInt(list.size())).getPosition();
+            return list.get(ThreadLocalRandom.current().nextInt(list.size())).getPosition().position;
         } else {
             if (pos.getY() == -1) {
                 pos = pos.up(2);
@@ -1619,7 +1619,7 @@ public class Level implements Metadatable {
     }
 
     public void scheduleUpdate(Block block, Vector3 pos, int delay, int priority, boolean checkArea, boolean checkBlockWhenUpdate) {
-        if (block.getId().equals(BlockID.AIR) || (checkArea && !this.isChunkLoaded(block.getFloorX() >> 4, block.getFloorZ() >> 4))) {
+        if (block.getId().equals(BlockID.AIR) || (checkArea && !this.isChunkLoaded(block.position.getFloorX() >> 4, block.position.getFloorZ() >> 4))) {
             return;
         }
 
@@ -2325,16 +2325,16 @@ public class Level implements Metadatable {
             return false;
         }
 
-        block.x = x;
-        block.y = y;
-        block.z = z;
+        block.position.x = x;
+        block.position.y = y;
+        block.position.z = z;
         block.level = this;
         block.layer = layer;
 
         Block blockPrevious = statePrevious.toBlock();
-        blockPrevious.x = x;
-        blockPrevious.y = y;
-        blockPrevious.z = z;
+        blockPrevious.position.x = x;
+        blockPrevious.position.y = y;
+        blockPrevious.position.z = z;
         blockPrevious.level = this;
         blockPrevious.layer = layer;
 
@@ -2344,7 +2344,7 @@ public class Level implements Metadatable {
 
         if (direct) {
             if (isAntiXrayEnabled() && block.isTransparent()) {
-                this.sendBlocks(this.getChunkPlayers(cx, cz).values().toArray(Player.EMPTY_ARRAY), new Vector3[]{block.add(-1), block.add(1), block.add(0, -1), block.add(0, 1), block.add(0, 0, 1), block.add(0, 0, -1)}, UpdateBlockPacket.FLAG_ALL_PRIORITY);
+                this.sendBlocks(this.getChunkPlayers(cx, cz).values().toArray(Player.EMPTY_ARRAY), new Vector3[]{block.position.add(-1), block.position.add(1), block.position.add(0, -1), block.position.add(0, 1), block.position.add(0, 0, 1), block.position.add(0, 0, -1)}, UpdateBlockPacket.FLAG_ALL_PRIORITY);
             }
             this.sendBlocks(this.getChunkPlayers(cx, cz).values().toArray(Player.EMPTY_ARRAY), new Block[]{block}, UpdateBlockPacket.FLAG_ALL_PRIORITY, block.layer);
         } else {
@@ -2380,7 +2380,7 @@ public class Level implements Metadatable {
 
     public void breakBlock(Block block) {
         if(block.level == this) {
-            this.setBlock(block, Block.get(Block.AIR));
+            this.setBlock(block.position, Block.get(Block.AIR));
             Locator locator = block.add(0.5, 0.5, 0.5);
             this.addParticle(new DestroyBlockParticle(locator, block));
             this.getVibrationManager().callVibrationEvent(new VibrationEvent(null, locator, VibrationType.BLOCK_DESTROY));
@@ -2519,7 +2519,7 @@ public class Level implements Metadatable {
 
     public Item useBreakOn(@NotNull Vector3 vector, @Nullable BlockFace face, @Nullable Item item, @Nullable Player player, boolean createParticles, boolean immediateDestroy) {
         if (vector instanceof Block b) {
-            return useBreakOn(b, b.layer, face, item, player, createParticles, immediateDestroy);
+            return useBreakOn(b.position, b.layer, face, item, player, createParticles, immediateDestroy);
         } else {
             return useBreakOn(vector, 0, face, item, player, createParticles, immediateDestroy);
         }
@@ -2609,15 +2609,15 @@ public class Level implements Metadatable {
             drops = target.getDrops(item);
         }
 
-        Block above = this.getBlock(new Vector3(target.x, target.y + 1, target.z), 0);
+        Block above = this.getBlock(new Vector3(target.position.x, target.position.y + 1, target.position.z), 0);
         if (above != null) {
             if (above.getId().equals(BlockID.FIRE)) {
-                this.setBlock(above, Block.get(BlockID.AIR), true);
+                this.setBlock(above.position, Block.get(BlockID.AIR), true);
             }
         }
 
         if (createParticles) {
-            Map<Integer, Player> players = this.getChunkPlayers((int) target.x >> 4, (int) target.z >> 4);
+            Map<Integer, Player> players = this.getChunkPlayers((int) target.position.x >> 4, (int) target.position.z >> 4);
             if (player != null && immediateDestroy) {
                 players.remove(player.getLoaderId());
             }
@@ -2626,7 +2626,7 @@ public class Level implements Metadatable {
 
         // Close BlockEntity before we check onBreak
         if (layer == 0) {
-            BlockEntity blockEntity = this.getBlockEntity(target);
+            BlockEntity blockEntity = this.getBlockEntity(target.position);
             if (blockEntity != null) {
                 blockEntity.onBreak(isSilkTouch);
                 blockEntity.close();
@@ -2722,11 +2722,11 @@ public class Level implements Metadatable {
             }
         }
         //handle height limit
-        if (!isYInRange((int) block.y)) {
+        if (!isYInRange((int) block.position.y)) {
             return null;
         }
         //handle height limit in nether
-        if (block.y > 127 && this.getDimension() == DIMENSION_NETHER) {
+        if (block.position.y > 127 && this.getDimension() == DIMENSION_NETHER) {
             return null;
         }
 
@@ -2873,14 +2873,14 @@ public class Level implements Metadatable {
         }
 
         if ((block instanceof BlockLiquid) && ((BlockLiquid) block).usesWaterLogging()) {
-            this.setBlock(block, 1, block, false, false);
-            this.setBlock(block, 0, Block.get(BlockID.AIR), false, false);
+            this.setBlock(block.position, 1, block, false, false);
+            this.setBlock(block.position, 0, Block.get(BlockID.AIR), false, false);
             this.scheduleUpdate(block, 1);
         }
 
         if (!hand.place(item, block, target, face, fx, fy, fz, player)) {
-            this.setBlock(block, 0, block, true, false);
-            this.setBlock(block, 1, Block.get(BlockID.AIR), true, false);
+            this.setBlock(block.position, 0, block, true, false);
+            this.setBlock(block.position, 1, Block.get(BlockID.AIR), true, false);
             return null;
         }
 
@@ -2906,7 +2906,7 @@ public class Level implements Metadatable {
         int distance = this.server.getSpawnRadius();
         if (distance > -1) {
             Vector2 t = new Vector2(vector3.x, vector3.z);
-            Vector2 s = new Vector2(this.getSpawnLocation().x, this.getSpawnLocation().z);
+            Vector2 s = new Vector2(this.getSpawnLocation().position.x, this.getSpawnLocation().position.z);
             return t.distance(s) <= distance;
         }
         return false;
@@ -3304,10 +3304,10 @@ public class Level implements Metadatable {
         if (nzy == null)
             return block.getColor();
         color = block.getColor().toAwtColor();
-        if (nzy.getFloorY() > block.getFloorY()) {
-            color = darker(color, 0.875 - Math.min(5, nzy.getFloorY() - block.getFloorY()) * 0.05);
-        } else if (nzy.getFloorY() < block.getFloorY()) {
-            color = brighter(color, 0.875 - Math.min(5, block.getFloorY() - nzy.getFloorY()) * 0.05);
+        if (nzy.position.getFloorY() > block.position.getFloorY()) {
+            color = darker(color, 0.875 - Math.min(5, nzy.position.getFloorY() - block.position.getFloorY()) * 0.05);
+        } else if (nzy.position.getFloorY() < block.position.getFloorY()) {
+            color = brighter(color, 0.875 - Math.min(5, block.position.getFloorY() - nzy.position.getFloorY()) * 0.05);
         }
 
         //效果不好，暂时禁用
@@ -3325,10 +3325,10 @@ public class Level implements Metadatable {
             var g1 = color.getGreen();
             var b1 = color.getBlue();
             //在水下
-            if (block.y < 62) {
+            if (block.position.y < 62) {
                 //在海平面下
                 //海平面为62格。离海平面越远颜色越接近海洋颜色
-                var depth = 62 - block.y;
+                var depth = 62 - block.position.y;
                 if (depth > 96) return WATER_BLOCK_COLOR;
                 b1 = WATER_BLOCK_COLOR.getBlue();
                 var radio = (depth / 96.0);
@@ -4398,9 +4398,9 @@ public class Level implements Metadatable {
     public boolean createPortal(Block target) {
         if (this.getDimension() == DIMENSION_THE_END) return false;
         int maxPortalSize = 23;
-        final int targX = target.getFloorX();
-        final int targY = target.getFloorY();
-        final int targZ = target.getFloorZ();
+        final int targX = target.position.getFloorX();
+        final int targY = target.position.getFloorY();
+        final int targZ = target.position.getFloorZ();
         //check if there's air above (at least 3 blocks)
         for (int i = 1; i < 4; i++) {
             if (!this.getBlock(targX, targY + i, targZ).isAir()) {
@@ -4525,7 +4525,7 @@ public class Level implements Metadatable {
                 }
             }
 
-            this.addSound(target, Sound.FIRE_IGNITE);
+            this.addSound(target.position, Sound.FIRE_IGNITE);
             return true;
         } else if (sizeZ >= 2 && sizeZ <= maxPortalSize) {
             //start scan from 1 block above base
@@ -4610,7 +4610,7 @@ public class Level implements Metadatable {
                 }
             }
 
-            this.addSound(target, Sound.FIRE_IGNITE);
+            this.addSound(target.position, Sound.FIRE_IGNITE);
             return true;
         }
 

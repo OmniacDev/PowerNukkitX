@@ -67,7 +67,7 @@ public abstract class BlockCopperGrateBase extends BlockFlowable implements Oxid
 
         Block down = this.down();
         if (!down.isAir()) {
-            this.getLevel().setBlock(block, this, true, true);
+            this.getLevel().setBlock(block.position, this, true, true);
             return true;
         }
         return false;
@@ -109,7 +109,7 @@ public abstract class BlockCopperGrateBase extends BlockFlowable implements Oxid
         if (getOxidizationLevel().equals(oxidizationLevel)) {
             return true;
         }
-        return getLevel().setBlock(this, Block.get(getCopperId(isWaxed(), oxidizationLevel)));
+        return getLevel().setBlock(this.position, Block.get(getCopperId(isWaxed(), oxidizationLevel)));
     }
 
     @Override
@@ -117,7 +117,7 @@ public abstract class BlockCopperGrateBase extends BlockFlowable implements Oxid
         if (isWaxed() == waxed) {
             return true;
         }
-        return getLevel().setBlock(this, Block.get(getCopperId(waxed, getOxidizationLevel())));
+        return getLevel().setBlock(this.position, Block.get(getCopperId(waxed, getOxidizationLevel())));
     }
 
     @Override

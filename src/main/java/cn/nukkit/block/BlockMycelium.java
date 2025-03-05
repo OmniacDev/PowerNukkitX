@@ -65,7 +65,7 @@ public class BlockMycelium extends BlockDirt {
     @Override
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (getLevel().getFullLight(add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
+            if (getLevel().getFullLight(add(0, 1, 0).position) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
                 //TODO: light levels
                 NukkitRandom random = new NukkitRandom();
                 x = random.nextInt((int) x - 1, (int) x + 1);
@@ -77,7 +77,7 @@ public class BlockMycelium extends BlockDirt {
                         BlockSpreadEvent ev = new BlockSpreadEvent(block, this, Block.get(BlockID.MYCELIUM));
                         Server.getInstance().getPluginManager().callEvent(ev);
                         if (!ev.isCancelled()) {
-                            this.getLevel().setBlock(block, ev.getNewState());
+                            this.getLevel().setBlock(block.position, ev.getNewState());
                         }
                     }
                 }
@@ -104,7 +104,7 @@ public class BlockMycelium extends BlockDirt {
 
         if (item.isShovel()) {
             item.useOn(this);
-            this.getLevel().setBlock(this, Block.get(BlockID.GRASS_PATH));
+            this.getLevel().setBlock(this.position, Block.get(BlockID.GRASS_PATH));
             if (player != null) {
                 player.getLevel().addSound(player.pos, Sound.USE_GRASS);
             }

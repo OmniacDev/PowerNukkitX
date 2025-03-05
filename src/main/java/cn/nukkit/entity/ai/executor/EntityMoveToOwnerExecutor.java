@@ -55,7 +55,7 @@ public class EntityMoveToOwnerExecutor implements EntityControl, IBehaviorExecut
             if (!target.level.getName().equals(entity.level.getName()))
                 return false;
 
-            if (entity.getPosition().floor().equals(oldTarget)) return false;
+            if (entity.getPosition().position.floor().equals(oldTarget)) return false;
 
             var distanceSquared = entity.pos.distanceSquared(player.pos);
             if (distanceSquared <= maxFollowRangeSquared) {
@@ -126,7 +126,7 @@ public class EntityMoveToOwnerExecutor implements EntityControl, IBehaviorExecut
         double y = player.getLevel().getHighestBlockAt(x, z);
         var vector3 = new Vector3(x, y, z);
         var result = player.getLevel().getBlock(vector3);
-        if (result.isSolid() && result.getId() != BlockID.AIR) return result.up();
+        if (result.isSolid() && result.getId() != BlockID.AIR) return result.up().position;
         else return null;
     }
 }

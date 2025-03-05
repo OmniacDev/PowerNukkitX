@@ -55,11 +55,11 @@ public class BlockSuspiciousSand extends BlockFallable {
         int progress = getPropertyValue(CommonBlockProperties.BRUSHED_PROGRESS);
         if(progress < 3) {
             setPropertyValue(CommonBlockProperties.BRUSHED_PROGRESS, progress+1);
-            getLevel().addSound(this, Sound.HIT_SUSPICIOUS_SAND);
-            getLevel().setBlock(this, this);
+            getLevel().addSound(this.position, Sound.HIT_SUSPICIOUS_SAND);
+            getLevel().setBlock(this.position, this);
         } else {
-            getLevel().setBlock(this, BlockSand.PROPERTIES.getDefaultState().toBlock());
-            getLevel().addSound(this, Sound.BREAK_SUSPICIOUS_SAND);
+            getLevel().setBlock(this.position, BlockSand.PROPERTIES.getDefaultState().toBlock());
+            getLevel().addSound(this.position, Sound.BREAK_SUSPICIOUS_SAND);
         }
         super.onTouch(vector, item, face, fx, fy, fz, player, action);
     }

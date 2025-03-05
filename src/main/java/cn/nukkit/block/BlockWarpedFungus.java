@@ -49,7 +49,7 @@ public class BlockWarpedFungus extends BlockFungus {
     public boolean grow(@Nullable Player cause) {
         NukkitRandom nukkitRandom = new NukkitRandom();
         BlockManager blockManager = new BlockManager(this.getLevel());
-        this.feature.placeObject(blockManager, this.getFloorX(), this.getFloorY(), this.getFloorZ(), nukkitRandom);
+        this.feature.placeObject(blockManager, this.position.getFloorX(), this.position.getFloorY(), this.position.getFloorZ(), nukkitRandom);
         StructureGrowEvent ev = new StructureGrowEvent(this, blockManager.getBlocks());
         this.level.getServer().getPluginManager().callEvent(ev);
         if (ev.isCancelled()) {

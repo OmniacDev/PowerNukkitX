@@ -36,7 +36,7 @@ public class EntityElytraFirework extends EntityFireworksRocket {
                     this.motion.x = this.followingPlayer.motion.x;
                     this.motion.y = this.followingPlayer.motion.y;
                     this.motion.z = this.followingPlayer.motion.z;
-                    this.teleport(followingPlayer.getNextPosition().add(followingPlayer.getMotion()));
+                    this.teleport(followingPlayer.getNextPosition().position.add(followingPlayer.getMotion()));
 
                     this.move(this.motion.x, this.motion.y, this.motion.z);
                     this.updateMovement();

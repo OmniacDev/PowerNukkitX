@@ -586,7 +586,7 @@ public class EntityBoat extends EntityVehicle {
     }
 
     public void onInput(Transform loc) {
-        this.move(loc.x - this.pos.x, loc.y - this.pos.y, loc.z - this.pos.z);
+        this.move(loc.position.x - this.pos.x, loc.position.y - this.pos.y, loc.position.z - this.pos.z);
         this.rotation.yaw = loc.yaw;
         broadcastMovement(false);
     }

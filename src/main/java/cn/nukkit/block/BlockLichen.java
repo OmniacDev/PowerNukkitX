@@ -30,7 +30,7 @@ public abstract class BlockLichen extends BlockTransparent {
     public void witherAtSide(BlockFace side) {
         if (isGrowthToSide(side)) {
             setPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS, getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) ^ (0b000001 << side.getDUSWNEIndex()));
-            getLevel().setBlock(this, this, true, true);
+            getLevel().setBlock(this.position, this, true, true);
         }
     }
 
@@ -41,7 +41,7 @@ public abstract class BlockLichen extends BlockTransparent {
     public void growToSide(BlockFace side) {
         if (!isGrowthToSide(side)) {
             setPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS, getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) | (0b000001 << side.getDUSWNEIndex()));
-            getLevel().setBlock(this, this, true, true);
+            getLevel().setBlock(this.position, this, true, true);
         }
     }
 
@@ -73,7 +73,7 @@ public abstract class BlockLichen extends BlockTransparent {
             return false;
         }
 
-        getLevel().setBlock(block, this, true, true);
+        getLevel().setBlock(block.position, this, true, true);
         return true;
     }
 

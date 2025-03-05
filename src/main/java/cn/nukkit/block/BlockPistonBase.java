@@ -89,12 +89,12 @@ public abstract class BlockPistonBase extends BlockTransparent implements Faceab
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         if (player != null) {
-            if (Math.abs(player.pos.getFloorX() - this.x) <= 1 && Math.abs(player.pos.getFloorZ() - this.z) <= 1) {
+            if (Math.abs(player.pos.getFloorX() - this.position.x) <= 1 && Math.abs(player.pos.getFloorZ() - this.position.z) <= 1) {
                 double y = player.pos.y + player.getEyeHeight();
 
-                if (y - this.y > 2) {
+                if (y - this.position.y > 2) {
                     this.setPropertyValue(CommonBlockProperties.FACING_DIRECTION, BlockFace.UP.getIndex());
-                } else if (this.y - y > 0) {
+                } else if (this.position.y - y > 0) {
                     this.setPropertyValue(CommonBlockProperties.FACING_DIRECTION, BlockFace.DOWN.getIndex());
                 } else {
                     this.setPropertyValue(CommonBlockProperties.FACING_DIRECTION, player.getHorizontalFacing().getIndex());
@@ -103,12 +103,12 @@ public abstract class BlockPistonBase extends BlockTransparent implements Faceab
                 this.setPropertyValue(CommonBlockProperties.FACING_DIRECTION, player.getHorizontalFacing().getIndex());
             }
         }
-        this.level.setBlock(block, this, true, true);
-        var nbt = BlockEntity.getDefaultCompound(this, BlockEntity.PISTON_ARM)
+        this.level.setBlock(block.position, this, true, true);
+        var nbt = BlockEntity.getDefaultCompound(this.position, BlockEntity.PISTON_ARM)
                 .putInt("facing", this.getBlockFace().getIndex())
                 .putBoolean("Sticky", this.sticky)
                 .putBoolean("powered", isGettingPower());
-        var piston = (BlockEntityPistonArm) BlockEntity.createBlockEntity(BlockEntity.PISTON_ARM, this.level.getChunk(getChunkX(), getChunkZ()), nbt);
+        var piston = (BlockEntityPistonArm) BlockEntity.createBlockEntity(BlockEntity.PISTON_ARM, this.level.getChunk(this.position.getChunkX(), this.position.getChunkZ()), nbt);
         piston.powered = isGettingPower();
         this.checkState(piston.powered);
         return true;
@@ -116,7 +116,7 @@ public abstract class BlockPistonBase extends BlockTransparent implements Faceab
 
     @Override
     public boolean onBreak(Item item) {
-        this.level.setBlock(this, Block.get(BlockID.AIR), true, true);
+        this.level.setBlock(this.position, Block.get(BlockID.AIR), true, true);
         var block = this.getSide(getBlockFace());
         if (block instanceof BlockPistonArmCollision b && b.getBlockFace() == this.getBlockFace())
             block.onBreak(item);
@@ -174,7 +174,7 @@ public abstract class BlockPistonBase extends BlockTransparent implements Faceab
             var b = this.getSide(side);
             if (b.getId().equals(Block.REDSTONE_WIRE) && b.getPropertyValue(CommonBlockProperties.REDSTONE_SIGNAL) > 0)
                 return true;
-            if (this.level.isSidePowered(b, side))
+            if (this.level.isSidePowered(b.position, side))
                 return true;
         }
         return false;
@@ -252,24 +252,24 @@ public abstract class BlockPistonBase extends BlockTransparent implements Faceab
                 var block = destroyBlocks.get(i);
                 var item = ItemTool.getBestTool(block.getToolType());
                 //清除位置上所含的水等
-                this.level.setBlock(block, 1, Block.get(BlockID.AIR), true, false);
-                this.level.useBreakOn(block, item);
+                this.level.setBlock(block.position, 1, Block.get(BlockID.AIR), true, false);
+                this.level.useBreakOn(block.position, item);
             }
             var blocksToMove = calculator.getBlocksToMove();
-            toMoveBlockVec = blocksToMove.stream().map(Vector3::asBlockVector3).collect(Collectors.toList());
+            toMoveBlockVec = blocksToMove.stream().map(b -> b.position.asBlockVector3()).collect(Collectors.toList());
             var moveDirection = extending ? pistonFace : pistonFace.getOpposite();
             for (Block blockToMove : blocksToMove) {
-                var oldPos = new Vector3(blockToMove.x, blockToMove.y, blockToMove.z);
+                var oldPos = new Vector3(blockToMove.position.x, blockToMove.position.y, blockToMove.position.z);
                 var newPos = blockToMove.getSidePos(moveDirection);
                 //清除位置上所含的水等
-                level.setBlock(newPos, 1, Block.get(AIR), true, false);
-                CompoundTag nbt = BlockEntity.getDefaultCompound(newPos, BlockEntity.MOVING_BLOCK)
+                level.setBlock(newPos.position, 1, Block.get(AIR), true, false);
+                CompoundTag nbt = BlockEntity.getDefaultCompound(newPos.position, BlockEntity.MOVING_BLOCK)
                         .putBoolean("expanding", extending)
-                        .putInt("pistonPosX", this.getFloorX())
-                        .putInt("pistonPosY", this.getFloorY())
-                        .putInt("pistonPosZ", this.getFloorZ())
+                        .putInt("pistonPosX", this.position.getFloorX())
+                        .putInt("pistonPosY", this.position.getFloorY())
+                        .putInt("pistonPosZ", this.position.getFloorZ())
                         .putCompound("movingBlock", blockToMove.blockstate.getBlockStateTag())
-                        .putCompound("movingBlockExtra", level.getBlock(blockToMove, 1).getBlockState().getBlockStateTag())
+                        .putCompound("movingBlockExtra", level.getBlock(blockToMove.position, 1).getBlockState().getBlockStateTag())
                         .putBoolean("isMovable", true);
                 var blockEntity = this.level.getBlockEntity(oldPos);
                 //移动方块实体
@@ -280,7 +280,7 @@ public abstract class BlockPistonBase extends BlockTransparent implements Faceab
                 }
                 oldPosList.add(oldPos);
 
-                blockEntityHolderList.add((BlockEntityHolder<?>) Block.get(MOVING_BLOCK, Locator.fromObject(newPos, this.level)));
+                blockEntityHolderList.add((BlockEntityHolder<?>) Block.get(MOVING_BLOCK, Locator.fromObject(newPos.position, this.level)));
                 nbtList.add(nbt);
             }
         }
@@ -306,23 +306,23 @@ public abstract class BlockPistonBase extends BlockTransparent implements Faceab
         if (extending) {
             var pistonArmPos = this.getSide(pistonFace);
             //清除位置上所含的水等
-            level.setBlock(pistonArmPos, 1, Block.get(AIR), true, false);
+            level.setBlock(pistonArmPos.position, 1, Block.get(AIR), true, false);
             BlockFace blockFace = getBlockFace();
             if (blockFace.getAxis() == BlockFace.Axis.Y) {
-                level.setBlock(pistonArmPos, createHead(blockFace), true, false);
+                level.setBlock(pistonArmPos.position, createHead(blockFace), true, false);
             } else {
-                level.setBlock(pistonArmPos, createHead(blockFace.getOpposite()), true, false);
+                level.setBlock(pistonArmPos.position, createHead(blockFace.getOpposite()), true, false);
             }
         }
         //开始移动
 
         blockEntity.move();
         if (extending) {
-            this.getLevel().addSound(this, Sound.TILE_PISTON_OUT);
-            this.getLevel().getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.add(0.5, 0.5, 0.5), VibrationType.PISTON_EXTEND));
+            this.getLevel().addSound(this.position, Sound.TILE_PISTON_OUT);
+            this.getLevel().getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.position.add(0.5, 0.5, 0.5), VibrationType.PISTON_EXTEND));
         } else {
-            this.getLevel().addSound(this, Sound.TILE_PISTON_IN);
-            this.getLevel().getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.add(0.5, 0.5, 0.5), VibrationType.PISTON_CONTRACT));
+            this.getLevel().addSound(this.position, Sound.TILE_PISTON_IN);
+            this.getLevel().getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.position.add(0.5, 0.5, 0.5), VibrationType.PISTON_CONTRACT));
         }
         return true;
     }
@@ -388,7 +388,7 @@ public abstract class BlockPistonBase extends BlockTransparent implements Faceab
         private Vector3 armPos;
 
         public BlocksCalculator(boolean extending) {
-            this.pistonPos = getLocation();
+            this.pistonPos = getLocation().position;
             this.extending = extending;
 
             BlockFace face = getBlockFace();

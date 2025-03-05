@@ -43,12 +43,12 @@ public abstract class BlockHangingSign extends BlockSignBase implements BlockEnt
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (isHanging()) {
                 if (up().isAir()) {
-                    getLevel().useBreakOn(this);
+                    getLevel().useBreakOn(this.position);
                     return Level.BLOCK_UPDATE_NORMAL;
                 }
             } else {
                 if (checkGroundBlock() == null) {
-                    getLevel().useBreakOn(this);
+                    getLevel().useBreakOn(this.position);
                     return Level.BLOCK_UPDATE_NORMAL;
                 }
             }
@@ -89,8 +89,8 @@ public abstract class BlockHangingSign extends BlockSignBase implements BlockEnt
             return false;
         }
 
-        Block layer0 = level.getBlock(this, 0);
-        Block layer1 = level.getBlock(this, 1);
+        Block layer0 = level.getBlock(this.position, 0);
+        Block layer1 = level.getBlock(this.position, 1);
 
         CompoundTag nbt = new CompoundTag();
 
@@ -102,14 +102,14 @@ public abstract class BlockHangingSign extends BlockSignBase implements BlockEnt
             if ((player != null && player.isSneaking()) || target instanceof BlockThin || target instanceof BlockChain || target instanceof BlockHangingSign) {
                 this.setPropertyValue(CommonBlockProperties.ATTACHED_BIT, true);
                 this.setPropertyValue(CommonBlockProperties.GROUND_SIGN_DIRECTION, direction.getIndex());
-                getLevel().setBlock(block, this, true);
+                getLevel().setBlock(block.position, this, true);
             } else {
                 this.setPropertyValue(CommonBlockProperties.FACING_DIRECTION, direction.getClosestBlockFace().getIndex());
-                getLevel().setBlock(block, this, true);
+                getLevel().setBlock(block.position, this, true);
             }
         } else {
             this.setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.rotateY().getIndex());
-            getLevel().setBlock(block, this, true);
+            getLevel().setBlock(block.position, this, true);
         }
         if (item.hasCustomBlockData()) {
             for (var e : item.getCustomBlockData().getEntrySet()) {
@@ -120,13 +120,13 @@ public abstract class BlockHangingSign extends BlockSignBase implements BlockEnt
         try {
             createBlockEntity(nbt);
             if (player != null) {
-                player.openSignEditor(this, true);
+                player.openSignEditor(this.position, true);
             }
             return true;
         } catch (Exception e) {
             log.warn("Failed to create block entity {} at {}", getBlockEntityType(), getLocation(), e);
-            level.setBlock(layer0, 0, layer0, true);
-            level.setBlock(layer1, 0, layer1, true);
+            level.setBlock(layer0.position, 0, layer0, true);
+            level.setBlock(layer1.position, 0, layer1, true);
             return false;
         }
     }

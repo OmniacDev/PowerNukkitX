@@ -52,12 +52,12 @@ public abstract class BlockThin extends BlockTransparent implements BlockConnect
             //null sucks
         }
         return new SimpleAxisAlignedBB(
-                this.x + w,
-                this.y,
-                this.z + n,
-                this.x + e,
-                this.y + 1,
-                this.z + s
+                this.position.x + w,
+                this.position.y,
+                this.position.z + n,
+                this.position.x + e,
+                this.position.y + 1,
+                this.position.z + s
         );
     }
 
@@ -72,7 +72,7 @@ public abstract class BlockThin extends BlockTransparent implements BlockConnect
                     true;
             default -> {
                 if (block instanceof BlockTrapdoor trapdoor) {
-                    yield trapdoor.isOpen() && trapdoor.getBlockFace() == calculateFace(this, trapdoor);
+                    yield trapdoor.isOpen() && trapdoor.getBlockFace() == calculateFace(this.position, trapdoor.position);
                 }
                 yield block.isSolid();
             }

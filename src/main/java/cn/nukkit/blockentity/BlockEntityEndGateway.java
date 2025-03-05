@@ -57,12 +57,12 @@ public class BlockEntityEndGateway extends BlockEntitySpawnable {
             this.exitPortal = new BlockVector3(exitPortalList.get(0).data, exitPortalList.get(1).data, exitPortalList.get(2).data);
         } else {
             this.exitPortal = defaultExitPortal.clone();
-            if(this.toHorizontal().distance(Vector2.ZERO) < 100) {
+            if(this.position.toHorizontal().distance(Vector2.ZERO) < 100) {
                 shift:
                 for(int shift : new int[] {0, -5, 5, -10, 10}) { //Reduces the probability of a no hit
                     for(int i = 0; i < 16; i++) {
                         if(exitPortal.getY() <= 16 || exitPortal.getY() > 128) {
-                            this.exitPortal = new Vector3(this.x+shift, 0, this.z+shift).normalize().multiply(0x500 + (i*0xF)).asBlockVector3();
+                            this.exitPortal = new Vector3(this.position.x + shift, 0, this.position.z + shift).normalize().multiply(0x500 + (i*0xF)).asBlockVector3();
                             this.exitPortal = getSafeExitPortal();
                         } else break shift;
                     }
@@ -222,11 +222,11 @@ public class BlockEntityEndGateway extends BlockEntitySpawnable {
         }
 
         BlockEventPacket pk = new BlockEventPacket();
-        pk.x = this.getFloorX();
-        pk.y = this.getFloorY();
-        pk.z = this.getFloorZ();
+        pk.x = this.position.getFloorX();
+        pk.y = this.position.getFloorY();
+        pk.z = this.position.getFloorZ();
         pk.type = 1;
         pk.value = eventData;
-        this.getLevel().addChunkPacket(this.getChunkX(), this.getChunkZ(), pk);
+        this.getLevel().addChunkPacket(this.position.getChunkX(), this.position.getChunkZ(), pk);
     }
 }

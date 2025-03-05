@@ -22,7 +22,7 @@ public interface IBlockOreRedstoneGlowing{
             BlockFadeEvent event = new BlockFadeEvent(block, getUnlitBlock());
             level.getServer().getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
-                level.setBlock(block, event.getNewState(), true, true);
+                level.setBlock(block.position, event.getNewState(), true, true);
             }
 
             return Level.BLOCK_UPDATE_WEAK;

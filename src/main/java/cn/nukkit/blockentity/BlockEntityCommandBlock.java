@@ -555,7 +555,7 @@ public class BlockEntityCommandBlock extends BlockEntitySpawnable implements ICo
     @NotNull
     @Override
     public Transform getLocation() {
-        return Transform.fromObject(this.clone(), this.getLevel());
+        return Transform.fromObject(this.clone().position, this.getLevel());
     }
 
     @Override

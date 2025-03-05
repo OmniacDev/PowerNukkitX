@@ -27,9 +27,9 @@ import static cn.nukkit.level.Level.DIMENSION_OVERWORLD;
 public final class PortalHelper implements BlockID {
     public static void spawnPortal(Locator pos) {
         Level lvl = pos.level; //TODO: This will generate part of the time, seems to be only when the chunk is populated
-        int x = pos.getFloorX();
-        int y = pos.getFloorY();
-        int z = pos.getFloorZ();
+        int x = pos.position.getFloorX();
+        int y = pos.position.getFloorY();
+        int z = pos.position.getFloorZ();
 
         Block air = Block.get(AIR);
         Block obsidian = Block.get(OBSIDIAN);
@@ -73,8 +73,8 @@ public final class PortalHelper implements BlockID {
 
     public static Locator getNearestValidPortal(Locator currentPos) {
         AxisAlignedBB axisAlignedBB = new SimpleAxisAlignedBB(
-                new Vector3(currentPos.getFloorX() - 128.0, currentPos.level.getDimensionData().getMinHeight(), currentPos.getFloorZ() - 128.0),
-                new Vector3(currentPos.getFloorX() + 128.0, currentPos.level.getDimensionData().getMaxHeight(), currentPos.getFloorZ() + 128.0));
+                new Vector3(currentPos.position.getFloorX() - 128.0, currentPos.level.getDimensionData().getMinHeight(), currentPos.position.getFloorZ() - 128.0),
+                new Vector3(currentPos.position.getFloorX() + 128.0, currentPos.level.getDimensionData().getMaxHeight(), currentPos.position.getFloorZ() + 128.0));
         BiPredicate<BlockVector3, BlockState> condition = (pos, state) -> Objects.equals(state.getIdentifier(), BlockID.PORTAL);
         List<Block> blocks = currentPos.level.scanBlocks(axisAlignedBB, condition);
 
@@ -82,11 +82,11 @@ public final class PortalHelper implements BlockID {
             return null;
         }
 
-        final Vector2 currentPosV2 = new Vector2(currentPos.getFloorX(), currentPos.getFloorZ());
-        final double by = currentPos.getFloorY();
-        Comparator<Block> euclideanDistance = Comparator.comparingDouble(block -> currentPosV2.distanceSquared(block.getFloorX(), block.getFloorZ()));
+        final Vector2 currentPosV2 = new Vector2(currentPos.position.getFloorX(), currentPos.position.getFloorZ());
+        final double by = currentPos.position.getFloorY();
+        Comparator<Block> euclideanDistance = Comparator.comparingDouble(block -> currentPosV2.distanceSquared(block.position.getFloorX(), block.position.getFloorZ()));
         Comparator<Block> heightDistance = Comparator.comparingDouble(block -> {
-            double ey = by - block.y;
+            double ey = by - block.position.y;
             return ey * ey;
         });
 
@@ -102,10 +102,10 @@ public final class PortalHelper implements BlockID {
         DimensionData dimensionData;
         if (current.level.getDimension() == DIMENSION_OVERWORLD) {
             dimensionData = DimensionEnum.NETHER.getDimensionData();
-            return new Locator(current.getFloorX() >> 3, NukkitMath.clamp(current.getFloorY(), dimensionData.getMinHeight(), dimensionData.getMaxHeight()), current.getFloorZ() >> 3, defaultNetherLevel);
+            return new Locator(current.position.getFloorX() >> 3, NukkitMath.clamp(current.position.getFloorY(), dimensionData.getMinHeight(), dimensionData.getMaxHeight()), current.position.getFloorZ() >> 3, defaultNetherLevel);
         } else if (current.level.getDimension() == Level.DIMENSION_NETHER) {
             dimensionData = DimensionEnum.OVERWORLD.getDimensionData();
-            return new Locator(current.getFloorX() << 3, NukkitMath.clamp(current.getFloorY(), dimensionData.getMinHeight(), dimensionData.getMaxHeight()), current.getFloorZ() << 3, Server.getInstance().getDefaultLevel());
+            return new Locator(current.position.getFloorX() << 3, NukkitMath.clamp(current.position.getFloorY(), dimensionData.getMinHeight(), dimensionData.getMaxHeight()), current.position.getFloorZ() << 3, Server.getInstance().getDefaultLevel());
         } else {
             throw new IllegalArgumentException("Neither overworld nor nether given!");
         }

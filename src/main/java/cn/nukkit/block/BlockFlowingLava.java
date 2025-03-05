@@ -72,7 +72,7 @@ public class BlockFlowingLava extends BlockLiquid {
 
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        boolean ret = this.getLevel().setBlock(this, this, true, false);
+        boolean ret = this.getLevel().setBlock(this.position, this, true, false);
         this.getLevel().scheduleUpdate(this, this.tickRate());
 
         return ret;
@@ -89,7 +89,7 @@ public class BlockFlowingLava extends BlockLiquid {
 
             if (i > 0) {
                 for (int k = 0; k < i; ++k) {
-                    Vector3 v = this.add(random.nextInt(3) - 1, 1, random.nextInt(3) - 1);
+                    Vector3 v = this.position.add(random.nextInt(3) - 1, 1, random.nextInt(3) - 1);
                     Block block = this.getLevel().getBlock(v);
 
                     if (block.isAir()) {
@@ -112,7 +112,7 @@ public class BlockFlowingLava extends BlockLiquid {
                 }
             } else {
                 for (int k = 0; k < 3; ++k) {
-                    Vector3 v = this.add(random.nextInt(3) - 1, 0, random.nextInt(3) - 1);
+                    Vector3 v = this.position.add(random.nextInt(3) - 1, 0, random.nextInt(3) - 1);
                     Block block = this.getLevel().getBlock(v);
 
                     if (block.up().isAir() && block.getBurnChance() > 0) {

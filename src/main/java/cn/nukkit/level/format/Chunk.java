@@ -484,7 +484,7 @@ public class Chunk implements IChunk {
     @Override
     public void addBlockEntity(BlockEntity blockEntity) {
         this.tiles.put(blockEntity.getId(), blockEntity);
-        int index = ((blockEntity.getFloorZ() & 0x0f) << 16) | ((blockEntity.getFloorX() & 0x0f) << 12) | (ensureY(blockEntity.getFloorY()) + 64);
+        int index = ((blockEntity.position.getFloorZ() & 0x0f) << 16) | ((blockEntity.position.getFloorX() & 0x0f) << 12) | (ensureY(blockEntity.position.getFloorY()) + 64);
         BlockEntity entity = this.tileList.get(index);
         if (this.tileList.containsKey(index) && !entity.equals(blockEntity)) {
             this.tiles.remove(entity.getId());
@@ -500,7 +500,7 @@ public class Chunk implements IChunk {
     public void removeBlockEntity(BlockEntity blockEntity) {
         if (this.tiles != null) {
             this.tiles.remove(blockEntity.getId());
-            int index = ((blockEntity.getFloorZ() & 0x0f) << 16) | ((blockEntity.getFloorX() & 0x0f) << 12) | (ensureY(blockEntity.getFloorY()) + 64);
+            int index = ((blockEntity.position.getFloorZ() & 0x0f) << 16) | ((blockEntity.position.getFloorX() & 0x0f) << 12) | (ensureY(blockEntity.position.getFloorY()) + 64);
             this.tileList.remove(index);
             if (this.isInit) {
                 this.setChanged();
@@ -713,9 +713,9 @@ public class Chunk implements IChunk {
                     log.warn("Block entity validation of {} at {}, {} {} {} failed, removing as invalid.",
                             entity.getClass().getName(),
                             getProvider().getLevel().getName(),
-                            entity.x,
-                            entity.y,
-                            entity.z,
+                            entity.position.x,
+                            entity.position.y,
+                            entity.position.z,
                             e
                     );
                 } catch (Exception e2) {

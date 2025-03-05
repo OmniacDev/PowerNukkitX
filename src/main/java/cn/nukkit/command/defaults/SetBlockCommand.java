@@ -47,13 +47,13 @@ public class SetBlockCommand extends VanillaCommand {
         if (list.hasResult(3)) {
             oldBlockHandling = list.getResult(3);
         }
-        if (!sender.getPosition().level.isYInRange((int) locator.y)) {
+        if (!sender.getPosition().level.isYInRange((int) locator.position.y)) {
             log.addError("commands.setblock.outOfWorld").output();
             return 0;
         }
 
         Level level = sender.getPosition().getLevel();
-        Block current = level.getBlock(locator);
+        Block current = level.getBlock(locator.position);
         if (current.getId().equals(block.getId()) && current.getBlockState() == block.getBlockState()) {
             log.addError("commands.setblock.noChange").output();
             return 0;
@@ -62,9 +62,9 @@ public class SetBlockCommand extends VanillaCommand {
             switch (oldBlockHandling) {
                 case "destroy" -> {
                     if (sender.isPlayer()) {
-                        level.useBreakOn(locator, null, Item.AIR, sender.asPlayer(), true, true);
+                        level.useBreakOn(locator.position, null, Item.AIR, sender.asPlayer(), true, true);
                     } else {
-                        level.useBreakOn(locator);
+                        level.useBreakOn(locator.position);
                     }
                 }
                 case "keep" -> {
@@ -73,7 +73,7 @@ public class SetBlockCommand extends VanillaCommand {
                 }
             }
         }
-        level.setBlock(locator, block);
+        level.setBlock(locator.position, block);
         log.addSuccess("commands.setblock.success").output();
         return 1;
     }

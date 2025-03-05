@@ -55,12 +55,12 @@ public class BlockWetSponge extends BlockSolid {
         if (level.getDimension() != Level.DIMENSION_NETHER)
             return true;
 
-        level.setBlock(block, new BlockSponge(), true, true);
-        this.getLevel().addLevelEvent(block.add(0.5, 0.875, 0.5), LevelEventPacket.EVENT_CAULDRON_EXPLODE);
+        level.setBlock(block.position, new BlockSponge(), true, true);
+        this.getLevel().addLevelEvent(block.position.add(0.5, 0.875, 0.5), LevelEventPacket.EVENT_CAULDRON_EXPLODE);
         ThreadLocalRandom random = ThreadLocalRandom.current();
 
         for (int i = 0; i < 8; ++i) {
-            level.addParticle(new CloudParticle(block.getLocation().add(random.nextDouble(), 1, random.nextDouble())));
+            level.addParticle(new CloudParticle(block.getLocation().position.add(random.nextDouble(), 1, random.nextDouble())));
         }
 
         return true;

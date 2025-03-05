@@ -59,7 +59,7 @@ public class BlockFlowerPot extends BlockFlowable implements BlockEntityHolder<B
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!BlockLever.isSupportValid(down(), BlockFace.UP)) {
-                level.useBreakOn(this);
+                level.useBreakOn(this.position);
                 return type;
             }
         }
@@ -106,7 +106,7 @@ public class BlockFlowerPot extends BlockFlowable implements BlockEntityHolder<B
             blockEntity.namedTag.putCompound("PlantBlock", potBlock.getPlantBlockTag());
 
             setPropertyValue(CommonBlockProperties.UPDATE_BIT, true);
-            getLevel().setBlock(this, this, true);
+            getLevel().setBlock(this.position, this, true);
             blockEntity.spawnToAll();
             return true;
         }
@@ -119,7 +119,7 @@ public class BlockFlowerPot extends BlockFlowable implements BlockEntityHolder<B
         blockEntity.namedTag.remove("PlantBlock");
 
         setPropertyValue(CommonBlockProperties.UPDATE_BIT, false);
-        getLevel().setBlock(this, this, true);
+        getLevel().setBlock(this.position, this, true);
         blockEntity.spawnToAll();
     }
 
@@ -201,27 +201,27 @@ public class BlockFlowerPot extends BlockFlowable implements BlockEntityHolder<B
 
     @Override
     public double getMinX() {
-        return this.x + 0.3125;
+        return this.position.x + 0.3125;
     }
 
     @Override
     public double getMinZ() {
-        return this.z + 0.3125;
+        return this.position.z + 0.3125;
     }
 
     @Override
     public double getMaxX() {
-        return this.x + 0.6875;
+        return this.position.x + 0.6875;
     }
 
     @Override
     public double getMaxY() {
-        return this.y + 0.375;
+        return this.position.y + 0.375;
     }
 
     @Override
     public double getMaxZ() {
-        return this.z + 0.6875;
+        return this.position.z + 0.6875;
     }
 
     @Override

@@ -70,7 +70,7 @@ public abstract class BlockCopperBase extends BlockSolid implements Oxidizable, 
         if (getOxidizationLevel().equals(oxidizationLevel)) {
             return true;
         }
-        return getLevel().setBlock(this, Block.get(getCopperId(isWaxed(), oxidizationLevel)));
+        return getLevel().setBlock(this.position, Block.get(getCopperId(isWaxed(), oxidizationLevel)));
     }
 
     @Override
@@ -78,7 +78,7 @@ public abstract class BlockCopperBase extends BlockSolid implements Oxidizable, 
         if (isWaxed() == waxed) {
             return true;
         }
-        return getLevel().setBlock(this, Block.get(getCopperId(waxed, getOxidizationLevel())));
+        return getLevel().setBlock(this.position, Block.get(getCopperId(waxed, getOxidizationLevel())));
     }
 
     @Override

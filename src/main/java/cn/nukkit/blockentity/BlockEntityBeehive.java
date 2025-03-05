@@ -70,7 +70,7 @@ public class BlockEntityBeehive extends BlockEntity {
                 int honeyLevel = this.namedTag.getByte("HoneyLevel");
                 beehive.setBlockFace(beehive.getBlockFace());
                 beehive.setHoneyLevel(honeyLevel);
-                beehive.getLevel().setBlock(beehive, beehive, true, true);
+                beehive.getLevel().setBlock(beehive.position, beehive, true, true);
             }
             this.namedTag.remove("HoneyLevel");
         }
@@ -92,7 +92,7 @@ public class BlockEntityBeehive extends BlockEntity {
                 int honeyLevel = this.namedTag.getByte("HoneyLevel");
                 beehive.setBlockFace(beehive.getBlockFace());
                 beehive.setHoneyLevel(honeyLevel);
-                beehive.getLevel().setBlock(beehive, beehive, true, true);
+                beehive.getLevel().setBlock(beehive.position, beehive, true, true);
             }
             this.namedTag.remove("HoneyLevel");
         }
@@ -111,7 +111,7 @@ public class BlockEntityBeehive extends BlockEntity {
         Block block = getBlock();
         if (block instanceof BlockBeehive hive) {
             hive.setHoneyLevel(honeyLevel);
-            block.getLevel().setBlock(block, block, true, true);
+            block.getLevel().setBlock(block.position, block, true, true);
         }
     }
 
@@ -151,8 +151,8 @@ public class BlockEntityBeehive extends BlockEntity {
 
         entity.close();
         if (playSound) {
-            entity.level.addSound(this, Sound.BLOCK_BEEHIVE_ENTER);
-            if (entity.level != null && (entity.level != level || distanceSquared(this) >= 4)) {
+            entity.level.addSound(this.position, Sound.BLOCK_BEEHIVE_ENTER);
+            if (entity.level != null && (entity.level != level || entity.pos.distanceSquared(this.position) >= 4)) {
                 entity.level.addSound(entity.pos, Sound.BLOCK_BEEHIVE_ENTER);
             }
         }
@@ -257,9 +257,9 @@ public class BlockEntityBeehive extends BlockEntity {
             );
 
             saveData.putList("Pos", new ListTag<FloatTag>()
-                    .add(new FloatTag(spawnLocator.x))
-                    .add(new FloatTag(spawnLocator.y))
-                    .add(new FloatTag(spawnLocator.z))
+                    .add(new FloatTag(spawnLocator.position.x))
+                    .add(new FloatTag(spawnLocator.position.y))
+                    .add(new FloatTag(spawnLocator.position.z))
             );
 
             saveData.putList("Motion", new ListTag<FloatTag>()
@@ -299,7 +299,7 @@ public class BlockEntityBeehive extends BlockEntity {
         Entity entity = Entity.createEntity(occupant.actorIdentifier, spawnLocator.getChunk(), saveData);
         if (entity != null) {
             removeOccupant(occupant);
-            level.addSound(this, Sound.BLOCK_BEEHIVE_EXIT);
+            level.addSound(this.position, Sound.BLOCK_BEEHIVE_EXIT);
         }
 
         EntityBee bee = entity instanceof EntityBee ? (EntityBee) entity : null;
@@ -367,7 +367,7 @@ public class BlockEntityBeehive extends BlockEntity {
                     occupant.ticksLeftToStay = 600;
                 }
             } else if (!occupant.isMuted() && RANDOM.nextDouble() < 0.005) {
-                level.addSound(add(0.5, 0, 0.5), occupant.workSound, 1f, occupant.workSoundPitch);
+                level.addSound(this.position.add(0.5, 0, 0.5), occupant.workSound, 1f, occupant.workSoundPitch);
             }
         }
 

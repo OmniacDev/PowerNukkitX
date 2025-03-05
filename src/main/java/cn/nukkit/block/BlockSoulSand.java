@@ -48,7 +48,7 @@ public class BlockSoulSand extends BlockSolid {
 
     @Override
     public double getMaxY() {
-        return this.y + 1;
+        return this.position.y + 1;
     }
 
     @Override
@@ -75,9 +75,9 @@ public class BlockSoulSand extends BlockSolid {
                 BlockFormEvent event = new BlockFormEvent(up, new BlockBubbleColumn());
                 if (!event.isCancelled()) {
                     if (event.getNewState().getWaterloggingLevel() > 0) {
-                        this.getLevel().setBlock(up, 1, new BlockFlowingWater(), true, false);
+                        this.getLevel().setBlock(up.position, 1, new BlockFlowingWater(), true, false);
                     }
-                    this.getLevel().setBlock(up, 0, event.getNewState(), true, true);
+                    this.getLevel().setBlock(up.position, 0, event.getNewState(), true, true);
                 }
             }
         }

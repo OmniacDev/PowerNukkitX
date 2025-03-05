@@ -216,23 +216,23 @@ public class EntityIronGolem extends EntityGolem implements EntityOwnable {
                         }
                         for(int i = 0; i<=2; i++) {
                             Block location = block.getSide(blockFace, i);
-                            block.level.setBlock(location, Block.get(Block.AIR));
-                            block.level.addParticle(new DestroyBlockParticle(location.add(0.5, 0.5, 0.5), block));
-                            block.level.getVibrationManager().callVibrationEvent(new VibrationEvent(null, location.add(0.5, 0.5, 0.5), VibrationType.BLOCK_DESTROY));
+                            block.level.setBlock(location.position, Block.get(Block.AIR));
+                            block.level.addParticle(new DestroyBlockParticle(location.position.add(0.5, 0.5, 0.5), block));
+                            block.level.getVibrationManager().callVibrationEvent(new VibrationEvent(null, location.position.add(0.5, 0.5, 0.5), VibrationType.BLOCK_DESTROY));
                         }
                         for(int i = -1; i<=1; i++) {
                             Block location = block.getSide(blockFace).getSide(face, i);
-                            block.level.setBlock(location, Block.get(Block.AIR));
-                            block.level.addParticle(new DestroyBlockParticle(location.add(0.5, 0.5, 0.5), block));
-                            block.level.getVibrationManager().callVibrationEvent(new VibrationEvent(null, location.add(0.5, 0.5, 0.5), VibrationType.BLOCK_DESTROY));
+                            block.level.setBlock(location.position, Block.get(Block.AIR));
+                            block.level.addParticle(new DestroyBlockParticle(location.position.add(0.5, 0.5, 0.5), block));
+                            block.level.getVibrationManager().callVibrationEvent(new VibrationEvent(null, location.position.add(0.5, 0.5, 0.5), VibrationType.BLOCK_DESTROY));
 
                         }
                         Block pos = block.getSide(blockFace, 2);
                         CompoundTag nbt = new CompoundTag()
                                 .putList("Pos", new ListTag<FloatTag>()
-                                        .add(new FloatTag(pos.x + 0.5))
-                                        .add(new FloatTag(pos.y))
-                                        .add(new FloatTag(pos.z + 0.5)))
+                                        .add(new FloatTag(pos.position.x + 0.5))
+                                        .add(new FloatTag(pos.position.y))
+                                        .add(new FloatTag(pos.position.z + 0.5)))
                                 .putList("Motion", new ListTag<FloatTag>()
                                         .add(new FloatTag(0))
                                         .add(new FloatTag(0))
@@ -241,7 +241,7 @@ public class EntityIronGolem extends EntityGolem implements EntityOwnable {
                                         .add(new FloatTag(0f))
                                         .add(new FloatTag(0f)));
 
-                        Entity irongolem = Entity.createEntity(EntityID.IRON_GOLEM, block.level.getChunk(block.getChunkX(), block.getChunkZ()), nbt);
+                        Entity irongolem = Entity.createEntity(EntityID.IRON_GOLEM, block.level.getChunk(block.position.getChunkX(), block.position.getChunkZ()), nbt);
                         irongolem.spawnToAll();
                         if(irongolem instanceof EntityIronGolem golem) {
                             if(player != null) {

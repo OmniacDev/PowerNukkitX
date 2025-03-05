@@ -360,7 +360,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                 float randY = Utils.rand(0f, 0.3f);
                 float randZ = Utils.rand(0f, 0.5f);
                 this.getLevel().addParticleEffect(this.pos.add(randX, this.getEyeHeight() + randY, randZ), ParticleEffect.VILLAGER_HAPPY);
-                this.getLevel().addParticleEffect(bed.add(randX, 0.5625f + randY, randZ), ParticleEffect.VILLAGER_HAPPY);
+                this.getLevel().addParticleEffect(bed.position.add(randX, 0.5625f + randY, randZ), ParticleEffect.VILLAGER_HAPPY);
             }
         }
     }
@@ -599,11 +599,11 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
         this.namedTag.putCompound("gossip", gossipTag);
         if(getMemoryStorage().notEmpty(CoreMemoryTypes.OCCUPIED_BED)) {
             BlockBed bed = getMemoryStorage().get(CoreMemoryTypes.OCCUPIED_BED);
-            this.namedTag.putCompound("bed", new CompoundTag().putInt("x", bed.getFloorX()).putInt("y", bed.getFloorY()).putInt("z", bed.getFloorZ()));
+            this.namedTag.putCompound("bed", new CompoundTag().putInt("x", bed.position.getFloorX()).putInt("y", bed.position.getFloorY()).putInt("z", bed.position.getFloorZ()));
         }
         if(getMemoryStorage().notEmpty(CoreMemoryTypes.SITE_BLOCK)) {
             Block site = getMemoryStorage().get(CoreMemoryTypes.SITE_BLOCK);
-            this.namedTag.putCompound("siteBlock", new CompoundTag().putInt("x", site.getFloorX()).putInt("y", site.getFloorY()).putInt("z", site.getFloorZ()));
+            this.namedTag.putCompound("siteBlock", new CompoundTag().putInt("x", site.position.getFloorX()).putInt("y", site.position.getFloorY()).putInt("z", site.position.getFloorZ()));
         }
         ListTag<CompoundTag> inventoryTag = null;
         if (this.getInventory() != null) {

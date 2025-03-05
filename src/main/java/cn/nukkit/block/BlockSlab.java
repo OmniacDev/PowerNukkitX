@@ -42,12 +42,12 @@ public abstract class BlockSlab extends BlockTransparent {
 
     @Override
     public double getMinY() {
-        return isOnTop() ? this.y + 0.5 : this.y;
+        return isOnTop() ? this.position.y + 0.5 : this.position.y;
     }
 
     @Override
     public double getMaxY() {
-        return isOnTop() ? this.y + 1 : this.y + 0.5;
+        return isOnTop() ? this.position.y + 1 : this.position.y + 0.5;
     }
 
     @Override
@@ -86,11 +86,11 @@ public abstract class BlockSlab extends BlockTransparent {
         if (face == BlockFace.DOWN) {
             if (target instanceof BlockSlab slab && slab.isOnTop() && isSameType((BlockSlab) target)) {
 
-                this.getLevel().setBlock(target, Block.get(doubleSlab), true);
+                this.getLevel().setBlock(target.position, Block.get(doubleSlab), true);
 
                 return true;
             } else if (block instanceof BlockSlab && isSameType((BlockSlab) block)) {
-                this.getLevel().setBlock(block, Block.get(doubleSlab), true);
+                this.getLevel().setBlock(block.position, Block.get(doubleSlab), true);
 
                 return true;
             } else {
@@ -98,11 +98,11 @@ public abstract class BlockSlab extends BlockTransparent {
             }
         } else if (face == BlockFace.UP) {
             if (target instanceof BlockSlab slab && !slab.isOnTop() && isSameType((BlockSlab) target)) {
-                this.getLevel().setBlock(target, Block.get(doubleSlab), true);
+                this.getLevel().setBlock(target.position, Block.get(doubleSlab), true);
 
                 return true;
             } else if (block instanceof BlockSlab && isSameType((BlockSlab) block)) {
-                this.getLevel().setBlock(block, Block.get(doubleSlab), true);
+                this.getLevel().setBlock(block.position, Block.get(doubleSlab), true);
 
                 return true;
             }
@@ -110,7 +110,7 @@ public abstract class BlockSlab extends BlockTransparent {
         } else {
             if (block instanceof BlockSlab) {
                 if (isSameType((BlockSlab) block)) {
-                    this.getLevel().setBlock(block, Block.get(doubleSlab), true);
+                    this.getLevel().setBlock(block.position, Block.get(doubleSlab), true);
 
                     return true;
                 }
@@ -126,7 +126,7 @@ public abstract class BlockSlab extends BlockTransparent {
         if (block instanceof BlockSlab && !isSameType((BlockSlab) block)) {
             return false;
         }
-        this.getLevel().setBlock(block, this, true, true);
+        this.getLevel().setBlock(block.position, this, true, true);
 
         return true;
     }

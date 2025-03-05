@@ -29,7 +29,7 @@ public abstract class BlockCoral extends BlockFlowable {
     public abstract Block getDeadCoral();
 
     public void setDead(Block deadBlock) {
-        this.getLevel().setBlock(this, deadBlock, true, true);
+        this.getLevel().setBlock(this.position, deadBlock, true, true);
     }
 
     @Override
@@ -42,7 +42,7 @@ public abstract class BlockCoral extends BlockFlowable {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             Block down = down();
             if (!down.isSolid()) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
             } else if (!isDead()) {
                 this.getLevel().scheduleUpdate(this, 60 + ThreadLocalRandom.current().nextInt(40));
             }
@@ -70,11 +70,11 @@ public abstract class BlockCoral extends BlockFlowable {
         }
 
         if (hasWater && layer1.getPropertyValue(LIQUID_DEPTH) == 8) {
-            this.getLevel().setBlock(this, 1, new BlockFlowingWater(), true, false);
+            this.getLevel().setBlock(this.position, 1, new BlockFlowingWater(), true, false);
         }
 
         if (down.isSolid()) {
-            this.getLevel().setBlock(this, 0, this, true, true);
+            this.getLevel().setBlock(this.position, 0, this, true, true);
             return true;
         }
         return false;

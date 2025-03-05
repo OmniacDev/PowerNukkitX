@@ -56,7 +56,7 @@ public class BlockFrostedIce extends BlockTransparent {
 
     @Override
     public boolean onBreak(Item item) {
-        level.setBlock(this, get(FLOWING_WATER), true);
+        level.setBlock(this.position, get(FLOWING_WATER), true);
         return true;
     }
 
@@ -70,7 +70,7 @@ public class BlockFrostedIce extends BlockTransparent {
             }
         } else if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (countNeighbors() < 2) {
-                level.setBlock(this, layer, get(FLOWING_WATER), true);
+                level.setBlock(this.position, layer, get(FLOWING_WATER), true);
             }
         }
         return super.onUpdate(type);
@@ -90,10 +90,10 @@ public class BlockFrostedIce extends BlockTransparent {
         int age = getAge();
         if (age < 3) {
             setAge(age + 1);
-            level.setBlock(this, layer, this, true);
-            level.scheduleUpdate(level.getBlock(this), ThreadLocalRandom.current().nextInt(20, 40));
+            level.setBlock(this.position, layer, this, true);
+            level.scheduleUpdate(level.getBlock(this.position), ThreadLocalRandom.current().nextInt(20, 40));
         } else {
-            level.setBlock(this, layer, get(FLOWING_WATER), true);
+            level.setBlock(this.position, layer, get(FLOWING_WATER), true);
             if (isSource) {
                 for (BlockFace face : BlockFace.values()) {
                     Block block = getSide(face);

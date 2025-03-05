@@ -41,7 +41,7 @@ public class ItemTntMinecart extends Item {
                 adjacent = 0.5D;
             }
             EntityTntMinecart minecart = (EntityTntMinecart) Entity.createEntity(Entity.TNT_MINECART,
-                    level.getChunk(target.getFloorX() >> 4, target.getFloorZ() >> 4), new CompoundTag()
+                    level.getChunk(target.position.getFloorX() >> 4, target.position.getFloorZ() >> 4), new CompoundTag()
                             .putList("Pos", new ListTag<>()
                                     .add(new FloatTag(target.getX() + 0.5))
                                     .add(new FloatTag(target.getY() + 0.0625D + adjacent))

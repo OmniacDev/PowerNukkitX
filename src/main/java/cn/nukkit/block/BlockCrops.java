@@ -51,7 +51,7 @@ public abstract class BlockCrops extends BlockFlowable {
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         if (block.down().getId().equals(FARMLAND)) {
-            this.getLevel().setBlock(block, this, true, true);
+            this.getLevel().setBlock(block.position, this, true, true);
             return true;
         }
         return false;
@@ -74,8 +74,8 @@ public abstract class BlockCrops extends BlockFlowable {
                     return false;
                 }
 
-                this.getLevel().setBlock(this, ev.getNewState(), false, true);
-                this.level.addParticle(new BoneMealParticle(this));
+                this.getLevel().setBlock(this.position, ev.getNewState(), false, true);
+                this.level.addParticle(new BoneMealParticle(this.position));
 
                 if (player != null && !player.isCreative()) {
                     item.count--;
@@ -92,11 +92,11 @@ public abstract class BlockCrops extends BlockFlowable {
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!this.down().getId().equals(FARMLAND)) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (ThreadLocalRandom.current().nextInt(2) == 1 && getLevel().getFullLight(this) >= getMinimumLightLevel()) {
+            if (ThreadLocalRandom.current().nextInt(2) == 1 && getLevel().getFullLight(this.position) >= getMinimumLightLevel()) {
                 int growth = getGrowth();
                 if (growth < getMaxGrowth()) {
                     BlockCrops block = (BlockCrops) this.clone();
@@ -105,7 +105,7 @@ public abstract class BlockCrops extends BlockFlowable {
                     Server.getInstance().getPluginManager().callEvent(ev);
 
                     if (!ev.isCancelled()) {
-                        this.getLevel().setBlock(this, ev.getNewState(), false, true);
+                        this.getLevel().setBlock(this.position, ev.getNewState(), false, true);
                     } else {
                         return Level.BLOCK_UPDATE_RANDOM;
                     }

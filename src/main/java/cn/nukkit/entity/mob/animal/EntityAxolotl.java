@@ -86,7 +86,7 @@ public class EntityAxolotl extends EntityAnimal implements EntitySwimmable, Enti
                                 1, 1
                         ),
                         new Behavior(entity -> {
-                            setMoveTarget(getMemoryStorage().get(CoreMemoryTypes.NEAREST_BLOCK));
+                            setMoveTarget(getMemoryStorage().get(CoreMemoryTypes.NEAREST_BLOCK).position);
                             return true;
                         }, all(
                                 new MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.NEAREST_BLOCK),

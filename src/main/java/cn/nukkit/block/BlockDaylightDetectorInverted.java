@@ -43,7 +43,7 @@ public class BlockDaylightDetectorInverted extends BlockDaylightDetector {
     public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
         if(isNotActivate(player)) return false;
         BlockDaylightDetector block = new BlockDaylightDetector();
-        getLevel().setBlock(this, block, true, true);
+        getLevel().setBlock(this.position, block, true, true);
         if (this.level.getServer().getSettings().levelSettings().enableRedstone()) {
             block.updatePower();
         }

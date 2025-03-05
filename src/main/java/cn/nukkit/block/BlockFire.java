@@ -107,7 +107,7 @@ public class BlockFire extends BlockFlowable {
             if (type == Level.BLOCK_UPDATE_NORMAL) {
                 String downId = down.getId();
                 if (downId.equals(Block.SOUL_SAND) || downId.equals(Block.SOUL_SOIL)) {
-                    this.getLevel().setBlock(this, Block.get(SOUL_FIRE).setPropertyValue(AGE_16, this.getAge()));
+                    this.getLevel().setBlock(this.position, Block.get(SOUL_FIRE).setPropertyValue(AGE_16, this.getAge()));
                     return type;
                 }
             }
@@ -116,9 +116,9 @@ public class BlockFire extends BlockFlowable {
                 BlockFadeEvent event = new BlockFadeEvent(this, get(AIR));
                 level.getServer().getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
-                    level.setBlock(this, event.getNewState(), true);
+                    level.setBlock(this.position, event.getNewState(), true);
                 }
-            } else if (this.level.gameRules.getBoolean(GameRule.DO_FIRE_TICK) && !level.isUpdateScheduled(this, this)) {
+            } else if (this.level.gameRules.getBoolean(GameRule.DO_FIRE_TICK) && !level.isUpdateScheduled(this.position, this)) {
                 level.scheduleUpdate(this, tickRate());
             }
 
@@ -137,7 +137,7 @@ public class BlockFire extends BlockFlowable {
                 BlockFadeEvent event = new BlockFadeEvent(this, get(AIR));
                 level.getServer().getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
-                    level.setBlock(this, event.getNewState(), true);
+                    level.setBlock(this.position, event.getNewState(), true);
                 }
             }
 
@@ -151,7 +151,7 @@ public class BlockFire extends BlockFlowable {
                 if (meta < 15) {
                     int newMeta = meta + random.nextInt(3);
                     this.setAge(Math.min(newMeta, 15));
-                    this.getLevel().setBlock(this, this, true);
+                    this.getLevel().setBlock(this.position, this, true);
                 }
 
                 this.getLevel().scheduleUpdate(this, this.tickRate() + random.nextInt(10));
@@ -161,14 +161,14 @@ public class BlockFire extends BlockFlowable {
                         BlockFadeEvent event = new BlockFadeEvent(this, get(AIR));
                         level.getServer().getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
-                            level.setBlock(this, event.getNewState(), true);
+                            level.setBlock(this.position, event.getNewState(), true);
                         }
                     }
                 } else if (!forever && !(down.getBurnAbility() > 0) && meta == 15 && random.nextInt(4) == 0) {
                     BlockFadeEvent event = new BlockFadeEvent(this, get(AIR));
                     level.getServer().getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
-                        level.setBlock(this, event.getNewState(), true);
+                        level.setBlock(this.position, event.getNewState(), true);
                     }
                 } else {
                     int o = 0;
@@ -181,14 +181,14 @@ public class BlockFire extends BlockFlowable {
                     this.tryToCatchBlockOnFire(this.south(), 300 + o, meta);
                     this.tryToCatchBlockOnFire(this.north(), 300 + o, meta);
 
-                    for (int x = (int) (this.x - 1); x <= (int) (this.x + 1); ++x) {
-                        for (int z = (int) (this.z - 1); z <= (int) (this.z + 1); ++z) {
-                            for (int y = (int) (this.y - 1); y <= (int) (this.y + 4); ++y) {
-                                if (x != (int) this.x || y != (int) this.y || z != (int) this.z) {
+                    for (int x = (int) (this.position.x - 1); x <= (int) (this.position.x + 1); ++x) {
+                        for (int z = (int) (this.position.z - 1); z <= (int) (this.position.z + 1); ++z) {
+                            for (int y = (int) (this.position.y - 1); y <= (int) (this.position.y + 4); ++y) {
+                                if (x != (int) this.position.x || y != (int) this.position.y || z != (int) this.position.z) {
                                     int k = 100;
 
-                                    if (y > this.y + 1) {
-                                        k += (int) ((y - (this.y + 1)) * 100);
+                                    if (y > this.position.y + 1) {
+                                        k += (int) ((y - (this.position.y + 1)) * 100);
                                     }
 
                                     Block block = this.getLevel().getBlock(new Vector3(x, y, z));
@@ -210,7 +210,7 @@ public class BlockFire extends BlockFlowable {
                                             this.level.getServer().getPluginManager().callEvent(e);
 
                                             if (!e.isCancelled()) {
-                                                this.getLevel().setBlock(block, Block.get(blockstate.setPropertyValue(PROPERTIES, AGE_16.createValue(this.getAge()))), true);
+                                                this.getLevel().setBlock(block.position, Block.get(blockstate.setPropertyValue(PROPERTIES, AGE_16.createValue(this.getAge()))), true);
                                                 this.getLevel().scheduleUpdate(block, this.tickRate());
                                             }
                                         }
@@ -243,7 +243,7 @@ public class BlockFire extends BlockFlowable {
                 this.level.getServer().getPluginManager().callEvent(e);
 
                 if (!e.isCancelled()) {
-                    this.getLevel().setBlock(block, Block.get(blockstate.setPropertyValue(PROPERTIES, AGE_16.createValue(this.getAge()))), true);
+                    this.getLevel().setBlock(block.position, Block.get(blockstate.setPropertyValue(PROPERTIES, AGE_16.createValue(this.getAge()))), true);
                     this.getLevel().scheduleUpdate(block, this.tickRate());
                 }
             } else {
@@ -251,7 +251,7 @@ public class BlockFire extends BlockFlowable {
                 this.getLevel().getServer().getPluginManager().callEvent(ev);
 
                 if (!ev.isCancelled()) {
-                    this.getLevel().setBlock(block, Block.get(BlockID.AIR), true);
+                    this.getLevel().setBlock(block.position, Block.get(BlockID.AIR), true);
                 }
             }
 
@@ -334,16 +334,16 @@ public class BlockFire extends BlockFlowable {
                 || downId.equals(BlockID.BEDROCK) && ((BlockBedrock) down).getBurnIndefinitely();
 
         if (!forever && this.getLevel().isRaining() &&
-                (this.getLevel().canBlockSeeSky(this) ||
-                        this.getLevel().canBlockSeeSky(this.east()) ||
-                        this.getLevel().canBlockSeeSky(this.west()) ||
-                        this.getLevel().canBlockSeeSky(this.south()) ||
-                        this.getLevel().canBlockSeeSky(this.north()))
+                (this.getLevel().canBlockSeeSky(this.position) ||
+                        this.getLevel().canBlockSeeSky(this.east().position) ||
+                        this.getLevel().canBlockSeeSky(this.west().position) ||
+                        this.getLevel().canBlockSeeSky(this.south().position) ||
+                        this.getLevel().canBlockSeeSky(this.north().position))
         ) {
             BlockFadeEvent event = new BlockFadeEvent(this, get(AIR));
             level.getServer().getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
-                level.setBlock(this, event.getNewState(), true);
+                level.setBlock(this.position, event.getNewState(), true);
             }
             return true;
         }

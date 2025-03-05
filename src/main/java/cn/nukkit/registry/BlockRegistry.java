@@ -1463,9 +1463,9 @@ public final class BlockRegistry implements BlockID, IRegistry<String, Block, Cl
         if (constructor == null) return null;
         try {
             var b = (Block) constructor.invoke((Object) null);
-            b.x = x;
-            b.y = y;
-            b.z = z;
+            b.position.x = x;
+            b.position.y = y;
+            b.position.z = z;
             return b;
         } catch (Throwable e) {
             throw new RuntimeException(e);
@@ -1477,9 +1477,9 @@ public final class BlockRegistry implements BlockID, IRegistry<String, Block, Cl
         if (constructor == null) return null;
         try {
             var b = (Block) constructor.invoke((Object) null);
-            b.x = x;
-            b.y = y;
-            b.z = z;
+            b.position.x = x;
+            b.position.y = y;
+            b.position.z = z;
             b.level = level;
             return b;
         } catch (Throwable e) {
@@ -1492,9 +1492,9 @@ public final class BlockRegistry implements BlockID, IRegistry<String, Block, Cl
         if (constructor == null) return null;
         try {
             var b = (Block) constructor.invoke((Object) null);
-            b.x = x;
-            b.y = y;
-            b.z = z;
+            b.position.x = x;
+            b.position.y = y;
+            b.position.z = z;
             b.level = level;
             b.layer = layer;
             return b;
@@ -1524,9 +1524,9 @@ public final class BlockRegistry implements BlockID, IRegistry<String, Block, Cl
         if (constructor == null) return null;
         try {
             var b = (Block) constructor.invoke(blockState);
-            b.x = x;
-            b.y = y;
-            b.z = z;
+            b.position.x = x;
+            b.position.y = y;
+            b.position.z = z;
             return b;
         } catch (Throwable e) {
             throw new RuntimeException(e);
@@ -1538,9 +1538,9 @@ public final class BlockRegistry implements BlockID, IRegistry<String, Block, Cl
         if (constructor == null) return null;
         try {
             var b = (Block) constructor.invoke(blockState);
-            b.x = x;
-            b.y = y;
-            b.z = z;
+            b.position.x = x;
+            b.position.y = y;
+            b.position.z = z;
             b.level = level;
             return b;
         } catch (Throwable e) {
@@ -1553,9 +1553,9 @@ public final class BlockRegistry implements BlockID, IRegistry<String, Block, Cl
         if (constructor == null) return null;
         try {
             var b = (Block) constructor.invoke(blockState);
-            b.x = x;
-            b.y = y;
-            b.z = z;
+            b.position.x = x;
+            b.position.y = y;
+            b.position.z = z;
             b.level = level;
             b.layer = layer;
             return b;

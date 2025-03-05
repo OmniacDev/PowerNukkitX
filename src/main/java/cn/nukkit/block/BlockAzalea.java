@@ -67,7 +67,7 @@ public class BlockAzalea extends BlockSolid implements BlockFlowerPot.FlowerPotB
                 item.count--;
             }
 
-            this.level.addParticle(new BoneMealParticle(this));
+            this.level.addParticle(new BoneMealParticle(this.position));
             if (ThreadLocalRandom.current().nextInt(4) == 0) {
                 this.grow();
                 return true;
@@ -82,15 +82,15 @@ public class BlockAzalea extends BlockSolid implements BlockFlowerPot.FlowerPotB
         boolean aged = chance > 0.8;
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!BlockFlower.isSupportValid(down())) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) { //Growth
-            if (ThreadLocalRandom.current().nextInt(1, 8) == 1 && getLevel().getFullLight(add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
+            if (ThreadLocalRandom.current().nextInt(1, 8) == 1 && getLevel().getFullLight(this.position.add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
                 if (aged) {
                     this.grow();
                 } else {
-                    this.getLevel().setBlock(this, this, true);
+                    this.getLevel().setBlock(this.position, this, true);
                     return Level.BLOCK_UPDATE_RANDOM;
                 }
             } else {
@@ -103,7 +103,7 @@ public class BlockAzalea extends BlockSolid implements BlockFlowerPot.FlowerPotB
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         if (BlockFlower.isSupportValid(down())) {
-            this.getLevel().setBlock(block, this, true, true);
+            this.getLevel().setBlock(block.position, this, true, true);
             return true;
         }
 
@@ -135,7 +135,7 @@ public class BlockAzalea extends BlockSolid implements BlockFlowerPot.FlowerPotB
         Vector3 vector3;
 
         generator = new ObjectAzaleaTree();
-        vector3 = this.add(0, 0, 0);
+        vector3 = this.position.add(0, 0, 0);
 
         BlockManager chunkManager = new BlockManager(this.level);
         boolean success = generator.generate(chunkManager, RandomSourceProvider.create(), vector3);
@@ -146,9 +146,9 @@ public class BlockAzalea extends BlockSolid implements BlockFlowerPot.FlowerPotB
         }
 
         for (Block block : ev.getBlockList()) {
-            this.level.setBlock(block, block);
+            this.level.setBlock(block.position, block);
         }
 
-        this.level.setBlock(this, Block.get(OAK_LOG));
+        this.level.setBlock(this.position, Block.get(OAK_LOG));
     }
 }

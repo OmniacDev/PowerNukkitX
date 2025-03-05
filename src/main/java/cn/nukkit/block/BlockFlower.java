@@ -31,7 +31,7 @@ public abstract class BlockFlower extends BlockFlowable implements BlockFlowerPo
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         Block down = this.down();
         if (canPlantOn(down)) {
-            this.getLevel().setBlock(block, this, true);
+            this.getLevel().setBlock(block.position, this, true);
 
             return true;
         }
@@ -42,7 +42,7 @@ public abstract class BlockFlower extends BlockFlowable implements BlockFlowerPo
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!canPlantOn(down())) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
 
                 return Level.BLOCK_UPDATE_NORMAL;
             }
@@ -63,10 +63,10 @@ public abstract class BlockFlower extends BlockFlowable implements BlockFlowerPo
                 item.count--;
             }
 
-            this.level.addParticle(new BoneMealParticle(this));
+            this.level.addParticle(new BoneMealParticle(this.position));
 
             for (int i = 0; i < 8; i++) {
-                Vector3 vec = this.add(
+                Vector3 vec = this.position.add(
                         ThreadLocalRandom.current().nextInt(-3, 4),
                         ThreadLocalRandom.current().nextInt(-1, 2),
                         ThreadLocalRandom.current().nextInt(-3, 4));

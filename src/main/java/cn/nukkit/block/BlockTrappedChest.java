@@ -54,7 +54,7 @@ public class BlockTrappedChest extends BlockChest {
             }
             Block c = this.getSide(side);
             if (c instanceof BlockTrappedChest trappedChest && trappedChest.getBlockFace() == getBlockFace()) {
-                BlockEntity blockEntity = this.getLevel().getBlockEntity(trappedChest);
+                BlockEntity blockEntity = this.getLevel().getBlockEntity(trappedChest.position);
                 if (blockEntity instanceof BlockEntityChest && !((BlockEntityChest) blockEntity).isPaired()) {
                     chest = (BlockEntityChest) blockEntity;
                     break;
@@ -62,13 +62,13 @@ public class BlockTrappedChest extends BlockChest {
             }
         }
 
-        this.getLevel().setBlock(block, this, true, true);
+        this.getLevel().setBlock(block.position, this, true, true);
         CompoundTag nbt = new CompoundTag()
                 .putList("Items", new ListTag<>())
                 .putString("id", BlockEntity.CHEST)
-                .putInt("x", (int) this.x)
-                .putInt("y", (int) this.y)
-                .putInt("z", (int) this.z);
+                .putInt("x", (int) this.position.x)
+                .putInt("y", (int) this.position.y)
+                .putInt("z", (int) this.position.z);
 
         if (item.hasCustomName()) {
             nbt.putString("CustomName", item.getCustomName());
@@ -81,7 +81,7 @@ public class BlockTrappedChest extends BlockChest {
             }
         }
 
-        BlockEntityChest blockEntity = (BlockEntityChest) BlockEntity.createBlockEntity(BlockEntity.CHEST, this.getLevel().getChunk((int) (this.x) >> 4, (int) (this.z) >> 4), nbt);
+        BlockEntityChest blockEntity = (BlockEntityChest) BlockEntity.createBlockEntity(BlockEntity.CHEST, this.getLevel().getChunk((int) this.position.x >> 4, (int) this.position.z >> 4), nbt);
 
         if (blockEntity == null) {
             return false;
@@ -99,7 +99,7 @@ public class BlockTrappedChest extends BlockChest {
     public int getWeakPower(BlockFace face) {
         int playerCount = 0;
 
-        BlockEntity blockEntity = this.level.getBlockEntity(this);
+        BlockEntity blockEntity = this.level.getBlockEntity(this.position);
 
         if (blockEntity instanceof BlockEntityChest) {
             playerCount = ((BlockEntityChest) blockEntity).getInventory().getViewers().size();

@@ -51,7 +51,7 @@ public class BlockPistonArmCollision extends BlockTransparent implements Faceabl
 
     @Override
     public boolean onBreak(Item item) {
-        this.level.setBlock(this, Block.get(BlockID.AIR), true, true);
+        this.level.setBlock(this.position, Block.get(BlockID.AIR), true, true);
         Block side = getSide(getBlockFace().getOpposite());
 
         if (side instanceof BlockPistonBase piston && piston.getBlockFace() == this.getBlockFace()) {
@@ -67,7 +67,7 @@ public class BlockPistonArmCollision extends BlockTransparent implements Faceabl
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!(getSide(getBlockFace().getOpposite()) instanceof BlockPistonBase)) {
-                level.setBlock(this, new BlockAir(), true, false);
+                level.setBlock(this.position, new BlockAir(), true, false);
             }
             return type;
         }

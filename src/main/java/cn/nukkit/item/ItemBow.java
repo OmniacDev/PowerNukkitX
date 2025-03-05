@@ -90,9 +90,9 @@ public class ItemBow extends ItemTool {
 
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(arrowTransform.x))
-                        .add(new FloatTag(arrowTransform.y))
-                        .add(new FloatTag(arrowTransform.z)))
+                        .add(new FloatTag(arrowTransform.position.x))
+                        .add(new FloatTag(arrowTransform.position.y))
+                        .add(new FloatTag(arrowTransform.position.z)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(-Math.sin(player.rotation.yaw / 180 * Math.PI) * Math.cos(player.rotation.pitch / 180 * Math.PI)))
                         .add(new FloatTag(-Math.sin(player.rotation.pitch / 180 * Math.PI)))

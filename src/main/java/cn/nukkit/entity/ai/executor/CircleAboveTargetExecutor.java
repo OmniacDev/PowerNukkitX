@@ -53,13 +53,13 @@ public class CircleAboveTargetExecutor implements EntityControl, IBehaviorExecut
         double angle = Math.toRadians((circleLoc * angleIncrement));
         double particleX = origin.getX() + Math.cos(angle) * 20;
         double particleZ = origin.getZ() + Math.sin(angle) * 20;
-        Transform loc = new Transform(particleX, origin.y, particleZ, angle, 0, origin.level);
-        if(entity.pos.distance(loc) < 3) {
+        Transform loc = new Transform(particleX, origin.position.y, particleZ, angle, 0, origin.level);
+        if(entity.pos.distance(loc.position) < 3) {
             circleLoc++;
             circleLoc%=8;
         }
-        setRouteTarget(entity, loc);
-        setLookTarget(entity, loc);
+        setRouteTarget(entity, loc.position);
+        setLookTarget(entity, loc.position);
         if (updateRouteImmediatelyWhenTargetChange) {
             var floor = target.floor();
 

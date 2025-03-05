@@ -65,7 +65,7 @@ public class BlockGlowLichen extends BlockLichen {
 
         newLichen.setPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS, newLichen.getPropertyValue(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) | (0b000001 << candidates.get(random).getDUSWNEIndex()));
 
-        getLevel().setBlock(random, newLichen, true, true);
+        getLevel().setBlock(random.position, newLichen, true, true);
 
         return true;
     }

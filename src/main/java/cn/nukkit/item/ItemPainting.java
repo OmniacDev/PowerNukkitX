@@ -67,7 +67,7 @@ public class ItemPainting extends Item {
         int direction = DIRECTION[face.getIndex() - 2];
         EntityPainting.Motive motive = validMotives.get(ThreadLocalRandom.current().nextInt(validMotives.size()));
 
-        Vector3 position = new Vector3(target.x + 0.5, target.y + 0.5, target.z + 0.5);
+        Vector3 position = new Vector3(target.position.x + 0.5, target.position.y + 0.5, target.position.z + 0.5);
         double widthOffset = offset(motive.width);
 
         switch (face.getHorizontalIndex()) {

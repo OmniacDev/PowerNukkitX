@@ -108,7 +108,7 @@ public class BlockRedstoneTorch extends BlockTorch implements RedstoneComponent 
 
     private boolean checkState() {
         if (isPoweredFromSide()) {
-            this.level.setBlock(getLocation(), Block.get(BlockID.UNLIT_REDSTONE_TORCH).setPropertyValues(getPropertyValues()), false, true);
+            this.level.setBlock(getLocation().position, Block.get(BlockID.UNLIT_REDSTONE_TORCH).setPropertyValues(getPropertyValues()), false, true);
             updateAllAroundRedstone(getBlockFace().getOpposite());
             return true;
         }
@@ -125,7 +125,7 @@ public class BlockRedstoneTorch extends BlockTorch implements RedstoneComponent 
             return true;
         }
 
-        return this.level.isSidePowered(side, face);
+        return this.level.isSidePowered(side.position, face);
     }
 
     @Override

@@ -61,11 +61,11 @@ public class BlockIronDoor extends BlockDoor {
 
     @Override
     public void playOpenSound() {
-        level.addSound(this, Sound.OPEN_IRON_DOOR);
+        level.addSound(this.position, Sound.OPEN_IRON_DOOR);
     }
 
     @Override
     public void playCloseSound() {
-        level.addSound(this, Sound.CLOSE_IRON_DOOR);
+        level.addSound(this.position, Sound.CLOSE_IRON_DOOR);
     }
 }

@@ -39,9 +39,9 @@ public class StrafeExecutor implements EntityControl, IBehaviorExecutor {
             double pitch = BVector3.getPitchFromVector(toPlayerVector);
             CompoundTag nbt = new CompoundTag()
                     .putList("Pos", new ListTag<FloatTag>()
-                            .add(new FloatTag(fireballTransform.x))
-                            .add(new FloatTag(fireballTransform.y))
-                            .add(new FloatTag(fireballTransform.z)))
+                            .add(new FloatTag(fireballTransform.position.x))
+                            .add(new FloatTag(fireballTransform.position.y))
+                            .add(new FloatTag(fireballTransform.position.z)))
                     .putList("Motion", new ListTag<FloatTag>()
                             .add(new FloatTag(-Math.sin(yaw / 180 * Math.PI) * Math.cos(pitch / 180 * Math.PI)))
                             .add(new FloatTag(-Math.sin(pitch / 180 * Math.PI)))

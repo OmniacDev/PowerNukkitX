@@ -85,7 +85,7 @@ public class BlockChorusPlant extends BlockTransparent {
                 return type;
             }
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            level.useBreakOn(this, null, null, true);
+            level.useBreakOn(this.position, null, null, true);
             return type;
         }
         

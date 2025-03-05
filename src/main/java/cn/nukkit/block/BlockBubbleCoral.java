@@ -50,7 +50,7 @@ public class BlockBubbleCoral extends BlockCoral {
             }
             BlockFadeEvent event = new BlockFadeEvent(this, getDeadCoral());
             if (!event.isCancelled()) {
-                this.getLevel().setBlock(this, event.getNewState(), true, true);
+                this.getLevel().setBlock(this.position, event.getNewState(), true, true);
             }
             return type;
         }

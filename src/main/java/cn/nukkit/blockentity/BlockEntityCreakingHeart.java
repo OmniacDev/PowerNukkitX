@@ -62,15 +62,15 @@ public class BlockEntityCreakingHeart extends BlockEntitySpawnable {
     @Override
     public boolean onUpdate() {
         if(getLevel().getTick() % 40 == 0 && isBlockEntityValid() && getHeart().isActive()) {
-            getLevel().addSound(this, Sound.BLOCK_CREAKING_HEART_AMBIENT);
+            getLevel().addSound(this.position, Sound.BLOCK_CREAKING_HEART_AMBIENT);
         }
         if((getLinkedCreaking() == null || !getLinkedCreaking().isAlive()) && isBlockEntityValid() && getHeart().isActive() && (!getLevel().isDay() || getLevel().isRaining() || getLevel().isThundering())) {
             Locator pos = new Locator(
-                            this.x + Utils.rand(-this.spawnRangeHorizontal, this.spawnRangeHorizontal),
-                            this.y,
-                            this.z + Utils.rand(-this.spawnRangeHorizontal, this.spawnRangeHorizontal),
-                            this.level
-                    );
+                    this.position.x + Utils.rand(-this.spawnRangeHorizontal, this.spawnRangeHorizontal),
+                    this.position.y,
+                    this.position.z + Utils.rand(-this.spawnRangeHorizontal, this.spawnRangeHorizontal),
+                    this.level
+            );
 
             height:
             for(double i = -spawnRangeVertical; i < spawnRangeVertical; i++) {
@@ -79,7 +79,7 @@ public class BlockEntityCreakingHeart extends BlockEntitySpawnable {
                     for(int j = 1; j < 3; j++) {
                         if(!getSide(BlockFace.UP, j).getLevelBlock().isAir()) continue height;
                     }
-                    pos.y = i;
+                    pos.position.y = i;
                     break;
                 }
             }
@@ -92,7 +92,7 @@ public class BlockEntityCreakingHeart extends BlockEntitySpawnable {
                     ent.close();
                 } else {
                     setLinkedCreaking((EntityCreaking) ent);
-                    this.getLevel().addSound(this, Sound.BLOCK_CREAKING_HEART_MOB_SPAWN, 1, 1);
+                    this.getLevel().addSound(this.position, Sound.BLOCK_CREAKING_HEART_MOB_SPAWN, 1, 1);
                     ent.spawnToAll();
                 }
             }

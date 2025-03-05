@@ -51,7 +51,7 @@ public class BlockBoneBlock extends BlockSolid{
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         this.setPillarAxis(face.getAxis());
-        this.getLevel().setBlock(block, this, true);
+        this.getLevel().setBlock(block.position, this, true);
         return true;
     }
 

@@ -38,7 +38,7 @@ public class BlockNetherWart extends BlockFlowable {
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         Block down = this.down();
         if (down.getId().equals(SOUL_SAND)) {
-            this.getLevel().setBlock(block, this, true, true);
+            this.getLevel().setBlock(block.position, this, true, true);
             return true;
         }
         return false;
@@ -48,7 +48,7 @@ public class BlockNetherWart extends BlockFlowable {
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!this.down().getId().equals(SOUL_SAND)) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
@@ -60,7 +60,7 @@ public class BlockNetherWart extends BlockFlowable {
                     Server.getInstance().getPluginManager().callEvent(ev);
 
                     if (!ev.isCancelled()) {
-                        this.getLevel().setBlock(this, ev.getNewState(), true, true);
+                        this.getLevel().setBlock(this.position, ev.getNewState(), true, true);
                     } else {
                         return Level.BLOCK_UPDATE_RANDOM;
                     }

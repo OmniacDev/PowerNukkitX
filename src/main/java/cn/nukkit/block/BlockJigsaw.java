@@ -67,12 +67,12 @@ public class BlockJigsaw extends BlockSolid implements Faceable {
 
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
-        if (Math.abs(player.pos.x - this.x) < 2 && Math.abs(player.pos.z - this.z) < 2) {
+        if (Math.abs(player.pos.x - this.position.x) < 2 && Math.abs(player.pos.z - this.position.z) < 2) {
             double y = player.pos.y + player.getEyeHeight();
 
-            if (y - this.y > 2) {
+            if (y - this.position.y > 2) {
                 this.setBlockFace(BlockFace.UP);
-            } else if (this.y - y > 0) {
+            } else if (this.position.y - y > 0) {
                 this.setBlockFace(BlockFace.DOWN);
             } else {
                 this.setBlockFace(player.getHorizontalFacing().getOpposite());
@@ -80,7 +80,7 @@ public class BlockJigsaw extends BlockSolid implements Faceable {
         } else {
             this.setBlockFace(player.getHorizontalFacing().getOpposite());
         }
-        this.level.setBlock(block, this, true, false);
+        this.level.setBlock(block.position, this, true, false);
 
         return super.place(item, block, target, face, fx, fy, fz, player);
     }

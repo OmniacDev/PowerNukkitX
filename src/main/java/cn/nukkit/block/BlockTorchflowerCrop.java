@@ -56,8 +56,8 @@ public class BlockTorchflowerCrop extends BlockCrops {
                 Server.getInstance().getPluginManager().callEvent(ev);
 
 
-                this.getLevel().setBlock(this, ev.getNewState(), false, true);
-                this.level.addParticle(new BoneMealParticle(this));
+                this.getLevel().setBlock(this.position, ev.getNewState(), false, true);
+                this.level.addParticle(new BoneMealParticle(this.position));
 
                 if (player != null && !player.isCreative()) {
                     item.count--;
@@ -75,8 +75,8 @@ public class BlockTorchflowerCrop extends BlockCrops {
                     return false;
                 }
 
-                this.getLevel().setBlock(this, ev.getNewState(), false, true);
-                this.level.addParticle(new BoneMealParticle(this));
+                this.getLevel().setBlock(this.position, ev.getNewState(), false, true);
+                this.level.addParticle(new BoneMealParticle(this.position));
 
                 if (player != null && !player.isCreative()) {
                     item.count--;
@@ -93,11 +93,11 @@ public class BlockTorchflowerCrop extends BlockCrops {
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!this.down().getId().equals(FARMLAND)) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
-            if (ThreadLocalRandom.current().nextInt(2) == 1 && getLevel().getFullLight(this) >= getMinimumLightLevel()) {
+            if (ThreadLocalRandom.current().nextInt(2) == 1 && getLevel().getFullLight(this.position) >= getMinimumLightLevel()) {
                 int growth = getGrowth();
                 if (growth == 1) {
                     BlockTorchflower block = new BlockTorchflower();
@@ -107,7 +107,7 @@ public class BlockTorchflowerCrop extends BlockCrops {
                     if (ev.isCancelled()) {
                         return 0;
                     } else {
-                        this.getLevel().setBlock(this, ev.getNewState(), false, true);
+                        this.getLevel().setBlock(this.position, ev.getNewState(), false, true);
                         return Level.BLOCK_UPDATE_RANDOM;
                     }
                 }
@@ -118,7 +118,7 @@ public class BlockTorchflowerCrop extends BlockCrops {
                     Server.getInstance().getPluginManager().callEvent(ev);
 
                     if (!ev.isCancelled()) {
-                        this.getLevel().setBlock(this, ev.getNewState(), false, true);
+                        this.getLevel().setBlock(this.position, ev.getNewState(), false, true);
                     } else {
                         return Level.BLOCK_UPDATE_RANDOM;
                     }

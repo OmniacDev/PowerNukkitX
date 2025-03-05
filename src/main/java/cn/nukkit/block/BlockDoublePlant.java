@@ -55,13 +55,13 @@ public abstract class BlockDoublePlant extends BlockFlowable {
             if (isTopHalf()) {
                 // Top
                 if (!(this.down() instanceof BlockDoublePlant)) {
-                    this.getLevel().setBlock(this, Block.get(BlockID.AIR), false, true);
+                    this.getLevel().setBlock(this.position, Block.get(BlockID.AIR), false, true);
                     return Level.BLOCK_UPDATE_NORMAL;
                 }
             } else {
                 // Bottom
                 if (!isSupportValid(down())) {
-                    this.getLevel().setBlock(this, Block.get(BlockID.AIR), false, true);
+                    this.getLevel().setBlock(this.position, Block.get(BlockID.AIR), false, true);
                     return Level.BLOCK_UPDATE_NORMAL;
                 }
             }
@@ -75,11 +75,11 @@ public abstract class BlockDoublePlant extends BlockFlowable {
 
         if (up.isAir() && isSupportValid(down())) {
             setTopHalf(false);
-            this.getLevel().setBlock(block, this, true, false); // If we update the bottom half, it will drop the item because there isn't a flower block above
+            this.getLevel().setBlock(block.position, this, true, false); // If we update the bottom half, it will drop the item because there isn't a flower block above
 
             setTopHalf(true);
-            this.getLevel().setBlock(up, this, true, true);
-            this.getLevel().updateAround(this);
+            this.getLevel().setBlock(up.position, this, true, true);
+            this.getLevel().updateAround(this.position);
             return true;
         }
 
@@ -98,9 +98,9 @@ public abstract class BlockDoublePlant extends BlockFlowable {
         Block down = down();
 
         if (isTopHalf()) { // Top half
-            this.getLevel().useBreakOn(down);
+            this.getLevel().useBreakOn(down.position);
         } else {
-            this.getLevel().setBlock(this, Block.get(BlockID.AIR), true, true);
+            this.getLevel().setBlock(this.position, Block.get(BlockID.AIR), true, true);
         }
 
         return true;
@@ -155,8 +155,8 @@ public abstract class BlockDoublePlant extends BlockFlowable {
                     if (player != null && (player.gamemode & 0x01) == 0) {
                         item.count--;
                     }
-                    this.level.addParticle(new BoneMealParticle(this));
-                    this.level.dropItem(this, this.toItem());
+                    this.level.addParticle(new BoneMealParticle(this.position));
+                    this.level.dropItem(this.position, this.toItem());
             }
 
             return true;

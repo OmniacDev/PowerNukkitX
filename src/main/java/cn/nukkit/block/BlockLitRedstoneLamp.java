@@ -56,9 +56,9 @@ public class BlockLitRedstoneLamp extends BlockRedstoneLamp {
                 return 0;
             }
 
-            this.level.updateComparatorOutputLevelSelective(this, true);
+            this.level.updateComparatorOutputLevelSelective(this.position, true);
 
-            this.level.setBlock(this, Block.get(BlockID.REDSTONE_LAMP), false, false);
+            this.level.setBlock(this.position, Block.get(BlockID.REDSTONE_LAMP), false, false);
         }
         return 0;
     }

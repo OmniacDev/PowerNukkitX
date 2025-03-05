@@ -430,7 +430,7 @@ public class SimpleFlatAStarRouteFinder extends SimpleRouteFinder {
     protected int getAvailableHorizontalOffset(Vector3 vector3) {
         var block = getHighestUnder(vector3, 4);
         if (block != null) {
-            return block.getFloorY() - vector3.getFloorY() + 1;
+            return block.position.getFloorY() - vector3.getFloorY() + 1;
         }
         return -384;
     }

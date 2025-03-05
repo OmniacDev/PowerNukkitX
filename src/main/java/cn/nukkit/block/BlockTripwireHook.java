@@ -55,7 +55,7 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
             case Level.BLOCK_UPDATE_NORMAL -> {
                 var supportBlock = this.getSide(this.getFacing().getOpposite());
                 if (!supportBlock.isNormalBlock() && !(supportBlock instanceof BlockGlass)) {
-                    this.level.useBreakOn(this);
+                    this.level.useBreakOn(this.position);
                 }
                 return type;
             }
@@ -79,7 +79,7 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
             this.setFace(face);
         }
 
-        this.level.setBlock(this, this);
+        this.level.setBlock(this.position, this);
 
         if (player != null) {
             this.updateLine(false, false);
@@ -123,7 +123,7 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
         BlockTripWire[] line = new BlockTripWire[MAX_TRIPWIRE_CIRCUIT_LENGTH];
         //Skip the starting hook in potential circuit
         for (int steps = 1; steps < MAX_TRIPWIRE_CIRCUIT_LENGTH; ++steps) {
-            Block b = this.level.getBlock(locator.getSide(facing, steps));
+            Block b = this.level.getBlock(locator.getSide(facing, steps).position);
 
             if (b instanceof BlockTripwireHook hook) {
                 if (hook.getFacing() == facing.getOpposite()) {
@@ -165,17 +165,17 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
             Locator pairedPos = locator.getSide(facing, pairedHookDistance);
             BlockFace pairedFace = facing.getOpposite();
             updatedHook.setFace(pairedFace);
-            this.level.setBlock(pairedPos, updatedHook, true, true);
+            this.level.setBlock(pairedPos.position, updatedHook, true, true);
             RedstoneComponent.updateAroundRedstone(pairedPos);
             RedstoneComponent.updateAroundRedstone(pairedPos.getSide(pairedFace.getOpposite()));
-            this.addSound(pairedPos, isConnected, isPowered, wasConnected, wasPowered);
+            this.addSound(pairedPos.position, isConnected, isPowered, wasConnected, wasPowered);
         }
 
-        this.addSound(locator, isConnected, isPowered, wasConnected, wasPowered);
+        this.addSound(locator.position, isConnected, isPowered, wasConnected, wasPowered);
 
         if (!isHookBroken) {
             updatedHook.setFace(facing);
-            this.level.setBlock(locator, updatedHook, true, true);
+            this.level.setBlock(locator.position, updatedHook, true, true);
 
             if (doUpdateAroundHook) {
                 updateAroundRedstone();
@@ -187,7 +187,7 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
         for (int steps = 1; steps < pairedHookDistance; steps++) {
             BlockTripWire wire = line[steps];
             if(wire == null) { continue; }
-            Vector3 vc = locator.getSide(facing, steps);
+            Vector3 vc = locator.position.getSide(facing, steps);
             wire.setAttached(isConnected);
             this.level.setBlock(vc, wire, true, true);
         }
@@ -232,7 +232,7 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
         this.setPropertyValue(POWERED_BIT, isPowered);
         var pos = this.add(0.5, 0.5, 0.5);
         VibrationType vibrationType = (isPowered) ? VibrationType.BLOCK_ACTIVATE : VibrationType.BLOCK_DEACTIVATE;
-        this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, pos, vibrationType));
+        this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, pos.position, vibrationType));
     }
 
     public void setAttached(boolean isAttached) {
@@ -240,7 +240,7 @@ public class BlockTripwireHook extends BlockTransparent implements RedstoneCompo
         this.setPropertyValue(ATTACHED_BIT, isAttached);
         var pos = this.add(0.5, 0.5, 0.5);
         VibrationType vibrationType = (isAttached) ? VibrationType.BLOCK_ATTACH : VibrationType.BLOCK_DETACH;
-        this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, pos, vibrationType));
+        this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, pos.position, vibrationType));
     }
 
     public void setFace(BlockFace face) {

@@ -70,7 +70,7 @@ public abstract class BlockDoubleSlabCopperBase extends BlockDoubleSlabBase impl
         if (getOxidizationLevel().equals(oxidizationLevel)) {
             return true;
         }
-        return getLevel().setBlock(this, Block.get(getCopperId(isWaxed(), oxidizationLevel)).setPropertyValues(getPropertyValues()));
+        return getLevel().setBlock(this.position, Block.get(getCopperId(isWaxed(), oxidizationLevel)).setPropertyValues(getPropertyValues()));
     }
 
     @Override
@@ -78,7 +78,7 @@ public abstract class BlockDoubleSlabCopperBase extends BlockDoubleSlabBase impl
         if (isWaxed() == waxed) {
             return true;
         }
-        return getLevel().setBlock(this, Block.get(getCopperId(isWaxed(), getOxidizationLevel())).setPropertyValues(getPropertyValues()));
+        return getLevel().setBlock(this.position, Block.get(getCopperId(isWaxed(), getOxidizationLevel())).setPropertyValues(getPropertyValues()));
     }
 
     @Override

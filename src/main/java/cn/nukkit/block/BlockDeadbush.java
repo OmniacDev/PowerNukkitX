@@ -50,7 +50,7 @@ public class BlockDeadbush extends BlockFlowable implements BlockFlowerPot.Flowe
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         if (isSupportValid()) {
-            this.getLevel().setBlock(block, this, true, true);
+            this.getLevel().setBlock(block.position, this, true, true);
             return true;
         }
         return false;
@@ -66,7 +66,7 @@ public class BlockDeadbush extends BlockFlowable implements BlockFlowerPot.Flowe
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!isSupportValid()) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
 
                 return Level.BLOCK_UPDATE_NORMAL;
             }

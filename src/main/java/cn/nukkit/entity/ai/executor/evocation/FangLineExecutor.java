@@ -96,9 +96,9 @@ public class FangLineExecutor implements EntityControl, IBehaviorExecutor {
     protected void spawn(EntityEvocationIllager illager, Transform transform) {
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(transform.x))
-                        .add(new FloatTag(transform.y))
-                        .add(new FloatTag(transform.z)))
+                        .add(new FloatTag(transform.position.x))
+                        .add(new FloatTag(transform.position.y))
+                        .add(new FloatTag(transform.position.z)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(0))
                         .add(new FloatTag(0))
@@ -107,7 +107,7 @@ public class FangLineExecutor implements EntityControl, IBehaviorExecutor {
                         .add(new FloatTag((transform.yaw)))
                         .add(new FloatTag(0f)));
 
-        Entity fang = Entity.createEntity(EntityID.EVOCATION_FANG, transform.level.getChunk(transform.getChunkX(), transform.getChunkZ()), nbt);
+        Entity fang = Entity.createEntity(EntityID.EVOCATION_FANG, transform.level.getChunk(transform.position.getChunkX(), transform.position.getChunkZ()), nbt);
         if(fang instanceof EntityEvocationFang fangEntity) {
             fangEntity.setEvocationIllager(illager);
         }

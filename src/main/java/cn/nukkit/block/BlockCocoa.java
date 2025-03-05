@@ -55,32 +55,32 @@ public class BlockCocoa extends BlockTransparent implements Faceable {
 
     @Override
     public double getMinX() {
-        return this.x + getRelativeBoundingBox().getMinX();
+        return this.position.x + getRelativeBoundingBox().getMinX();
     }
 
     @Override
     public double getMaxX() {
-        return this.x + getRelativeBoundingBox().getMaxX();
+        return this.position.x + getRelativeBoundingBox().getMaxX();
     }
 
     @Override
     public double getMinY() {
-        return this.y + getRelativeBoundingBox().getMinY();
+        return this.position.y + getRelativeBoundingBox().getMinY();
     }
 
     @Override
     public double getMaxY() {
-        return this.y + getRelativeBoundingBox().getMaxY();
+        return this.position.y + getRelativeBoundingBox().getMaxY();
     }
 
     @Override
     public double getMinZ() {
-        return this.z + getRelativeBoundingBox().getMinZ();
+        return this.position.z + getRelativeBoundingBox().getMinZ();
     }
 
     @Override
     public double getMaxZ() {
-        return this.z + getRelativeBoundingBox().getMaxZ();
+        return this.position.z + getRelativeBoundingBox().getMaxZ();
     }
 
     private AxisAlignedBB getRelativeBoundingBox() {
@@ -113,7 +113,7 @@ public class BlockCocoa extends BlockTransparent implements Faceable {
         if (target instanceof BlockJungleLog || target instanceof BlockWood wood && wood.getWoodType() == WoodType.JUNGLE) {
             if (face != BlockFace.DOWN && face != BlockFace.UP) {
                 setPropertyValue(DIRECTION, faces[face.getIndex()]);
-                this.level.setBlock(block, this, true, true);
+                this.level.setBlock(block.position, this, true, true);
                 return true;
             }
         }
@@ -129,7 +129,7 @@ public class BlockCocoa extends BlockTransparent implements Faceable {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             Block side = this.getSide(BlockFace.fromIndex(faces2[getPropertyValue(DIRECTION)]));
             if (!((side instanceof BlockWood wood && wood.getWoodType() == WoodType.JUNGLE) || side instanceof BlockJungleLog)) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
@@ -159,7 +159,7 @@ public class BlockCocoa extends BlockTransparent implements Faceable {
                 if (!this.grow()) {
                     return false;
                 }
-                this.level.addParticle(new BoneMealParticle(this));
+                this.level.addParticle(new BoneMealParticle(this.position));
 
                 if (player != null && (player.gamemode & 0x01) == 0) {
                     item.count--;
@@ -177,7 +177,7 @@ public class BlockCocoa extends BlockTransparent implements Faceable {
         block.setPropertyValue(AGE_3, getAge() + 1);
         BlockGrowEvent ev = new BlockGrowEvent(this, block);
         Server.getInstance().getPluginManager().callEvent(ev);
-        return !ev.isCancelled() && this.getLevel().setBlock(this, ev.getNewState(), true, true);
+        return !ev.isCancelled() && this.getLevel().setBlock(this.position, ev.getNewState(), true, true);
     }
 
     @Override

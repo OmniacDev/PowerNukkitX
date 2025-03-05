@@ -311,7 +311,7 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
         EntityDamageEvent lastDamageCause = this.lastDamageCause;
         boolean byAttack = lastDamageCause != null && lastDamageCause.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK;
 
-        Vector3 pos = getPosition();
+        Vector3 pos = getPosition().position;
 
         pos.y += 0.2;
         level.dropItem(pos, getBoots());

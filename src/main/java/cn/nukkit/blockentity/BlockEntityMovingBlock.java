@@ -66,9 +66,9 @@ public class BlockEntityMovingBlock extends BlockEntitySpawnable {
             }else{
                 this.block = blockState.toBlock();
             }
-            this.block.x = x;
-            this.block.y = y;
-            this.block.z = z;
+            this.block.position.x = x;
+            this.block.position.y = y;
+            this.block.position.z = z;
         } else {
             this.close();
         }
@@ -97,9 +97,9 @@ public class BlockEntityMovingBlock extends BlockEntitySpawnable {
         if (bb == null)
             return;
         bb = bb.getOffsetBoundingBox(
-                this.x + (piston.progress * moveDirection.getXOffset()) - moveDirection.getXOffset(),
-                this.y + (piston.progress * moveDirection.getYOffset()) - moveDirection.getYOffset(),
-                this.z + (piston.progress * moveDirection.getZOffset()) - moveDirection.getZOffset()
+                this.position.x + (piston.progress * moveDirection.getXOffset()) - moveDirection.getXOffset(),
+                this.position.y + (piston.progress * moveDirection.getYOffset()) - moveDirection.getYOffset(),
+                this.position.z + (piston.progress * moveDirection.getZOffset()) - moveDirection.getZOffset()
                 //带动站在移动方块上的实体
         ).addCoord(0, moveDirection.getAxis().isHorizontal() ? 0.25 : 0, 0);
         for (Entity entity : this.level.getCollidingEntities(bb))

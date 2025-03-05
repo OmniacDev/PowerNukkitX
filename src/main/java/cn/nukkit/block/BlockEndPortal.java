@@ -118,9 +118,9 @@ public class BlockEndPortal extends BlockFlowable implements BlockEntityHolder<B
 
     public static void spawnObsidianPlatform(Locator locator) {
         Level level = locator.getLevel();
-        int x = locator.getFloorX();
-        int y = locator.getFloorY();
-        int z = locator.getFloorZ();
+        int x = locator.position.getFloorX();
+        int y = locator.position.getFloorY();
+        int z = locator.position.getFloorZ();
 
         for (int blockX = x - 2; blockX <= x + 2; blockX++) {
             for (int blockZ = z - 2; blockZ <= z + 2; blockZ++) {

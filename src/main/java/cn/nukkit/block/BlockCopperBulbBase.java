@@ -66,13 +66,13 @@ public abstract class BlockCopperBulbBase extends BlockSolid implements Redstone
                 this.setLit(!(getLit()));
 
                 this.setPowered(true);
-                this.getLevel().setBlock(this, this, true, true);
+                this.getLevel().setBlock(this.position, this, true, true);
                 return 1;
             }
 
             if(getPowered()) {
                 this.setPowered(false);
-                this.getLevel().setBlock(this, this, true, true);
+                this.getLevel().setBlock(this.position, this, true, true);
                 return 1;
             }
         }
@@ -115,7 +115,7 @@ public abstract class BlockCopperBulbBase extends BlockSolid implements Redstone
         if (getOxidizationLevel().equals(oxidizationLevel)) {
             return true;
         }
-        return getLevel().setBlock(this, Block.get(getCopperId(isWaxed(), oxidizationLevel)));
+        return getLevel().setBlock(this.position, Block.get(getCopperId(isWaxed(), oxidizationLevel)));
     }
 
     @Override
@@ -123,7 +123,7 @@ public abstract class BlockCopperBulbBase extends BlockSolid implements Redstone
         if (isWaxed() == waxed) {
             return true;
         }
-        return getLevel().setBlock(this, Block.get(getCopperId(waxed, getOxidizationLevel())));
+        return getLevel().setBlock(this.position, Block.get(getCopperId(waxed, getOxidizationLevel())));
     }
 
     @Override

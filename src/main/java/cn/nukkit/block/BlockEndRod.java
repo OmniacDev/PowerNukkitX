@@ -59,22 +59,22 @@ public class BlockEndRod extends BlockTransparent implements Faceable {
 
     @Override
     public double getMinX() {
-        return this.x + 0.4;
+        return this.position.x + 0.4;
     }
 
     @Override
     public double getMinZ() {
-        return this.z + 0.4;
+        return this.position.z + 0.4;
     }
 
     @Override
     public double getMaxX() {
-        return this.x + 0.6;
+        return this.position.x + 0.6;
     }
 
     @Override
     public double getMaxZ() {
-        return this.z + 0.6;
+        return this.position.z + 0.6;
     }
 
     @Override
@@ -91,7 +91,7 @@ public class BlockEndRod extends BlockTransparent implements Faceable {
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         int[] faces = {0, 1, 3, 2, 5, 4};
         setPropertyValue(CommonBlockProperties.FACING_DIRECTION, faces[player != null ? face.getIndex() : 0]);
-        this.getLevel().setBlock(block, this, true, true);
+        this.getLevel().setBlock(block.position, this, true, true);
 
         return true;
     }

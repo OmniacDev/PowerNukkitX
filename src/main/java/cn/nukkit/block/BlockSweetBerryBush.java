@@ -81,8 +81,8 @@ public class BlockSweetBerryBush extends BlockFlowable {
                 return false;
             }
 
-            this.getLevel().setBlock(this, ev.getNewState(), false, true);
-            this.level.addParticle(new BoneMealParticle(this));
+            this.getLevel().setBlock(this.position, ev.getNewState(), false, true);
+            this.level.addParticle(new BoneMealParticle(this.position));
 
             if (player != null && (player.gamemode & 0x01) == 0) {
                 item.count--;
@@ -107,13 +107,13 @@ public class BlockSweetBerryBush extends BlockFlowable {
 
         getLevel().getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            getLevel().setBlock(this, event.getNewState(), true, true);
+            getLevel().setBlock(this.position, event.getNewState(), true, true);
             Item[] drops = event.getDrops();
             if (drops != null) {
                 Locator dropPos = add(0.5, 0.5, 0.5);
                 for (Item drop : drops) {
                     if (drop != null) {
-                        getLevel().dropItem(dropPos, drop);
+                        getLevel().dropItem(dropPos.position, drop);
                     }
                 }
             }
@@ -126,15 +126,15 @@ public class BlockSweetBerryBush extends BlockFlowable {
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!isSupportValid(down())) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             if (getGrowth() < 3 && ThreadLocalRandom.current().nextInt(5) == 0
-                    && getLevel().getFullLight(add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
+                    && getLevel().getFullLight(this.position.add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
                 BlockGrowEvent event = new BlockGrowEvent(this, Block.get(getId()).setPropertyValue(CommonBlockProperties.GROWTH, getGrowth() + 1));
                 if (!event.isCancelled()) {
-                    getLevel().setBlock(this, event.getNewState(), true, true);
+                    getLevel().setBlock(this.position, event.getNewState(), true, true);
                 }
             }
             return type;
@@ -148,7 +148,7 @@ public class BlockSweetBerryBush extends BlockFlowable {
             return false;
         }
         if (isSupportValid(down())) {
-            this.getLevel().setBlock(block, this, true);
+            this.getLevel().setBlock(block.position, this, true);
             return true;
         }
         return false;

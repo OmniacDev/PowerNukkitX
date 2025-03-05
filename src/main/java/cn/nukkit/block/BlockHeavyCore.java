@@ -28,27 +28,27 @@ public class BlockHeavyCore extends BlockFlowable {
 
     @Override
     public double getMinX() {
-        return this.x + 0.25;
+        return this.position.x + 0.25;
     }
 
     @Override
     public double getMinZ() {
-        return this.z + 0.25;
+        return this.position.z + 0.25;
     }
 
     @Override
     public double getMaxX() {
-        return this.x + 0.75;
+        return this.position.x + 0.75;
     }
 
     @Override
     public double getMaxY() {
-        return this.y + 0.50;
+        return this.position.y + 0.50;
     }
 
     @Override
     public double getMaxZ() {
-        return this.z + 0.75;
+        return this.position.z + 0.75;
     }
 
     @Override

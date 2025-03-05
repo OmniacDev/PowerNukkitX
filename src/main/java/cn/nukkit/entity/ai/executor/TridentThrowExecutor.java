@@ -147,9 +147,9 @@ public class TridentThrowExecutor implements EntityControl, IBehaviorExecutor {
         fireballTransform.setY(entity.pos.y + entity.getEyeHeight() + directionVector.getY());
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(fireballTransform.x))
-                        .add(new FloatTag(fireballTransform.y))
-                        .add(new FloatTag(fireballTransform.z)))
+                        .add(new FloatTag(fireballTransform.position.x))
+                        .add(new FloatTag(fireballTransform.position.y))
+                        .add(new FloatTag(fireballTransform.position.z)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(-Math.sin(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI)))
                         .add(new FloatTag(-Math.sin(entity.rotation.pitch / 180 * Math.PI)))

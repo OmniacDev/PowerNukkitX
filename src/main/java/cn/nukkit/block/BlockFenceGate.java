@@ -107,22 +107,22 @@ public class BlockFenceGate extends BlockTransparent implements RedstoneComponen
 
     @Override
     public double getMinX() {
-        return this.x + offMinX[getOffsetIndex()];
+        return this.position.x + offMinX[getOffsetIndex()];
     }
 
     @Override
     public double getMinZ() {
-        return this.z + offMinZ[getOffsetIndex()];
+        return this.position.z + offMinZ[getOffsetIndex()];
     }
 
     @Override
     public double getMaxX() {
-        return this.x + offMaxX[getOffsetIndex()];
+        return this.position.x + offMaxX[getOffsetIndex()];
     }
 
     @Override
     public double getMaxZ() {
-        return this.z + offMaxZ[getOffsetIndex()];
+        return this.position.z + offMaxZ[getOffsetIndex()];
     }
 
     @Override
@@ -135,7 +135,7 @@ public class BlockFenceGate extends BlockTransparent implements RedstoneComponen
             setInWall(true);
         }
 
-        if (!this.getLevel().setBlock(block, this, true, true)) {
+        if (!this.getLevel().setBlock(block.position, this, true, true)) {
             return false;
         }
 
@@ -212,7 +212,7 @@ public class BlockFenceGate extends BlockTransparent implements RedstoneComponen
         
         setBlockFace(direction);
         setPropertyValue(OPEN_BIT, !getPropertyValue(OPEN_BIT));
-        this.level.setBlock(this, this, false, false);
+        this.level.setBlock(this.position, this, false, false);
 
         if (player != null) {
             this.setManualOverride(this.isGettingPower() || isOpen());
@@ -235,11 +235,11 @@ public class BlockFenceGate extends BlockTransparent implements RedstoneComponen
     }
 
     public void playOpenSound() {
-        level.addSound(this, Sound.RANDOM_DOOR_OPEN);
+        level.addSound(this.position, Sound.RANDOM_DOOR_OPEN);
     }
 
     public void playCloseSound() {
-        level.addSound(this, Sound.RANDOM_DOOR_CLOSE);
+        level.addSound(this.position, Sound.RANDOM_DOOR_CLOSE);
     }
 
     public boolean isOpen() {
@@ -257,7 +257,7 @@ public class BlockFenceGate extends BlockTransparent implements RedstoneComponen
             boolean touchingWall = getSide(face.rotateY()) instanceof BlockWallBase || getSide(face.rotateYCCW()) instanceof BlockWallBase;
             if (touchingWall != isInWall()) {
                 this.setInWall(touchingWall);
-                level.setBlock(this, this, true);
+                level.setBlock(this.position, this, true);
                 return type;
             }
         } else if (type == Level.BLOCK_UPDATE_REDSTONE && this.level.getServer().getSettings().levelSettings().enableRedstone()) {

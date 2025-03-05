@@ -50,8 +50,8 @@ public class BlockGoldenRail extends BlockRail implements RedstoneComponent {
             }
             boolean wasPowered = isActive();
             boolean isPowered = this.isGettingPower()
-                    || checkSurrounding(this, true, 0)
-                    || checkSurrounding(this, false, 0);
+                    || checkSurrounding(this.position, true, 0)
+                    || checkSurrounding(this.position, false, 0);
 
             // Avoid Block mistake
             if (wasPowered != isPowered) {
@@ -205,7 +205,7 @@ public class BlockGoldenRail extends BlockRail implements RedstoneComponent {
     @Override
     public void setActive(boolean active) {
         setRailActive(active);
-        level.setBlock(this, this, true, true);
+        level.setBlock(this.position, this, true, true);
     }
 
     @Override

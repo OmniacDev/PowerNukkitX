@@ -52,10 +52,10 @@ public class BlockBamboo extends BlockTransparent implements BlockFlowerPot.Flow
             }
             return type;
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            level.useBreakOn(this, null, null, true);
+            level.useBreakOn(this.position, null, null, true);
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             Block up = up();
-            if (getAge() == 0 && up.isAir() && level.getFullLight(up) >= BlockCrops.MINIMUM_LIGHT_LEVEL && ThreadLocalRandom.current().nextInt(3) == 0) {
+            if (getAge() == 0 && up.isAir() && level.getFullLight(up.position) >= BlockCrops.MINIMUM_LIGHT_LEVEL && ThreadLocalRandom.current().nextInt(3) == 0) {
                 grow(up);
             }
             return type;
@@ -75,9 +75,9 @@ public class BlockBamboo extends BlockTransparent implements BlockFlowerPot.Flow
         level.getServer().getPluginManager().callEvent(blockGrowEvent);
         if (!blockGrowEvent.isCancelled()) {
             Block newState1 = blockGrowEvent.getNewState();
-            newState1.x = x;
-            newState1.y = up.y;
-            newState1.z = z;
+            newState1.position.x = this.position.x;
+            newState1.position.y = up.position.y;
+            newState1.position.z = this.position.z;
             newState1.level = level;
             newState1.place(toItem(), up, this, BlockFace.DOWN, 0.5, 0.5, 0.5, null);
             return true;
@@ -104,9 +104,9 @@ public class BlockBamboo extends BlockTransparent implements BlockFlowerPot.Flow
         String downId = down.getId();
         if (!downId.equals(BAMBOO) && !downId.equals(BAMBOO_SAPLING)) {
             BlockBambooSapling sampling = new BlockBambooSapling();
-            sampling.x = x;
-            sampling.y = y;
-            sampling.z = z;
+            sampling.position.x = this.position.x;
+            sampling.position.y = this.position.y;
+            sampling.position.z = this.position.z;
             sampling.level = level;
             return sampling.place(item, block, target, face, fx, fy, fz, player);
         }
@@ -138,18 +138,18 @@ public class BlockBamboo extends BlockTransparent implements BlockFlowerPot.Flow
                     bambooDown.setBambooLeafSize(BambooLeafSize.SMALL_LEAVES);
                     bambooDown.setThick(true);
                     bambooDown.setAge(1);
-                    this.level.setBlock(bambooDown, bambooDown, false, true);
+                    this.level.setBlock(bambooDown.position, bambooDown, false, true);
                     while ((down = down.down()) instanceof BlockBamboo) {
                         bambooDown = (BlockBamboo) down;
                         bambooDown.setThick(true);
                         bambooDown.setBambooLeafSize(BambooLeafSize.NO_LEAVES);
                         bambooDown.setAge(1);
-                        this.level.setBlock(bambooDown, bambooDown, false, true);
+                        this.level.setBlock(bambooDown.position, bambooDown, false, true);
                     }
                 } else {
                     setBambooLeafSize(BambooLeafSize.SMALL_LEAVES);
                     bambooDown.setAge(1);
-                    this.level.setBlock(bambooDown, bambooDown, false, true);
+                    this.level.setBlock(bambooDown.position, bambooDown, false, true);
                 }
             } else {
                 setThick(true);
@@ -157,19 +157,19 @@ public class BlockBamboo extends BlockTransparent implements BlockFlowerPot.Flow
                 setAge(0);
                 bambooDown.setBambooLeafSize(LARGE_LEAVES);
                 bambooDown.setAge(1);
-                this.level.setBlock(bambooDown, bambooDown, false, true);
+                this.level.setBlock(bambooDown.position, bambooDown, false, true);
                 down = bambooDown.down();
                 if (down instanceof BlockBamboo) {
                     bambooDown = (BlockBamboo) down;
                     bambooDown.setBambooLeafSize(SMALL_LEAVES);
                     bambooDown.setAge(1);
-                    this.level.setBlock(bambooDown, bambooDown, false, true);
+                    this.level.setBlock(bambooDown.position, bambooDown, false, true);
                     down = bambooDown.down();
                     if (down instanceof BlockBamboo) {
                         bambooDown = (BlockBamboo) down;
                         bambooDown.setBambooLeafSize(NO_LEAVES);
                         bambooDown.setAge(1);
-                        this.level.setBlock(bambooDown, bambooDown, false, true);
+                        this.level.setBlock(bambooDown.position, bambooDown, false, true);
                     }
                 }
             }
@@ -182,7 +182,7 @@ public class BlockBamboo extends BlockTransparent implements BlockFlowerPot.Flow
             setAge(1);
         }
 
-        this.level.setBlock(this, this, false, true);
+        this.level.setBlock(this.position, this, false, true);
         return true;
     }
 
@@ -194,7 +194,7 @@ public class BlockBamboo extends BlockTransparent implements BlockFlowerPot.Flow
             int height = bambooDown.countHeight();
             if (height < 15 && (height < 11 || !(ThreadLocalRandom.current().nextFloat() < 0.25F))) {
                 bambooDown.setAge(0);
-                this.level.setBlock(bambooDown, bambooDown.layer, bambooDown, false, true);
+                this.level.setBlock(bambooDown.position, bambooDown.layer, bambooDown, false, true);
             }
         }
         return super.onBreak(item);
@@ -264,11 +264,11 @@ public class BlockBamboo extends BlockTransparent implements BlockFlowerPot.Flow
     @Override
     public boolean onActivate(@NotNull Item item, Player player, BlockFace blockFace, float fx, float fy, float fz) {
         if (item.isFertilizer()) {
-            int top = (int) y;
+            int top = (int) this.position.y;
             int count = 1;
 
             for (int i = 1; i <= 16; i++) {
-                String id = this.level.getBlockIdAt(this.getFloorX(), this.getFloorY() - i, this.getFloorZ());
+                String id = this.level.getBlockIdAt(this.position.getFloorX(), this.position.getFloorY() - i, this.position.getFloorZ());
                 if (Objects.equals(id, BAMBOO)) {
                     count++;
                 } else {
@@ -277,7 +277,7 @@ public class BlockBamboo extends BlockTransparent implements BlockFlowerPot.Flow
             }
 
             for (int i = 1; i <= 16; i++) {
-                String id = this.level.getBlockIdAt(this.getFloorX(), this.getFloorY() + i, this.getFloorZ());
+                String id = this.level.getBlockIdAt(this.position.getFloorX(), this.position.getFloorY() + i, this.position.getFloorZ());
                 if (Objects.equals(id, BAMBOO)) {
                     top++;
                     count++;
@@ -293,7 +293,7 @@ public class BlockBamboo extends BlockTransparent implements BlockFlowerPot.Flow
 
             boolean success = false;
 
-            Block block = this.up(top - (int) y + 1);
+            Block block = this.up(top - (int) this.position.y + 1);
             if (block.getId() == BlockID.AIR) {
                 success = grow(block);
             }
@@ -302,7 +302,7 @@ public class BlockBamboo extends BlockTransparent implements BlockFlowerPot.Flow
                 if (player != null && player.isSurvival()) {
                     item.count--;
                 }
-                level.addParticle(new BoneMealParticle(this));
+                level.addParticle(new BoneMealParticle(this.position));
             }
 
             return true;

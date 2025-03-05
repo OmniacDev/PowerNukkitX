@@ -57,7 +57,7 @@ public abstract class BlockSapling extends BlockFlowable implements BlockFlowerP
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, Player player) {
         if (BlockFlower.isSupportValid(down())) {
-            this.getLevel().setBlock(block, this, true, true);
+            this.getLevel().setBlock(block.position, this, true, true);
             return true;
         }
 
@@ -76,7 +76,7 @@ public abstract class BlockSapling extends BlockFlowable implements BlockFlowerP
                 item.count--;
             }
 
-            this.level.addParticle(new BoneMealParticle(this));
+            this.level.addParticle(new BoneMealParticle(this.position));
             if (ThreadLocalRandom.current().nextFloat() >= 0.45) {
                 return true;
             }
@@ -92,16 +92,16 @@ public abstract class BlockSapling extends BlockFlowable implements BlockFlowerP
     public int onUpdate(int type) {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             if (!BlockFlower.isSupportValid(down())) {
-                this.getLevel().useBreakOn(this);
+                this.getLevel().useBreakOn(this.position);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) { //Growth
-            if (ThreadLocalRandom.current().nextInt(1, 8) == 1 && getLevel().getFullLight(add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
+            if (ThreadLocalRandom.current().nextInt(1, 8) == 1 && getLevel().getFullLight(this.position.add(0, 1, 0)) >= BlockCrops.MINIMUM_LIGHT_LEVEL) {
                 if (isAged()) {
                     this.grow();
                 } else {
                     setAged(true);
-                    this.getLevel().setBlock(this, this, true);
+                    this.getLevel().setBlock(this.position, this, true);
                     return Level.BLOCK_UPDATE_RANDOM;
                 }
             } else {
@@ -115,13 +115,13 @@ public abstract class BlockSapling extends BlockFlowable implements BlockFlowerP
         ObjectGenerator generator = null;
         boolean bigTree = false;
 
-        Vector3 vector3 = new Vector3(this.x, this.y - 1, this.z);
+        Vector3 vector3 = new Vector3(this.position.x, this.position.y - 1, this.position.z);
 
         switch (getWoodType()) {
             case JUNGLE:
                 Vector2 vector2;
                 if ((vector2 = this.findSaplings(WoodType.JUNGLE)) != null) {
-                    vector3 = this.add(vector2.getFloorX(), 0, vector2.getFloorY());
+                    vector3 = this.position.add(vector2.getFloorX(), 0, vector2.getFloorY());
                     generator = new ObjectJungleBigTree(10, 20,
                             BlockJungleLog.PROPERTIES.getBlockState(CommonBlockProperties.PILLAR_AXIS, BlockFace.Axis.Y),
                             BlockJungleLeaves.PROPERTIES.getDefaultState()
@@ -131,16 +131,16 @@ public abstract class BlockSapling extends BlockFlowable implements BlockFlowerP
 
                 if (!bigTree) {
                     generator = new NewJungleTree(4, 7);
-                    vector3 = this.add(0, 0, 0);
+                    vector3 = this.position.add(0, 0, 0);
                 }
                 break;
             case ACACIA:
                 generator = new ObjectSavannaTree();
-                vector3 = this.add(0, 0, 0);
+                vector3 = this.position.add(0, 0, 0);
                 break;
             case DARK_OAK:
                 if ((vector2 = this.findSaplings(WoodType.DARK_OAK)) != null) {
-                    vector3 = this.add(vector2.getFloorX(), 0, vector2.getFloorY());
+                    vector3 = this.position.add(vector2.getFloorX(), 0, vector2.getFloorY());
                     generator = new ObjectDarkOakTree();
                     bigTree = true;
                 }
@@ -151,19 +151,19 @@ public abstract class BlockSapling extends BlockFlowable implements BlockFlowerP
                 break;
             case PALE_OAK:
                 if ((vector2 = this.findSaplings(WoodType.PALE_OAK)) != null) {
-                    vector3 = this.add(vector2.getFloorX(), 0, vector2.getFloorY());
+                    vector3 = this.position.add(vector2.getFloorX(), 0, vector2.getFloorY());
                     generator = new ObjectPaleOakTree();
                     bigTree = true;
                 }
 
                 if (!bigTree) {
                     generator = new ObjectSmallPaleOakTree(4, 7);
-                    vector3 = this.add(0, 0, 0);
+                    vector3 = this.position.add(0, 0, 0);
                 }
                 break;
             case SPRUCE:
                 if ((vector2 = this.findSaplings(WoodType.SPRUCE)) != null) {
-                    vector3 = this.add(vector2.getFloorX(), 0, vector2.getFloorY());
+                    vector3 = this.position.add(vector2.getFloorX(), 0, vector2.getFloorY());
                     generator = new HugeTreesGenerator(0, 0, null, null) {
                         @Override
                         public boolean generate(BlockManager level, RandomSourceProvider rand, Vector3 position) {
@@ -184,7 +184,7 @@ public abstract class BlockSapling extends BlockFlowable implements BlockFlowerP
                 }
             default:
                 BlockManager blockManager = new BlockManager(this.level);
-                LegacyTreeGenerator.growTree(blockManager, this.getFloorX(), this.getFloorY(), this.getFloorZ(), RandomSourceProvider.create(), getWoodType(), false);
+                LegacyTreeGenerator.growTree(blockManager, this.position.getFloorX(), this.position.getFloorY(), this.position.getFloorZ(), RandomSourceProvider.create(), getWoodType(), false);
                 StructureGrowEvent ev = new StructureGrowEvent(this, blockManager.getBlocks());
                 this.level.getServer().getPluginManager().callEvent(ev);
                 if (ev.isCancelled()) {
@@ -206,7 +206,7 @@ public abstract class BlockSapling extends BlockFlowable implements BlockFlowerP
             this.level.setBlock(vector3.add(0, 0, 1), get(AIR), true, false);
             this.level.setBlock(vector3.add(1, 0, 1), get(AIR), true, false);
         } else {
-            this.level.setBlock(this, get(AIR), true, false);
+            this.level.setBlock(this.position, get(AIR), true, false);
         }
 
         BlockManager blockManager = new BlockManager(this.level);
@@ -220,7 +220,7 @@ public abstract class BlockSapling extends BlockFlowable implements BlockFlowerP
                 this.level.setBlock(vector3.add(0, 0, 1), this, true, false);
                 this.level.setBlock(vector3.add(1, 0, 1), this, true, false);
             } else {
-                this.level.setBlock(this, this, true, false);
+                this.level.setBlock(this.position, this, true, false);
             }
             return;
         }
@@ -240,7 +240,7 @@ public abstract class BlockSapling extends BlockFlowable implements BlockFlowerP
         for (List<Vector2> validVectors : validVectorsList) {
             boolean correct = true;
             for (Vector2 vector2 : validVectors) {
-                if (!this.isSameType(this.add(vector2.x, 0, vector2.y), type))
+                if (!this.isSameType(this.position.add(vector2.x, 0, vector2.y), type))
                     correct = false;
             }
             if (correct) {

@@ -46,8 +46,8 @@ public class BlockActivatorRail extends BlockRail implements RedstoneComponent {
 
             boolean wasPowered = isActive();
             boolean isPowered = this.isGettingPower()
-                    || checkSurrounding(this, true, 0)
-                    || checkSurrounding(this, false, 0);
+                    || checkSurrounding(this.position, true, 0)
+                    || checkSurrounding(this.position, false, 0);
 
             // Avoid Block mistake
             if (wasPowered != isPowered) {

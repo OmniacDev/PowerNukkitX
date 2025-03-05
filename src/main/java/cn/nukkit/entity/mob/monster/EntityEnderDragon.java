@@ -191,9 +191,9 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
                 double particleZ = origin.getZ() + Math.sin(angle) * 96;
                 Block dest = getLevel().getBlock(new Vector3(particleX, 75, particleZ));
                 if(!(dest instanceof BlockEndGateway)) {
-                    Arrays.stream(BlockFace.values()).forEach(face -> getLevel().setBlock(dest.up().getSide(face), Block.get(Block.BEDROCK)));
-                    Arrays.stream(BlockFace.values()).forEach(face -> getLevel().setBlock(dest.down().getSide(face), Block.get(Block.BEDROCK)));
-                    getLevel().setBlock(dest, Block.get(Block.END_GATEWAY));
+                    Arrays.stream(BlockFace.values()).forEach(face -> getLevel().setBlock(dest.up().getSide(face).position, Block.get(Block.BEDROCK)));
+                    Arrays.stream(BlockFace.values()).forEach(face -> getLevel().setBlock(dest.down().getSide(face).position, Block.get(Block.BEDROCK)));
+                    getLevel().setBlock(dest.position, Block.get(Block.END_GATEWAY));
                     break;
                 } else continue;
             }

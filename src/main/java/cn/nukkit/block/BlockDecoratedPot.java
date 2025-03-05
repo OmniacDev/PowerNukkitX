@@ -52,9 +52,9 @@ public class BlockDecoratedPot extends BlockFlowable implements Faceable, BlockE
             }
         }
 
-        nbt.putInt("x", (int) this.x);
-        nbt.putInt("y", (int) this.y);
-        nbt.putInt("z", (int) this.y);
+        nbt.putInt("x", (int) this.position.x);
+        nbt.putInt("y", (int) this.position.y);
+        nbt.putInt("z", (int) this.position.y);
 
         this.setBlockFace(player.getDirection().getOpposite());
         return BlockEntityHolder.setBlockAndCreateEntity(this, true, true, nbt) != null;

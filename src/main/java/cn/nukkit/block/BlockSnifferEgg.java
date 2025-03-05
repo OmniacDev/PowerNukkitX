@@ -32,6 +32,6 @@ public class BlockSnifferEgg extends BlockTransparent {
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         this.setPropertyValue(CommonBlockProperties.CRACKED_STATE, CrackedState.NO_CRACKS);
-        return this.getLevel().setBlock(this, this);
+        return this.getLevel().setBlock(this.position, this);
     }
 }

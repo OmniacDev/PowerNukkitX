@@ -88,32 +88,32 @@ public class BlockChest extends BlockTransparent implements Faceable, BlockEntit
 
     @Override
     public double getMinX() {
-        return this.x + 0.0625;
+        return this.position.x + 0.0625;
     }
 
     @Override
     public double getMinY() {
-        return this.y;
+        return this.position.y;
     }
 
     @Override
     public double getMinZ() {
-        return this.z + 0.0625;
+        return this.position.z + 0.0625;
     }
 
     @Override
     public double getMaxX() {
-        return this.x + 0.9375;
+        return this.position.x + 0.9375;
     }
 
     @Override
     public double getMaxY() {
-        return this.y + 0.9475;
+        return this.position.y + 0.9475;
     }
 
     @Override
     public double getMaxZ() {
-        return this.z + 0.9375;
+        return this.position.z + 0.9375;
     }
 
     @Override
@@ -203,7 +203,7 @@ public class BlockChest extends BlockTransparent implements Faceable, BlockEntit
         if (chest != null) {
             chest.unpair();
         }
-        this.getLevel().setBlock(this, Block.get(BlockID.AIR), true, true);
+        this.getLevel().setBlock(this.position, Block.get(BlockID.AIR), true, true);
 
         return true;
     }

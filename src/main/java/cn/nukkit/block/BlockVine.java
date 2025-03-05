@@ -146,12 +146,12 @@ public class BlockVine extends BlockTransparent {
             f6 = 1;
         }
         return new SimpleAxisAlignedBB(
-                this.x + f1,
-                this.y + f2,
-                this.z + f3,
-                this.x + f4,
-                this.y + f5,
-                this.z + f6
+                this.position.x + f1,
+                this.position.y + f2,
+                this.position.z + f3,
+                this.position.x + f4,
+                this.position.y + f5,
+                this.position.z + f6
         );
     }
 
@@ -159,7 +159,7 @@ public class BlockVine extends BlockTransparent {
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         if (!block.getId().equals(VINE) && target.isSolid() && face.getHorizontalIndex() != -1) {
             this.setPropertyValue(CommonBlockProperties.VINE_DIRECTION_BITS, getMetaFromFace(face.getOpposite()));
-            this.getLevel().setBlock(block, this, true, true);
+            this.getLevel().setBlock(block.position, this, true, true);
             return true;
         }
 
@@ -194,12 +194,12 @@ public class BlockVine extends BlockTransparent {
                 }
             }
             if (faces.isEmpty() && !up.isSolid()) {
-                this.getLevel().useBreakOn(this, null, null, true);
+                this.getLevel().useBreakOn(this.position, null, null, true);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
             int meta = getMetaFromFaces(faces);
             if (meta != this.blockstate.specialValue()) {
-                this.level.setBlock(this, Block.get(VINE).setPropertyValue(CommonBlockProperties.VINE_DIRECTION_BITS, meta), true);
+                this.level.setBlock(this.position, Block.get(VINE).setPropertyValue(CommonBlockProperties.VINE_DIRECTION_BITS, meta), true);
                 return Level.BLOCK_UPDATE_NORMAL;
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
@@ -210,7 +210,7 @@ public class BlockVine extends BlockTransparent {
                 int faceMeta = getMetaFromFace(face);
                 int meta = this.blockstate.specialValue();
 
-                if (this.y < 255 && face == BlockFace.UP && block.isAir()) {
+                if (this.position.y < 255 && face == BlockFace.UP && block.isAir()) {
                     if (this.canSpread()) {
                         for (BlockFace horizontalFace : BlockFace.Plane.HORIZONTAL) {
                             if (random.nextBoolean() || !this.getSide(horizontalFace).getSide(face).isSolid()) {
@@ -247,7 +247,7 @@ public class BlockVine extends BlockTransparent {
                             putVine(this, meta, null);
                         }
                     }
-                } else if (this.y > 0) {
+                } else if (this.position.y > 0) {
                     Block below = this.down();
                     String id = below.getId();
                     if (id.equals(AIR) || id.equals(VINE)) {
@@ -266,9 +266,9 @@ public class BlockVine extends BlockTransparent {
     }
 
     private boolean canSpread() {
-        int blockX = this.getFloorX();
-        int blockY = this.getFloorY();
-        int blockZ = this.getFloorZ();
+        int blockX = this.position.getFloorX();
+        int blockY = this.position.getFloorY();
+        int blockZ = this.position.getFloorZ();
 
         int count = 0;
         for (int x = blockX - 4; x <= blockX + 4; x++) {
@@ -294,7 +294,7 @@ public class BlockVine extends BlockTransparent {
         }
         this.level.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            this.level.setBlock(block, vine, true);
+            this.level.setBlock(block.position, vine, true);
         }
     }
 

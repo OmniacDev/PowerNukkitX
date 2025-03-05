@@ -54,8 +54,8 @@ public interface Oxidizable {
                     if (x == 0 && y == 0 && z == 0){
                         continue;
                     }
-                    mutableTransform.setComponents(block.x + x, block.y + y, block.z + z);
-                    if (block.distanceManhattan(mutableTransform) > 4) {
+                    mutableTransform.position.setComponents(block.position.x + x, block.position.y + y, block.position.z + z);
+                    if (block.position.distanceManhattan(mutableTransform.position) > 4) {
                         continue ;
                     }
                     Block relative = mutableTransform.getLevelBlock();
@@ -84,7 +84,7 @@ public interface Oxidizable {
             BlockFadeEvent event = new BlockFadeEvent(block, nextBlock);
             block.getLevel().getServer().getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
-                block.getLevel().setBlock(block, event.getNewState());
+                block.getLevel().setBlock(block.position, event.getNewState());
             }
         }
         return type;
@@ -109,7 +109,7 @@ public interface Oxidizable {
         if (player == null || !player.isCreative()) {
             item.useOn(this instanceof Block? (Block) this : location.getLevelBlock());
         }
-        location.getLevel().addParticle(new ScrapeParticle(location));
+        location.getLevel().addParticle(new ScrapeParticle(location.position));
         return true;
     }
 

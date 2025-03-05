@@ -27,16 +27,16 @@ public class PlayerInteractEvent extends PlayerEvent implements Cancellable {
     protected final Vector3 touchVector;
     protected final Action action;
 
-    public PlayerInteractEvent(Player player, Item item, Vector3 block, BlockFace face) {
+    public PlayerInteractEvent(Player player, @Nullable Item item, @Nullable Block block, @Nullable BlockFace face) {
         this(player, item, block, face, Action.RIGHT_CLICK_BLOCK);
     }
 
-    public PlayerInteractEvent(Player player, @Nullable Item item, Vector3 block, @Nullable BlockFace face, Action action) {
-        if (block instanceof Block block1) {
-            this.blockTouched = block1;
+    public PlayerInteractEvent(Player player, @Nullable Item item, @Nullable Block block, @Nullable BlockFace face, Action action) {
+        if (block != null) {
+            this.blockTouched = block;
             this.touchVector = new Vector3(0, 0, 0);
         } else {
-            this.touchVector = block;
+            this.touchVector = block.position;
             this.blockTouched = Block.get(Block.AIR, new Locator(0, 0, 0, player.level));
         }
 

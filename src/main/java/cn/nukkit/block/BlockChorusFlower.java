@@ -90,7 +90,7 @@ public class BlockChorusFlower extends BlockTransparent {
                 return type;
             }
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-            this.getLevel().useBreakOn(this, null, null, true);
+            this.getLevel().useBreakOn(this.position, null, null, true);
             return type;
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             // Check limit
@@ -121,14 +121,14 @@ public class BlockChorusFlower extends BlockTransparent {
                     // Grow Upward
                     if (growUp && this.up(2).isAir() && isHorizontalAir(this.up())) {
                         BlockChorusFlower block = (BlockChorusFlower) this.clone();
-                        block.y = this.y + 1;
+                        block.position.y = this.position.y + 1;
                         BlockGrowEvent ev = new BlockGrowEvent(this, block);
                         Server.getInstance().getPluginManager().callEvent(ev);
                         
                         if (!ev.isCancelled()) {
-                            this.getLevel().setBlock(this, Block.get(CHORUS_PLANT));
-                            this.getLevel().setBlock(block, ev.getNewState());
-                            this.getLevel().addSound(this.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_GROW);
+                            this.getLevel().setBlock(this.position, Block.get(CHORUS_PLANT));
+                            this.getLevel().setBlock(block.position, ev.getNewState());
+                            this.getLevel().addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_GROW);
                         } else {
                             return Level.BLOCK_UPDATE_RANDOM;
                         }
@@ -139,17 +139,17 @@ public class BlockChorusFlower extends BlockTransparent {
                             Block check = this.getSide(face);
                             if (check.isAir() && check.down().isAir() && isHorizontalAirExcept(check, face.getOpposite())) {
                                 BlockChorusFlower block = (BlockChorusFlower) this.clone();
-                                block.x = check.x;
-                                block.y = check.y;
-                                block.z = check.z;
+                                block.position.x = check.position.x;
+                                block.position.y = check.position.y;
+                                block.position.z = check.position.z;
                                 block.setAge(getAge() + 1);
                                 BlockGrowEvent ev = new BlockGrowEvent(this, block);
                                 Server.getInstance().getPluginManager().callEvent(ev);
                                 
                                 if (!ev.isCancelled()) {
-                                    this.getLevel().setBlock(this, Block.get(CHORUS_PLANT));
-                                    this.getLevel().setBlock(block, ev.getNewState());
-                                    this.getLevel().addSound(this.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_GROW);
+                                    this.getLevel().setBlock(this.position, Block.get(CHORUS_PLANT));
+                                    this.getLevel().setBlock(block.position, ev.getNewState());
+                                    this.getLevel().addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_GROW);
                                 } else {
                                     return Level.BLOCK_UPDATE_RANDOM;
                                 }
@@ -163,8 +163,8 @@ public class BlockChorusFlower extends BlockTransparent {
                         Server.getInstance().getPluginManager().callEvent(ev);
                         
                         if (!ev.isCancelled()) {
-                            this.getLevel().setBlock(block, ev.getNewState());
-                            this.getLevel().addSound(this.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_DEATH);
+                            this.getLevel().setBlock(block.position, ev.getNewState());
+                            this.getLevel().addSound(this.position.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_DEATH);
                         } else {
                             return Level.BLOCK_UPDATE_RANDOM;
                         }
@@ -204,7 +204,7 @@ public class BlockChorusFlower extends BlockTransparent {
     @Override
     public boolean onProjectileHit(@NotNull Entity projectile, @NotNull Locator locator, @NotNull Vector3 motion) {
         if (projectile instanceof EntityArrow || projectile instanceof EntitySnowball || projectile instanceof EntitySmallFireball) {
-            this.getLevel().useBreakOn(this);
+            this.getLevel().useBreakOn(this.position);
             return true;
         }
         return super.onProjectileHit(projectile, locator, motion);

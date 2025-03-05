@@ -91,12 +91,12 @@ public class CrossBowShootExecutor implements EntityControl, IBehaviorExecutor {
 
         if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
             //更新寻路target
-            setRouteTarget(entity, clone);
+            setRouteTarget(entity, clone.position);
         } else {
             setRouteTarget(entity, null);
         }
         //更新视线target
-        setLookTarget(entity, clone);
+        setLookTarget(entity, clone.position);
 
         if (tick2 == 0 && tick1 > coolDownTick) {
             if (entity.pos.distanceSquared(target.pos) <= maxShootDistanceSquared) {
