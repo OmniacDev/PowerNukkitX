@@ -259,7 +259,6 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     public static final int CREATIVE = 1;
     public static final int ADVENTURE = 2;
     public static final int SPECTATOR = 3;
-    public static final int VIEW = SPECTATOR;
     public static final float DEFAULT_SPEED = 0.1f;
     public static final float DEFAULT_FLY_SPEED = 0.05f;
     public static final float MAXIMUM_SPEED = 0.5f;
@@ -2835,8 +2834,8 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
                 this.timeSinceRest++;
             }
 
-            if (this.server.getServerAuthoritativeMovement() > 0) {//仅服务端权威使用，因为客户端权威continue break是正常的
-                onBlockBreakContinue(breakingBlock.position, breakingBlockFace);
+            if (this.server.getServerAuthoritativeMovement() > 0 && this.breakingBlock != null) {//仅服务端权威使用，因为客户端权威continue break是正常的
+                onBlockBreakContinue(this.breakingBlock.position, this.breakingBlockFace);
             }
 
             //reset move status
