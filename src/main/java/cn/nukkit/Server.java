@@ -2479,7 +2479,7 @@ public class Server {
             case "0", "survival", "s" -> Player.SURVIVAL;
             case "1", "creative", "c" -> Player.CREATIVE;
             case "2", "adventure", "a" -> Player.ADVENTURE;
-            case "3", "spectator", "spc", "view", "v" -> Player.SPECTATOR;
+            case "3", "spectator" -> Player.SPECTATOR;
             default -> -1;
         };
     }
