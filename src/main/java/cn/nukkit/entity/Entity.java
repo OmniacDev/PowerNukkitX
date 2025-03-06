@@ -272,7 +272,9 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     public Entity(IChunk chunk, CompoundTag nbt) {
         initEntityProperties(this.getIdentifier());
 
-        this.level = chunk.getProvider().getLevel();
+        if (chunk != null) {
+            this.level = chunk.getProvider().getLevel();
+        }
 
         if (!(this instanceof Player)) {
             this.init(chunk, nbt);

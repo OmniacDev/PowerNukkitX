@@ -491,19 +491,13 @@ public class LevelDBProvider implements LevelProvider {
 
     @Override
     public IChunk getChunk(int chunkX, int chunkZ, boolean create) {
-        var tmp = getThreadLastChunk();
-        if (tmp != null && tmp.getX() == chunkX && tmp.getZ() == chunkZ) {
-            return tmp;
-        }
         long index = Level.chunkHash(chunkX, chunkZ);
-        lastChunk.set(new WeakReference<>(tmp = chunks.get(index)));
-        if (tmp != null) {
-            return tmp;
-        } else {
+        var tmp = getLoadedChunk(index);
+        if (tmp == null) {
             tmp = this.loadChunk(index, chunkX, chunkZ, create);
             lastChunk.set(new WeakReference<>(tmp));
-            return tmp;
         }
+        return tmp;
     }
 
     @Override
