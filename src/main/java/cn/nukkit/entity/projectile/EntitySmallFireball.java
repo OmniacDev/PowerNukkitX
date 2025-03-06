@@ -95,9 +95,9 @@ public class EntitySmallFireball extends EntityProjectile {
             affect = onCollideWithBlock(locator, motion, collisionBlock);
         if (!affect && this.getLocator().getLevelBlock().getId() == BlockID.AIR) {
             BlockFire fire = (BlockFire) Block.get(BlockID.FIRE);
-            fire.position.x = this.pos.x;
-            fire.position.y = this.pos.y;
-            fire.position.z = this.pos.z;
+            fire.position.x = this.position.x;
+            fire.position.y = this.position.y;
+            fire.position.z = this.position.z;
             fire.level = level;
 
             if (fire.isBlockTopFacingSurfaceSolid(fire.down()) || fire.canNeighborBurn()) {

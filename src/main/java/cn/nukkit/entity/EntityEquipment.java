@@ -3,7 +3,6 @@ package cn.nukkit.entity;
 import cn.nukkit.Player;
 
 
-import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.inventory.BaseInventory;
 import cn.nukkit.inventory.InventoryHolder;
 import cn.nukkit.inventory.InventoryType;
@@ -158,30 +157,30 @@ public class EntityEquipment extends BaseInventory {
     public boolean equip(Item item) {
         if (item.isHelmet()) {
             if (item.getTier() > getHead().getTier()) {
-                this.entity.level.dropItem(this.entity.pos, getHead());
+                this.entity.level.dropItem(this.entity.position, getHead());
                 this.setHead(item);
                 return true;
             }
         } else if (item.isChestplate()) {
             if (item.getTier() > getChest().getTier()) {
-                this.entity.level.dropItem(this.entity.pos, getChest());
+                this.entity.level.dropItem(this.entity.position, getChest());
                 this.setChest(item);
                 return true;
             }
         } else if (item.isLeggings()) {
             if (item.getTier() > getLegs().getTier()) {
-                this.entity.level.dropItem(this.entity.pos, getLegs());
+                this.entity.level.dropItem(this.entity.position, getLegs());
                 this.setLegs(item);
                 return true;
             }
         } else if (item.isBoots()) {
             if (item.getTier() > getFeet().getTier()) {
-                this.entity.level.dropItem(this.entity.pos, getFeet());
+                this.entity.level.dropItem(this.entity.position, getFeet());
                 this.setFeet(item);
                 return true;
             }
         } else if (item.getTier() > getMainHand().getTier()) {
-            this.entity.level.dropItem(this.entity.pos, getMainHand());
+            this.entity.level.dropItem(this.entity.position, getMainHand());
             this.setMainHand(item);
             return true;
         }

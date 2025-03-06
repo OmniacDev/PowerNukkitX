@@ -68,10 +68,10 @@ public abstract class EntityVehicle extends Entity implements EntityRideable, En
 
         // A killer task
         if (this.level != null) {
-            if (this.pos.y < this.level.getMinHeight() - 16) {
+            if (this.position.y < this.level.getMinHeight() - 16) {
                 kill();
             }
-        } else if (this.pos.y < -16) {
+        } else if (this.position.y < -16) {
             kill();
         }
         // Movement code

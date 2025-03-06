@@ -51,7 +51,7 @@ public class VexSummonExecutor extends FangLineExecutor {
     @Override
     protected void startSpell(EntityMob entity) {
         tick = 0;
-        entity.level.addSound(entity.pos, Sound.MOB_EVOCATION_ILLAGER_PREPARE_SUMMON);
+        entity.level.addSound(entity.position, Sound.MOB_EVOCATION_ILLAGER_PREPARE_SUMMON);
         entity.setDataProperty(EntityDataTypes.EVOKER_SPELL_CASTING_COLOR, BlockColor.WHITE_BLOCK_COLOR.getARGB());
         entity.getMemoryStorage().put(LAST_MAGIC, EntityEvocationIllager.SPELL.SUMMON);
         entity.setDataFlag(EntityFlag.CASTING);
@@ -76,7 +76,7 @@ public class VexSummonExecutor extends FangLineExecutor {
                         .add(new FloatTag((float) (entity.headYaw > 180 ? 360 : 0) - entity.headYaw))
                         .add(new FloatTag(0f)));
 
-        Entity vexEntity = Entity.createEntity(EntityID.VEX, entity.level.getChunk(entity.pos.getChunkX(), entity.pos.getChunkZ()), nbt);
+        Entity vexEntity = Entity.createEntity(EntityID.VEX, entity.level.getChunk(entity.position.getChunkX(), entity.position.getChunkZ()), nbt);
         if(vexEntity instanceof EntityVex vex) {
             vex.setIllager((EntityEvocationIllager) entity);
         }

@@ -53,7 +53,7 @@ public class EntityWindCharge extends EntityProjectile {
 
         for(Entity entity : level.getEntities()) {
             if(entity instanceof EntityLiving entityLiving) {
-                if(entityLiving.pos.distance(this.pos) < getBurstRadius()) {
+                if(entityLiving.position.distance(this.position) < getBurstRadius()) {
                     this.knockBack(entityLiving);
                 }
             }
@@ -71,7 +71,7 @@ public class EntityWindCharge extends EntityProjectile {
         }
         entity.attack(new EntityDamageByEntityEvent(this, entity, EntityDamageEvent.DamageCause.PROJECTILE, 1f));
         level.addLevelSoundEvent(entity.getLocator().position.add(0, 1), LevelSoundEventPacket.SOUND_WIND_CHARGE_BURST);
-        this.level.addParticle(new GenericParticle(this.pos, Particle.TYPE_WIND_EXPLOSION));
+        this.level.addParticle(new GenericParticle(this.position, Particle.TYPE_WIND_EXPLOSION));
         knockBack(entity);
         this.kill();
     }
@@ -87,7 +87,7 @@ public class EntityWindCharge extends EntityProjectile {
 
     @Override
     protected void addHitEffect() {
-        this.level.addParticle(new GenericParticle(this.pos, Particle.TYPE_WIND_EXPLOSION));
+        this.level.addParticle(new GenericParticle(this.position, Particle.TYPE_WIND_EXPLOSION));
     }
 
     @Override

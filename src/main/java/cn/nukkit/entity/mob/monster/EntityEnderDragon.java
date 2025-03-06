@@ -30,7 +30,6 @@ import cn.nukkit.entity.ai.route.posevaluator.IPosEvaluator;
 import cn.nukkit.entity.ai.sensor.NearestEntitySensor;
 import cn.nukkit.entity.ai.sensor.NearestPlayerSensor;
 import cn.nukkit.entity.item.EntityEnderCrystal;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Sound;
@@ -106,9 +105,9 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
         addEntity.yaw = (float) this.rotation.yaw;
         addEntity.headYaw = (float) this.rotation.yaw;
         addEntity.pitch = (float) this.rotation.pitch;
-        addEntity.x = (float) this.pos.x;
-        addEntity.y = (float) this.pos.y;
-        addEntity.z = (float) this.pos.z;
+        addEntity.x = (float) this.position.x;
+        addEntity.y = (float) this.position.y;
+        addEntity.z = (float) this.position.z;
         addEntity.speedX = (float) this.motion.x;
         addEntity.speedY = (float) this.motion.y;
         addEntity.speedZ = (float) this.motion.z;
@@ -140,12 +139,12 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
             return true;
         }
         if (currentTick % 2 == 0) {
-            if(currentTick % ((this.pos.toHorizontal().distance(Vector2.ZERO) < 1) ? 10 : 20) == 0) {
-                getLevel().addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_FLAP, -1, this.getIdentifier(), false, false);
+            if(currentTick % ((this.position.toHorizontal().distance(Vector2.ZERO) < 1) ? 10 : 20) == 0) {
+                getLevel().addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_FLAP, -1, this.getIdentifier(), false, false);
             }
             for (Entity e : this.getLevel().getEntities()) {
                 if (e instanceof EntityEnderCrystal) {
-                    if (e.pos.distance(this.pos) <= 28) {
+                    if (e.position.distance(this.position) <= 28) {
                         float health = this.getHealth();
                         if (!(health > this.getMaxHealth()) && health != 0) {
                             this.heal(0.2f);
@@ -163,7 +162,7 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
     public void kill() {
         if(deathTicks == -1) {
             deathTicks = 190;
-            getLevel().addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_DEATH, -1, getIdentifier(), false, false);
+            getLevel().addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_DEATH, -1, getIdentifier(), false, false);
             EntityEventPacket packet = new EntityEventPacket();
             packet.event = EntityEventPacket.ENDER_DRAGON_DEATH;
             packet.eid = getId();
@@ -294,7 +293,7 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
         public boolean control(EntityMob entity) {
             Vector3 target = entity.getMemoryStorage().get(CoreMemoryTypes.LOOK_TARGET);
             if(target == null) return false;
-            var toPlayerVector = new Vector3(entity.pos.x - target.x, entity.pos.y - target.y, entity.pos.z - target.z).normalize();
+            var toPlayerVector = new Vector3(entity.position.x - target.x, entity.position.y - target.y, entity.position.z - target.z).normalize();
             entity.headYaw = (BVector3.getYawFromVector(toPlayerVector));
             entity.rotation.yaw = (BVector3.getYawFromVector(toPlayerVector));
             entity.rotation.pitch = (BVector3.getPitchFromVector(toPlayerVector));

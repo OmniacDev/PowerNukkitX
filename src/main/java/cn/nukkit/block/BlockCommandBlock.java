@@ -5,7 +5,6 @@ import cn.nukkit.Server;
 import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.blockentity.BlockEntityCommandBlock;
 import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemBlock;
 import cn.nukkit.level.Level;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
@@ -69,8 +68,8 @@ public class BlockCommandBlock extends BlockSolid implements Faceable, BlockEnti
         if (player != null) {
             if (!player.isCreative())
                 return false;
-            if (Math.abs(player.pos.getFloorX() - this.position.x) < 2 && Math.abs(player.pos.getFloorZ() - this.position.z) < 2) {
-                double y = player.pos.y + player.getEyeHeight();
+            if (Math.abs(player.position.getFloorX() - this.position.x) < 2 && Math.abs(player.position.getFloorZ() - this.position.z) < 2) {
+                double y = player.position.y + player.getEyeHeight();
                 if (y - this.position.y > 2) {
                     this.setBlockFace(BlockFace.UP);
                 } else if (this.position.y - y > 0) {

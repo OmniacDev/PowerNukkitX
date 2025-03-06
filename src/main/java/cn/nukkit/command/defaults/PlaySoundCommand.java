@@ -72,16 +72,16 @@ public class PlaySoundCommand extends VanillaCommand {
         for (Player player : targets) {
             String name = player.getName();
             PlaySoundPacket packet = new PlaySoundPacket();
-            if (locator.position.distance(player.pos) > maxDistance) {
+            if (locator.position.distance(player.position) > maxDistance) {
                 if (minimumVolume <= 0) {
                     log.addError("commands.playsound.playerTooFar", name);
                     continue;
                 }
 
                 packet.volume = minimumVolume;
-                packet.x = player.pos.getFloorX();
-                packet.y = player.pos.getFloorY();
-                packet.z = player.pos.getFloorZ();
+                packet.x = player.position.getFloorX();
+                packet.y = player.position.getFloorY();
+                packet.z = player.position.getFloorZ();
             } else {
                 packet.volume = volume;
                 packet.x = locator.position.getFloorX();

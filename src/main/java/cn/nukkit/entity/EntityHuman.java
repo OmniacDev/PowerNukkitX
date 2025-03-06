@@ -150,9 +150,9 @@ public class EntityHuman extends EntityHumanType {
     public void moveDelta() {
         MovePlayerPacket pk = new MovePlayerPacket();
         pk.eid = this.getId();
-        pk.x = (float) this.pos.x;
-        pk.y = (float) this.pos.y;
-        pk.z = (float) this.pos.z;
+        pk.x = (float) this.position.x;
+        pk.y = (float) this.position.y;
+        pk.z = (float) this.position.z;
         pk.yaw = (float) this.rotation.yaw;
         pk.headYaw = this.headYaw.floatValue();
         pk.pitch = (float) this.rotation.pitch;
@@ -183,9 +183,9 @@ public class EntityHuman extends EntityHumanType {
             pk.username = this.getName();
             pk.entityUniqueId = this.getId();
             pk.entityRuntimeId = this.getId();
-            pk.x = (float) this.pos.x;
-            pk.y = (float) this.pos.y;
-            pk.z = (float) this.pos.z;
+            pk.x = (float) this.position.x;
+            pk.y = (float) this.position.y;
+            pk.z = (float) this.position.z;
             pk.speedX = (float) this.motion.x;
             pk.speedY = (float) this.motion.y;
             pk.speedZ = (float) this.motion.z;

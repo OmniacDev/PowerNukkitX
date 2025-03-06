@@ -26,7 +26,7 @@ public class PlaySoundExecutor implements IBehaviorExecutor {
     public boolean execute(EntityMob entity) {
         float volume = minVolume == maxVolume ? minVolume : ThreadLocalRandom.current().nextFloat(minVolume, maxVolume);
         float pitch = minPitch == maxPitch ? minPitch : ThreadLocalRandom.current().nextFloat(minPitch, maxPitch);
-        entity.getLocator().getLevel().addSound(entity.pos, sound, volume, pitch);
+        entity.getLocator().getLevel().addSound(entity.position, sound, volume, pitch);
         return false;
     }
 }

@@ -62,8 +62,8 @@ public class EntityCreeper extends EntityMonster implements EntityWalkable, Enti
                                 all(
                                         entity -> entity.getMemoryStorage().compareDataTo(CoreMemoryTypes.SHOULD_EXPLODE, true),
                                         any(
-                                                entity -> getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER) != null && getLevel().raycastBlocks(this.pos, getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER).pos).isEmpty(),
-                                                entity -> getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET) != null && getLevel().raycastBlocks(this.pos, getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET).pos).isEmpty()
+                                                entity -> getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER) != null && getLevel().raycastBlocks(this.position, getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER).position).isEmpty(),
+                                                entity -> getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET) != null && getLevel().raycastBlocks(this.position, getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET).position).isEmpty()
                                         )
                                 ), 4, 1
                         ),
@@ -89,11 +89,11 @@ public class EntityCreeper extends EntityMonster implements EntityWalkable, Enti
                     Entity attacker = memoryStorage.get(CoreMemoryTypes.ATTACK_TARGET);
                     if (attacker == null)
                         attacker = memoryStorage.get(CoreMemoryTypes.NEAREST_PLAYER);
-                    if (attacker != null && (!(attacker instanceof Player player) || player.isSurvival()) && attacker.pos.distanceSquared(entity.pos) <= 3 * 3 && (memoryStorage.isEmpty(CoreMemoryTypes.SHOULD_EXPLODE) || memoryStorage.compareDataTo(CoreMemoryTypes.SHOULD_EXPLODE, false))) {
+                    if (attacker != null && (!(attacker instanceof Player player) || player.isSurvival()) && attacker.position.distanceSquared(entity.position) <= 3 * 3 && (memoryStorage.isEmpty(CoreMemoryTypes.SHOULD_EXPLODE) || memoryStorage.compareDataTo(CoreMemoryTypes.SHOULD_EXPLODE, false))) {
                         memoryStorage.put(CoreMemoryTypes.SHOULD_EXPLODE, true);
                         return;
                     }
-                    if ((attacker == null || (attacker instanceof Player player && !player.isSurvival()) || attacker.pos.distanceSquared(entity.pos) >= 7 * 7) && memoryStorage.compareDataTo(CoreMemoryTypes.SHOULD_EXPLODE, true) && memoryStorage.get(CoreMemoryTypes.EXPLODE_CANCELLABLE)) {
+                    if ((attacker == null || (attacker instanceof Player player && !player.isSurvival()) || attacker.position.distanceSquared(entity.position) >= 7 * 7) && memoryStorage.compareDataTo(CoreMemoryTypes.SHOULD_EXPLODE, true) && memoryStorage.get(CoreMemoryTypes.EXPLODE_CANCELLABLE)) {
                         memoryStorage.put(CoreMemoryTypes.SHOULD_EXPLODE, false);
                     }
                 }),
@@ -182,7 +182,7 @@ public class EntityCreeper extends EntityMonster implements EntityWalkable, Enti
         if (item.getId() == Item.FLINT_AND_STEEL && (memoryStorage.isEmpty(CoreMemoryTypes.SHOULD_EXPLODE) || memoryStorage.compareDataTo(CoreMemoryTypes.SHOULD_EXPLODE, false))) {
             memoryStorage.put(CoreMemoryTypes.SHOULD_EXPLODE, true);
             memoryStorage.put(CoreMemoryTypes.EXPLODE_CANCELLABLE, false);
-            this.level.addSound(this.pos, Sound.FIRE_IGNITE);
+            this.level.addSound(this.position, Sound.FIRE_IGNITE);
             return true;
         }
         return super.onInteract(player, item, clickedPos);

@@ -36,8 +36,8 @@ public class HoppingController extends WalkController {
                 entity.setDataFlag(EntityFlag.MOVING, false);
                 return false;
             }
-            var relativeVector = direction.clone().setComponents(direction.x - entity.pos.x,
-                    direction.y - entity.pos.y, direction.z - entity.pos.z);
+            var relativeVector = direction.clone().setComponents(direction.x - entity.position.x,
+                    direction.y - entity.position.y, direction.z - entity.position.z);
             var xzLengthSquared = relativeVector.x * relativeVector.x + relativeVector.z * relativeVector.z;
             if (Math.abs(xzLengthSquared) < EntityPhysical.PRECISION) {
                 entity.setDataFlag(EntityFlag.MOVING, false);
@@ -52,7 +52,7 @@ public class HoppingController extends WalkController {
                 double diffY = entity.getScale();
                 dy += entity.getJumpingMotion(diffY);
                 Sound jumpSound = entity instanceof EntityRabbit ? Sound.MOB_RABBIT_HOP : entity instanceof EntitySlime ? Sound.JUMP_SLIME : null;
-                if(jumpSound != null) entity.getLevel().addSound(entity.pos, jumpSound);
+                if(jumpSound != null) entity.getLevel().addSound(entity.position, jumpSound);
                 entity.setDataProperty(EntityDataTypes.CLIENT_EVENT, 2);
                 currentJumpCoolDown = 0;
             }

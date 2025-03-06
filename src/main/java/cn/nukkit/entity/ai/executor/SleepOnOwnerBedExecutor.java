@@ -4,7 +4,6 @@ import cn.nukkit.Player;
 import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityOwnable;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.mob.EntityMob;
 
 /**
  * 使有主人的生物在主人睡觉时睡到主人床上<br/>
@@ -15,7 +14,7 @@ public class SleepOnOwnerBedExecutor implements IBehaviorExecutor {
     @Override
     public boolean execute(EntityMob entity) {
         Player owner = ((EntityOwnable) entity).getOwner();
-        if (entity.pos.distanceSquared(owner.pos) <= 4) {
+        if (entity.position.distanceSquared(owner.position) <= 4) {
             setSleeping(entity, true);
         }
         return owner.isSleeping();
@@ -24,8 +23,8 @@ public class SleepOnOwnerBedExecutor implements IBehaviorExecutor {
     @Override
     public void onStart(EntityMob entity) {
         Player owner = ((EntityOwnable) entity).getOwner();
-        entity.setMoveTarget(owner.pos);
-        entity.setLookTarget(owner.pos);
+        entity.setMoveTarget(owner.position);
+        entity.setLookTarget(owner.position);
     }
 
     @Override

@@ -165,9 +165,9 @@ public class EntityBoat extends EntityVehicle {
         addEntity.yaw = (float) this.rotation.yaw;
         addEntity.headYaw = (float) this.rotation.yaw;
         addEntity.pitch = (float) this.rotation.pitch;
-        addEntity.x = (float) this.pos.x;
-        addEntity.y = (float) this.pos.y + getBaseOffset();
-        addEntity.z = (float) this.pos.z;
+        addEntity.x = (float) this.position.x;
+        addEntity.y = (float) this.position.y + getBaseOffset();
+        addEntity.z = (float) this.position.z;
         addEntity.speedX = (float) this.motion.x;
         addEntity.speedY = (float) this.motion.y;
         addEntity.speedZ = (float) this.motion.z;
@@ -212,11 +212,11 @@ public class EntityBoat extends EntityVehicle {
 
         // A killer task
         if (this.level != null) {
-            if (this.pos.y < this.level.getMinHeight() - 16) {
+            if (this.position.y < this.level.getMinHeight() - 16) {
                 kill();
                 return false;
             }
-        } else if (this.pos.y < -16) {
+        } else if (this.position.y < -16) {
             kill();
             return false;
         }
@@ -269,13 +269,13 @@ public class EntityBoat extends EntityVehicle {
     }
 
     private void moveBoat(double waterDiff) {
-        checkObstruction(this.pos.x, this.pos.y, this.pos.z);
+        checkObstruction(this.position.x, this.position.y, this.position.z);
         move(this.motion.x, this.motion.y, this.motion.z);
 
         double friction = 1 - this.getDrag();
 
         if (this.onGround && (Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.z) > 0.00001)) {
-            friction *= this.getLevel().getBlock(this.pos.add(0, -1, 0).floor()).getFrictionFactor();
+            friction *= this.getLevel().getBlock(this.position.add(0, -1, 0).floor()).getFrictionFactor();
         }
 
         this.motion.x *= friction;
@@ -287,7 +287,7 @@ public class EntityBoat extends EntityVehicle {
         this.motion.z *= friction;
 
         Transform from = new Transform(this.prevPos.x, this.prevPos.y, this.prevPos.z, this.prevRotation.yaw, this.prevRotation.pitch, level);
-        Transform to = new Transform(this.pos.x, this.pos.y, this.pos.z, this.rotation.yaw, this.rotation.pitch, level);
+        Transform to = new Transform(this.position.x, this.position.y, this.position.z, this.rotation.yaw, this.rotation.pitch, level);
 
         if (!from.equals(to)) {
             this.getServer().getPluginManager().callEvent(new VehicleMoveEvent(this, from, to));
@@ -508,8 +508,8 @@ public class EntityBoat extends EntityVehicle {
                 return;
             }
 
-            double diffX = entity.pos.x - this.pos.x;
-            double diffZ = entity.pos.z - this.pos.z;
+            double diffX = entity.position.x - this.position.x;
+            double diffZ = entity.position.z - this.position.z;
 
             double direction = NukkitMath.getDirection(diffX, diffZ);
 
@@ -561,7 +561,7 @@ public class EntityBoat extends EntityVehicle {
     }
 
     protected void dropItem() {
-        this.level.dropItem(this.pos, Item.get(ItemID.BOAT, this.woodID));
+        this.level.dropItem(this.position, Item.get(ItemID.BOAT, this.woodID));
     }
 
     @Override
@@ -586,7 +586,7 @@ public class EntityBoat extends EntityVehicle {
     }
 
     public void onInput(Transform loc) {
-        this.move(loc.position.x - this.pos.x, loc.position.y - this.pos.y, loc.position.z - this.pos.z);
+        this.move(loc.position.x - this.position.x, loc.position.y - this.position.y, loc.position.z - this.position.z);
         this.rotation.yaw = loc.rotation.yaw;
         broadcastMovement(false);
     }

@@ -7,7 +7,6 @@ import cn.nukkit.block.BlockLiquid;
 import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.EntityPhysical;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.Vector3;
 
 import java.util.Arrays;
@@ -47,8 +46,8 @@ public class WalkController implements IController {
                 entity.setDataFlag(EntityFlag.MOVING, false);
                 return false;
             }
-            var relativeVector = direction.clone().setComponents(direction.x - entity.pos.x,
-                    direction.y - entity.pos.y, direction.z - entity.pos.z);
+            var relativeVector = direction.clone().setComponents(direction.x - entity.position.x,
+                    direction.y - entity.position.y, direction.z - entity.position.z);
             var xzLengthSquared = relativeVector.x * relativeVector.x + relativeVector.z * relativeVector.z;
             if (Math.abs(xzLengthSquared) < EntityPhysical.PRECISION) {
                 entity.setDataFlag(EntityFlag.MOVING, false);

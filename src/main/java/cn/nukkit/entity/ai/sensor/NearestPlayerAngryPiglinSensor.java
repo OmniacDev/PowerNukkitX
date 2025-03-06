@@ -26,7 +26,7 @@ public class NearestPlayerAngryPiglinSensor implements ISensor {
     @Override
     public void sense(EntityMob entity) {
         for(Player player : entity.getViewers().values()) {
-            if(player.pos.distance(entity.pos) < 32) {
+            if(player.position.distance(entity.position) < 32) {
                 boolean trigger = false;
                 if(player.getTopWindow().isPresent()) {
                     if(checkInventory(player.getTopWindow().get())) {

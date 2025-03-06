@@ -77,7 +77,7 @@ public class SnowGolemShootExecutor implements EntityControl, IBehaviorExecutor 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
         Transform clone = this.target.getTransform();
 
-        if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
+        if (entity.position.distanceSquared(target.position) > maxShootDistanceSquared) {
             setRouteTarget(entity, clone.position);
         } else {
             setRouteTarget(entity, null);
@@ -85,7 +85,7 @@ public class SnowGolemShootExecutor implements EntityControl, IBehaviorExecutor 
         setLookTarget(entity, clone.position);
 
         if (tick2 == 0 && tick1 > coolDownTick) {
-            if (entity.pos.distanceSquared(target.pos) <= maxShootDistanceSquared) {
+            if (entity.position.distanceSquared(target.position) <= maxShootDistanceSquared) {
                 this.tick1 = 0;
                 this.tick2++;
             }
@@ -128,7 +128,7 @@ public class SnowGolemShootExecutor implements EntityControl, IBehaviorExecutor 
 
         Transform fireballTransform = entity.getTransform();
         Vector3 directionVector = entity.getDirectionVector().multiply(1 + ThreadLocalRandom.current().nextFloat(0.2f));
-        fireballTransform.setY(entity.pos.y + entity.getEyeHeight() + directionVector.getY());
+        fireballTransform.setY(entity.position.y + entity.getEyeHeight() + directionVector.getY());
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
                         .add(new FloatTag(fireballTransform.position.x))
@@ -142,7 +142,7 @@ public class SnowGolemShootExecutor implements EntityControl, IBehaviorExecutor 
                         .add(new FloatTag((float) (entity.headYaw > 180 ? 360 : 0) - entity.headYaw))
                         .add(new FloatTag((float) -entity.rotation.pitch)));
 
-        Entity projectile = Entity.createEntity(EntityID.SNOWBALL, entity.level.getChunk(entity.pos.getChunkX(), entity.pos.getChunkZ()), nbt);
+        Entity projectile = Entity.createEntity(EntityID.SNOWBALL, entity.level.getChunk(entity.position.getChunkX(), entity.position.getChunkZ()), nbt);
 
         if (projectile == null) {
             return;
@@ -157,7 +157,7 @@ public class SnowGolemShootExecutor implements EntityControl, IBehaviorExecutor 
             projectile.kill();
         } else {
             projectile.spawnToAll();
-            entity.level.addSound(entity.pos, Sound.MOB_SNOWGOLEM_SHOOT);
+            entity.level.addSound(entity.position, Sound.MOB_SNOWGOLEM_SHOOT);
         }
     }
 

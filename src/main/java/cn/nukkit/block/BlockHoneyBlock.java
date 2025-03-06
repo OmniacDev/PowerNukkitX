@@ -57,8 +57,8 @@ public class BlockHoneyBlock extends BlockSolid {
         if (!entity.onGround && entity.motion.y <= 0.08 &&
                 (!(entity instanceof Player)
                         || !((Player) entity).getAdventureSettings().get(AdventureSettings.Type.FLYING))) {
-            double ex = Math.abs(this.position.x + 0.5D - entity.pos.x);
-            double ez = Math.abs(this.position.z + 0.5D - entity.pos.z);
+            double ex = Math.abs(this.position.x + 0.5D - entity.position.x);
+            double ez = Math.abs(this.position.z + 0.5D - entity.position.z);
             double width = 0.4375D + (double)(entity.getWidth() / 2.0F);
             if (ex + 1.0E-3D > width || ez + 1.0E-3D > width) {
                 Vector3 motion = entity.getMotion();
@@ -75,7 +75,7 @@ public class BlockHoneyBlock extends BlockSolid {
                 entity.resetFallDistance();
 
                 if (RANDOM.nextInt(10) == 0) {
-                    level.addSound(entity.pos, Sound.LAND_HONEY_BLOCK);
+                    level.addSound(entity.position, Sound.LAND_HONEY_BLOCK);
                 }
             }
         }

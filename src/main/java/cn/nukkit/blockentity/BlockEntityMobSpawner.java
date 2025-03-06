@@ -99,11 +99,11 @@ public class BlockEntityMobSpawner extends BlockEntitySpawnable {
             boolean playerInRange = false;
             for (Entity entity : this.level.getEntities()) {
                 if (!playerInRange && entity instanceof Player && !((Player) entity).isSpectator()) {
-                    if (entity.pos.distance(this.position) <= this.requiredPlayerRange) {
+                    if (entity.position.distance(this.position) <= this.requiredPlayerRange) {
                         playerInRange = true;
                     }
                 } else if (entity instanceof EntityAnimal || entity instanceof EntityMonster) {
-                    if (entity.pos.distance(this.position) <= this.requiredPlayerRange) {
+                    if (entity.position.distance(this.position) <= this.requiredPlayerRange) {
                         nearbyEntities++;
                     }
                 }

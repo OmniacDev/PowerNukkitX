@@ -45,13 +45,13 @@ public class PiglinTransformExecutor implements EntityControl, IBehaviorExecutor
         entity.saveNBT();
         entity.close();
         EntityZombiePigman entityZombiePigman = new EntityZombiePigman(entity.getLocator().getChunk(), entity.namedTag);
-        entityZombiePigman.setPosition(entity.pos);
+        entityZombiePigman.setPosition(entity.position);
         entityZombiePigman.setRotation(entity.rotation.yaw, entity.rotation.pitch);
         entityZombiePigman.spawnToAll();
-        entityZombiePigman.level.addSound(entityZombiePigman.pos, Sound.MOB_PIGLIN_CONVERTED_TO_ZOMBIFIED);
+        entityZombiePigman.level.addSound(entityZombiePigman.position, Sound.MOB_PIGLIN_CONVERTED_TO_ZOMBIFIED);
         Inventory inventory = entityZombiePigman.getEquipment();
         for(int i = 2; i < inventory.getSize(); i++) {
-            entityZombiePigman.level.dropItem(entityZombiePigman.pos, inventory.getItem(i));
+            entityZombiePigman.level.dropItem(entityZombiePigman.position, inventory.getItem(i));
             inventory.clear(i);
         }
         // TODO

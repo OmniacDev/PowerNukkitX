@@ -31,7 +31,6 @@ import cn.nukkit.utils.TickCachedBlockIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class EntityLiving extends Entity implements EntityDamageable {
     public final static float DEFAULT_SPEED = 0.1f;
@@ -129,7 +128,7 @@ public abstract class EntityLiving extends Entity implements EntityDamageable {
                     animate.eid = getId();
 
                     this.getLevel().addChunkPacket(damager.getChunkX(), damager.getChunkZ(), animate);
-                    this.getLevel().addSound(this.pos, Sound.GAME_PLAYER_ATTACK_STRONG);
+                    this.getLevel().addSound(this.position, Sound.GAME_PLAYER_ATTACK_STRONG);
 
                     source.setDamage(source.getDamage() * 1.5f);
                 }
@@ -138,8 +137,8 @@ public abstract class EntityLiving extends Entity implements EntityDamageable {
                     this.setOnFire(2 * this.server.getDifficulty());
                 }
 
-                double deltaX = this.pos.x - damager.pos.x;
-                double deltaZ = this.pos.z - damager.pos.z;
+                double deltaX = this.position.x - damager.position.x;
+                double deltaZ = this.position.z - damager.position.z;
                 this.knockBack(damager, source.getDamage(), deltaX, deltaZ, ((EntityDamageByEntityEvent) source).getKnockBack());
             }
 
@@ -201,9 +200,9 @@ public abstract class EntityLiving extends Entity implements EntityDamageable {
 
         if (this.level.getGameRules().getBoolean(GameRule.DO_ENTITY_DROPS)) {
             for (cn.nukkit.item.Item item : ev.getDrops()) {
-                this.getLevel().dropItem(this.pos, item);
+                this.getLevel().dropItem(this.position, item);
             }
-            this.getLevel().dropExpOrb(this.pos, getExperienceDrops());
+            this.getLevel().dropExpOrb(this.position, getExperienceDrops());
         }
     }
 
@@ -301,7 +300,7 @@ public abstract class EntityLiving extends Entity implements EntityDamageable {
 
         // Used to check collisions with magma / cactus blocks
         // Math.round处理在某些条件下 出现x.999999的坐标条件,这里选择四舍五入
-        var block = this.level.getTickCachedBlock(this.pos.getFloorX(), (int) (Math.round(this.pos.y) - 1), this.pos.getFloorZ());
+        var block = this.level.getTickCachedBlock(this.position.getFloorX(), (int) (Math.round(this.position.y) - 1), this.position.getFloorZ());
         if (block instanceof BlockMagma || block instanceof BlockCactus) block.onEntityCollide(this);
 
         return hasUpdate;
@@ -337,7 +336,7 @@ public abstract class EntityLiving extends Entity implements EntityDamageable {
 
         List<Block> blocks = new ArrayList<>();
 
-        var itr = new TickCachedBlockIterator(this.level, this.pos, this.getDirectionVector(), this.getEyeHeight(), maxDistance);
+        var itr = new TickCachedBlockIterator(this.level, this.position, this.getDirectionVector(), this.getEyeHeight(), maxDistance);
 
         while (itr.hasNext()) {
             Block block = itr.next();
@@ -419,9 +418,9 @@ public abstract class EntityLiving extends Entity implements EntityDamageable {
             return false;
         }
 
-        Vector3 entityPos = damager.pos;
+        Vector3 entityPos = damager.position;
         Vector3 direction = this.getDirectionVector();
-        Vector3 normalizedVector = this.pos.subtract(entityPos).normalize();
+        Vector3 normalizedVector = this.position.subtract(entityPos).normalize();
         boolean blocked = (normalizedVector.x * direction.x) + (normalizedVector.z * direction.z) < 0.0;
         boolean knockBack = !(damager instanceof EntityProjectile);
         EntityDamageBlockedEvent event = new EntityDamageBlockedEvent(this, source, knockBack, true);
@@ -435,8 +434,8 @@ public abstract class EntityLiving extends Entity implements EntityDamageable {
         }
 
         if (event.getKnockBackAttacker() && damager instanceof EntityLiving attacker) {
-            double deltaX = attacker.pos.getX() - this.pos.getX();
-            double deltaZ = attacker.pos.getZ() - this.pos.getZ();
+            double deltaX = attacker.position.getX() - this.position.getX();
+            double deltaZ = attacker.position.getZ() - this.position.getZ();
             attacker.knockBack(this, 0, deltaX, deltaZ);
             attacker.attackTime = 10;
             attacker.attackTimeByShieldKb = true;
@@ -448,7 +447,7 @@ public abstract class EntityLiving extends Entity implements EntityDamageable {
 
     protected void onBlock(Entity entity, EntityDamageEvent event, boolean animate) {
         if (animate) {
-            getLevel().addSound(this.pos, Sound.ITEM_SHIELD_BLOCK);
+            getLevel().addSound(this.position, Sound.ITEM_SHIELD_BLOCK);
         }
     }
 

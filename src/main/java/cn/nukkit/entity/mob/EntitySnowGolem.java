@@ -78,9 +78,9 @@ public class EntitySnowGolem extends EntityGolem {
         if(item instanceof ItemShears) {
             if(!isSheared()) {
                 this.setSheared(true);
-                this.level.addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_SHEAR);
+                this.level.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_SHEAR);
                 if(player.getGamemode() != Player.CREATIVE) player.getInventory().getItemInHand().setDamage(item.getDamage() + 1);
-                this.level.dropItem(this.pos.add(0, this.getEyeHeight(), 0), Item.get(Block.CARVED_PUMPKIN));
+                this.level.dropItem(this.position.add(0, this.getEyeHeight(), 0), Item.get(Block.CARVED_PUMPKIN));
             }
         }
         return super.onInteract(player, item);
@@ -128,7 +128,7 @@ public class EntitySnowGolem extends EntityGolem {
             }
         }
         if(this.waterTicks >= 20) {
-            if((this.level.isRaining() && !this.isUnderBlock()) || this.getLocator().getLevelBlock() instanceof BlockLiquid || Registries.BIOME.get(getLevel().getBiomeId(this.pos.getFloorX(), this.pos.getFloorY(), this.pos.getFloorZ())).temperature() > 1.0) {
+            if((this.level.isRaining() && !this.isUnderBlock()) || this.getLocator().getLevelBlock() instanceof BlockLiquid || Registries.BIOME.get(getLevel().getBiomeId(this.position.getFloorX(), this.position.getFloorY(), this.position.getFloorZ())).temperature() > 1.0) {
                 this.attack(new EntityDamageEvent(this, EntityDamageEvent.DamageCause.WEATHER, 1));
             }
             this.waterTicks = 0;

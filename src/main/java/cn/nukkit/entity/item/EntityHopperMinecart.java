@@ -61,7 +61,7 @@ public class EntityHopperMinecart extends EntityMinecartAbstract implements Inve
         this.updatePickupArea();
 
         Block blockSide = this.getLocator().getSide(BlockFace.UP).getTickCachedLevelBlock();
-        BlockEntity blockEntity = this.level.getBlockEntity(temporalVector.setComponentsAdding(this.pos, BlockFace.UP));
+        BlockEntity blockEntity = this.level.getBlockEntity(temporalVector.setComponentsAdding(this.position, BlockFace.UP));
 
         boolean changed;
 
@@ -106,7 +106,7 @@ public class EntityHopperMinecart extends EntityMinecartAbstract implements Inve
     @Override
     public void dropItem() {
         for (Item item : this.inventory.getContents().values()) {
-            this.level.dropItem(this.pos, item);
+            this.level.dropItem(this.position, item);
         }
         if (this.lastDamageCause instanceof EntityDamageByEntityEvent entityDamageByEntityEvent) {
             Entity damager = entityDamageByEntityEvent.getDamager();
@@ -114,7 +114,7 @@ public class EntityHopperMinecart extends EntityMinecartAbstract implements Inve
                 return;
             }
         }
-        this.level.dropItem(this.pos, Item.get(Item.HOPPER_MINECART));
+        this.level.dropItem(this.position, Item.get(Item.HOPPER_MINECART));
     }
 
     @Override
@@ -163,7 +163,7 @@ public class EntityHopperMinecart extends EntityMinecartAbstract implements Inve
     }
 
     public void updatePickupArea() {
-        this.pickupArea = new SimpleAxisAlignedBB(this.pos.x - 0.5, this.pos.y - 0.5, this.pos.z - 0.5, this.pos.x + 1, this.pos.y + 2.5, this.pos.z + 1).expand(0.25, 0, 0.25);
+        this.pickupArea = new SimpleAxisAlignedBB(this.position.x - 0.5, this.position.y - 0.5, this.position.z - 0.5, this.position.x + 1, this.position.y + 2.5, this.position.z + 1).expand(0.25, 0, 0.25);
     }
 
     public void checkDisabled() {

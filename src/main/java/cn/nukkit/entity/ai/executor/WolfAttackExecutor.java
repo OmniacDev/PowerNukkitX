@@ -5,7 +5,6 @@ import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.animal.EntityWolf;
 
 /**
@@ -44,7 +43,7 @@ public class WolfAttackExecutor extends MeleeAttackExecutor {
             if (!entity.isEnablePitch()) entity.setEnablePitch(true);
             var vector3 = entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_FEEDING_PLAYER);
             if (vector3 != null) {
-                this.lookTarget = vector3.pos.clone();
+                this.lookTarget = vector3.position.clone();
                 entity.setDataFlag(EntityFlag.INTERESTED, true);
             }
         }

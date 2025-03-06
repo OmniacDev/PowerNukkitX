@@ -6,7 +6,6 @@ import cn.nukkit.entity.ai.executor.IBehaviorExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.ai.memory.MemoryType;
 import cn.nukkit.entity.item.EntityEnderCrystal;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityEnderDragon;
 import cn.nukkit.math.Vector2;
 import cn.nukkit.math.Vector3;
@@ -81,7 +80,7 @@ public class CircleMovementExecutor implements EntityControl, IBehaviorExecutor 
     public void onStop(EntityMob entity) {
         stop(entity);
         if(entity instanceof EntityEnderDragon) {
-            if(Utils.rand(0, 3 + (int) Arrays.stream(entity.getLevel().getEntities()).filter(entity1 -> entity1 instanceof EntityEnderCrystal && entity1.pos.toHorizontal().distance(Vector2.ZERO) < 128).count()) < 1) {
+            if(Utils.rand(0, 3 + (int) Arrays.stream(entity.getLevel().getEntities()).filter(entity1 -> entity1 instanceof EntityEnderCrystal && entity1.position.toHorizontal().distance(Vector2.ZERO) < 128).count()) < 1) {
                 entity.getMemoryStorage().put(CoreMemoryTypes.FORCE_PERCHING, true);
             }
         }

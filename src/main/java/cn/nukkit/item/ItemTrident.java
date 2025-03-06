@@ -56,9 +56,9 @@ public class ItemTrident extends ItemTool {
 
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(player.pos.x))
-                        .add(new FloatTag(player.pos.y + player.getEyeHeight()))
-                        .add(new FloatTag(player.pos.z)))
+                        .add(new FloatTag(player.position.x))
+                        .add(new FloatTag(player.position.y + player.getEyeHeight()))
+                        .add(new FloatTag(player.position.z)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(-Math.sin(player.rotation.yaw / 180 * Math.PI) * Math.cos(player.rotation.pitch / 180 * Math.PI)))
                         .add(new FloatTag(-Math.sin(player.rotation.pitch / 180 * Math.PI)))
@@ -96,7 +96,7 @@ public class ItemTrident extends ItemTool {
                 entityShootBowEvent.getProjectile().close();
             } else {
                 entityShootBowEvent.getProjectile().spawnToAll();
-                player.getLevel().addSound(player.pos, Sound.ITEM_TRIDENT_THROW);
+                player.getLevel().addSound(player.position, Sound.ITEM_TRIDENT_THROW);
                 if (!player.isCreative()) {
                     this.count--;
                     player.getInventory().setItemInHand(this);

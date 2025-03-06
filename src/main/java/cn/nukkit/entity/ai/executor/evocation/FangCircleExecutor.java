@@ -46,7 +46,7 @@ public class FangCircleExecutor extends FangLineExecutor {
             double angle = Math.toRadians((i * angleIncrement) + origin.headYaw);
             double particleX = origin.getX() + Math.cos(angle) * size;
             double particleZ = origin.getZ() + Math.sin(angle) * size;
-            spawn(origin, new Transform(particleX, origin.pos.y, particleZ, angle, 0, origin.level));
+            spawn(origin, new Transform(particleX, origin.position.y, particleZ, angle, 0, origin.level));
         }
     }
 

@@ -154,7 +154,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                 entity -> {
                                     Block block = getMemoryStorage().get(CoreMemoryTypes.NEAREST_BLOCK_2);
                                     if(block == null || getMoveDirectionEnd() == null) return false;
-                                    return getLevel().raycastBlocks(this.pos, getMoveDirectionEnd(), true, false, 0.5d).contains(block);
+                                    return getLevel().raycastBlocks(this.position, getMoveDirectionEnd(), true, false, 0.5d).contains(block);
                                 }
                         ), 4, 1),
                         new Behavior(
@@ -177,12 +177,12 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                         new Behavior(new PlaySoundExecutor(Sound.MOB_VILLAGER_IDLE, isBaby() ? 1.3f : 0.8f, isBaby() ? 1.7f : 1.2f, 1, 1), new RandomSoundEvaluator(), 1, 1)
                         ),
                 Set.of(
-                        new Behavior(entity -> {setMoveTarget(null); setLookTarget(getTradeInventory().getViewers().stream().findFirst().get().pos); return true;}, entity -> getTradeInventory() != null && !getTradeInventory().getViewers().isEmpty(), 9, 1),
+                        new Behavior(entity -> {setMoveTarget(null); setLookTarget(getTradeInventory().getViewers().stream().findFirst().get().position); return true;}, entity -> getTradeInventory() != null && !getTradeInventory().getViewers().isEmpty(), 9, 1),
                         new Behavior(new FleeFromTargetExecutor(CoreMemoryTypes.NEAREST_ZOMBIE, 0.5f, true, 8), all(
                                 new EntityCheckEvaluator(CoreMemoryTypes.NEAREST_ZOMBIE),
                                 new DistanceEvaluator(CoreMemoryTypes.NEAREST_ZOMBIE, 8),
                                 entity -> getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_ZOMBIE) && getMemoryStorage().get(CoreMemoryTypes.NEAREST_ZOMBIE) instanceof EntityMob i && i.getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET) && i.getMemoryStorage().get(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET) == this,
-                                entity -> getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_ZOMBIE) && getLevel().raycastBlocks(this.pos, getMemoryStorage().get(CoreMemoryTypes.NEAREST_ZOMBIE).pos).isEmpty()
+                                entity -> getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_ZOMBIE) && getLevel().raycastBlocks(this.position, getMemoryStorage().get(CoreMemoryTypes.NEAREST_ZOMBIE).position).isEmpty()
                         ), 8, 1),
                         new Behavior(new SleepExecutor(), all(
                                 new MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.OCCUPIED_BED),
@@ -253,7 +253,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                         double minDistance = Float.MAX_VALUE;
                                         EntityVillagerV2 nearest = null;
                                         for(EntityVillagerV2 entity1 : entities.toList()) {
-                                            double distance = entity1.pos.distance(this.pos);
+                                            double distance = entity1.position.distance(this.position);
                                             if(distance < minDistance) {
                                                 minDistance = distance;
                                                 nearest = entity1;
@@ -265,7 +265,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                     }
                                 } else {
                                     if(shouldShareFood()) {
-                                        entities.filter(entity1 -> entity1.isHungry() && entity1.pos.distance(this.pos) < 16).findAny().ifPresentOrElse(entity1 ->  {
+                                        entities.filter(entity1 -> entity1.isHungry() && entity1.position.distance(this.position) < 16).findAny().ifPresentOrElse(entity1 ->  {
                                             getMemoryStorage().put(CoreMemoryTypes.GOSSIP_TARGET, entity1);
                                             entity1.getMemoryStorage().put(CoreMemoryTypes.GOSSIP_TARGET, this);
                                         }, () -> getMemoryStorage().clear(CoreMemoryTypes.GOSSIP_TARGET));
@@ -297,7 +297,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                     var maxDistanceSquared = -1d;
                                     EntityVillagerV2 nearestInLove = null;
                                     for (Entity e : entities) {
-                                        double newDistance = e.pos.distanceSquared(entity.pos);
+                                        double newDistance = e.position.distanceSquared(entity.position);
                                         if (e instanceof EntityVillagerV2 another && e != entity) {
                                             if (!another.isBaby() && another.getMemoryStorage().get(CoreMemoryTypes.WILLING) && another.getMemoryStorage().isEmpty(CoreMemoryTypes.ENTITY_SPOUSE) && (maxDistanceSquared == -1 || newDistance < maxDistanceSquared)) {
                                                 maxDistanceSquared = newDistance;
@@ -359,7 +359,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                 float randX = Utils.rand(0f, 0.5f);
                 float randY = Utils.rand(0f, 0.3f);
                 float randZ = Utils.rand(0f, 0.5f);
-                this.getLevel().addParticleEffect(this.pos.add(randX, this.getEyeHeight() + randY, randZ), ParticleEffect.VILLAGER_HAPPY);
+                this.getLevel().addParticleEffect(this.position.add(randX, this.getEyeHeight() + randY, randZ), ParticleEffect.VILLAGER_HAPPY);
                 this.getLevel().addParticleEffect(bed.position.add(randX, 0.5625f + randY, randZ), ParticleEffect.VILLAGER_HAPPY);
             }
         }
@@ -455,7 +455,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
         if(this.namedTag.containsInt("clothing")) {
             this.setDataProperty(EntityDataTypes.MARK_VARIANT, this.namedTag.getInt("clothing"));
         } else {
-            BlockVector3 bv = this.pos.asBlockVector3();
+            BlockVector3 bv = this.position.asBlockVector3();
             this.setDataProperty(EntityDataTypes.MARK_VARIANT, Clothing.getClothing(getLevel().getBiomeId(bv.x, bv.y, bv.z)).ordinal());
         }
         if(this.namedTag.containsCompound("bed")) {

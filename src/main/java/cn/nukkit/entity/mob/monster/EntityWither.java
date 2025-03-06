@@ -153,7 +153,7 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
     public void kill() {
         if(deathTicks == -1) {
             deathTicks = 190;
-            getLevel().addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_DEATH, -1, Entity.WITHER, false, false);
+            getLevel().addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_DEATH, -1, Entity.WITHER, false, false);
             EntityEventPacket packet = new EntityEventPacket();
             packet.event = EntityEventPacket.DEATH_ANIMATION;
             packet.eid = getId();
@@ -217,9 +217,9 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
         addEntity.yaw = (float) this.rotation.yaw;
         addEntity.headYaw = (float) this.rotation.yaw;
         addEntity.pitch = (float) this.rotation.pitch;
-        addEntity.x = (float) this.pos.x;
-        addEntity.y = (float) this.pos.y;
-        addEntity.z = (float) this.pos.z;
+        addEntity.x = (float) this.position.x;
+        addEntity.y = (float) this.position.y;
+        addEntity.z = (float) this.position.z;
         addEntity.speedX = (float) this.motion.x;
         addEntity.speedY = (float) this.motion.y;
         addEntity.speedZ = (float) this.motion.z;
@@ -262,7 +262,7 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
             if (this.age == 200) {
                 this.explode();
                 setHealth(getMaxHealth());
-                getLevel().addSound(this.pos, Sound.MOB_WITHER_SPAWN);
+                getLevel().addSound(this.position, Sound.MOB_WITHER_SPAWN);
             } else if(age < 200) {
                 heal(getMaxHealth()/200f);
             }
@@ -323,7 +323,7 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
         if((age%40==0 || getDataFlag(EntityFlag.CAN_DASH) && age > 200)) {
             Block[] blocks = level.getCollisionBlocks(getBoundingBox().grow(1, 1, 1));
             if(blocks.length > 0) {
-                if(blockBreakSound != null) level.addSound(this.pos, blockBreakSound);
+                if(blockBreakSound != null) level.addSound(this.position, blockBreakSound);
                 for (Block collisionBlock : blocks) {
                     if(!(collisionBlock instanceof BlockBedrock)) {
                         level.breakBlock(collisionBlock);

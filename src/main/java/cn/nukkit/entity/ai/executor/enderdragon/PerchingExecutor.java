@@ -29,13 +29,13 @@ public class PerchingExecutor implements EntityControl, IBehaviorExecutor {
         if(stayTick >= 0) {
             stayTick++;
         }
-        if(entity.pos.distance(target) <= 1) {
+        if(entity.position.distance(target) <= 1) {
             if(stayTick == -1) stayTick=0;
             if(stayTick == 25) {
-                entity.getViewers().values().stream().filter(player -> player.pos.distance(new Vector3(0, 64, 0)) <= 20).findAny().ifPresent(player -> {
+                entity.getViewers().values().stream().filter(player -> player.position.distance(new Vector3(0, 64, 0)) <= 20).findAny().ifPresent(player -> {
                     removeRouteTarget(entity);
-                    setLookTarget(entity, player.pos);
-                    Vector3 toPlayerVector = new Vector3(player.pos.x - entity.pos.x, player.pos.y - entity.pos.y, player.pos.z - entity.pos.z).normalize();
+                    setLookTarget(entity, player.position);
+                    Vector3 toPlayerVector = new Vector3(player.position.x - entity.position.x, player.position.y - entity.position.y, player.position.z - entity.position.z).normalize();
                     Transform transform = entity.getTransform().add(toPlayerVector.multiply(10));
                     transform.position.y = transform.level.getHighestBlockAt(transform.position.toHorizontal()) + 1;
                     EntityAreaEffectCloud areaEffectCloud = (EntityAreaEffectCloud) Entity.createEntity(Entity.AREA_EFFECT_CLOUD, transform.getChunk(),
@@ -89,8 +89,8 @@ public class PerchingExecutor implements EntityControl, IBehaviorExecutor {
     public void onStart(EntityMob entity) {
         Player player = entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER);
         if(player == null) return;
-        setLookTarget(entity, player.pos);
-        setRouteTarget(entity, player.pos);
+        setLookTarget(entity, player.position);
+        setRouteTarget(entity, player.position);
         stayTick = -1;
     }
 

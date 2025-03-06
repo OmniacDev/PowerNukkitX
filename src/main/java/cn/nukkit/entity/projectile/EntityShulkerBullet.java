@@ -89,7 +89,7 @@ public class EntityShulkerBullet extends EntityMob implements EntityFlyable {
         close();
         for(Entity entity : collidingEntities) {
             if(entity.attack(new EntityDamageByEntityEvent(this, entity, EntityDamageEvent.DamageCause.CONTACT, 4))) {
-                getLevel().addSound(entity.pos, Sound.MOB_SHULKER_BULLET_HIT);
+                getLevel().addSound(entity.position, Sound.MOB_SHULKER_BULLET_HIT);
                 entity.addEffect(Effect.get(EffectType.LEVITATION).setDuration(200));
             }
         }

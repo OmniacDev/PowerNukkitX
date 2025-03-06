@@ -115,10 +115,10 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
         this.entityBaseTick(tickDiff);
 
         if (this.state == 2) {
-            this.level.addSound(this.pos, Sound.AMBIENT_WEATHER_THUNDER);
-            this.level.addSound(this.pos, Sound.RANDOM_EXPLODE);
+            this.level.addSound(this.position, Sound.AMBIENT_WEATHER_THUNDER);
+            this.level.addSound(this.position, Sound.RANDOM_EXPLODE);
 
-            Block down = getLevel().getBlock(this.pos.down());
+            Block down = getLevel().getBlock(this.position.down());
             if (isVulnerableOxidizable(down)) {
                 Map<Locator, OxidizationLevel> changes = new LinkedHashMap<>();
                 changes.put(new Locator(down.getVector3(), level), OxidizationLevel.UNAFFECTED);

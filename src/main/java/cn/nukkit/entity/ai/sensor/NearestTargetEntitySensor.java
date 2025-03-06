@@ -74,9 +74,9 @@ public class NearestTargetEntitySensor<T extends Entity> implements ISensor {
             if (current != null && current.isAlive()) return;
 
             //寻找范围内最近的实体
-            var entities = Collections.synchronizedList(new SortedList<>(Comparator.comparingDouble((Entity e) -> e.pos.distanceSquared(entity.pos))));
+            var entities = Collections.synchronizedList(new SortedList<>(Comparator.comparingDouble((Entity e) -> e.position.distanceSquared(entity.position))));
             for (Entity p : entity.getLevel().getEntities()) {
-                if (entity.pos.distanceSquared(p.pos) <= maxRangeSquared && entity.pos.distanceSquared(p.pos) >= minRangeSquared && !p.equals(entity)) {
+                if (entity.position.distanceSquared(p.position) <= maxRangeSquared && entity.position.distanceSquared(p.position) >= minRangeSquared && !p.equals(entity)) {
                     entities.add(p);
                 }
             }
@@ -90,11 +90,11 @@ public class NearestTargetEntitySensor<T extends Entity> implements ISensor {
             List<List<Entity>> sortEntities = new ArrayList<>(memories.size());
 
             for (int i = 0, len = memories.size(); i < len; ++i) {
-                sortEntities.add(new SortedList<>(Comparator.comparingDouble((Entity e) -> e.pos.distanceSquared(entity.pos))));
+                sortEntities.add(new SortedList<>(Comparator.comparingDouble((Entity e) -> e.position.distanceSquared(entity.position))));
             }
 
             for (Entity p : entity.getLevel().getEntities()) {
-                if (entity.pos.distanceSquared(p.pos) <= maxRangeSquared && entity.pos.distanceSquared(p.pos) >= minRangeSquared && !p.equals(entity)) {
+                if (entity.position.distanceSquared(p.position) <= maxRangeSquared && entity.position.distanceSquared(p.position) >= minRangeSquared && !p.equals(entity)) {
                     int i = 0;
                     for (var targetFunction : allTargetFunction) {
                         if (targetFunction.apply((T) p)) {

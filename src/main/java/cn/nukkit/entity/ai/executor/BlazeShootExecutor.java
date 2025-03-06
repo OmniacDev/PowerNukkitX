@@ -80,7 +80,7 @@ public class BlazeShootExecutor implements EntityControl, IBehaviorExecutor {
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
         Transform clone = this.target.getTransform();
 
-        if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
+        if (entity.position.distanceSquared(target.position) > maxShootDistanceSquared) {
             setRouteTarget(entity, clone.position);
         } else {
             setRouteTarget(entity, null);
@@ -88,7 +88,7 @@ public class BlazeShootExecutor implements EntityControl, IBehaviorExecutor {
         setLookTarget(entity, clone.position);
 
         if (tick2 == 0 && tick1 > coolDownTick) {
-            if (entity.pos.distanceSquared(target.pos) <= maxShootDistanceSquared) {
+            if (entity.position.distanceSquared(target.position) <= maxShootDistanceSquared) {
                 this.tick1 = 0;
                 this.tick2++;
                 startOnFire(entity);
@@ -137,7 +137,7 @@ public class BlazeShootExecutor implements EntityControl, IBehaviorExecutor {
 
         Transform fireballTransform = entity.getTransform();
         Vector3 directionVector = entity.getDirectionVector().multiply(1 + ThreadLocalRandom.current().nextFloat(0.2f));
-        fireballTransform.setY(entity.pos.y + entity.getEyeHeight() + directionVector.getY());
+        fireballTransform.setY(entity.position.y + entity.getEyeHeight() + directionVector.getY());
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
                         .add(new FloatTag(fireballTransform.position.x))
@@ -155,7 +155,7 @@ public class BlazeShootExecutor implements EntityControl, IBehaviorExecutor {
         double p = 1;
         double f = Math.min((p * p + p * 2) / 3, 1) * 3;
 
-        Entity projectile = Entity.createEntity(EntityID.SMALL_FIREBALL, entity.level.getChunk(entity.pos.getChunkX(), entity.pos.getChunkZ()), nbt);
+        Entity projectile = Entity.createEntity(EntityID.SMALL_FIREBALL, entity.level.getChunk(entity.position.getChunkX(), entity.position.getChunkZ()), nbt);
 
         if (projectile == null) {
             return;
@@ -170,7 +170,7 @@ public class BlazeShootExecutor implements EntityControl, IBehaviorExecutor {
             projectile.kill();
         } else {
             projectile.spawnToAll();
-            entity.level.addLevelEvent(entity.pos, LevelEventPacket.EVENT_SOUND_BLAZE_FIREBALL);
+            entity.level.addLevelEvent(entity.position, LevelEventPacket.EVENT_SOUND_BLAZE_FIREBALL);
         }
     }
 

@@ -27,7 +27,7 @@ public class PiglinTradeExecutor implements EntityControl, IBehaviorExecutor {
         tick++;
         if(tick < 160) {
             if(tick % 30 == 0 && ThreadLocalRandom.current().nextBoolean()) {
-                entity.level.addSound(entity.pos, Sound.MOB_PIGLIN_ADMIRING_ITEM);
+                entity.level.addSound(entity.position, Sound.MOB_PIGLIN_ADMIRING_ITEM);
             }
             return true;
         } else {
@@ -36,7 +36,7 @@ public class PiglinTradeExecutor implements EntityControl, IBehaviorExecutor {
                 if(offhand instanceof ItemGoldIngot && !mob.isBaby()) {
                     mob.getEquipment().decreaseCount(EntityEquipment.OFF_HAND);
                     Vector3 motion = entity.getDirectionVector().multiply(0.4);
-                    entity.level.dropItem(entity.pos.add(0, 1.3, 0), getDrop(), motion, 40);
+                    entity.level.dropItem(entity.position.add(0, 1.3, 0), getDrop(), motion, 40);
                 }
             }
             return false;
@@ -112,7 +112,7 @@ public class PiglinTradeExecutor implements EntityControl, IBehaviorExecutor {
     }
 
     public void clearOffhand(EntityMonster mob, Item item) {
-        mob.level.dropItem(mob.pos, item); // TODO
+        mob.level.dropItem(mob.position, item); // TODO
         mob.getEquipment().clear(EntityEquipment.OFF_HAND);
     }
 }

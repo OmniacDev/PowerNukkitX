@@ -26,8 +26,6 @@ import cn.nukkit.item.ItemID;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
-import cn.nukkit.level.vibration.VibrationEvent;
-import cn.nukkit.level.vibration.VibrationType;
 import cn.nukkit.math.IVector3;
 import cn.nukkit.math.NukkitMath;
 import cn.nukkit.math.Vector3;
@@ -320,7 +318,7 @@ public abstract class EntityMob extends EntityPhysical implements EntityInventor
         armor.setDamage(armor.getDamage() + 1);
 
         if (armor.getDamage() >= armor.getMaxDurability()) {
-            getLevel().addSound(this.pos, Sound.RANDOM_BREAK);
+            getLevel().addSound(this.position, Sound.RANDOM_BREAK);
             return Item.get(BlockID.AIR, 0, 0);
         }
 
@@ -356,16 +354,16 @@ public abstract class EntityMob extends EntityPhysical implements EntityInventor
     public void moveDelta() {
         MoveEntityDeltaPacket pk = new MoveEntityDeltaPacket();
         pk.runtimeEntityId = this.getId();
-        if (this.prevPos.x != this.pos.x) {
-            pk.x = (float) this.pos.x;
+        if (this.prevPos.x != this.position.x) {
+            pk.x = (float) this.position.x;
             pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_X;
         }
-        if (this.prevPos.y != this.pos.y) {
-            pk.y = (float) this.pos.y;
+        if (this.prevPos.y != this.position.y) {
+            pk.y = (float) this.position.y;
             pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_Y;
         }
-        if (this.prevPos.z != this.pos.z) {
-            pk.z = (float) this.pos.z;
+        if (this.prevPos.z != this.position.z) {
+            pk.z = (float) this.position.z;
             pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_Z;
         }
         if (this.prevRotation.pitch != this.rotation.pitch) {

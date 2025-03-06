@@ -39,7 +39,7 @@ public class EntityEvocationFang extends EntityMonster implements EntityWalkable
     protected void initEntity() {
         this.setMaxHealth(1);
         super.initEntity();
-        getLevel().addLevelSoundEvent(this.pos, LevelSoundEventPacketV2.SOUND_FANG, -1, EntityID.EVOCATION_FANG, false, false);
+        getLevel().addLevelSoundEvent(this.position, LevelSoundEventPacketV2.SOUND_FANG, -1, EntityID.EVOCATION_FANG, false, false);
         for(Entity entity : getLevel().getCollidingEntities(getBoundingBox())) {
             if(attackTarget(entity)) {
                 EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(this, entity, EntityDamageEvent.DamageCause.MAGIC, 6);

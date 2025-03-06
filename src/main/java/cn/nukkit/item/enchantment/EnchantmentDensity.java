@@ -33,7 +33,7 @@ public class EnchantmentDensity extends Enchantment {
 
     @Override
     public double getDamageBonus(Entity target, Entity damager) {
-        double height = damager.highestPosition - damager.pos.y;
+        double height = damager.highestPosition - damager.position.y;
         if(height >= 1.5f) {
             return height * 0.5f * getLevel();
         }

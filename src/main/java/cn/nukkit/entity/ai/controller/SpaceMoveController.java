@@ -2,7 +2,6 @@ package cn.nukkit.entity.ai.controller;
 
 import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.Vector3;
 
 /**
@@ -19,8 +18,8 @@ public class SpaceMoveController implements IController {
             if (entity.motion.x * entity.motion.x + entity.motion.y * entity.motion.y + entity.motion.z * entity.motion.z > speed * speed * 0.4756) {
                 return false;
             }
-            var relativeVector = direction.clone().setComponents(direction.x - entity.pos.x,
-                    direction.y - entity.pos.y, direction.z - entity.pos.z);
+            var relativeVector = direction.clone().setComponents(direction.x - entity.position.x,
+                    direction.y - entity.position.y, direction.z - entity.position.z);
             var xyzLength = Math.sqrt(relativeVector.x * relativeVector.x + relativeVector.y * relativeVector.y + relativeVector.z * relativeVector.z);
             var k = speed / xyzLength * 0.33;
             var dx = relativeVector.x * k;

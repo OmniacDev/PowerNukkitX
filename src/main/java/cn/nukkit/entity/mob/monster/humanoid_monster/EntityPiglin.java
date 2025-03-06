@@ -95,7 +95,7 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
                                         )
                                 )
                         ), 12, 1),
-                        new Behavior(new PlaySoundExecutor(Sound.MOB_PIGLIN_JEALOUS, 0.8f, 1.2f, 0.8f, 0.8f), all(new RandomSoundEvaluator(), entity -> getViewers().values().stream().noneMatch(p -> p.pos.distance(entity.pos) < 8 && likesItem(p.getInventory().getItemInHand()) && p.level.raycastBlocks(p.pos, entity.pos).isEmpty())), 12, 1),
+                        new Behavior(new PlaySoundExecutor(Sound.MOB_PIGLIN_JEALOUS, 0.8f, 1.2f, 0.8f, 0.8f), all(new RandomSoundEvaluator(), entity -> getViewers().values().stream().noneMatch(p -> p.position.distance(entity.position) < 8 && likesItem(p.getInventory().getItemInHand()) && p.level.raycastBlocks(p.position, entity.position).isEmpty())), 12, 1),
                         new Behavior(new PlaySoundExecutor(Sound.MOB_PIGLIN_ANGRY, 0.8f, 1.2f, 0.8f, 0.8f), all(new RandomSoundEvaluator(), entity -> isAngry()), 11, 1),
                         new Behavior(new PlaySoundExecutor(Sound.MOB_PIGLIN_AMBIENT, 0.8f, 1.2f, 0.8f, 0.8f), all(new RandomSoundEvaluator(), entity -> !isAngry()), 10, 1),
                         new Behavior(new CrossBowShootExecutor(this::getItemInHand, CoreMemoryTypes.ATTACK_TARGET, 0.3f, 15, true, 30, 80), all(
@@ -248,13 +248,13 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
                 if(entity instanceof EntityHoglin hoglin) {
                     if(!hoglin.isBaby()) {
                         if(hoglin.getHealth() - getDiffHandDamage(getServer().getDifficulty()) <= 0) {
-                            List<Entity> entities =  Arrays.stream(getLevel().getEntities()).filter(entity1 -> entity1 instanceof EntityPiglin piglin && piglin.pos.distance(this.pos) < 16).toList();
+                            List<Entity> entities =  Arrays.stream(getLevel().getEntities()).filter(entity1 -> entity1 instanceof EntityPiglin piglin && piglin.position.distance(this.position) < 16).toList();
                             AnimateEntityPacket.Animation.AnimationBuilder builder = AnimateEntityPacket.Animation.builder();
                             builder.animation("animation.piglin.celebrate_hunt_special");
                             builder.nextState("r");
                             builder.blendOutTime(1);
                             Entity.playAnimationOnEntities(builder.build(), entities);
-                            entities.forEach(entity1 -> entity1.level.addSound(entity1.pos, Sound.MOB_PIGLIN_CELEBRATE));
+                            entities.forEach(entity1 -> entity1.level.addSound(entity1.position, Sound.MOB_PIGLIN_CELEBRATE));
                         }
                         yield true;
                     }
@@ -305,7 +305,7 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
     @Override
     public boolean equip(Item item) {
          if((item.getTier() > getItemInHand().getTier() && getItemInHand().getTier() != ItemArmor.TIER_GOLD) || item.getTier() == ItemArmor.TIER_GOLD) {
-            this.level.dropItem(this.pos, getItemInHand());
+            this.level.dropItem(this.position, getItemInHand());
             this.setItemInHand(item);
             return true;
         }
@@ -321,8 +321,8 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
         @Override
         public void onStart(EntityMob entity) {
             super.onStart(entity);
-            if(entity.pos.distance(entity.getMemoryStorage().get(getMemory()).getVector3()) < 8) {
-                entity.getLevel().addSound(entity.pos, Sound.MOB_PIGLIN_RETREAT);
+            if(entity.position.distance(entity.getMemoryStorage().get(getMemory()).getVector3()) < 8) {
+                entity.getLevel().addSound(entity.position, Sound.MOB_PIGLIN_RETREAT);
             }
         }
     }
@@ -338,8 +338,8 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
             super.onStart(entity);
             entity.setDataProperty(EntityDataTypes.TARGET_EID, entity.getMemoryStorage().get(memory).getId());
             entity.setDataFlag(EntityFlag.ANGRY);
-            entity.level.addLevelSoundEvent(entity.pos, LevelSoundEventPacket.SOUND_ANGRY, -1, Entity.PIGLIN, false, false);
-            Arrays.stream(entity.level.getEntities()).filter(entity1 -> entity1 instanceof EntityPiglin && entity1.pos.distance(entity.pos) < 16 && ((EntityPiglin) entity1).getMemoryStorage().isEmpty(CoreMemoryTypes.ATTACK_TARGET)).forEach(entity1 -> ((EntityPiglin) entity1).getMemoryStorage().put(CoreMemoryTypes.ATTACK_TARGET, entity.getMemoryStorage().get(memory)));
+            entity.level.addLevelSoundEvent(entity.position, LevelSoundEventPacket.SOUND_ANGRY, -1, Entity.PIGLIN, false, false);
+            Arrays.stream(entity.level.getEntities()).filter(entity1 -> entity1 instanceof EntityPiglin && entity1.position.distance(entity.position) < 16 && ((EntityPiglin) entity1).getMemoryStorage().isEmpty(CoreMemoryTypes.ATTACK_TARGET)).forEach(entity1 -> ((EntityPiglin) entity1).getMemoryStorage().put(CoreMemoryTypes.ATTACK_TARGET, entity.getMemoryStorage().get(memory)));
             if(entity.getMemoryStorage().get(memory) instanceof EntityHoglin) {
                 entity.getMemoryStorage().put(CoreMemoryTypes.LAST_HOGLIN_ATTACK_TIME, entity.getLevel().getTick());
             }

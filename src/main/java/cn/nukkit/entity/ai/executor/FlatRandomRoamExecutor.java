@@ -2,7 +2,6 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.mob.EntityMob;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.math.Vector3;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -108,8 +107,8 @@ public class FlatRandomRoamExecutor implements EntityControl, IBehaviorExecutor 
 
     protected Vector3 next(EntityMob entity) {
         var random = ThreadLocalRandom.current();
-        int x = random.nextInt(maxRoamRange * 2) - maxRoamRange + entity.pos.getFloorX();
-        int z = random.nextInt(maxRoamRange * 2) - maxRoamRange + entity.pos.getFloorZ();
-        return new Vector3(x, entity.pos.y, z);
+        int x = random.nextInt(maxRoamRange * 2) - maxRoamRange + entity.position.getFloorX();
+        int z = random.nextInt(maxRoamRange * 2) - maxRoamRange + entity.position.getFloorZ();
+        return new Vector3(x, entity.position.y, z);
     }
 }

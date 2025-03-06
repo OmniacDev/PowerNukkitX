@@ -36,11 +36,11 @@ public class TeleportExecutor implements IBehaviorExecutor {
     public boolean execute(EntityMob entity) {
         Locator locator = entity.getLocator();
         for(int i = 0; i < maxTries; i++) {
-            if(locator.position.distance(entity.pos) < minDistance) {
+            if(locator.position.distance(entity.position) < minDistance) {
                 locator = find(entity.getTransform());
             } else break;
         }
-        if(entity.pos.distance(locator.position) > minDistance) {
+        if(entity.position.distance(locator.position) > minDistance) {
             entity.teleport(locator);
             locator.level.addSound(locator.position, Sound.MOB_ENDERMEN_PORTAL);
         }

@@ -33,8 +33,8 @@ public class WitherShootExecutor implements EntityControl, IBehaviorExecutor {
             if (tick % 10 == 0) {
                 spawn(entity, tick == 40);
             }
-            setRouteTarget(entity, entity.pos);
-            setLookTarget(entity, target.pos);
+            setRouteTarget(entity, entity.position);
+            setLookTarget(entity, target.position);
             return true;
         } else {
             entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_TIME, entity.getLevel().getTick());
@@ -66,7 +66,7 @@ public class WitherShootExecutor implements EntityControl, IBehaviorExecutor {
                         .add(new FloatTag((float) -entity.rotation.pitch)))
                 .putDouble("damage", 2);
 
-        Entity projectile = Entity.createEntity(charged ? EntityID.WITHER_SKULL_DANGEROUS : EntityID.WITHER_SKULL, entity.level.getChunk(entity.pos.getChunkX(), entity.pos.getChunkZ()), nbt);
+        Entity projectile = Entity.createEntity(charged ? EntityID.WITHER_SKULL_DANGEROUS : EntityID.WITHER_SKULL, entity.level.getChunk(entity.position.getChunkX(), entity.position.getChunkZ()), nbt);
         if (projectile == null) {
             return;
         }
@@ -80,7 +80,7 @@ public class WitherShootExecutor implements EntityControl, IBehaviorExecutor {
             projectile.kill();
         } else {
             projectile.spawnToAll();
-            entity.level.addSound(entity.pos, Sound.MOB_WITHER_SHOOT);
+            entity.level.addSound(entity.position, Sound.MOB_WITHER_SHOOT);
         }
     }
 }

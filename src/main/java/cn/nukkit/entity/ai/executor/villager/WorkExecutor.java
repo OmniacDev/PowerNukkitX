@@ -7,7 +7,6 @@ import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.executor.NearbyFlatRandomRoamExecutor;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.profession.Profession;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.villagers.EntityVillagerV2;
 import cn.nukkit.item.Item;
 import cn.nukkit.math.Vector2;
@@ -30,10 +29,10 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
         if(entity instanceof EntityVillagerV2 villager) {
             Block site = villager.getMemoryStorage().get(CoreMemoryTypes.SITE_BLOCK);
             if(stayTick < 100) {
-                if(site.position.distance(villager.pos) < 1.5f) {
+                if(site.position.distance(villager.position) < 1.5f) {
                     setLookTarget(villager, site.position);
                     stayTick++;
-                    if(stayTick == 40 || stayTick == 90) villager.getLevel().addSound(villager.pos, Profession.getProfession(villager.getProfession()).getWorkSound());
+                    if(stayTick == 40 || stayTick == 90) villager.getLevel().addSound(villager.position, Profession.getProfession(villager.getProfession()).getWorkSound());
                 }
                 if(stayTick == 99) removeRouteTarget(villager);
             } else {
@@ -45,7 +44,7 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
                             double minDistance = Float.MAX_VALUE;
                             Block nearest = null;
                             for(Block block : Arrays.stream(villager.getLevel().getCollisionBlocks(villager.getBoundingBox().grow(9, 2, 9), false, true)).filter(block -> block instanceof BlockCrops crops && crops.isFullyGrown()).toList()) {
-                                double distance = block.position.distance(villager.pos);
+                                double distance = block.position.distance(villager.position);
                                 if(distance < minDistance) {
                                     minDistance = distance;
                                     nearest = block;
@@ -59,9 +58,9 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
                                     removeLookTarget(villager);
                                 } else {
                                     if(entity.getMoveTarget() == null) {
-                                        Vector2 horizontal = new Vector2(nearest.position.x - entity.pos.x, nearest.position.z - entity.pos.z);
+                                        Vector2 horizontal = new Vector2(nearest.position.x - entity.position.x, nearest.position.z - entity.position.z);
                                         horizontal = horizontal.multiply(1 - 1/horizontal.length());
-                                        Vector3 target = new Vector3(entity.pos.x + horizontal.x, nearest.position.y, entity.pos.z + horizontal.y);
+                                        Vector3 target = new Vector3(entity.position.x + horizontal.x, nearest.position.y, entity.position.z + horizontal.y);
                                         setLookTarget(entity, target);
                                         setRouteTarget(entity, target);
                                     }
@@ -84,9 +83,9 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
 
     public void setTarget(EntityMob entity) {
         Block site = entity.getMemoryStorage().get(CoreMemoryTypes.SITE_BLOCK);
-        Vector2 horizontal = new Vector2(site.position.x - entity.pos.x, site.position.z - entity.pos.z);
+        Vector2 horizontal = new Vector2(site.position.x - entity.position.x, site.position.z - entity.position.z);
         horizontal = horizontal.multiply(1 - 1/horizontal.length());
-        Vector3 target = new Vector3(entity.pos.x + horizontal.x, site.position.y, entity.pos.z + horizontal.y);
+        Vector3 target = new Vector3(entity.position.x + horizontal.x, site.position.y, entity.position.z + horizontal.y);
         setLookTarget(entity, target);
         setRouteTarget(entity, target);
     }

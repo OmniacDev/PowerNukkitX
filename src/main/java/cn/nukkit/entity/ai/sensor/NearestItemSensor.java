@@ -42,11 +42,11 @@ public class NearestItemSensor implements ISensor {
         for (Entity e : entity.getLevel().getEntities()) {
             if(e instanceof EntityItem entityItem) {
                 if(itemClass.isAssignableFrom(entityItem.getItem().getClass())) {
-                    if (entity.pos.distanceSquared(e.pos) <= rangeSquared && entity.pos.distanceSquared(e.pos) >= minRangeSquared) {
+                    if (entity.position.distanceSquared(e.position) <= rangeSquared && entity.position.distanceSquared(e.position) >= minRangeSquared) {
                         if (item == null) {
                             item = entityItem;
                         } else {
-                            if (entity.pos.distanceSquared(entityItem.pos) < entity.pos.distanceSquared(item.pos)) {
+                            if (entity.position.distanceSquared(entityItem.position) < entity.position.distanceSquared(item.position)) {
                                  item = entityItem;
                             }
                         }

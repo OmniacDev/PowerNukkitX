@@ -153,7 +153,7 @@ public class EntityBee extends EntityAnimal implements EntityFlyable {
                                 this.kill();
                             } else if(stayAtFlower) {
                                 this.setNectar(true);
-                                this.getLevel().addSound(this.pos, Sound.MOB_BEE_POLLINATE);
+                                this.getLevel().addSound(this.position, Sound.MOB_BEE_POLLINATE);
                             }
                             stayAtFlower = !stayAtFlower;
                         });

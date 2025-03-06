@@ -187,7 +187,7 @@ public abstract class EntityProjectile extends Entity {
                 updateMotion();
             }
 
-            Vector3 moveVector = new Vector3(this.pos.x + this.motion.x, this.pos.y + this.motion.y, this.pos.z + this.motion.z);
+            Vector3 moveVector = new Vector3(this.position.x + this.motion.x, this.position.y + this.motion.y, this.position.z + this.motion.z);
 
             Entity[] list = this.getLevel().getCollidingEntities(this.getBoundingBox().addCoord(this.motion.x, this.motion.y, this.motion.z).expand(1, 1, 1), this);
 
@@ -200,13 +200,13 @@ public abstract class EntityProjectile extends Entity {
                 }
 
                 AxisAlignedBB axisalignedbb = entity.getBoundingBox().grow(0.3, 0.3, 0.3);
-                MovingObjectPosition ob = axisalignedbb.calculateIntercept(this.pos, moveVector);
+                MovingObjectPosition ob = axisalignedbb.calculateIntercept(this.position, moveVector);
 
                 if (ob == null) {
                     continue;
                 }
 
-                double distance = this.pos.distanceSquared(ob.hitVector);
+                double distance = this.position.distanceSquared(ob.hitVector);
 
                 if (distance < nearDistance) {
                     nearDistance = distance;
@@ -239,7 +239,7 @@ public abstract class EntityProjectile extends Entity {
                 this.motion.y = 0;
                 this.motion.z = 0;
 
-                this.server.getPluginManager().callEvent(new ProjectileHitEvent(this, MovingObjectPosition.fromBlock(this.pos.getFloorX(), this.pos.getFloorY(), this.pos.getFloorZ(), BlockFace.UP, this.pos)));
+                this.server.getPluginManager().callEvent(new ProjectileHitEvent(this, MovingObjectPosition.fromBlock(this.position.getFloorX(), this.position.getFloorY(), this.position.getFloorZ(), BlockFace.UP, this.position)));
                 onCollideWithBlock(locator, motion);
                 addHitEffect();
                 return false;

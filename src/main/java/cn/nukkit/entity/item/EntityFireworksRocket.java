@@ -129,7 +129,7 @@ public class EntityFireworksRocket extends Entity {
 
 
             if (this.fireworkAge == 0) {
-                this.getLevel().addSound(this.pos, Sound.FIREWORK_LAUNCH);
+                this.getLevel().addSound(this.position, Sound.FIREWORK_LAUNCH);
             }
 
             this.fireworkAge++;
@@ -141,7 +141,7 @@ public class EntityFireworksRocket extends Entity {
                 pk.event = EntityEventPacket.FIREWORK_EXPLOSION;
                 pk.eid = this.getId();
 
-                level.addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_LARGE_BLAST, -1, getNetworkId());
+                level.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_LARGE_BLAST, -1, getNetworkId());
 
                 Server.broadcastPacket(getViewers().values(), pk);
 

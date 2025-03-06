@@ -115,10 +115,10 @@ public class EntityMooshroom extends EntityAnimal implements EntityWalkable {
         if (item.getId() == Item.SHEARS && item.useOn(this)) {
             this.close();
             //TODO 不同颜色的牛掉落不同的蘑菇
-            this.level.dropItem(this.pos, Item.get(BlockID.RED_MUSHROOM, 0, 5));
-            this.level.addParticleEffect(this.pos.add(0, this.getHeight(), 0), ParticleEffect.LARGE_EXPLOSION_LEVEL);
+            this.level.dropItem(this.position, Item.get(BlockID.RED_MUSHROOM, 0, 5));
+            this.level.addParticleEffect(this.position.add(0, this.getHeight(), 0), ParticleEffect.LARGE_EXPLOSION_LEVEL);
             EntityCow cow = new EntityCow(this.getLocator().getChunk(), this.namedTag);
-            cow.setPosition(this.pos);
+            cow.setPosition(this.position);
             cow.setRotation(this.rotation.yaw, this.rotation.pitch);
             cow.spawnToAll();
             this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this, this.getVector3(), VibrationType.SHEAR));

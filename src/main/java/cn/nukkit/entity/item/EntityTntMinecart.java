@@ -58,8 +58,8 @@ public class EntityTntMinecart extends EntityMinecartAbstract implements EntityE
     @Override
     public boolean onUpdate(int currentTick) {
         // 记录最大高度，用于计算坠落伤害
-        if (!this.onGround && this.pos.y > highestPosition) {
-            this.highestPosition = this.pos.y;
+        if (!this.onGround && this.position.y > highestPosition) {
+            this.highestPosition = this.position.y;
         }
         if (fuse < 80) {
             int tickDiff = currentTick - lastUpdate;
@@ -87,7 +87,7 @@ public class EntityTntMinecart extends EntityMinecartAbstract implements EntityE
     @Override
     protected void updateFallState(boolean onGround) {
         if (onGround) {
-            fallDistance = (float) (this.highestPosition - this.pos.y);
+            fallDistance = (float) (this.highestPosition - this.position.y);
 
             if (fallDistance > 4) {
                 if (this.level.getGameRules().getBoolean(GameRule.TNT_EXPLODES)) {
@@ -101,7 +101,7 @@ public class EntityTntMinecart extends EntityMinecartAbstract implements EntityE
 
     @Override
     public void activate(int x, int y, int z, boolean flag) {
-        level.addSound(this.pos, Sound.FIRE_IGNITE);
+        level.addSound(this.position, Sound.FIRE_IGNITE);
         this.fuse = 79;
     }
 
@@ -139,7 +139,7 @@ public class EntityTntMinecart extends EntityMinecartAbstract implements EntityE
                 return;
             }
         }
-        level.dropItem(this.pos, new ItemTntMinecart());
+        level.dropItem(this.position, new ItemTntMinecart());
     }
 
     @Override
@@ -164,7 +164,7 @@ public class EntityTntMinecart extends EntityMinecartAbstract implements EntityE
     public boolean onInteract(Player player, Item item, Vector3 clickedPos) {
         boolean interact = super.onInteract(player, item, clickedPos);
         if (item.getId().equals(Item.FLINT_AND_STEEL) || item.getId().equals(Item.FIRE_CHARGE)) {
-            level.addSound(this.pos, Sound.FIRE_IGNITE);
+            level.addSound(this.position, Sound.FIRE_IGNITE);
             this.fuse = 79;
             return true;
         }

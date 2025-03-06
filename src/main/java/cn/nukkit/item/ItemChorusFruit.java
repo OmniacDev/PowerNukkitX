@@ -39,9 +39,9 @@ public class ItemChorusFruit extends ItemFood {
 
     @Override
     public boolean onEaten(Player player) {
-        int minX = player.pos.getFloorX() - 8;
-        int minY = player.pos.getFloorY() - 8;
-        int minZ = player.pos.getFloorZ() - 8;
+        int minX = player.position.getFloorX() - 8;
+        int minY = player.position.getFloorY() - 8;
+        int minZ = player.position.getFloorZ() - 8;
         int maxX = minX + 16;
         int maxY = minY + 16;
         int maxZ = minZ + 16;
@@ -72,9 +72,9 @@ public class ItemChorusFruit extends ItemFood {
             }
 
             // Sounds are broadcast at both source and destination
-            level.addLevelSoundEvent(player.pos, LevelSoundEventPacket.SOUND_TELEPORT);
+            level.addLevelSoundEvent(player.position, LevelSoundEventPacket.SOUND_TELEPORT);
             player.teleport(new Vector3(x + 0.5, y + 1, z + 0.5), PlayerTeleportEvent.TeleportCause.CHORUS_FRUIT);
-            level.addLevelSoundEvent(player.pos, LevelSoundEventPacket.SOUND_TELEPORT);
+            level.addLevelSoundEvent(player.position, LevelSoundEventPacket.SOUND_TELEPORT);
 
             break;
         }

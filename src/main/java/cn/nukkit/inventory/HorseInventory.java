@@ -71,14 +71,14 @@ public class HorseInventory extends BaseInventory {
                 this.getHolder().setDataFlag(EntityFlag.WASD_CONTROLLED, false);
                 this.getHolder().setDataFlag(EntityFlag.CAN_POWER_JUMP, false);
             } else {
-                this.getHolder().getLevel().addLevelSoundEvent(this.getHolder().pos, LevelSoundEventPacket.SOUND_SADDLE, -1, this.getHolder().getIdentifier(), false, false);
+                this.getHolder().getLevel().addLevelSoundEvent(this.getHolder().position, LevelSoundEventPacket.SOUND_SADDLE, -1, this.getHolder().getIdentifier(), false, false);
                 this.getHolder().setDataFlag(EntityFlag.SADDLED);
                 this.getHolder().setDataFlag(EntityFlag.WASD_CONTROLLED);
                 this.getHolder().setDataFlag(EntityFlag.CAN_POWER_JUMP);
             }
         } else if (index == 1) {
             if (!this.getHorseArmor().isNull()) {
-                this.getHolder().getLevel().addSound(this.getHolder().pos, Sound.MOB_HORSE_ARMOR);
+                this.getHolder().getLevel().addSound(this.getHolder().position, Sound.MOB_HORSE_ARMOR);
             }
             MobArmorEquipmentPacket mobArmorEquipmentPacket = new MobArmorEquipmentPacket();
             mobArmorEquipmentPacket.eid = this.getHolder().getId();

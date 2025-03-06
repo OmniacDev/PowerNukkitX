@@ -201,8 +201,8 @@ public class EntityHoglin extends EntityMob implements EntityWalkable {
         @Override
         public void onStart(EntityMob entity) {
             super.onStart(entity);
-            if(entity.pos.distance(entity.getMemoryStorage().get(getMemory()).getVector3()) < 8) {
-                entity.getLevel().addSound(entity.pos, Sound.MOB_HOGLIN_RETREAT);
+            if(entity.position.distance(entity.getMemoryStorage().get(getMemory()).getVector3()) < 8) {
+                entity.getLevel().addSound(entity.position, Sound.MOB_HOGLIN_RETREAT);
             }
         }
     }
@@ -218,7 +218,7 @@ public class EntityHoglin extends EntityMob implements EntityWalkable {
             super.onStart(entity);
             entity.setDataProperty(EntityDataTypes.TARGET_EID, entity.getMemoryStorage().get(memory).getId());
             entity.setDataFlag(EntityFlag.ANGRY);
-            entity.level.addLevelSoundEvent(entity.pos, LevelSoundEventPacket.SOUND_ANGRY, -1, Entity.HOGLIN, false, false);
+            entity.level.addLevelSoundEvent(entity.position, LevelSoundEventPacket.SOUND_ANGRY, -1, Entity.HOGLIN, false, false);
         }
 
         @Override

@@ -262,7 +262,7 @@ public class TeleportCommand extends VanillaCommand {
                     log.addTooManyTargets().output();
                     return 0;
                 }
-                Vector3 lookAtPosition = lookAtEntity.get(0).pos;
+                Vector3 lookAtPosition = lookAtEntity.get(0).position;
                 boolean checkForBlocks = false;
                 if (list.hasResult(4)) {
                     checkForBlocks = list.getResult(4);
@@ -369,7 +369,7 @@ public class TeleportCommand extends VanillaCommand {
                     log.addTooManyTargets().output();
                     return 0;
                 }
-                Vector3 lookAtPosition = lookAtEntity.get(0).pos;
+                Vector3 lookAtPosition = lookAtEntity.get(0).position;
                 boolean checkForBlocks = false;
                 if (list.hasResult(3)) {
                     checkForBlocks = list.getResult(3);

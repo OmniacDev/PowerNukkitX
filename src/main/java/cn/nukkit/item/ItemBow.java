@@ -79,7 +79,7 @@ public class ItemBow extends ItemTool {
         Transform arrowTransform = player.getTransform();
         Vector3 directionVector = player.getDirectionVector().multiply(1.1);
         arrowTransform = arrowTransform.add(directionVector.getX(), 0, directionVector.getZ());
-        arrowTransform.setY(player.pos.y + player.getEyeHeight() + directionVector.getY());
+        arrowTransform.setY(player.position.y + player.getEyeHeight() + directionVector.getY());
 
         ItemArrow itemArrow = (ItemArrow) (offhandOptional.isPresent() ?
                 offhandOptional.get().getValue() :
@@ -155,7 +155,7 @@ public class ItemBow extends ItemTool {
                     if (!(durability != null && durability.getLevel() > 0 && (100 / (durability.getLevel() + 1)) <= new Random().nextInt(100))) {
                         this.setDamage(this.getDamage() + 1);
                         if (this.getDamage() >= getMaxDurability()) {
-                            player.getLevel().addSound(player.pos, Sound.RANDOM_BREAK);
+                            player.getLevel().addSound(player.position, Sound.RANDOM_BREAK);
                             this.count--;
                         }
                         player.getInventory().setItemInHand(this);
@@ -169,7 +169,7 @@ public class ItemBow extends ItemTool {
                     entityShootBowEvent.getProjectile().kill();
                 } else {
                     entityShootBowEvent.getProjectile().spawnToAll();
-                    player.getLevel().addSound(player.pos, Sound.RANDOM_BOW);
+                    player.getLevel().addSound(player.position, Sound.RANDOM_BOW);
                 }
             }
         }

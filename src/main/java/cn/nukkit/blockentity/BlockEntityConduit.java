@@ -149,7 +149,7 @@ public class BlockEntityConduit extends BlockEntitySpawnable {
 
         this.getLevel().getPlayers().values().stream()
                 .filter(this::canAffect)
-                .filter(p -> conduitPos.distanceSquared(p.pos.x, p.pos.z) <= radiusSquared)
+                .filter(p -> conduitPos.distanceSquared(p.position.x, p.position.z) <= radiusSquared)
                 .forEach(p -> p.addEffect(Effect.get(EffectType.CONDUIT_POWER)
                                 .setDuration(260)
                                 .setVisible(true)
@@ -206,8 +206,8 @@ public class BlockEntityConduit extends BlockEntitySpawnable {
 
     public boolean canAffect(Entity target) {
         return target.isTouchingWater()
-                || target.level.isRaining() && target.level.canBlockSeeSky(target.pos)
-                && !BiomeTags.containTag(target.level.getBiomeId(target.pos.getFloorX(), target.pos.getFloorY(), target.pos.getFloorZ()), BiomeTags.FROZEN);
+                || target.level.isRaining() && target.level.canBlockSeeSky(target.position)
+                && !BiomeTags.containTag(target.level.getBiomeId(target.position.getFloorX(), target.position.getFloorY(), target.position.getFloorZ()), BiomeTags.FROZEN);
     }
 
     private boolean scanWater() {

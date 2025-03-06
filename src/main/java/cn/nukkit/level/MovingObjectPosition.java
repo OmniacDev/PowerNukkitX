@@ -47,7 +47,7 @@ public class MovingObjectPosition {
         MovingObjectPosition objectPosition = new MovingObjectPosition();
         objectPosition.typeOfHit = 1;
         objectPosition.entityHit = entity;
-        objectPosition.hitVector = new Vector3(entity.pos.x, entity.pos.y, entity.pos.z);
+        objectPosition.hitVector = new Vector3(entity.position.x, entity.position.y, entity.position.z);
         return objectPosition;
     }
 

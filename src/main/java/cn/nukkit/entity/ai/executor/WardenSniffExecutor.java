@@ -2,7 +2,6 @@ package cn.nukkit.entity.ai.executor;
 
 import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityWarden;
 import cn.nukkit.level.Sound;
 
@@ -32,7 +31,7 @@ public class WardenSniffExecutor implements IBehaviorExecutor {
         this.endTime = entity.getLevel().getTick() + this.duration;
         entity.setDataFlag(EntityFlag.SNIFFING, true);
         entity.setDataFlagExtend(EntityFlag.SNIFFING, true);
-        entity.level.addSound(entity.pos.clone(), Sound.MOB_WARDEN_SNIFF);
+        entity.level.addSound(entity.position.clone(), Sound.MOB_WARDEN_SNIFF);
     }
 
     @Override

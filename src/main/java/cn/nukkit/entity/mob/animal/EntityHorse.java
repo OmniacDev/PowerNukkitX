@@ -286,7 +286,7 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
             return;
         }
 
-        Vector3 floorLocation = this.pos.floor();
+        Vector3 floorLocation = this.position.floor();
         Block down = this.level.getBlock(floorLocation.down());
 
         EntityFallEvent event = new EntityFallEvent(this, down, fallDistance);
@@ -324,7 +324,7 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
                 if (onPhysicalInteraction(floor, ThreadLocalRandom.current().nextInt(10) >= 3)) {
                     return;
                 }
-                this.level.useBreakOn(this.pos, null, null, true);
+                this.level.useBreakOn(this.position, null, null, true);
             }
         }
     }
@@ -354,7 +354,7 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
         this.motion.z = 0;
         this.setMoveTarget(null);
         this.setLookTarget(null);
-        this.move(clientLoc.position.x - this.pos.x, clientLoc.position.y - this.pos.y, clientLoc.position.z - this.pos.z);
+        this.move(clientLoc.position.x - this.position.x, clientLoc.position.y - this.position.y, clientLoc.position.z - this.position.z);
         this.rotation.yaw = clientLoc.rotation.yaw;
         this.headYaw = clientLoc.headYaw;
         broadcastMovement(false);
@@ -448,7 +448,7 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
      * Play an animation of a failed tamer
      */
     public void playTameFailAnimation() {
-        this.getLevel().addLevelSoundEvent(this.pos, LevelSoundEventPacket.SOUND_MAD, -1, "minecraft:horse", this.isBaby(), false);
+        this.getLevel().addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_MAD, -1, "minecraft:horse", this.isBaby(), false);
         this.setDataFlag(EntityFlag.STANDING);
     }
 
@@ -510,9 +510,9 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
         addEntity.yaw = (float) this.rotation.yaw;
         addEntity.headYaw = (float) this.rotation.yaw;
         addEntity.pitch = (float) this.rotation.pitch;
-        addEntity.x = (float) this.pos.x;
-        addEntity.y = (float) this.pos.y + this.getBaseOffset();
-        addEntity.z = (float) this.pos.z;
+        addEntity.x = (float) this.position.x;
+        addEntity.y = (float) this.position.y + this.getBaseOffset();
+        addEntity.z = (float) this.position.z;
         addEntity.speedX = (float) this.motion.x;
         addEntity.speedY = (float) this.motion.y;
         addEntity.speedZ = (float) this.motion.z;

@@ -2,8 +2,6 @@ package cn.nukkit.block;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.block.property.CommonBlockProperties;
-import cn.nukkit.block.property.enums.DirtType;
 import cn.nukkit.event.block.BlockFadeEvent;
 import cn.nukkit.event.block.BlockSpreadEvent;
 import cn.nukkit.item.Item;
@@ -17,7 +15,6 @@ import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.random.NukkitRandom;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class BlockGrassBlock extends BlockDirt {
@@ -62,14 +59,14 @@ public class BlockGrassBlock extends BlockDirt {
             item.useOn(this);
             this.getLevel().setBlock(this.position, Block.get(BlockID.FARMLAND));
             if (player != null) {
-                player.getLevel().addSound(player.pos, Sound.USE_GRASS);
+                player.getLevel().addSound(player.position, Sound.USE_GRASS);
             }
             return true;
         } else if (item.isShovel()) {
             item.useOn(this);
             this.getLevel().setBlock(this.position, Block.get(BlockID.GRASS_PATH));
             if (player != null) {
-                player.getLevel().addSound(player.pos, Sound.USE_GRASS);
+                player.getLevel().addSound(player.position, Sound.USE_GRASS);
             }
             return true;
         }

@@ -3,7 +3,6 @@ package cn.nukkit.entity.ai.sensor;
 import cn.nukkit.Player;
 import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
-import cn.nukkit.entity.mob.EntityMob;
 import lombok.Getter;
 
 
@@ -23,9 +22,9 @@ public class PlayerStaringSensor implements ISensor {
     @Override
     public void sense(EntityMob entity) {
         for(Player player : entity.getViewers().values()) {
-            if(player.pos.distance(entity.pos) <= range) {
+            if(player.position.distance(entity.position) <= range) {
                 if(ignoreRotation || Math.abs(Math.abs(player.headYaw-entity.headYaw)-180) <= this.triggerDiff) {
-                    if(player.isLookingAt(entity.pos.add(0, entity.getEyeHeight(), 0), triggerDiff, true)) {
+                    if(player.isLookingAt(entity.position.add(0, entity.getEyeHeight(), 0), triggerDiff, true)) {
                         entity.getMemoryStorage().put(CoreMemoryTypes.STARING_PLAYER, player);
                         return;
                     }

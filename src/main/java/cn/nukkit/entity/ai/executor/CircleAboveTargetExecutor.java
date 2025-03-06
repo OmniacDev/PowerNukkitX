@@ -54,7 +54,7 @@ public class CircleAboveTargetExecutor implements EntityControl, IBehaviorExecut
         double particleX = origin.getX() + Math.cos(angle) * 20;
         double particleZ = origin.getZ() + Math.sin(angle) * 20;
         Transform loc = new Transform(particleX, origin.position.y, particleZ, angle, 0, origin.level);
-        if(entity.pos.distance(loc.position) < 3) {
+        if(entity.position.distance(loc.position) < 3) {
             circleLoc++;
             circleLoc%=8;
         }

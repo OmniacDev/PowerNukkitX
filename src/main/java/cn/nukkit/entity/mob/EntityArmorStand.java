@@ -145,7 +145,7 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
                 slot = EntityEquipment.MAIN_HAND;
             }
         } else {
-            double clickHeight = clickedPos.y - this.pos.y;
+            double clickHeight = clickedPos.y - this.position.y;
             if (clickHeight >= 0.1 && clickHeight < 0.55 && !getBoots().isNull()) {
                 isArmor = true;
                 slot = EntityEquipment.FEET;
@@ -194,7 +194,7 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
         }
 
         if (changed) {
-            level.addSound(this.pos, Sound.MOB_ARMOR_STAND_PLACE);
+            level.addSound(this.position, Sound.MOB_ARMOR_STAND_PLACE);
         }
 
         return false; // Returning true would consume the item but tryChangeEquipment already manages the inventory
@@ -289,7 +289,7 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
     public void fall(float fallDistance) {
         super.fall(fallDistance);
 
-        this.getLevel().addSound(this.pos, Sound.MOB_ARMOR_STAND_LAND);
+        this.getLevel().addSound(this.position, Sound.MOB_ARMOR_STAND_LAND);
     }
 
     @Override
@@ -309,20 +309,20 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
         pos.y += 0.2;
         level.dropItem(pos, getBoots());
 
-        pos.y = this.pos.y + 0.6;
+        pos.y = this.position.y + 0.6;
         level.dropItem(pos, getLeggings());
 
-        pos.y = this.pos.y + 1.4;
-        level.dropItem(byAttack ? pos : this.pos, Item.get(ItemID.ARMOR_STAND));
+        pos.y = this.position.y + 1.4;
+        level.dropItem(byAttack ? pos : this.position, Item.get(ItemID.ARMOR_STAND));
         level.dropItem(pos, getChestplate());
         level.dropItem(pos, getItemInHand());
         level.dropItem(pos, getItemInOffhand());
 
-        pos.y = this.pos.y + 1.8;
+        pos.y = this.position.y + 1.8;
         level.dropItem(pos, getHelmet());
         getEquipment().clearAll();
 
-        level.addSound(this.pos, Sound.MOB_ARMOR_STAND_BREAK);
+        level.addSound(this.position, Sound.MOB_ARMOR_STAND_BREAK);
 
         //todo: initiator should be a entity who kill it but not itself
         level.getVibrationManager().callVibrationEvent(new VibrationEvent(this.getLastDamageCause() instanceof EntityDamageByEntityEvent byEntity ? byEntity.getDamager() : this, this.getVector3(), VibrationType.ENTITY_DIE));
@@ -334,7 +334,7 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
         switch (source.getCause()) {
             case FALL:
                 source.setCancelled(true);
-                level.addSound(this.pos, Sound.MOB_ARMOR_STAND_LAND);
+                level.addSound(this.position, Sound.MOB_ARMOR_STAND_LAND);
                 break;
             case CONTACT:
             case HUNGER:
@@ -378,7 +378,7 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
         if (source instanceof EntityDamageByEntityEvent event) {
             if (event.getDamager() instanceof Player player) {
                 if (player.isCreative()) {
-                    this.level.addParticle(new DestroyBlockParticle(this.pos, Block.get(BlockID.OAK_PLANKS)));
+                    this.level.addParticle(new DestroyBlockParticle(this.position, Block.get(BlockID.OAK_PLANKS)));
                     this.close();
                     return true;
                 }
@@ -386,7 +386,7 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
         }
 
         setDataProperty(HURT_TICKS, 9, true);
-        level.addSound(this.pos, Sound.MOB_ARMOR_STAND_HIT);
+        level.addSound(this.position, Sound.MOB_ARMOR_STAND_HIT);
 
         return true;
     }
@@ -443,8 +443,8 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
 
             updateMovement();
             hasUpdate = true;
-            if (onGround && (highestPosition - this.pos.y) >= 3) {
-                level.addSound(this.pos, Sound.MOB_ARMOR_STAND_LAND);
+            if (onGround && (highestPosition - this.position.y) >= 3) {
+                level.addSound(this.position, Sound.MOB_ARMOR_STAND_LAND);
             }
         }
 

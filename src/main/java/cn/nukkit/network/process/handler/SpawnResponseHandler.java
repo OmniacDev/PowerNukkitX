@@ -19,7 +19,6 @@ import cn.nukkit.registry.Registries;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 @Slf4j
@@ -121,9 +120,9 @@ public class SpawnResponseHandler extends BedrockSessionPacketHandler {
         startPk.entityRuntimeId = player.getId();
         startPk.playerGamemode = Player.toNetworkGamemode(player.getGamemode());
 
-        startPk.x = (float) player.pos.x;
-        startPk.y = (float) (player.isOnGround() ? player.pos.y + player.getEyeHeight() : player.pos.y);//防止在地上生成容易陷进地里
-        startPk.z = (float) player.pos.z;
+        startPk.x = (float) player.position.x;
+        startPk.y = (float) (player.isOnGround() ? player.position.y + player.getEyeHeight() : player.position.y);//防止在地上生成容易陷进地里
+        startPk.z = (float) player.position.z;
         startPk.yaw = (float) player.rotation.yaw;
         startPk.pitch = (float) player.rotation.pitch;
         startPk.seed = -1L;

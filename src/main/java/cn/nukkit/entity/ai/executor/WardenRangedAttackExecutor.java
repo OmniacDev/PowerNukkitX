@@ -5,7 +5,6 @@ import cn.nukkit.entity.EntityCanAttack;
 import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.Sound;
@@ -41,10 +40,10 @@ public class WardenRangedAttackExecutor implements IBehaviorExecutor {
             if (!target.isAlive()) return false;
 
             //particle
-            sendAttackParticle(entity, entity.pos.add(0, 1.5), target.pos.add(0, target.getHeight() / 2));
+            sendAttackParticle(entity, entity.position.add(0, 1.5), target.position.add(0, target.getHeight() / 2));
 
             //sound
-            entity.level.addSound(entity.pos, Sound.MOB_WARDEN_SONIC_BOOM);
+            entity.level.addSound(entity.position, Sound.MOB_WARDEN_SONIC_BOOM);
 //            LevelSoundEventPacketV2 pk = new LevelSoundEventPacketV2();
 //            pk.sound = LevelSoundEventPacket.SOUND_SONIC_BOOM;
 //            pk.entityIdentifier = "minecraft:warden";
@@ -65,7 +64,7 @@ public class WardenRangedAttackExecutor implements IBehaviorExecutor {
 
             EntityDamageByEntityEvent ev = new EntityDamageByEntityEvent(entity, target, EntityDamageEvent.DamageCause.MAGIC, damages, 0.6f, null);
 
-            entity.level.addSound(target.pos, Sound.MOB_WARDEN_ATTACK);
+            entity.level.addSound(target.position, Sound.MOB_WARDEN_ATTACK);
             target.attack(ev);
         }
         if (currentTick > this.totalRunningTime) {
@@ -73,8 +72,8 @@ public class WardenRangedAttackExecutor implements IBehaviorExecutor {
         } else {
             var target = entity.getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET);
             //更新视线target
-            entity.setLookTarget(target.pos.clone());
-            entity.setMoveTarget(target.pos.clone());
+            entity.setLookTarget(target.position.clone());
+            entity.setMoveTarget(target.position.clone());
             return true;
         }
     }
@@ -92,7 +91,7 @@ public class WardenRangedAttackExecutor implements IBehaviorExecutor {
         entity.setDataFlag(EntityFlag.SONIC_BOOM, true);
         entity.setDataFlagExtend(EntityFlag.SONIC_BOOM, true);
 
-        entity.level.addSound(entity.pos, Sound.MOB_WARDEN_SONIC_CHARGE);
+        entity.level.addSound(entity.position, Sound.MOB_WARDEN_SONIC_CHARGE);
 //        LevelSoundEventPacketV2 pk = new LevelSoundEventPacketV2();
 //        pk.sound = LevelSoundEventPacket.SOUND_SONIC_CHARGE;
 //        pk.entityIdentifier = "minecraft:warden";

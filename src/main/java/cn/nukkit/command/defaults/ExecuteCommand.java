@@ -246,7 +246,7 @@ public class ExecuteCommand extends VanillaCommand {
                 String chainCommand = list.getResult(4);
                 for (Entity target : targets) {
                     Transform source = sender.getTransform();
-                    BVector3 bv = BVector3.fromPos(target.pos.x - source.position.x, target.pos.y + (anchorAtEyes ? target.getEyeHeight() : 0) - source.position.y, target.pos.z - source.position.z);
+                    BVector3 bv = BVector3.fromPos(target.position.x - source.position.x, target.position.y + (anchorAtEyes ? target.getEyeHeight() : 0) - source.position.y, target.position.z - source.position.z);
                     source.setPitch(bv.getPitch());
                     source.setYaw(bv.getYaw());
                     ExecutorCommandSender executorCommandSender = new ExecutorCommandSender(sender, sender.asEntity(), source);
@@ -327,7 +327,7 @@ public class ExecuteCommand extends VanillaCommand {
                     return 0;
                 }
                 String chainCommand = list.getResult(3);
-                for (Vector3 vec : targets.stream().map(e -> e.pos).toList()) {
+                for (Vector3 vec : targets.stream().map(e -> e.position).toList()) {
                     Transform newLoc = sender.getTransform();
                     newLoc.setX(vec.getX());
                     newLoc.setY(vec.getY());

@@ -79,7 +79,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
         Transform clone = this.target.getTransform();
 
-        if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
+        if (entity.position.distanceSquared(target.position) > maxShootDistanceSquared) {
             setRouteTarget(entity, clone.position);
         } else {
             setRouteTarget(entity, null);
@@ -87,7 +87,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
         setLookTarget(entity, clone.position);
 
         if (tick2 == 0 && tick1 > coolDownTick) {
-            if (entity.pos.distanceSquared(target.pos) <= maxShootDistanceSquared) {
+            if (entity.position.distanceSquared(target.position) <= maxShootDistanceSquared) {
                 this.tick1 = 0;
                 this.tick2++;
                 startShootSequence(entity);
@@ -134,7 +134,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
 
         Transform potionTransform = entity.getTransform();
         Vector3 directionVector = entity.getDirectionVector();
-        potionTransform.setY(entity.pos.y + entity.getEyeHeight() + directionVector.getY());
+        potionTransform.setY(entity.position.y + entity.getEyeHeight() + directionVector.getY());
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
                         .add(new FloatTag(potionTransform.position.x))
@@ -149,7 +149,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
                         .add(new FloatTag((float) -entity.rotation.pitch)))
                 .putInt("PotionId", getPotionEffect(entity));
 
-        Entity projectile = Entity.createEntity(EntityID.SPLASH_POTION, entity.level.getChunk(entity.pos.getChunkX(), entity.pos.getChunkZ()), nbt);
+        Entity projectile = Entity.createEntity(EntityID.SPLASH_POTION, entity.level.getChunk(entity.position.getChunkX(), entity.position.getChunkZ()), nbt);
 
         if (projectile == null) {
             return;
@@ -180,7 +180,7 @@ public class PotionThrowExecutor implements EntityControl, IBehaviorExecutor {
         if(entity instanceof EntityMob intelligent) {
             if(intelligent.getMemoryStorage().notEmpty(memory)) {
                 Entity target = intelligent.getMemoryStorage().get(memory);
-                double distance = target.pos.distance(entity.pos);
+                double distance = target.position.distance(entity.position);
                 if(distance > 8 && !target.hasEffect(EffectType.SLOWNESS)) {
                     return 17; //SLOWNESS
                 } else if(distance < 3 && !target.hasEffect(EffectType.WEAKNESS) && ThreadLocalRandom.current().nextInt(4) == 0) {

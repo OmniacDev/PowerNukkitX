@@ -104,8 +104,8 @@ public class EntityBreedingExecutor<T extends EntityMob> implements IBehaviorExe
         if (entity1.getOffsetBoundingBox().intersectsWith(entity2.getOffsetBoundingBox())) return;
 
         //clone the vec
-        var cloned1 = entity1.pos.clone();
-        var cloned2 = entity2.pos.clone();
+        var cloned1 = entity1.position.clone();
+        var cloned2 = entity2.position.clone();
 
         //update move target
         entity1.setMoveTarget(cloned2);
@@ -127,7 +127,7 @@ public class EntityBreedingExecutor<T extends EntityMob> implements IBehaviorExe
         var maxDistanceSquared = -1d;
         T nearestInLove = null;
         for (var e : entities) {
-            var newDistance = e.pos.distanceSquared(entity.pos);
+            var newDistance = e.position.distanceSquared(entity.position);
             if (!e.equals(entity) && entityClass.isInstance(e)) {
                 T another = (T) e;
                 if (!another.isBaby() && another.getMemoryStorage().get(CoreMemoryTypes.IS_IN_LOVE) && another.getMemoryStorage().isEmpty(CoreMemoryTypes.ENTITY_SPOUSE) && (maxDistanceSquared == -1 || newDistance < maxDistanceSquared)) {

@@ -6,7 +6,6 @@ import cn.nukkit.entity.projectile.EntityProjectile;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.network.protocol.LevelSoundEventPacketV2;
@@ -28,9 +27,9 @@ public abstract class ProjectileItem extends Item {
     public boolean onClickAir(Player player, Vector3 directionVector) {
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(player.pos.x))
-                        .add(new FloatTag(player.pos.y + player.getEyeHeight() - 0.30000000149011612))
-                        .add(new FloatTag(player.pos.z)))
+                        .add(new FloatTag(player.position.x))
+                        .add(new FloatTag(player.position.y + player.getEyeHeight() - 0.30000000149011612))
+                        .add(new FloatTag(player.position.z)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(directionVector.x))
                         .add(new FloatTag(directionVector.y))
@@ -41,7 +40,7 @@ public abstract class ProjectileItem extends Item {
 
         this.correctNBT(nbt);
 
-        Entity projectile = Entity.createEntity(this.getProjectileEntityType(), player.getLevel().getChunk(player.pos.getFloorX() >> 4, player.pos.getFloorZ() >> 4), nbt, player);
+        Entity projectile = Entity.createEntity(this.getProjectileEntityType(), player.getLevel().getChunk(player.position.getFloorX() >> 4, player.position.getFloorZ() >> 4), nbt, player);
         if (projectile != null) {
             projectile = correctProjectile(player, projectile);
             if (projectile == null) {
@@ -71,7 +70,7 @@ public abstract class ProjectileItem extends Item {
     }
 
     protected void addThrowSound(Player player) {
-        player.getLevel().addLevelSoundEvent(player.pos, LevelSoundEventPacketV2.SOUND_THROW, -1, "minecraft:player", false, false);
+        player.getLevel().addLevelSoundEvent(player.position, LevelSoundEventPacketV2.SOUND_THROW, -1, "minecraft:player", false, false);
     }
 
     protected Entity correctProjectile(Player player, Entity projectile) {

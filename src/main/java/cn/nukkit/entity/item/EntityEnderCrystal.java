@@ -113,10 +113,10 @@ public class EntityEnderCrystal extends Entity implements EntityExplosive {
         super.close();
         for (Entity entity : this.getLevel().getEntities()) {
             if (entity instanceof EntityEnderDragon dragon) {
-                if (entity.pos.distance(this.pos) <= 28) {
+                if (entity.position.distance(this.position) <= 28) {
                     entity.attack(new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.MAGIC, 10));
                 }
-                dragon.getMemoryStorage().put(CoreMemoryTypes.LAST_ENDER_CRYSTAL_DESTROY, this.pos.asBlockVector3());
+                dragon.getMemoryStorage().put(CoreMemoryTypes.LAST_ENDER_CRYSTAL_DESTROY, this.position.asBlockVector3());
             }
         }
     }

@@ -100,14 +100,14 @@ public class EntitySnowball extends EntityThrowable {
     @Override
     protected void addHitEffect() {
         int particles = nextParticleCount();
-        DataPacket[] particlePackets = new GenericParticle(this.pos, Particle.TYPE_SNOWBALL_POOF).encode();
+        DataPacket[] particlePackets = new GenericParticle(this.position, Particle.TYPE_SNOWBALL_POOF).encode();
         int length = particlePackets.length;
         DataPacket[] allPackets = Arrays.copyOf(particlePackets, length * particles);
         for (int i = length; i < allPackets.length; i++) {
             allPackets[i] = particlePackets[i % length];
         }
-        int chunkX = (int) this.pos.x >> 4;
-        int chunkZ = (int) this.pos.z >> 4;
+        int chunkX = (int) this.position.x >> 4;
+        int chunkZ = (int) this.position.z >> 4;
         Level level = this.level;
         for (var p : allPackets) {
             Server.broadcastPacket(level.getChunkPlayers(chunkX, chunkZ).values(), p);

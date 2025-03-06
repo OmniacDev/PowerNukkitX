@@ -62,7 +62,7 @@ public class ItemFireworkRocket extends Item {
                     -Math.sin(Math.toRadians(player.rotation.pitch)) * 2,
                     Math.cos(Math.toRadians(player.rotation.yaw)) * Math.cos(Math.toRadians(player.rotation.pitch)) * 2));
 
-            spawnElytraFirework(player.pos, player);
+            spawnElytraFirework(player.position, player);
             if (!player.isCreative()) {
                 this.count--;
             }

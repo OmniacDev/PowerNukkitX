@@ -27,7 +27,7 @@ public class LookController implements IController {
             //clone防止异步导致的NPE
             Vector3 moveDirectionEnd = entity.getMoveDirectionEnd().clone();
             //构建路径方向向量
-            var routeDirectionVector = new Vector3(moveDirectionEnd.x - entity.pos.x, moveDirectionEnd.y - entity.pos.y, moveDirectionEnd.z - entity.pos.z);
+            var routeDirectionVector = new Vector3(moveDirectionEnd.x - entity.position.x, moveDirectionEnd.y - entity.position.y, moveDirectionEnd.z - entity.position.z);
             var yaw = BVector3.getYawFromVector(routeDirectionVector);
             entity.rotation.yaw = (yaw);
             if (!lookAtTarget) {
@@ -37,7 +37,7 @@ public class LookController implements IController {
         }
         if (lookAtTarget && lookTarget != null) {
             //构建指向玩家的向量
-            var toPlayerVector = new Vector3(lookTarget.x - entity.pos.x, lookTarget.y - entity.pos.y, lookTarget.z - entity.pos.z);
+            var toPlayerVector = new Vector3(lookTarget.x - entity.position.x, lookTarget.y - entity.position.y, lookTarget.z - entity.position.z);
             if (entity.isEnablePitch()) entity.rotation.pitch = (BVector3.getPitchFromVector(toPlayerVector));
             entity.headYaw = (BVector3.getYawFromVector(toPlayerVector));
         }

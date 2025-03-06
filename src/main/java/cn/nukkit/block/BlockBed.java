@@ -149,7 +149,7 @@ public class BlockBed extends BlockTransparent implements Faceable, BlockEntityH
         AxisAlignedBB accessArea = new SimpleAxisAlignedBB(head.position.x - 2, head.position.y - 5.5, head.position.z - 2, head.position.x + 3, head.position.y + 2.5, head.position.z + 3)
                 .addCoord(footPart.getXOffset(), 0, footPart.getZOffset());
 
-        if (!accessArea.isVectorInside(player.pos)) {
+        if (!accessArea.isVectorInside(player.position)) {
             player.sendMessage(new TranslationContainer(TextFormat.GRAY + "%tile.bed.tooFar"));
             return true;
         }

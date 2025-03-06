@@ -1,6 +1,5 @@
 package cn.nukkit.command.defaults;
 
-import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandEnum;
 import cn.nukkit.command.data.CommandParamType;
@@ -59,7 +58,7 @@ public class DebugCommand extends TestCommand implements CoreCommand {
                     player.getLevel().getScheduler().scheduleAsyncTask(InternalPlugin.INSTANCE, new AsyncTask() {
                         @Override
                         public void onRun() {
-                            itemFilledMap.renderMap(player.getLevel(), player.pos.getFloorX() - 64, player.pos.getFloorZ() - 64, zoom);
+                            itemFilledMap.renderMap(player.getLevel(), player.position.getFloorX() - 64, player.position.getFloorZ() - 64, zoom);
                             player.getInventory().setItemInHand(itemFilledMap);
                             itemFilledMap.sendImage(player);
                             player.sendMessage("Successfully rendered the map in your hand");

@@ -93,7 +93,7 @@ public class EntityVillager extends EntityMob {
     private void transform() {
         this.close();
         EntityZombieVillager zombieVillager = new EntityZombieVillager(this.getLocator().getChunk(), this.namedTag);
-        zombieVillager.setPosition(this.pos);
+        zombieVillager.setPosition(this.position);
         zombieVillager.setRotation(this.rotation.yaw, this.rotation.pitch);
         zombieVillager.spawnToAll();
     }

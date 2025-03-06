@@ -165,16 +165,16 @@ public class EntityXpOrb extends Entity {
 
             this.motion.y -= this.getGravity();
 
-            if (this.checkObstruction(this.pos.x, this.pos.y, this.pos.z)) {
+            if (this.checkObstruction(this.position.x, this.position.y, this.position.z)) {
                 hasUpdate = true;
             }
 
-            if (this.closestPlayer == null || this.closestPlayer.pos.distanceSquared(this.pos) > 64.0D) {
+            if (this.closestPlayer == null || this.closestPlayer.position.distanceSquared(this.position) > 64.0D) {
                 this.closestPlayer = null;
                 double closestDistance = 0.0D;
                 for (Player p : this.getViewers().values()) {
                     if (!p.isSpectator() && p.spawned && p.isAlive()) {
-                        double d = p.pos.distanceSquared(this.pos);
+                        double d = p.position.distanceSquared(this.position);
                         if (d <= 64.0D && (this.closestPlayer == null || d < closestDistance)) {
                             this.closestPlayer = p;
                             closestDistance = d;
@@ -188,9 +188,9 @@ public class EntityXpOrb extends Entity {
             }
 
             if (this.closestPlayer != null) {
-                double dX = (this.closestPlayer.pos.x - this.pos.x) / 8.0D;
-                double dY = (this.closestPlayer.pos.y + (double) this.closestPlayer.getEyeHeight() / 2.0D - this.pos.y) / 8.0D;
-                double dZ = (this.closestPlayer.pos.z - this.pos.z) / 8.0D;
+                double dX = (this.closestPlayer.position.x - this.position.x) / 8.0D;
+                double dY = (this.closestPlayer.position.y + (double) this.closestPlayer.getEyeHeight() / 2.0D - this.position.y) / 8.0D;
+                double dZ = (this.closestPlayer.position.z - this.position.z) / 8.0D;
                 double d = Math.sqrt(dX * dX + dY * dY + dZ * dZ);
                 double diff = 1.0D - d;
 
@@ -207,7 +207,7 @@ public class EntityXpOrb extends Entity {
             double friction = 1d - this.getDrag();
 
             if (this.onGround && (Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.z) > 0.00001)) {
-                friction = this.getLevel().getBlock(this.pos.add(0, -1, 0).floor()).getFrictionFactor() * friction;
+                friction = this.getLevel().getBlock(this.position.add(0, -1, 0).floor()).getFrictionFactor() * friction;
             }
 
             this.motion.x *= friction;

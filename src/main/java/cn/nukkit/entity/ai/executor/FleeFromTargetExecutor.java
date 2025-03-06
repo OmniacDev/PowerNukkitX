@@ -49,9 +49,9 @@ public class FleeFromTargetExecutor implements EntityControl, IBehaviorExecutor 
         }
 
         Vector3 target = entity.getBehaviorGroup().getMemoryStorage().get(memory).getVector3();
-        Vector3 moveTarget = target.add(new Vector3(entity.pos.x-target.x, entity.pos.y-target.y, entity.pos.z-target.z).normalize().multiply(minDistance));
+        Vector3 moveTarget = target.add(new Vector3(entity.position.x-target.x, entity.position.y-target.y, entity.position.z-target.z).normalize().multiply(minDistance));
 
-        if (target.distance(entity.pos) > minDistance) {
+        if (target.distance(entity.position) > minDistance) {
             setLookTarget(entity, target);
             return false;
         }

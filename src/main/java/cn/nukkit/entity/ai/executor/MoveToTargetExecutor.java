@@ -61,7 +61,7 @@ public class MoveToTargetExecutor implements EntityControl, IBehaviorExecutor {
 //        }
 
         if (enableRangeTest) {
-            var distanceSquared = target.distanceSquared(entity.pos);
+            var distanceSquared = target.distanceSquared(entity.position);
             if (distanceSquared > maxFollowRangeSquared || distanceSquared < minFollowRangeSquared) {
                 return false;
             }

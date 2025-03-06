@@ -7,7 +7,6 @@ import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.ai.memory.CoreMemoryTypes;
 import cn.nukkit.entity.effect.EffectType;
 import cn.nukkit.entity.effect.PotionType;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.mob.monster.EntityMonster;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
@@ -106,7 +105,7 @@ public class UsePotionExecutor implements EntityControl, IBehaviorExecutor {
             if(intelligent.getMemoryStorage().notEmpty(CoreMemoryTypes.BE_ATTACKED_EVENT)) {
                 EntityDamageEvent event = intelligent.getMemoryStorage().get(CoreMemoryTypes.BE_ATTACKED_EVENT);
                 if(event instanceof EntityDamageByEntityEvent e) {
-                    if(e.getDamager().pos.distance(entity.pos) > 11) {
+                    if(e.getDamager().position.distance(entity.position) > 11) {
                         return ItemPotion.fromPotion(PotionType.SWIFTNESS);
                     }
                 }

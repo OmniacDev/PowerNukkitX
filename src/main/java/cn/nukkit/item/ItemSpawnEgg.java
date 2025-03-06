@@ -11,7 +11,6 @@ import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.registry.Registries;
@@ -106,7 +105,7 @@ public class ItemSpawnEgg extends Item {
             }
             entity.spawnToAll();
 
-            level.getVibrationManager().callVibrationEvent(new VibrationEvent(player, entity.pos.clone(), VibrationType.ENTITY_PLACE));
+            level.getVibrationManager().callVibrationEvent(new VibrationEvent(player, entity.position.clone(), VibrationType.ENTITY_PLACE));
 
             return true;
         }

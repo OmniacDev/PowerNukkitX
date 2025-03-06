@@ -131,7 +131,7 @@ public class BlockCreakingHeart extends BlockSolid implements RedstoneComponent,
         BlockEntityCreakingHeart entityCreakingHeart = getOrCreateBlockEntity();
         EntityCreaking creaking = entityCreakingHeart.getLinkedCreaking();
         if(creaking != null) {
-            return (int) (15 - ((creaking.pos.distance(this.position) / 32) * 15));
+            return (int) (15 - ((creaking.position.distance(this.position) / 32) * 15));
         } else return 0;
     }
 

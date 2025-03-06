@@ -152,8 +152,8 @@ public class BlockEntityBeehive extends BlockEntity {
         entity.close();
         if (playSound) {
             entity.level.addSound(this.position, Sound.BLOCK_BEEHIVE_ENTER);
-            if (entity.level != null && (entity.level != level || entity.pos.distanceSquared(this.position) >= 4)) {
-                entity.level.addSound(entity.pos, Sound.BLOCK_BEEHIVE_ENTER);
+            if (entity.level != null && (entity.level != level || entity.position.distanceSquared(this.position) >= 4)) {
+                entity.level.addSound(entity.position, Sound.BLOCK_BEEHIVE_ENTER);
             }
         }
         return occupant;

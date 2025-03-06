@@ -12,7 +12,7 @@ public class LevelSoundEventProcessor extends DataPacketProcessor<LevelSoundEven
     public void handle(@NotNull PlayerHandle playerHandle, @NotNull LevelSoundEventPacket pk) {
         Player player = playerHandle.player;
         if (!player.isSpectator()) {
-            player.level.addChunkPacket(player.pos.getChunkX(), player.pos.getChunkZ(), pk);
+            player.level.addChunkPacket(player.position.getChunkX(), player.position.getChunkZ(), pk);
         }
     }
 

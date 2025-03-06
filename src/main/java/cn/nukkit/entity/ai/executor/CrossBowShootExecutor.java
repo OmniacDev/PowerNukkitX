@@ -89,7 +89,7 @@ public class CrossBowShootExecutor implements EntityControl, IBehaviorExecutor {
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed);
         Transform clone = this.target.getTransform();
 
-        if (entity.pos.distanceSquared(target.pos) > maxShootDistanceSquared) {
+        if (entity.position.distanceSquared(target.position) > maxShootDistanceSquared) {
             //更新寻路target
             setRouteTarget(entity, clone.position);
         } else {
@@ -99,7 +99,7 @@ public class CrossBowShootExecutor implements EntityControl, IBehaviorExecutor {
         setLookTarget(entity, clone.position);
 
         if (tick2 == 0 && tick1 > coolDownTick) {
-            if (entity.pos.distanceSquared(target.pos) <= maxShootDistanceSquared) {
+            if (entity.position.distanceSquared(target.position) <= maxShootDistanceSquared) {
                 this.tick1 = 0;
                 this.tick2++;
                 playBowAnimation(entity, 0);
@@ -160,9 +160,9 @@ public class CrossBowShootExecutor implements EntityControl, IBehaviorExecutor {
 
         CompoundTag nbt = new CompoundTag()
                 .putList("Pos", new ListTag<FloatTag>()
-                        .add(new FloatTag(entity.pos.x))
-                        .add(new FloatTag(entity.pos.y + entity.getCurrentHeight() / 2 + 0.2f))
-                        .add(new FloatTag(entity.pos.z)))
+                        .add(new FloatTag(entity.position.x))
+                        .add(new FloatTag(entity.position.y + entity.getCurrentHeight() / 2 + 0.2f))
+                        .add(new FloatTag(entity.position.z)))
                 .putList("Motion", new ListTag<FloatTag>()
                         .add(new FloatTag(-Math.sin(entity.headYaw / 180 * Math.PI) * Math.cos(entity.rotation.pitch / 180 * Math.PI)))
                         .add(new FloatTag(-Math.sin(entity.rotation.pitch / 180 * Math.PI)))
@@ -195,7 +195,7 @@ public class CrossBowShootExecutor implements EntityControl, IBehaviorExecutor {
                     entityShootBowEvent.getProjectile().kill();
                 } else {
                     entityShootBowEvent.getProjectile().spawnToAll();
-                    entity.getLevel().addSound(entity.pos, Sound.RANDOM_BOW);
+                    entity.getLevel().addSound(entity.position, Sound.RANDOM_BOW);
                 }
             }
         }
@@ -203,14 +203,14 @@ public class CrossBowShootExecutor implements EntityControl, IBehaviorExecutor {
 
     private void playBowAnimation(Entity entity, int chargeAmount) {
         if(chargeAmount == 0) {
-            entity.level.addSound(entity.pos, Sound.CROSSBOW_LOADING_START);
+            entity.level.addSound(entity.position, Sound.CROSSBOW_LOADING_START);
             entity.setDataProperty(EntityDataTypes.TARGET_EID, this.target.getId());
             entity.setDataFlag(EntityFlag.USING_ITEM);
         } else entity.setDataProperty(EntityDataTypes.CHARGE_AMOUNT, chargeAmount*2);
-        if(chargeAmount == 30) entity.level.addSound(entity.pos, Sound.CROSSBOW_LOADING_MIDDLE);
+        if(chargeAmount == 30) entity.level.addSound(entity.position, Sound.CROSSBOW_LOADING_MIDDLE);
         if(chargeAmount == 60) {
             entity.setDataFlag(EntityFlag.CHARGED);
-            entity.level.addSound(entity.pos, Sound.CROSSBOW_LOADING_END);
+            entity.level.addSound(entity.position, Sound.CROSSBOW_LOADING_END);
         }
     }
 

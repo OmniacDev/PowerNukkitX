@@ -49,7 +49,7 @@ public class EntityMoveToOwnerExecutor implements EntityControl, IBehaviorExecut
 
             //获取目的地位置（这个clone很重要）
             Player target = (Player) player.clone();
-            if (target.pos.distanceSquared(entity.pos) <= minFollowRangeSquared) return false;
+            if (target.position.distanceSquared(entity.position) <= minFollowRangeSquared) return false;
 
             //不允许跨世界
             if (!target.level.getName().equals(entity.level.getName()))
@@ -57,19 +57,19 @@ public class EntityMoveToOwnerExecutor implements EntityControl, IBehaviorExecut
 
             if (entity.getLocator().position.floor().equals(oldTarget)) return false;
 
-            var distanceSquared = entity.pos.distanceSquared(player.pos);
+            var distanceSquared = entity.position.distanceSquared(player.position);
             if (distanceSquared <= maxFollowRangeSquared) {
                 //更新寻路target
-                setRouteTarget(entity, target.pos);
+                setRouteTarget(entity, target.position);
                 //更新视线target
-                setLookTarget(entity, target.pos);
+                setLookTarget(entity, target.position);
 
                 if (entity.getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_FEEDING_PLAYER)) {
                     entity.setDataFlag(EntityFlag.INTERESTED, true);
                 }
 
                 if (updateRouteImmediatelyWhenTargetChange) {
-                    var floor = target.pos.floor();
+                    var floor = target.position.floor();
 
                     if (oldTarget == null || oldTarget.equals(floor))
                         entity.getBehaviorGroup().setForceUpdateRoute(true);
@@ -83,7 +83,7 @@ public class EntityMoveToOwnerExecutor implements EntityControl, IBehaviorExecut
                 return true;
             } else {
                 var targetVector = randomVector3(player, 4);
-                if (targetVector == null || targetVector.distanceSquared(player.pos) > maxFollowRangeSquared)
+                if (targetVector == null || targetVector.distanceSquared(player.position) > maxFollowRangeSquared)
                     return true;//继续寻找
                 else return !entity.teleport(targetVector);
             }
@@ -121,8 +121,8 @@ public class EntityMoveToOwnerExecutor implements EntityControl, IBehaviorExecut
 
     protected Vector3 randomVector3(Entity player, int r) {
         var random = ThreadLocalRandom.current();
-        int x = random.nextInt(r * -1, r) + player.pos.getFloorX();
-        int z = random.nextInt(r * -1, r) + player.pos.getFloorZ();
+        int x = random.nextInt(r * -1, r) + player.position.getFloorX();
+        int z = random.nextInt(r * -1, r) + player.position.getFloorZ();
         double y = player.getLevel().getHighestBlockAt(x, z);
         var vector3 = new Vector3(x, y, z);
         var result = player.getLevel().getBlock(vector3);

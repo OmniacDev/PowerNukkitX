@@ -37,7 +37,7 @@ public class ShulkerAttackExecutor implements IBehaviorExecutor {
         if(tick > nextAttack) {
             tick = 0;
             nextAttack = Utils.rand(20, 110);
-            Transform bulletTransform = entity.getTransform().clone().add(new Vector3(target.pos.x - entity.pos.x, target.pos.y - entity.pos.y, target.pos.z - entity.pos.z).normalize()).add(0, 0.5f, 0);
+            Transform bulletTransform = entity.getTransform().clone().add(new Vector3(target.position.x - entity.position.x, target.position.y - entity.position.y, target.position.z - entity.position.z).normalize()).add(0, 0.5f, 0);
             CompoundTag nbt = new CompoundTag()
                     .putList("Pos", new ListTag<FloatTag>()
                             .add(new FloatTag(bulletTransform.position.x))
@@ -52,13 +52,13 @@ public class ShulkerAttackExecutor implements IBehaviorExecutor {
                             .add(new FloatTag(0)));
 
 
-            Entity bulletEntity = Entity.createEntity(EntityID.SHULKER_BULLET, entity.level.getChunk(entity.pos.getChunkX(), entity.pos.getChunkZ()), nbt);
+            Entity bulletEntity = Entity.createEntity(EntityID.SHULKER_BULLET, entity.level.getChunk(entity.position.getChunkX(), entity.position.getChunkZ()), nbt);
 
             if(bulletEntity instanceof EntityShulkerBullet bullet) {
                 bullet.getMemoryStorage().put(CoreMemoryTypes.ATTACK_TARGET, target);
             }
             bulletEntity.spawnToAll();
-            entity.getLevel().addSound(entity.pos, Sound.MOB_SHULKER_SHOOT);
+            entity.getLevel().addSound(entity.position, Sound.MOB_SHULKER_SHOOT);
         }
         return new AllMatchEvaluator(new EntityCheckEvaluator(this.target), new DistanceEvaluator(this.target, 16), new NotMatchEvaluator(new PassByTimeEvaluator(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, 0, 60))).evaluate(entity);
     }

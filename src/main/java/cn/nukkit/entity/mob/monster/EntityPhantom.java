@@ -140,7 +140,7 @@ public class EntityPhantom extends EntityMonster implements EntityFlyable, Entit
         @Override
         public void onStart(EntityMob entity) {
             super.onStart(entity);
-            entity.level.addSound(entity.pos, Sound.MOB_PHANTOM_SWOOP);
+            entity.level.addSound(entity.position, Sound.MOB_PHANTOM_SWOOP);
         }
     }
 }

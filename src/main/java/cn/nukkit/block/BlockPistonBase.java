@@ -89,8 +89,8 @@ public abstract class BlockPistonBase extends BlockTransparent implements Faceab
     @Override
     public boolean place(@NotNull Item item, @NotNull Block block, @NotNull Block target, @NotNull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         if (player != null) {
-            if (Math.abs(player.pos.getFloorX() - this.position.x) <= 1 && Math.abs(player.pos.getFloorZ() - this.position.z) <= 1) {
-                double y = player.pos.y + player.getEyeHeight();
+            if (Math.abs(player.position.getFloorX() - this.position.x) <= 1 && Math.abs(player.position.getFloorZ() - this.position.z) <= 1) {
+                double y = player.position.y + player.getEyeHeight();
 
                 if (y - this.position.y > 2) {
                     this.setPropertyValue(CommonBlockProperties.FACING_DIRECTION, BlockFace.UP.getIndex());

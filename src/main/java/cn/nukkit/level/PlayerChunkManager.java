@@ -67,7 +67,7 @@ public final class PlayerChunkManager {
      */
     public synchronized void handleTeleport() {
         if (!player.isConnected()) return;
-        BlockVector3 floor = player.pos.asBlockVector3();
+        BlockVector3 floor = player.position.asBlockVector3();
         updateInRadiusChunks(1, floor);
         removeOutOfRadiusChunks();
         updateChunkSendingQueue();
@@ -78,7 +78,7 @@ public final class PlayerChunkManager {
     public synchronized void tick() {
         if (!player.isConnected()) return;
         long currentLoaderChunkPosHashed;
-        BlockVector3 floor = player.pos.asBlockVector3();
+        BlockVector3 floor = player.position.asBlockVector3();
         if ((currentLoaderChunkPosHashed = Level.chunkHash(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {
             lastLoaderChunkPosHashed = currentLoaderChunkPosHashed;
             updateInRadiusChunks(player.getViewDistance(), floor);
@@ -179,7 +179,7 @@ public final class PlayerChunkManager {
     private void sendChunk() {
         if (!chunkReadyToSend.isEmpty()) {
             NetworkChunkPublisherUpdatePacket ncp = new NetworkChunkPublisherUpdatePacket();
-            ncp.position = player.pos.asBlockVector3();
+            ncp.position = player.position.asBlockVector3();
             ncp.radius = player.getViewDistance() << 4;
             player.dataPacket(ncp);
             for (var e : chunkReadyToSend.long2ObjectEntrySet()) {

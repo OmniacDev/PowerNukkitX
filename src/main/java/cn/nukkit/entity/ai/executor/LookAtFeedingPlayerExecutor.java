@@ -19,7 +19,7 @@ public class LookAtFeedingPlayerExecutor implements EntityControl, IBehaviorExec
         if (!entity.isEnablePitch()) entity.setEnablePitch(true);
         var vector3 = entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_FEEDING_PLAYER);
         if (vector3 != null) {
-            setLookTarget(entity, vector3.pos);
+            setLookTarget(entity, vector3.position);
             entity.setDataFlag(EntityFlag.INTERESTED, true);
             return true;
         } else return false;

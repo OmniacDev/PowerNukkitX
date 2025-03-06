@@ -66,9 +66,9 @@ public class EntityChestBoat extends EntityBoat implements InventoryHolder {
         addEntity.yaw = (float) this.rotation.yaw;
         addEntity.headYaw = (float) this.rotation.yaw;
         addEntity.pitch = (float) this.rotation.pitch;
-        addEntity.x = (float) this.pos.x;
-        addEntity.y = (float) this.pos.y + getBaseOffset();
-        addEntity.z = (float) this.pos.z;
+        addEntity.x = (float) this.position.x;
+        addEntity.y = (float) this.position.y + getBaseOffset();
+        addEntity.z = (float) this.position.z;
         addEntity.speedX = (float) this.motion.x;
         addEntity.speedY = (float) this.motion.y;
         addEntity.speedZ = (float) this.motion.z;
@@ -126,18 +126,18 @@ public class EntityChestBoat extends EntityBoat implements InventoryHolder {
     @Override
     protected void dropItem() {
         switch (this.getVariant()) {
-            case 0 -> this.level.dropItem(this.pos, Item.get(ItemID.OAK_CHEST_BOAT));
-            case 1 -> this.level.dropItem(this.pos, Item.get(ItemID.SPRUCE_CHEST_BOAT));
-            case 2 -> this.level.dropItem(this.pos, Item.get(ItemID.BIRCH_CHEST_BOAT));
-            case 3 -> this.level.dropItem(this.pos, Item.get(ItemID.JUNGLE_CHEST_BOAT));
-            case 4 -> this.level.dropItem(this.pos, Item.get(ItemID.ACACIA_CHEST_BOAT));
-            case 5 -> this.level.dropItem(this.pos, Item.get(ItemID.DARK_OAK_CHEST_BOAT));
-            case 6 -> this.level.dropItem(this.pos, Item.get(ItemID.MANGROVE_CHEST_BOAT));
-            default -> this.level.dropItem(this.pos, Item.get(ItemID.CHEST_BOAT));
+            case 0 -> this.level.dropItem(this.position, Item.get(ItemID.OAK_CHEST_BOAT));
+            case 1 -> this.level.dropItem(this.position, Item.get(ItemID.SPRUCE_CHEST_BOAT));
+            case 2 -> this.level.dropItem(this.position, Item.get(ItemID.BIRCH_CHEST_BOAT));
+            case 3 -> this.level.dropItem(this.position, Item.get(ItemID.JUNGLE_CHEST_BOAT));
+            case 4 -> this.level.dropItem(this.position, Item.get(ItemID.ACACIA_CHEST_BOAT));
+            case 5 -> this.level.dropItem(this.position, Item.get(ItemID.DARK_OAK_CHEST_BOAT));
+            case 6 -> this.level.dropItem(this.position, Item.get(ItemID.MANGROVE_CHEST_BOAT));
+            default -> this.level.dropItem(this.position, Item.get(ItemID.CHEST_BOAT));
         }
 
         for (Item item : this.inventory.getContents().values()) {
-            this.level.dropItem(this.pos, item);
+            this.level.dropItem(this.position, item);
         }
         this.inventory.clearAll();
     }

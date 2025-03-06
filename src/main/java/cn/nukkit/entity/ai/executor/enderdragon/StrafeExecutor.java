@@ -27,12 +27,12 @@ public class StrafeExecutor implements EntityControl, IBehaviorExecutor {
 
         Player player = entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER);
         if(player == null) return false;
-        setLookTarget(entity, player.pos);
-        setRouteTarget(entity, player.pos);
+        setLookTarget(entity, player.position);
+        setRouteTarget(entity, player.position);
 
-        if(entity.pos.distance(player.pos) <= 64) {
+        if(entity.position.distance(player.position) <= 64) {
 
-            Vector3 toPlayerVector = new Vector3(player.pos.x - entity.pos.x, player.pos.y - entity.pos.y, player.pos.z - entity.pos.z).normalize();
+            Vector3 toPlayerVector = new Vector3(player.position.x - entity.position.x, player.position.y - entity.position.y, player.position.z - entity.position.z).normalize();
 
             Transform fireballTransform = entity.getTransform().add(toPlayerVector.multiply(5));
             double yaw = BVector3.getYawFromVector(toPlayerVector);
@@ -50,7 +50,7 @@ public class StrafeExecutor implements EntityControl, IBehaviorExecutor {
                             .add(new FloatTag(0))
                             .add(new FloatTag(0)));
 
-            Entity projectile = Entity.createEntity(EntityID.DRAGON_FIREBALL, entity.level.getChunk(entity.pos.getChunkX(), entity.pos.getChunkZ()), nbt);
+            Entity projectile = Entity.createEntity(EntityID.DRAGON_FIREBALL, entity.level.getChunk(entity.position.getChunkX(), entity.position.getChunkZ()), nbt);
             projectile.spawnToAll();
             this.fired = true;
             return false;
@@ -63,8 +63,8 @@ public class StrafeExecutor implements EntityControl, IBehaviorExecutor {
     public void onStart(EntityMob entity) {
         Player player = entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER);
         if(player == null) return;
-        setLookTarget(entity, player.pos);
-        setRouteTarget(entity, player.pos);
+        setLookTarget(entity, player.position);
+        setRouteTarget(entity, player.position);
         this.fired = false;
     }
 

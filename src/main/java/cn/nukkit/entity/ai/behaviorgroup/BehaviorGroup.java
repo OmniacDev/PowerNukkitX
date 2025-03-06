@@ -13,7 +13,6 @@ import cn.nukkit.entity.ai.route.RouteFindingManager;
 import cn.nukkit.entity.ai.route.data.Node;
 import cn.nukkit.entity.ai.route.finder.IRouteFinder;
 import cn.nukkit.entity.ai.sensor.ISensor;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.level.DimensionData;
 import cn.nukkit.level.Level;
 import cn.nukkit.math.Vector3;
@@ -287,13 +286,13 @@ public class BehaviorGroup implements IBehaviorGroup {
                     setForceUpdateRoute(false);
                     //写入section变更记录
                     cacheSectionBlockChange(entity.level, calPassByChunkSections(this.routeFinder.getRoute().stream().map(Node::getVector3).toList(), entity.level));
-                }).setStart(entity.pos.clone()).setTarget(target));
+                }).setStart(entity.position.clone()).setTarget(target));
             }
         }
         if (routeFindingTask != null && routeFindingTask.getFinished() && !hasNewUnCalMoveTarget(entity)) {
             //若不能再移动了，且没有正在计算的寻路任务，则清除路径信息
             var reachableTarget = routeFinder.getReachableTarget();
-            if (reachableTarget != null && entity.pos.floor().equals(reachableTarget.floor())) {
+            if (reachableTarget != null && entity.position.floor().equals(reachableTarget.floor())) {
                 entity.setMoveTarget(null);
                 entity.setMoveDirectionStart(null);
                 entity.setMoveDirectionEnd(null);
@@ -440,7 +439,7 @@ public class BehaviorGroup implements IBehaviorGroup {
     protected void updateMoveDirection(EntityMob entity) {
         Vector3 end = entity.getMoveDirectionEnd();
         if (end == null) {
-            end = entity.pos.clone();
+            end = entity.position.clone();
         }
         var next = routeFinder.next();
         if (next != null) {

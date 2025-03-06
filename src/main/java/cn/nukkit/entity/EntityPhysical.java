@@ -73,8 +73,8 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
     @Override
     public boolean onUpdate(int currentTick) {
         // 记录最大高度，用于计算坠落伤害
-        if (!this.onGround && this.pos.y > highestPosition) {
-            this.highestPosition = this.pos.y;
+        if (!this.onGround && this.position.y > highestPosition) {
+            this.highestPosition = this.position.y;
         }
         // 添加挤压伤害
         if (needsCollisionDamage) {
@@ -126,7 +126,7 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
     }
 
     public boolean isFalling() {
-        return !this.onGround && this.pos.y < this.highestPosition;
+        return !this.onGround && this.position.y < this.highestPosition;
     }
 
     public final void addTmpMoveMotion(Vector3 tmpMotion) {
@@ -191,7 +191,7 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
 
     public double getGroundFrictionFactor() {
         if (!this.onGround) return 1.0;
-        return this.getLevel().getTickCachedBlock(this.pos.add(0, -1, 0).floor()).getFrictionFactor();
+        return this.getLevel().getTickCachedBlock(this.position.add(0, -1, 0).floor()).getFrictionFactor();
     }
 
     /**
@@ -355,12 +355,12 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
         if (this.offsetBoundingBox == null) return;
         final double dx = this.getWidth() * 0.5;
         final double dz = this.getHeight() * 0.5;
-        this.offsetBoundingBox.setMinX(this.pos.x - dx);
-        this.offsetBoundingBox.setMaxX(this.pos.x + dz);
-        this.offsetBoundingBox.setMinY(this.pos.y);
-        this.offsetBoundingBox.setMaxY(this.pos.y + this.getHeight());
-        this.offsetBoundingBox.setMinZ(this.pos.z - dz);
-        this.offsetBoundingBox.setMaxZ(this.pos.z + dz);
+        this.offsetBoundingBox.setMinX(this.position.x - dx);
+        this.offsetBoundingBox.setMaxX(this.position.x + dz);
+        this.offsetBoundingBox.setMinY(this.position.y);
+        this.offsetBoundingBox.setMaxY(this.position.y + this.getHeight());
+        this.offsetBoundingBox.setMinZ(this.position.z - dz);
+        this.offsetBoundingBox.setMaxZ(this.position.z + dz);
     }
 
     public AxisAlignedBB getOffsetBoundingBox() {

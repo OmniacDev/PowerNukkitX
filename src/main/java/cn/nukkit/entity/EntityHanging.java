@@ -39,9 +39,9 @@ public abstract class EntityHanging extends Entity {
         super.saveNBT();
 
         this.namedTag.putByte("Direction", this.getDirection().getHorizontalIndex());
-        this.namedTag.putInt("TileX", (int) this.pos.x);
-        this.namedTag.putInt("TileY", (int) this.pos.y);
-        this.namedTag.putInt("TileZ", (int) this.pos.z);
+        this.namedTag.putInt("TileX", (int) this.position.x);
+        this.namedTag.putInt("TileY", (int) this.position.y);
+        this.namedTag.putInt("TileZ", (int) this.position.z);
     }
 
     @Override
@@ -70,13 +70,13 @@ public abstract class EntityHanging extends Entity {
 
         this.checkBlockCollision();
 
-        if (this.prevRotation.yaw != this.rotation.yaw || this.prevPos.x != this.pos.x || this.prevPos.y != this.pos.y || this.prevPos.z != this.pos.z) {
+        if (this.prevRotation.yaw != this.rotation.yaw || this.prevPos.x != this.position.x || this.prevPos.y != this.position.y || this.prevPos.z != this.position.z) {
             this.despawnFromAll();
             this.direction = (int) (this.rotation.yaw / 90);
             this.prevRotation.yaw = this.rotation.yaw;
-            this.prevPos.x = this.pos.x;
-            this.prevPos.y = this.pos.y;
-            this.prevPos.z = this.pos.z;
+            this.prevPos.x = this.position.x;
+            this.prevPos.y = this.position.y;
+            this.prevPos.z = this.position.z;
             this.spawnToAll();
             return true;
         }
