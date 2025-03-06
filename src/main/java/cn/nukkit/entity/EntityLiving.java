@@ -127,8 +127,8 @@ public abstract class EntityLiving extends Entity implements EntityDamageable {
                     animate.action = AnimatePacket.Action.CRITICAL_HIT;
                     animate.eid = getId();
 
-                    this.getLevel().addChunkPacket(damager.getChunkX(), damager.getChunkZ(), animate);
-                    this.getLevel().addSound(this.position, Sound.GAME_PLAYER_ATTACK_STRONG);
+                    this.level.addChunkPacket(damager.getChunkX(), damager.getChunkZ(), animate);
+                    this.level.addSound(this.position, Sound.GAME_PLAYER_ATTACK_STRONG);
 
                     source.setDamage(source.getDamage() * 1.5f);
                 }
@@ -200,9 +200,9 @@ public abstract class EntityLiving extends Entity implements EntityDamageable {
 
         if (this.level.getGameRules().getBoolean(GameRule.DO_ENTITY_DROPS)) {
             for (cn.nukkit.item.Item item : ev.getDrops()) {
-                this.getLevel().dropItem(this.position, item);
+                this.level.dropItem(this.position, item);
             }
-            this.getLevel().dropExpOrb(this.position, getExperienceDrops());
+            this.level.dropExpOrb(this.position, getExperienceDrops());
         }
     }
 
@@ -447,7 +447,7 @@ public abstract class EntityLiving extends Entity implements EntityDamageable {
 
     protected void onBlock(Entity entity, EntityDamageEvent event, boolean animate) {
         if (animate) {
-            getLevel().addSound(this.position, Sound.ITEM_SHIELD_BLOCK);
+            this.level.addSound(this.position, Sound.ITEM_SHIELD_BLOCK);
         }
     }
 

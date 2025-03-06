@@ -112,11 +112,11 @@ public class EntityArmadillo extends EntityAnimal {
     @Override
     public boolean onInteract(Player player, Item item, Vector3 clickedPos) {
         if(player.getInventory().getUnclonedItem(player.getInventory().getHeldItemIndex()) instanceof ItemBrush brush) {
-            getLevel().dropItem(this.position, Item.get(Item.ARMADILLO_SCUTE));
-            getLevel().addSound(player.position, Sound.MOB_ARMADILLO_BRUSH);
+            this.level.dropItem(this.position, Item.get(Item.ARMADILLO_SCUTE));
+            this.level.addSound(player.position, Sound.MOB_ARMADILLO_BRUSH);
             brush.incDamage(16);
             if(brush.getDamage() >= brush.getMaxDurability()) {
-                player.getLevel().addSound(player.position, Sound.RANDOM_BREAK);
+                player.level.addSound(player.position, Sound.RANDOM_BREAK);
                 player.getInventory().clear(player.getInventory().getHeldItemIndex());
             }
         }
@@ -129,7 +129,7 @@ public class EntityArmadillo extends EntityAnimal {
         super.initEntity();
         setMovementSpeed(0.5f);
         setRollState(RollState.UNROLLED);
-        getMemoryStorage().put(CoreMemoryTypes.NEXT_SHED, getLevel().getTick() + Utils.rand(6_000, 10_800));
+        getMemoryStorage().put(CoreMemoryTypes.NEXT_SHED, this.level.getTick() + Utils.rand(6_000, 10_800));
     }
 
     @Override
@@ -191,7 +191,7 @@ public class EntityArmadillo extends EntityAnimal {
             return new AnyMatchEvaluator(
                     new PassByTimeEvaluator(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, 0, 1),
                     entity1 -> {
-                        for(Entity other : entity.getLevel().getCollidingEntities(entity.getBoundingBox().grow(7, 2, 7))) {
+                        for(Entity other : entity.level.getCollidingEntities(entity.getBoundingBox().grow(7, 2, 7))) {
                             if(other instanceof EntityMonster mob) {
                                 if(mob.isUndead()) return true;
                             } else if(other instanceof Player player) {

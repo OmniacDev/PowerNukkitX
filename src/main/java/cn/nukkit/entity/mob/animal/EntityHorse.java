@@ -448,7 +448,7 @@ public class EntityHorse extends EntityAnimal implements EntityWalkable, EntityV
      * Play an animation of a failed tamer
      */
     public void playTameFailAnimation() {
-        this.getLevel().addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_MAD, -1, "minecraft:horse", this.isBaby(), false);
+        this.level.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_MAD, -1, "minecraft:horse", this.isBaby(), false);
         this.setDataFlag(EntityFlag.STANDING);
     }
 

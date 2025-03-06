@@ -25,7 +25,7 @@ public class SeedCommand extends VanillaCommand {
     public int execute(CommandSender sender, String commandLabel, Map.Entry<String, ParamList> result, CommandLogger log) {
         long seed;
         if (sender instanceof Player) {
-            seed = ((Player) sender).getLevel().getSeed();
+            seed = ((Player) sender).level.getSeed();
         } else {
             seed = sender.getServer().getDefaultLevel().getSeed();
         }

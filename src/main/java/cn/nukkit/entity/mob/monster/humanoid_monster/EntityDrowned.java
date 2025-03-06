@@ -78,7 +78,7 @@ public class EntityDrowned extends EntityZombie implements EntitySwimmable, Enti
                                 new DistanceEvaluator(CoreMemoryTypes.NEAREST_PLAYER, 32, 3),
                                 entity -> getItemInHand().getId().equals(Item.TRIDENT),
                                 any(
-                                        entity -> getLevel().isNight(),
+                                        entity -> this.level.isNight(),
                                         entity -> getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER) != null && getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER).isInsideOfWater()
                                 )
                         ), 6, 1),
@@ -91,7 +91,7 @@ public class EntityDrowned extends EntityZombie implements EntitySwimmable, Enti
                         new Behavior(new MeleeAttackExecutor(CoreMemoryTypes.NEAREST_PLAYER, 0.3f, 40, false, 30), all(
                                 new EntityCheckEvaluator(CoreMemoryTypes.NEAREST_PLAYER),
                                 any(
-                                        entity -> getLevel().isNight(),
+                                        entity -> this.level.isNight(),
                                         entity -> getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER) != null && getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER).isInsideOfWater()
                                 )
                         ), 3, 1),

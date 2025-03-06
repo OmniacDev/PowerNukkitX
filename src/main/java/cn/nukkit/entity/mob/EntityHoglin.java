@@ -79,7 +79,7 @@ public class EntityHoglin extends EntityMob implements EntityWalkable {
                 Set.of(
                         new Behavior(new EntityBreedingExecutor<>(EntityHoglin.class, 16, 100, 0.5f), entity -> entity.getMemoryStorage().get(CoreMemoryTypes.IS_IN_LOVE), 9, 1),
                         new Behavior(new HoglinTransformExecutor(), all(
-                                entity -> entity.getLevel().getDimension() != Level.DIMENSION_NETHER,
+                                entity -> entity.level.getDimension() != Level.DIMENSION_NETHER,
                                 entity -> !isImmobile(),
                                 entity -> !entity.namedTag.getBoolean("IsImmuneToZombification")
                         ), 8, 1),
@@ -171,7 +171,7 @@ public class EntityHoglin extends EntityMob implements EntityWalkable {
         boolean superResult = super.onInteract(player, item, clickedPos);
         if (isBreedingItem(item)) {
             getMemoryStorage().put(CoreMemoryTypes.LAST_FEED_PLAYER, player);
-            getMemoryStorage().put(CoreMemoryTypes.LAST_BE_FEED_TIME, getLevel().getTick());
+            getMemoryStorage().put(CoreMemoryTypes.LAST_BE_FEED_TIME, this.level.getTick());
             sendBreedingAnimation(item);
             item.count--;
             return player.getInventory().setItemInHand(item) && superResult;
@@ -202,7 +202,7 @@ public class EntityHoglin extends EntityMob implements EntityWalkable {
         public void onStart(EntityMob entity) {
             super.onStart(entity);
             if(entity.position.distance(entity.getMemoryStorage().get(getMemory()).getVector3()) < 8) {
-                entity.getLevel().addSound(entity.position, Sound.MOB_HOGLIN_RETREAT);
+                entity.level.addSound(entity.position, Sound.MOB_HOGLIN_RETREAT);
             }
         }
     }

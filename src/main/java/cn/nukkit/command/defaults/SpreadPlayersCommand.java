@@ -54,7 +54,7 @@ public class SpreadPlayersCommand extends VanillaCommand {
         }
         for (Entity target : targets) {
             Vector3 vec3 = this.nextXZ(x, z, (int) maxRange);
-            vec3.y = target.getLevel().getHighestBlockAt(vec3.getFloorX(), vec3.getFloorZ()) + 1;
+            vec3.y = target.level.getHighestBlockAt(vec3.getFloorX(), vec3.getFloorZ()) + 1;
             target.teleport(vec3);
         }
         log.addSuccess("commands.spreadplayers.success.players",

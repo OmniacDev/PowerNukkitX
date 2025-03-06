@@ -44,7 +44,7 @@ public class EntityElytraFirework extends EntityFireworksRocket {
                     this.rotation.yaw = (float) (Math.atan2(this.motion.x, this.motion.z) * 57.29577951308232D);
                     this.rotation.pitch = (float) (Math.atan2(this.motion.y, f) * 57.29577951308232D);
                     if (this.fireworkAge == 0) {
-                        this.getLevel().addLevelSoundEvent(this.position, 56);
+                        this.level.addLevelSoundEvent(this.position, 56);
                     }
 
                     ++this.fireworkAge;

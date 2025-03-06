@@ -56,7 +56,7 @@ public class ItemGlassBottle extends Item {
                 if (player.getInventory().canAddItem(filled)) {
                     player.getInventory().addItem(filled);
                 } else {
-                    player.getLevel().dropItem(player.position.add(0, 1.3, 0), filled, player.getDirectionVector().multiply(0.4));
+                    player.level.dropItem(player.position.add(0, 1.3, 0), filled, player.getDirectionVector().multiply(0.4));
                 }
             }
             

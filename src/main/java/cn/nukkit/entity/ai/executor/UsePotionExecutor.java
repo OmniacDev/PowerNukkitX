@@ -55,7 +55,7 @@ public class UsePotionExecutor implements EntityControl, IBehaviorExecutor {
         } else if (tick2 != 0) {
             tick2++;
             if (tick2 > useDelay) {
-                entity.getLevel().getScheduler().scheduleDelayedTask(InternalPlugin.INSTANCE, () -> endShootSequence(entity), 20);
+                entity.level.getScheduler().scheduleDelayedTask(InternalPlugin.INSTANCE, () -> endShootSequence(entity), 20);
                 tick2 = 0;
                 return true;
             }

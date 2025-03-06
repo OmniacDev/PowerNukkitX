@@ -18,8 +18,8 @@ public class ShedExecutor implements EntityControl, IBehaviorExecutor {
 
     @Override
     public void onStart(EntityMob entity) {
-        entity.getLevel().dropItem(entity.position, Item.get(Item.ARMADILLO_SCUTE));
-        entity.getLevel().addSound(entity.position, Sound.MOB_ARMADILLO_SCUTE_DROP);
-        entity.getMemoryStorage().put(CoreMemoryTypes.NEXT_SHED, entity.getLevel().getTick() + Utils.rand(6_000, 10_800));
+        entity.level.dropItem(entity.position, Item.get(Item.ARMADILLO_SCUTE));
+        entity.level.addSound(entity.position, Sound.MOB_ARMADILLO_SCUTE_DROP);
+        entity.getMemoryStorage().put(CoreMemoryTypes.NEXT_SHED, entity.level.getTick() + Utils.rand(6_000, 10_800));
     }
 }

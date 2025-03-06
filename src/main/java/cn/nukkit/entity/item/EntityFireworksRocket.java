@@ -129,7 +129,7 @@ public class EntityFireworksRocket extends Entity {
 
 
             if (this.fireworkAge == 0) {
-                this.getLevel().addSound(this.position, Sound.FIREWORK_LAUNCH);
+                this.level.addSound(this.position, Sound.FIREWORK_LAUNCH);
             }
 
             this.fireworkAge++;

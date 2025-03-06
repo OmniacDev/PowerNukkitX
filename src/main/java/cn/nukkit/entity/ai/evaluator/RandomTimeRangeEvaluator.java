@@ -25,7 +25,7 @@ public class RandomTimeRangeEvaluator implements IBehaviorEvaluator {
             this.updateNextTargetTime(entity);
             return false;
         }
-        var currentTime = entity.getLevel().getTick();
+        var currentTime = entity.level.getTick();
         if (currentTime >= nextTargetTime) {
             this.updateNextTargetTime(entity);
             return true;
@@ -35,6 +35,6 @@ public class RandomTimeRangeEvaluator implements IBehaviorEvaluator {
     }
 
     protected void updateNextTargetTime(EntityMob entity) {
-        this.nextTargetTime = entity.getLevel().getTick() + ThreadLocalRandom.current().nextInt(minTime, maxTime + 1);
+        this.nextTargetTime = entity.level.getTick() + ThreadLocalRandom.current().nextInt(minTime, maxTime + 1);
     }
 }

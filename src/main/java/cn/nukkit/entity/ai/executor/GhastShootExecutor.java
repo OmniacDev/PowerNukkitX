@@ -97,7 +97,7 @@ public class GhastShootExecutor implements EntityControl, IBehaviorExecutor {
             tick2++;
             if (tick2 > attackDelay) {
                 shootFireball(entity);
-                entity.getLevel().getScheduler().scheduleDelayedTask(InternalPlugin.INSTANCE, () -> endShootSequence(entity), 20);
+                entity.level.getScheduler().scheduleDelayedTask(InternalPlugin.INSTANCE, () -> endShootSequence(entity), 20);
                 tick2 = 0;
                 return target.getHealth() != 0;
             }

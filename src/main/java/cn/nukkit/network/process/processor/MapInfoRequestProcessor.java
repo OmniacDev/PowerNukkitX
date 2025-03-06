@@ -65,10 +65,10 @@ public class MapInfoRequestProcessor extends DataPacketProcessor<MapInfoRequestP
                 final int finalIndex = index;
                 final boolean finalOffhand = offhand;
                 //TODO: 并行计算
-                player.getLevel().getScheduler().scheduleAsyncTask(InternalPlugin.INSTANCE, new AsyncTask() {
+                player.level.getScheduler().scheduleAsyncTask(InternalPlugin.INSTANCE, new AsyncTask() {
                     @Override
                     public void onRun() {
-                        map.renderMap(player.getLevel(), (player.position.getFloorX() / 128) << 7, (player.position.getFloorZ() / 128) << 7, 1);
+                        map.renderMap(player.level, (player.position.getFloorX() / 128) << 7, (player.position.getFloorZ() / 128) << 7, 1);
                         if (finalOffhand) {
                             if (checkMapItemValid(player.getOffhandInventory().getUnclonedItem(finalIndex), pk))
                                 player.getOffhandInventory().setItem(finalIndex, map);

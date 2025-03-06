@@ -171,7 +171,7 @@ public class MeleeAttackExecutor implements EntityControl, IBehaviorExecutor {
                 }
 
                 playAttackAnimation(entity);
-                entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_TIME, entity.getLevel().getTick());
+                entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_TIME, entity.level.getTick());
                 entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_ENTITY, target);
                 attackTick = 0;
             }

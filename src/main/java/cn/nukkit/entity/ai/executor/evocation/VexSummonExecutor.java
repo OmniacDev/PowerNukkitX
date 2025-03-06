@@ -32,7 +32,7 @@ public class VexSummonExecutor extends FangLineExecutor {
         if(tick == CAST_DURATION) {
             for(int i = 0; i < VEX_COUNT; i++) {
                 int count = 0;
-                for(Entity entity1 : entity.getLevel().getNearbyEntities(entity.getBoundingBox().grow(15, 15, 15))) {
+                for(Entity entity1 : entity.level.getNearbyEntities(entity.getBoundingBox().grow(15, 15, 15))) {
                     if(entity1 instanceof EntityVex) count++;
                 }
                 if(count < 8) {
@@ -41,7 +41,7 @@ public class VexSummonExecutor extends FangLineExecutor {
             }
         }
         if(tick >= CAST_DURATION) {
-            int tick = entity.getLevel().getTick();
+            int tick = entity.level.getTick();
             entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_SUMMON, tick);
             entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_TIME, tick);
             return false;

@@ -87,7 +87,7 @@ public class EntityZombieVillager extends EntityZombie implements EntityWalkable
                         this.namedTag.putString("purifyPlayer", player.getLoginChainData().getXUID());
                         player.getInventory().decreaseCount(player.getInventory().getHeldItemIndex());
                     }
-                    getLevel().addSound(this.position, Sound.MOB_ZOMBIE_REMEDY);
+                    this.level.addSound(this.position, Sound.MOB_ZOMBIE_REMEDY);
                 }
             }
         }
@@ -121,7 +121,7 @@ public class EntityZombieVillager extends EntityZombie implements EntityWalkable
 
     protected void transformVillager() {
         this.close();
-        getEquipment().getContents().values().forEach(i -> getLevel().dropItem(this.position, i));
+        getEquipment().getContents().values().forEach(i -> this.level.dropItem(this.position, i));
         EntityVillagerV2 villager = new EntityVillagerV2(this.getLocator().getChunk(), this.namedTag);
         villager.addEffect(Effect.get(EffectType.NAUSEA).setDuration(200));
         villager.setPosition(this.position);

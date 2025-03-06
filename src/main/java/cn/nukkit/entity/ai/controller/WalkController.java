@@ -58,7 +58,7 @@ public class WalkController implements IController {
             var dx = relativeVector.x * k;
             var dz = relativeVector.z * k;
             var dy = 0.0d;
-            Block target = entity.getLevel().getBlock(entity.getMoveDirectionStart());
+            Block target = entity.level.getBlock(entity.getMoveDirectionStart());
             if (target.down().isSolid() && relativeVector.y > 0 && collidesBlocks(entity, dx, 0, dz) && currentJumpCoolDown > JUMP_COOL_DOWN || (entity.isTouchingWater() && !(target instanceof BlockLiquid || target.getLevel().getBlock(target.position, 1) instanceof BlockLiquid)  && target.down().isSolid())) {
                 //note: 从对BDS的抓包信息来看，台阶的碰撞箱在服务端和半砖一样，高度都为0.5
                 Block[] collisionBlocks = entity.level.getTickCachedCollisionBlocks(entity.getOffsetBoundingBox().getOffsetBoundingBox(dx, dy, dz), false, false, this::canJump);

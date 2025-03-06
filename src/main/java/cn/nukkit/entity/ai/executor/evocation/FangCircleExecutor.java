@@ -33,7 +33,7 @@ public class FangCircleExecutor extends FangLineExecutor {
         }
         tick++;
         if(tick >= DURATION) {
-            int tick = entity.getLevel().getTick();
+            int tick = entity.level.getTick();
             entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_CAST, tick);
             entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_TIME, tick);
             return false;

@@ -52,7 +52,7 @@ public class VillagerBreedingExecutor extends EntityBreedingExecutor {
                     Transform lookTransform = entity.getTransform().add(x, y, z);
                     Block lookBlock = lookTransform.getLevelBlock();
                     if (lookBlock instanceof BlockBed bed) {
-                        if (!bed.isHeadPiece() && Arrays.stream(entity.getLevel().getEntities()).noneMatch(entity1 -> entity1 instanceof EntityVillagerV2 v && v.getMemoryStorage().notEmpty(CoreMemoryTypes.OCCUPIED_BED) && v.getBed().equals(bed))) {
+                        if (!bed.isHeadPiece() && Arrays.stream(entity.level.getEntities()).noneMatch(entity1 -> entity1 instanceof EntityVillagerV2 v && v.getMemoryStorage().notEmpty(CoreMemoryTypes.OCCUPIED_BED) && v.getBed().equals(bed))) {
                             block = bed.getFootPart();
                         }
                     }
@@ -87,7 +87,7 @@ public class VillagerBreedingExecutor extends EntityBreedingExecutor {
         entity.setMovementSpeed(0.1f);
         //interrupt in love status
         entity.getMemoryStorage().put(CoreMemoryTypes.WILLING, false);
-        entity.getMemoryStorage().put(CoreMemoryTypes.LAST_IN_LOVE_TIME, entity.getLevel().getTick());
+        entity.getMemoryStorage().put(CoreMemoryTypes.LAST_IN_LOVE_TIME, entity.level.getTick());
     }
 
     protected void sendInLoveParticles(EntityMob entity) {

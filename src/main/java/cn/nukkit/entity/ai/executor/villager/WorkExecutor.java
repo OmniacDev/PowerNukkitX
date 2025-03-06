@@ -32,7 +32,7 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
                 if(site.position.distance(villager.position) < 1.5f) {
                     setLookTarget(villager, site.position);
                     stayTick++;
-                    if(stayTick == 40 || stayTick == 90) villager.getLevel().addSound(villager.position, Profession.getProfession(villager.getProfession()).getWorkSound());
+                    if(stayTick == 40 || stayTick == 90) villager.level.addSound(villager.position, Profession.getProfession(villager.getProfession()).getWorkSound());
                 }
                 if(stayTick == 99) removeRouteTarget(villager);
             } else {
@@ -43,7 +43,7 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
                             villager.setMovementSpeed(0.3f);
                             double minDistance = Float.MAX_VALUE;
                             Block nearest = null;
-                            for(Block block : Arrays.stream(villager.getLevel().getCollisionBlocks(villager.getBoundingBox().grow(9, 2, 9), false, true)).filter(block -> block instanceof BlockCrops crops && crops.isFullyGrown()).toList()) {
+                            for(Block block : Arrays.stream(villager.level.getCollisionBlocks(villager.getBoundingBox().grow(9, 2, 9), false, true)).filter(block -> block instanceof BlockCrops crops && crops.isFullyGrown()).toList()) {
                                 double distance = block.position.distance(villager.position);
                                 if(distance < minDistance) {
                                     minDistance = distance;
@@ -52,9 +52,9 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
                             }
                             if(nearest != null) {
                                 if(minDistance < 1.5f) {
-                                    villager.getLevel().breakBlock(nearest);
+                                    villager.level.breakBlock(nearest);
                                     villager.getInventory().addItem(nearest.getDrops(Item.AIR));
-                                    villager.getLevel().setBlock(nearest.position, nearest.getProperties().getDefaultState().toBlock());
+                                    villager.level.setBlock(nearest.position, nearest.getProperties().getDefaultState().toBlock());
                                     removeLookTarget(villager);
                                 } else {
                                     if(entity.getMoveTarget() == null) {
@@ -93,7 +93,7 @@ public class WorkExecutor extends NearbyFlatRandomRoamExecutor {
     @Override
     public void onStart(EntityMob entity) {
         if(entity instanceof EntityVillagerV2 villager) {
-            int shift = getShiftLength(entity.getLevel().getDayTime());
+            int shift = getShiftLength(entity.level.getDayTime());
             if(entity.getMemoryStorage().get(CoreMemoryTypes.LAST_REFILL_SHIFT) != shift) {
                 this.stayTick = 100;
                 this.walkTick = 200;

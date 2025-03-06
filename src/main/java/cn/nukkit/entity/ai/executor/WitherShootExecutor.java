@@ -37,7 +37,7 @@ public class WitherShootExecutor implements EntityControl, IBehaviorExecutor {
             setLookTarget(entity, target.position);
             return true;
         } else {
-            entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_TIME, entity.getLevel().getTick());
+            entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_TIME, entity.level.getTick());
             return false;
         }
     }

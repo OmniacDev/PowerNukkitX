@@ -48,7 +48,7 @@ public class EntityWindCharge extends EntityProjectile {
 
         if(collisionBlock instanceof BlockChorusFlower
                     || collisionBlock instanceof BlockDecoratedPot) {
-            this.getLevel().useBreakOn(collisionBlock.position, Item.AIR);
+            this.level.useBreakOn(collisionBlock.position, Item.AIR);
         }
 
         for(Entity entity : level.getEntities()) {

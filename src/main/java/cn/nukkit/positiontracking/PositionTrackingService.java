@@ -105,7 +105,7 @@ public class PositionTrackingService implements Closeable {
             PositionTrackingDBServerBroadcastPacket packet = new PositionTrackingDBServerBroadcastPacket();
             packet.setAction(PositionTrackingDBServerBroadcastPacket.Action.UPDATE);
             packet.setPosition(pos);
-            packet.setDimension(player.getLevel().getDimension());
+            packet.setDimension(player.level.getDimension());
             packet.setTrackingId(trackingHandler);
             packet.setStatus(0);
             player.dataPacket(packet);

@@ -32,8 +32,8 @@ public class PlayerTeleportEvent extends PlayerEvent implements Cancellable {
 
     public PlayerTeleportEvent(Player player, Vector3 from, Vector3 to, TeleportCause cause) {
         this(player);
-        this.from = vectorToLocation(player.getLevel(), from);
-        this.from = vectorToLocation(player.getLevel(), to);
+        this.from = vectorToLocation(player.level, from);
+        this.from = vectorToLocation(player.level, to);
         this.cause = cause;
     }
 

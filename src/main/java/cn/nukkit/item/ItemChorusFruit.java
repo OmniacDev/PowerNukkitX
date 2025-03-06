@@ -46,7 +46,7 @@ public class ItemChorusFruit extends ItemFood {
         int maxY = minY + 16;
         int maxZ = minZ + 16;
 
-        Level level = player.getLevel();
+        Level level = player.level;
         if (level == null) return false;
         if (player.isInsideOfWater()) return false;
 

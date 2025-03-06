@@ -111,7 +111,7 @@ public class EntityEnderCrystal extends Entity implements EntityExplosive {
     @Override
     public void close() {
         super.close();
-        for (Entity entity : this.getLevel().getEntities()) {
+        for (Entity entity : this.level.getEntities()) {
             if (entity instanceof EntityEnderDragon dragon) {
                 if (entity.position.distance(this.position) <= 28) {
                     entity.attack(new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.MAGIC, 10));

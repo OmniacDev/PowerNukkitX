@@ -41,14 +41,14 @@ public class GossipExecutor implements EntityControl, IBehaviorExecutor {
                             Item item = villager.getInventory().getUnclonedItem(i);
                             item.setCount(item.getCount()/2);
                             if(item.getId() == Block.WHEAT) item = Item.get(Block.WHEAT, 0, item.getCount()/3);
-                            villager.getLevel().dropItem(villager.getLocator().position.add(0, villager.getEyeHeight(), 0), item, new Vector3(entity1.position.x - entity.position.x, entity1.position.y - entity.position.y, entity1.position.z - entity.position.z).normalize().multiply(0.4));
+                            villager.level.dropItem(villager.getLocator().position.add(0, villager.getEyeHeight(), 0), item, new Vector3(entity1.position.x - entity.position.x, entity1.position.y - entity.position.y, entity1.position.z - entity.position.z).normalize().multiply(0.4));
                         }
                     }
                 }
             }
             if(tick % 100 == 0) {
                 if(Utils.rand(0, 10) == 0) {
-                    Arrays.stream(entity.getLevel().getCollidingEntities(entity.getBoundingBox().grow(2, 0, 2))).filter(entity2 -> entity2 instanceof EntityVillagerV2 && entity2 != entity).map(entity2 -> ((EntityVillagerV2) entity2)).forEach(entity2 -> entity2.setLookTarget(entity.position));
+                    Arrays.stream(entity.level.getCollidingEntities(entity.getBoundingBox().grow(2, 0, 2))).filter(entity2 -> entity2 instanceof EntityVillagerV2 && entity2 != entity).map(entity2 -> ((EntityVillagerV2) entity2)).forEach(entity2 -> entity2.setLookTarget(entity.position));
                 }
             }
         }
@@ -61,7 +61,7 @@ public class GossipExecutor implements EntityControl, IBehaviorExecutor {
         entity.setLookTarget(entity.getMemoryStorage().get(type).position);
         this.tick = 0;
         this.spread = false;
-        entity.getMemoryStorage().put(CoreMemoryTypes.LAST_GOSSIP, entity.getLevel().getTick());
+        entity.getMemoryStorage().put(CoreMemoryTypes.LAST_GOSSIP, entity.level.getTick());
     }
 
     @Override

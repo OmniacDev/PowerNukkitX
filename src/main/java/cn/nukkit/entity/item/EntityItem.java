@@ -145,7 +145,7 @@ public class EntityItem extends Entity {
 
         if (this.age % 60 == 0 && this.onGround && this.getItem() != null && this.isAlive()) {
             if (this.getItem().getCount() < this.getItem().getMaxStackSize()) {
-                for (Entity entity : this.getLevel().getNearbyEntities(getBoundingBox().grow(1, 1, 1), this, false)) {
+                for (Entity entity : this.level.getNearbyEntities(getBoundingBox().grow(1, 1, 1), this, false)) {
                     if (entity instanceof EntityItem) {
                         if (!entity.isAlive()) {
                             continue;
@@ -227,7 +227,7 @@ public class EntityItem extends Entity {
             double friction = 1 - this.getDrag();
 
             if (this.onGround && (Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.z) > 0.00001)) {
-                friction *= this.getLevel().getBlock(this.position.add(0, -1, 0).floor()).getFrictionFactor();
+                friction *= this.level.getBlock(this.position.add(0, -1, 0).floor()).getFrictionFactor();
             }
 
             this.motion.x *= friction;

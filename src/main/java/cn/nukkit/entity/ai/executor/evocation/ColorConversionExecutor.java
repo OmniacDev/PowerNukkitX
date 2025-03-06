@@ -23,7 +23,7 @@ public class ColorConversionExecutor extends FangLineExecutor {
     public boolean execute(EntityMob entity) {
         tick++;
         if(tick == CAST_DURATION) {
-            for(Entity entity1 : entity.getLevel().getNearbyEntities(entity.getBoundingBox().grow(16, 16, 16))) {
+            for(Entity entity1 : entity.level.getNearbyEntities(entity.getBoundingBox().grow(16, 16, 16))) {
                 if(entity1 instanceof EntitySheep entitySheep) {
                     if(entitySheep.getColor() == DyeColor.BLUE.getWoolData()) {
                         entitySheep.setColor(DyeColor.RED.getWoolData());
@@ -32,7 +32,7 @@ public class ColorConversionExecutor extends FangLineExecutor {
             }
         }
         if(tick >= CAST_DURATION) {
-            int tick = entity.getLevel().getTick();
+            int tick = entity.level.getTick();
             entity.getMemoryStorage().put(CoreMemoryTypes.LAST_CONVERSION, tick);
             entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_TIME, tick);
             return false;

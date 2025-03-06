@@ -10,7 +10,7 @@ public class RandomSoundEvaluator extends AllMatchEvaluator {
 
     public RandomSoundEvaluator(int ticks, int probability) {
         super(Set.of(
-            entity -> entity.getLevel().getTick()%ticks == 0,
+            entity -> entity.level.getTick()%ticks == 0,
             new ProbabilityEvaluator(1, probability)
         ));
     }

@@ -62,8 +62,8 @@ public class EntityCreeper extends EntityMonster implements EntityWalkable, Enti
                                 all(
                                         entity -> entity.getMemoryStorage().compareDataTo(CoreMemoryTypes.SHOULD_EXPLODE, true),
                                         any(
-                                                entity -> getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER) != null && getLevel().raycastBlocks(this.position, getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER).position).isEmpty(),
-                                                entity -> getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET) != null && getLevel().raycastBlocks(this.position, getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET).position).isEmpty()
+                                                entity -> getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER) != null && this.level.raycastBlocks(this.position, getMemoryStorage().get(CoreMemoryTypes.NEAREST_PLAYER).position).isEmpty(),
+                                                entity -> getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET) != null && this.level.raycastBlocks(this.position, getMemoryStorage().get(CoreMemoryTypes.ATTACK_TARGET).position).isEmpty()
                                         )
                                 ), 4, 1
                         ),

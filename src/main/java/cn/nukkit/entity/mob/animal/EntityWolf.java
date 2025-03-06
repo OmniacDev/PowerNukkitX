@@ -225,7 +225,7 @@ public class EntityWolf extends EntityAnimal implements EntityWalkable, EntityOw
                     this.setColor(DyeColor.RED);
                     this.saveNBT();
 
-                    this.getLevel().dropExpOrb(this.position, Utils.rand(1, 7));
+                    this.level.dropExpOrb(this.position, Utils.rand(1, 7));
 
                     return true;
                 } else {
@@ -243,15 +243,15 @@ public class EntityWolf extends EntityAnimal implements EntityWalkable, EntityOw
             }
         } else if (this.isBreedingItem(item)) {
             player.getInventory().decreaseCount(player.getInventory().getHeldItemIndex());
-            this.getLevel().addSound(this.position, Sound.RANDOM_EAT);
-            this.getLevel().addParticle(new ItemBreakParticle(this.position.add(0, getHeight() * 0.75F, 0), Item.get(item.getId(), 0, 1)));
+            this.level.addSound(this.position, Sound.RANDOM_EAT);
+            this.level.addParticle(new ItemBreakParticle(this.position.add(0, getHeight() * 0.75F, 0), Item.get(item.getId(), 0, 1)));
 
             if (healable != 0) {
                 this.setHealth(Math.max(this.getMaxHealth(), this.getHealth() + healable));
             }
 
             getMemoryStorage().put(CoreMemoryTypes.LAST_FEED_PLAYER, player);
-            getMemoryStorage().put(CoreMemoryTypes.LAST_BE_FEED_TIME, getLevel().getTick());
+            getMemoryStorage().put(CoreMemoryTypes.LAST_BE_FEED_TIME, this.level.getTick());
             return true;
         } else if (this.hasOwner() && player.getName().equals(getOwnerName()) && !this.isTouchingWater()) {
             this.setSitting(!this.isSitting());

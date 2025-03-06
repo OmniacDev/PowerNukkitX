@@ -104,7 +104,7 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
             this.addFreezingTicks(-1);
             //this.setMovementSpeed();
         }
-        if (this.getFreezingTicks() == 140 && this.getLevel().getTick() % 40 == 0) {
+        if (this.getFreezingTicks() == 140 && this.level.getTick() % 40 == 0) {
             this.attack(new EntityDamageEvent(this, EntityDamageEvent.DamageCause.FREEZING, getFrostbiteInjury()));
         }
         return hasUpdate;
@@ -191,7 +191,7 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
 
     public double getGroundFrictionFactor() {
         if (!this.onGround) return 1.0;
-        return this.getLevel().getTickCachedBlock(this.position.add(0, -1, 0).floor()).getFrictionFactor();
+        return this.level.getTickCachedBlock(this.position.add(0, -1, 0).floor()).getFrictionFactor();
     }
 
     /**
@@ -212,7 +212,7 @@ public abstract class EntityPhysical extends EntityCreature implements EntityAsy
     protected void handleLiquidMovement() {
         final var tmp = new Vector3();
         BlockLiquid blockLiquid = null;
-        for (final var each : this.getLevel().getCollisionBlocks(getOffsetBoundingBox(),
+        for (final var each : this.level.getCollisionBlocks(getOffsetBoundingBox(),
                 false, true, block -> block instanceof BlockLiquid)) {
             blockLiquid = (BlockLiquid) each;
             final var flowVector = blockLiquid.getFlowVector();

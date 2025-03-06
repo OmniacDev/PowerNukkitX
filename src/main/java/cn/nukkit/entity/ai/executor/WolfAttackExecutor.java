@@ -64,7 +64,7 @@ public class WolfAttackExecutor extends MeleeAttackExecutor {
 
     private void stop(EntityMob entity) {
         var wolf = (EntityWolf) entity;
-        entity.getLevel().getScheduler().scheduleDelayedTask(null, () -> wolf.setAngry(false), 5);
+        entity.level.getScheduler().scheduleDelayedTask(null, () -> wolf.setAngry(false), 5);
 
         if (entity.getMemoryStorage().isEmpty(CoreMemoryTypes.NEAREST_FEEDING_PLAYER)) {
             entity.setDataFlag(EntityFlag.INTERESTED, false);

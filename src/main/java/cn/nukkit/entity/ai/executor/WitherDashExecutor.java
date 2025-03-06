@@ -16,7 +16,7 @@ public class WitherDashExecutor extends MoveToTargetExecutor {
     @Override
     public void onStart(EntityMob entity) {
         super.onStart(entity);
-        entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_DASH, entity.getLevel().getTick());
+        entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_DASH, entity.level.getTick());
         entity.setDataFlag(EntityFlag.CAN_DASH);
     }
 

@@ -40,7 +40,7 @@ public abstract class ProjectileItem extends Item {
 
         this.correctNBT(nbt);
 
-        Entity projectile = Entity.createEntity(this.getProjectileEntityType(), player.getLevel().getChunk(player.position.getFloorX() >> 4, player.position.getFloorZ() >> 4), nbt, player);
+        Entity projectile = Entity.createEntity(this.getProjectileEntityType(), player.level.getChunk(player.position.getFloorX() >> 4, player.position.getFloorZ() >> 4), nbt, player);
         if (projectile != null) {
             projectile = correctProjectile(player, projectile);
             if (projectile == null) {
@@ -70,7 +70,7 @@ public abstract class ProjectileItem extends Item {
     }
 
     protected void addThrowSound(Player player) {
-        player.getLevel().addLevelSoundEvent(player.position, LevelSoundEventPacketV2.SOUND_THROW, -1, "minecraft:player", false, false);
+        player.level.addLevelSoundEvent(player.position, LevelSoundEventPacketV2.SOUND_THROW, -1, "minecraft:player", false, false);
     }
 
     protected Entity correctProjectile(Player player, Entity projectile) {

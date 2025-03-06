@@ -84,7 +84,7 @@ public class EntityCreaking extends EntityMonster {
         if(namedTag.containsCompound("creakingHeart")) {
             CompoundTag tag = namedTag.getCompound("creakingHeart");
             Vector3 vec = new Vector3(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
-            if(getLevel().getBlock(vec, true) instanceof BlockCreakingHeart heart) {
+            if(this.level.getBlock(vec, true) instanceof BlockCreakingHeart heart) {
                 heart.getOrCreateBlockEntity().setLinkedCreaking(this);
             }
         }
@@ -104,10 +104,10 @@ public class EntityCreaking extends EntityMonster {
         var storage = getMemoryStorage();
         if (storage != null) {
             storage.put(CoreMemoryTypes.BE_ATTACKED_EVENT, source);
-            storage.put(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, getLevel().getTick());
+            storage.put(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, this.level.getTick());
         }
 
-        Block[] paleLogs = Arrays.stream(getLevel().getCollisionBlocks(creakingHeart.getLevelBlock().getBoundingBox().grow(2, 2, 2))).filter(block -> block instanceof BlockPaleOakLog).toArray(Block[]::new);
+        Block[] paleLogs = Arrays.stream(this.level.getCollisionBlocks(creakingHeart.getLevelBlock().getBoundingBox().grow(2, 2, 2))).filter(block -> block instanceof BlockPaleOakLog).toArray(Block[]::new);
         int maxResinSpawn = ThreadLocalRandom.current().nextInt(1, 3);
         int resinSpawned = 0;
         logs:
@@ -169,7 +169,7 @@ public class EntityCreaking extends EntityMonster {
 
     @Override
     public boolean onUpdate(int currentTick) {
-        if(!(!getLevel().isDay() || getLevel().isRaining() || getLevel().isThundering())) {
+        if(!(!this.level.isDay() || this.level.isRaining() || this.level.isThundering())) {
             this.kill();
         }
         if(creakingHeart != null) {
@@ -178,7 +178,7 @@ public class EntityCreaking extends EntityMonster {
                 setLookTarget(creakingHeart.position);
             }
             if(getMemoryStorage().notEmpty(CoreMemoryTypes.LAST_BE_ATTACKED_TIME)) {
-                if(getLevel().getTick() - getMemoryStorage().get(CoreMemoryTypes.LAST_BE_ATTACKED_TIME) < 51) {
+                if(this.level.getTick() - getMemoryStorage().get(CoreMemoryTypes.LAST_BE_ATTACKED_TIME) < 51) {
                     sendParticleTrail();
                 }
             }

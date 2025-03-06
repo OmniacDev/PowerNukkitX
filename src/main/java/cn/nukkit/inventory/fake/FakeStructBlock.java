@@ -23,7 +23,7 @@ public class FakeStructBlock extends SingleFakeBlock {
     public Vector3 getOffset(Player player) {
         int floorX = player.position.getFloorX();
         int floorZ = player.position.getFloorZ();
-        return new Vector3(floorX, player.getLevel().getMinHeight() + 1, floorZ);
+        return new Vector3(floorX, player.level.getMinHeight() + 1, floorZ);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class FakeStructBlock extends SingleFakeBlock {
     public void remove(Player player) {
         this.lastPositions.getOrDefault(player, new HashSet<>()).forEach(position -> {
             UpdateBlockPacket packet = new UpdateBlockPacket();
-            packet.blockRuntimeId = player.getLevel().getBlock(position).getRuntimeId();
+            packet.blockRuntimeId = player.level.getBlock(position).getRuntimeId();
             packet.flags = UpdateBlockPacket.FLAG_NETWORK;
             packet.x = position.getFloorX();
             packet.y = position.getFloorY();

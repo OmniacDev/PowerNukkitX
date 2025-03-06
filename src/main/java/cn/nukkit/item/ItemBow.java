@@ -155,7 +155,7 @@ public class ItemBow extends ItemTool {
                     if (!(durability != null && durability.getLevel() > 0 && (100 / (durability.getLevel() + 1)) <= new Random().nextInt(100))) {
                         this.setDamage(this.getDamage() + 1);
                         if (this.getDamage() >= getMaxDurability()) {
-                            player.getLevel().addSound(player.position, Sound.RANDOM_BREAK);
+                            player.level.addSound(player.position, Sound.RANDOM_BREAK);
                             this.count--;
                         }
                         player.getInventory().setItemInHand(this);
@@ -169,7 +169,7 @@ public class ItemBow extends ItemTool {
                     entityShootBowEvent.getProjectile().kill();
                 } else {
                     entityShootBowEvent.getProjectile().spawnToAll();
-                    player.getLevel().addSound(player.position, Sound.RANDOM_BOW);
+                    player.level.addSound(player.position, Sound.RANDOM_BOW);
                 }
             }
         }

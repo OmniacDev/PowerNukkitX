@@ -115,7 +115,7 @@ public class EntityAxolotl extends EntityAnimal implements EntitySwimmable, Enti
                                 List.of(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET), this::attackTarget),
                         new BlockSensor(BlockFlowingWater.class, CoreMemoryTypes.NEAREST_BLOCK, 16, 5, 10),
                         entity -> {
-                            if(getLevel().getTick() % 20 == 0) {
+                            if(this.level.getTick() % 20 == 0) {
                                 Entity lastAttack = getMemoryStorage().get(CoreMemoryTypes.LAST_ATTACK_ENTITY);
                                 if(lastAttack != null) {
                                     if(!lastAttack.isAlive()) {
@@ -168,7 +168,7 @@ public class EntityAxolotl extends EntityAnimal implements EntitySwimmable, Enti
     @Override
     public boolean attack(EntityDamageEvent source) {
         if(source.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION && this.getLocator().getLevelBlock().canPassThrough()) {
-            if(getAirTicks() > -5600 || getLevel().isRaining() || getLevel().isThundering()) return false;
+            if(getAirTicks() > -5600 || this.level.isRaining() || this.level.isThundering()) return false;
         }
         return super.attack(source);
     }
@@ -195,7 +195,7 @@ public class EntityAxolotl extends EntityAnimal implements EntitySwimmable, Enti
     @Override
     protected boolean useBreedingItem(Player player, Item item) {
         getMemoryStorage().put(CoreMemoryTypes.LAST_FEED_PLAYER, player);
-        getMemoryStorage().put(CoreMemoryTypes.LAST_BE_FEED_TIME, getLevel().getTick());
+        getMemoryStorage().put(CoreMemoryTypes.LAST_BE_FEED_TIME, this.level.getTick());
         sendBreedingAnimation(item);
         return player.getInventory().setItemInHand(Item.get(Item.WATER_BUCKET));
     }

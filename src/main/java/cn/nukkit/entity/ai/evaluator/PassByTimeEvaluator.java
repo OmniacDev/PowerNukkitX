@@ -39,7 +39,7 @@ public class PassByTimeEvaluator implements IBehaviorEvaluator {
     @Override
     public boolean evaluate(EntityMob entity) {
         var time = entity.getMemoryStorage().get(timedMemory);
-        int passByTime = entity.getLevel().getTick() - time;
+        int passByTime = entity.level.getTick() - time;
         return passByTime >= minPassByTimeRange && passByTime <= maxPassByTimeRange;
     }
 }

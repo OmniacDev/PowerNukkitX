@@ -161,13 +161,11 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     @Nullable public CompoundTag linksTag;
     @NotNull public Boolean lootDropped = true;
     @NotNull public Integer markVariant= 0;
-    @NotNull public Vector3 motion = new Vector3();
+
     @NotNull public Boolean onGround = true;
     @NotNull public Long ownerNew = -1L;
     @NotNull public Boolean persistent = false;
     @NotNull public Integer portalCooldown = 0;
-    @NotNull public Vector3 position = new Vector3();
-    @NotNull public Rotator2 rotation = new Rotator2();
     @NotNull public Boolean saddled = false;
     @NotNull public Boolean sheared = false;
     @NotNull public Boolean showBottom = false;
@@ -179,11 +177,15 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     @NotNull public Long uniqueId = 0L;
     @NotNull public Integer variant = 0;
 
-    @Nullable public Level level;
+    @NotNull public Level level;
+
+    @NotNull public Vector3 position = new Vector3();
+    @NotNull public Rotator2 rotation = new Rotator2();
+    @NotNull public Vector3 motion = new Vector3();
 
     @NotNull public Vector3 prevPosition = position.clone();
-    @NotNull public Vector3 prevMotion = motion.clone();
     @NotNull public Rotator2 prevRotation = rotation.clone();
+    @NotNull public Vector3 prevMotion = motion.clone();
 
     public static final Entity[] EMPTY_ARRAY = new Entity[0];
     protected final EntityDataMap entityDataMap = new EntityDataMap();
@@ -3215,7 +3217,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
         return initialized;
     }
 
-    public @Nullable Level getLevel() {
+    public @NotNull Level getLevel() {
         return this.level;
     }
 
@@ -3241,9 +3243,5 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
 
     public Vector3 getVector3() {
         return this.position.clone();
-    }
-
-    public void setLevel(@Nullable Level level) {
-        this.level = level;
     }
 }

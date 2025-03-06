@@ -16,7 +16,7 @@ public class BreezeJumpExecutor implements EntityControl, IBehaviorExecutor {
 
     @Override
     public boolean execute(EntityMob entity) {
-        long tick = entity.getLevel().getTick();
+        long tick = entity.level.getTick();
         if(tick % 80 == 0) {
             startSequence(entity);
             prepareTick = tick;

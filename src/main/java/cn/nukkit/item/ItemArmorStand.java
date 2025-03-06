@@ -73,7 +73,7 @@ public class ItemArmorStand extends Item {
         }
 
         entity.spawnToAll();
-        player.getLevel().addSound(entity.position, Sound.MOB_ARMOR_STAND_PLACE);
+        player.level.addSound(entity.position, Sound.MOB_ARMOR_STAND_PLACE);
         return true;
     }
 

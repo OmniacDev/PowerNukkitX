@@ -153,7 +153,7 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
     public void kill() {
         if(deathTicks == -1) {
             deathTicks = 190;
-            getLevel().addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_DEATH, -1, Entity.WITHER, false, false);
+            this.level.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_DEATH, -1, Entity.WITHER, false, false);
             EntityEventPacket packet = new EntityEventPacket();
             packet.event = EntityEventPacket.DEATH_ANIMATION;
             packet.eid = getId();
@@ -262,7 +262,7 @@ public class EntityWither extends EntityBoss implements EntityFlyable, EntitySmi
             if (this.age == 200) {
                 this.explode();
                 setHealth(getMaxHealth());
-                getLevel().addSound(this.position, Sound.MOB_WITHER_SPAWN);
+                this.level.addSound(this.position, Sound.MOB_WITHER_SPAWN);
             } else if(age < 200) {
                 heal(getMaxHealth()/200f);
             }

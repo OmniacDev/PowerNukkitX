@@ -336,7 +336,7 @@ public class BlockCauldron extends BlockSolid implements BlockEntityHolder<Block
                     if (player.getInventory().canAddItem(potion)) {
                         player.getInventory().addItem(potion);
                     } else {
-                        player.getLevel().dropItem(player.position.add(0, 1.3, 0), potion, player.getDirectionVector().multiply(0.4));
+                        player.level.dropItem(player.position.add(0, 1.3, 0), potion, player.getDirectionVector().multiply(0.4));
                     }
                 }
 
@@ -365,7 +365,7 @@ public class BlockCauldron extends BlockSolid implements BlockEntityHolder<Block
                     if (player.getInventory().canAddItem(banner)) {
                         player.getInventory().addItem(banner);
                     } else {
-                        player.getLevel().dropItem(player.position.add(0, 1.3, 0), banner, player.getDirectionVector().multiply(0.4));
+                        player.level.dropItem(player.position.add(0, 1.3, 0), banner, player.getDirectionVector().multiply(0.4));
                     }
                 }
 
@@ -494,7 +494,7 @@ public class BlockCauldron extends BlockSolid implements BlockEntityHolder<Block
                 if (player.getInventory().canAddItem(newBucket)) {
                     player.getInventory().addItem(newBucket);
                 } else {
-                    player.getLevel().dropItem(player.position.add(0, 1.3, 0), newBucket, player.getDirectionVector().multiply(0.4));
+                    player.level.dropItem(player.position.add(0, 1.3, 0), newBucket, player.getDirectionVector().multiply(0.4));
                 }
             }
         }
@@ -512,7 +512,7 @@ public class BlockCauldron extends BlockSolid implements BlockEntityHolder<Block
                 if (player.getInventory().canAddItem(bottle)) {
                     player.getInventory().addItem(bottle);
                 } else {
-                    player.getLevel().dropItem(player.position.add(0, 1.3, 0), bottle, player.getDirectionVector().multiply(0.4));
+                    player.level.dropItem(player.position.add(0, 1.3, 0), bottle, player.getDirectionVector().multiply(0.4));
                 }
             }
         }

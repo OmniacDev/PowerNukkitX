@@ -131,7 +131,7 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
     @Override
     public boolean onUpdate(int currentTick) {
         //Hack -> Ensures that Ender Dragon is always ticked.
-        getLevel().getScheduler().scheduleTask(InternalPlugin.INSTANCE, this::scheduleUpdate);
+        this.level.getScheduler().scheduleTask(InternalPlugin.INSTANCE, this::scheduleUpdate);
         if(deathTicks != -1) {
             if(deathTicks <= 0) {
                 kill();
@@ -140,9 +140,9 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
         }
         if (currentTick % 2 == 0) {
             if(currentTick % ((this.position.toHorizontal().distance(Vector2.ZERO) < 1) ? 10 : 20) == 0) {
-                getLevel().addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_FLAP, -1, this.getIdentifier(), false, false);
+                this.level.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_FLAP, -1, this.getIdentifier(), false, false);
             }
-            for (Entity e : this.getLevel().getEntities()) {
+            for (Entity e : this.level.getEntities()) {
                 if (e instanceof EntityEnderCrystal) {
                     if (e.position.distance(this.position) <= 28) {
                         float health = this.getHealth();
@@ -162,7 +162,7 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
     public void kill() {
         if(deathTicks == -1) {
             deathTicks = 190;
-            getLevel().addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_DEATH, -1, getIdentifier(), false, false);
+            this.level.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_DEATH, -1, getIdentifier(), false, false);
             EntityEventPacket packet = new EntityEventPacket();
             packet.event = EntityEventPacket.ENDER_DRAGON_DEATH;
             packet.eid = getId();
@@ -172,13 +172,13 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
             super.kill();
             close();
             if(!isRevived()) {
-                getLevel().setBlock(new Vector3(0, getLevel().getHighestBlockAt(Vector2.ZERO)+1, 0), Block.get(Block.DRAGON_EGG));
+                this.level.setBlock(new Vector3(0, this.level.getHighestBlockAt(Vector2.ZERO)+1, 0), Block.get(Block.DRAGON_EGG));
             }
             for(int i = -2; i <= 2; i++) {
                 for(int j = -1; j <= 1; j++) {
                     if(!(i == 0 && j == 0)) {
-                        getLevel().setBlock(new Vector3(i, 63, j), Block.get(Block.END_PORTAL));
-                        getLevel().setBlock(new Vector3(j, 63, i), Block.get(Block.END_PORTAL));
+                        this.level.setBlock(new Vector3(i, 63, j), Block.get(Block.END_PORTAL));
+                        this.level.setBlock(new Vector3(j, 63, i), Block.get(Block.END_PORTAL));
                     }
                 }
             }
@@ -188,11 +188,11 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
                 double angle = Math.toRadians(i * angleIncrement);
                 double particleX = origin.getX() + Math.cos(angle) * 96;
                 double particleZ = origin.getZ() + Math.sin(angle) * 96;
-                Block dest = getLevel().getBlock(new Vector3(particleX, 75, particleZ));
+                Block dest = this.level.getBlock(new Vector3(particleX, 75, particleZ));
                 if(!(dest instanceof BlockEndGateway)) {
-                    Arrays.stream(BlockFace.values()).forEach(face -> getLevel().setBlock(dest.up().getSide(face).position, Block.get(Block.BEDROCK)));
-                    Arrays.stream(BlockFace.values()).forEach(face -> getLevel().setBlock(dest.down().getSide(face).position, Block.get(Block.BEDROCK)));
-                    getLevel().setBlock(dest.position, Block.get(Block.END_GATEWAY));
+                    Arrays.stream(BlockFace.values()).forEach(face -> this.level.setBlock(dest.up().getSide(face).position, Block.get(Block.BEDROCK)));
+                    Arrays.stream(BlockFace.values()).forEach(face -> this.level.setBlock(dest.down().getSide(face).position, Block.get(Block.BEDROCK)));
+                    this.level.setBlock(dest.position, Block.get(Block.END_GATEWAY));
                     break;
                 } else continue;
             }
@@ -277,7 +277,7 @@ public class EntityEnderDragon extends EntityBoss implements EntityFlyable {
     public boolean move(double dx, double dy, double dz) {
         boolean superRes = super.move(dx, dy, dz);
         if(superRes) {
-            Arrays.stream(getLevel().getCollisionBlocks(getBoundingBox())).filter(block -> canBreakBlock(block)).forEach(block -> getLevel().breakBlock(block));
+            Arrays.stream(this.level.getCollisionBlocks(getBoundingBox())).filter(block -> canBreakBlock(block)).forEach(block -> this.level.breakBlock(block));
         }
         return superRes;
     }

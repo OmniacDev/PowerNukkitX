@@ -215,7 +215,7 @@ public class ItemBucket extends Item {
                 PlayerBucketFillEvent ev;
                 player.getServer().getPluginManager().callEvent(ev = new PlayerBucketFillEvent(player, block, face, target, this, result));
                 if (!ev.isCancelled()) {
-                    player.getLevel().setBlock(target.position, target.layer, Block.get(BlockID.AIR), true, true);
+                    player.level.setBlock(target.position, target.layer, Block.get(BlockID.AIR), true, true);
 
                     level.getVibrationManager().callVibrationEvent(new VibrationEvent(player, target.position.add(0.5, 0.5, 0.5), VibrationType.FLUID_PICKUP));
 
@@ -284,7 +284,7 @@ public class ItemBucket extends Item {
             }
 
             boolean nether = false;
-            if (!canBeUsedOnDimension(player.getLevel().getDimension())) {
+            if (!canBeUsedOnDimension(player.level.getDimension())) {
                 ev.setCancelled(true);
                 nether = !isLava();
             }
@@ -292,8 +292,8 @@ public class ItemBucket extends Item {
             player.getServer().getPluginManager().callEvent(ev);
 
             if (!ev.isCancelled()) {
-                player.getLevel().setBlock(placementBlock.position, placementBlock.layer, targetBlock, true, true);
-                player.getLevel().sendBlocks(new Player[]{player}, new Block[]{target.getLevelBlockAtLayer(1)}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
+                player.level.setBlock(placementBlock.position, placementBlock.layer, targetBlock, true, true);
+                player.level.sendBlocks(new Player[]{player}, new Block[]{target.getLevelBlockAtLayer(1)}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
                 target.getLevel().getVibrationManager().callVibrationEvent(new VibrationEvent(player, target.position.add(0.5, 0.5, 0.5), VibrationType.FLUID_PLACE));
                 updateBucketItem(player, ev);
 
@@ -305,10 +305,10 @@ public class ItemBucket extends Item {
                     this.setDamage(0); // Empty bucket
                     player.getInventory().setItemInHand(this);
                 }
-                player.getLevel().addLevelSoundEvent(target.position, LevelSoundEventPacket.SOUND_FIZZ);
-                player.getLevel().addParticle(new ExplodeParticle(target.position.add(0.5, 1, 0.5)));
+                player.level.addLevelSoundEvent(target.position, LevelSoundEventPacket.SOUND_FIZZ);
+                player.level.addParticle(new ExplodeParticle(target.position.add(0.5, 1, 0.5)));
             } else {
-                player.getLevel().sendBlocks(new Player[]{player}, new Block[]{block.getLevelBlockAtLayer(1)}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
+                player.level.sendBlocks(new Player[]{player}, new Block[]{block.getLevelBlockAtLayer(1)}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
                 player.getInventory().sendContents(player);
             }
         } else if (targetBlock instanceof BlockPowderSnow) {
@@ -322,7 +322,7 @@ public class ItemBucket extends Item {
             PlayerBucketEmptyEvent ev = new PlayerBucketEmptyEvent(player, targetBlock, face, target, this, result);
             if (!ev.isCancelled()) {
                 target.getLevel().setBlock(target.position, targetBlock, true, true);
-                player.getLevel().addSound(target.position, Sound.BUCKET_FILL_POWDER_SNOW);
+                player.level.addSound(target.position, Sound.BUCKET_FILL_POWDER_SNOW);
 
                 updateBucketItem(player, ev);
 

@@ -45,7 +45,7 @@ public class TerraTest {
         resetPlayerStatus(player);
 
         player.level = level;
-        player.getLevel().initLevel();
+        player.level.initLevel();
         player.setViewDistance(1);
 
         GameLoop loop = gameLoop0(player);

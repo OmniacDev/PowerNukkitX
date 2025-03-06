@@ -189,7 +189,7 @@ public abstract class EntityProjectile extends Entity {
 
             Vector3 moveVector = new Vector3(this.position.x + this.motion.x, this.position.y + this.motion.y, this.position.z + this.motion.z);
 
-            Entity[] list = this.getLevel().getCollidingEntities(this.getBoundingBox().addCoord(this.motion.x, this.motion.y, this.motion.z).expand(1, 1, 1), this);
+            Entity[] list = this.level.getCollidingEntities(this.getBoundingBox().addCoord(this.motion.x, this.motion.y, this.motion.z).expand(1, 1, 1), this);
 
             double nearDistance = Integer.MAX_VALUE;
             Entity nearEntity = null;

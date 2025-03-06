@@ -43,7 +43,7 @@ public abstract class EntityAnimal extends EntityMob {
 
     protected boolean useBreedingItem(Player player, Item item) {
         getMemoryStorage().put(CoreMemoryTypes.LAST_FEED_PLAYER, player);
-        getMemoryStorage().put(CoreMemoryTypes.LAST_BE_FEED_TIME, getLevel().getTick());
+        getMemoryStorage().put(CoreMemoryTypes.LAST_BE_FEED_TIME, this.level.getTick());
         sendBreedingAnimation(item);
         item.count--;
         return player.getInventory().setItemInHand(item);

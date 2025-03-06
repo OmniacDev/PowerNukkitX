@@ -123,12 +123,12 @@ public class EntitySnowGolem extends EntityGolem {
             if(this.getLocator().getLevelBlock().isAir()) {
                 Block support = this.getLocator().getLevelBlock().down();
                 if(support.isFullBlock() && !support.isAir()){
-                    this.getLevel().setBlock(this.getLocator().getLevelBlock().position, Block.get(Block.SNOW_LAYER));
+                    this.level.setBlock(this.getLocator().getLevelBlock().position, Block.get(Block.SNOW_LAYER));
                 }
             }
         }
         if(this.waterTicks >= 20) {
-            if((this.level.isRaining() && !this.isUnderBlock()) || this.getLocator().getLevelBlock() instanceof BlockLiquid || Registries.BIOME.get(getLevel().getBiomeId(this.position.getFloorX(), this.position.getFloorY(), this.position.getFloorZ())).temperature() > 1.0) {
+            if((this.level.isRaining() && !this.isUnderBlock()) || this.getLocator().getLevelBlock() instanceof BlockLiquid || Registries.BIOME.get(this.level.getBiomeId(this.position.getFloorX(), this.position.getFloorY(), this.position.getFloorZ())).temperature() > 1.0) {
                 this.attack(new EntityDamageEvent(this, EntityDamageEvent.DamageCause.WEATHER, 1));
             }
             this.waterTicks = 0;

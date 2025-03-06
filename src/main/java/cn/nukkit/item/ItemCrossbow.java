@@ -44,7 +44,7 @@ public class ItemCrossbow extends ItemTool {
 
     public boolean onUse(Player player, int ticksUsed) {
         if (isLoaded()) return true;
-        this.loadTick = player.getLevel().getTick();
+        this.loadTick = player.level.getTick();
         int needTickUsed = 25;
         Enchantment enchantment = this.getEnchantment(Enchantment.ID_CROSSBOW_QUICK_CHARGE);
         if (enchantment != null) {
@@ -107,7 +107,7 @@ public class ItemCrossbow extends ItemTool {
     }
 
     public boolean onClickAir(Player player, Vector3 directionVector) {
-        if (this.isLoaded() && player.getLevel().getTick() - this.loadTick > 5) {
+        if (this.isLoaded() && player.level.getTick() - this.loadTick > 5) {
             double mX;
             double mY;
             double mZ;
@@ -128,7 +128,7 @@ public class ItemCrossbow extends ItemTool {
                 EntityCrossbowFirework entity = new EntityCrossbowFirework(player.chunk, nbt);
                 entity.setMotion(new Vector3(mX, mY, mZ));
                 entity.spawnToAll();
-                player.getLevel().addSound(player.position, Sound.CROSSBOW_SHOOT);
+                player.level.addSound(player.position, Sound.CROSSBOW_SHOOT);
                 removeChargedItem(player);
             } else {
                 EntityArrow entity = new EntityArrow(player.chunk, nbt, player, true);
@@ -149,7 +149,7 @@ public class ItemCrossbow extends ItemTool {
                             proj.close();
                         } else {
                             proj.spawnToAll();
-                            player.getLevel().addSound(player.position, Sound.CROSSBOW_SHOOT);
+                            player.level.addSound(player.position, Sound.CROSSBOW_SHOOT);
                             removeChargedItem(player);
                         }
                     }
@@ -180,7 +180,7 @@ public class ItemCrossbow extends ItemTool {
             );
             this.setCompoundTag(tag);
             player.getInventory().setItemInHand(this);
-            player.getLevel().addSound(player.position, Sound.CROSSBOW_LOADING_END);
+            player.level.addSound(player.position, Sound.CROSSBOW_LOADING_END);
         }
     }
 

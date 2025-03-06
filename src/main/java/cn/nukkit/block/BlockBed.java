@@ -154,7 +154,7 @@ public class BlockBed extends BlockTransparent implements Faceable, BlockEntityH
             return true;
         }
 
-        Transform spawn = Transform.fromObject(this.position.add(0.5, 0.5, 0.5), player.getLevel(), player.rotation.yaw, player.rotation.pitch);
+        Transform spawn = Transform.fromObject(this.position.add(0.5, 0.5, 0.5), player.level, player.rotation.yaw, player.rotation.pitch);
         if (!player.getSpawn().equals(spawn)) {
             player.setSpawn(this, SpawnPointType.BLOCK);
         }

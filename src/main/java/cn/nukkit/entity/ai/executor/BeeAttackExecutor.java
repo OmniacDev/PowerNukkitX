@@ -54,6 +54,6 @@ public class BeeAttackExecutor extends MeleeAttackExecutor {
 
     private void stop(EntityMob entity) {
         var bee = (EntityBee) entity;
-        entity.getLevel().getScheduler().scheduleDelayedTask(null, () -> bee.setAngry(false), 5);
+        entity.level.getScheduler().scheduleDelayedTask(null, () -> bee.setAngry(false), 5);
     }
 }

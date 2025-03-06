@@ -289,7 +289,7 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
     public void fall(float fallDistance) {
         super.fall(fallDistance);
 
-        this.getLevel().addSound(this.position, Sound.MOB_ARMOR_STAND_LAND);
+        this.level.addSound(this.position, Sound.MOB_ARMOR_STAND_LAND);
     }
 
     @Override

@@ -216,10 +216,10 @@ public class EntityFallingBlock extends Entity {
                             }
                             level.addParticle(new DestroyBlockParticle(pos, Block.get(blockState)));
                         } else {
-                            while(pos.getY() < getLevel().getMaxHeight()) {
-                                if(!getLevel().getBlock(pos).isAir()) pos.y++; else break;
+                            while(pos.getY() < this.level.getMaxHeight()) {
+                                if(!this.level.getBlock(pos).isAir()) pos.y++; else break;
                             }
-                            getLevel().setBlock(pos, eventTo, true);
+                            this.level.setBlock(pos, eventTo, true);
                         }
 
                         if (eventTo.getId().equals(Block.ANVIL)) {
@@ -234,15 +234,15 @@ public class EntityFallingBlock extends Entity {
                             if (fallDistance > 8) {
                                 BlockAnvil anvil = (BlockAnvil) eventTo;
                                 if (anvil.getAnvilDamage() == Damage.VERY_DAMAGED) {
-                                    getLevel().setBlock(eventTo.position, BlockAir.STATE.toBlock(), true);
+                                    this.level.setBlock(eventTo.position, BlockAir.STATE.toBlock(), true);
                                 } else {
                                     anvil.setAnvilDamage(anvil.getAnvilDamage().next());
-                                    getLevel().setBlock(eventTo.position, anvil, true);
+                                    this.level.setBlock(eventTo.position, anvil, true);
                                 }
                             }
-                            getLevel().addLevelEvent(eventTo.position, LevelEventPacket.EVENT_SOUND_ANVIL_LAND);
+                            this.level.addLevelEvent(eventTo.position, LevelEventPacket.EVENT_SOUND_ANVIL_LAND);
                         } else if (eventTo.getId().equals(BlockID.POINTED_DRIPSTONE)) {
-                            getLevel().addLevelEvent(block.position, LevelEventPacket.EVENT_SOUND_POINTED_DRIPSTONE_LAND);
+                            this.level.addLevelEvent(block.position, LevelEventPacket.EVENT_SOUND_POINTED_DRIPSTONE_LAND);
 
                             Entity[] e = level.getCollidingEntities(new SimpleAxisAlignedBB(pos, pos.add(1, 1, 1)));
                             for (Entity entity : e) {
@@ -286,7 +286,7 @@ public class EntityFallingBlock extends Entity {
 
     private void dropItems() {
         Block block = this.getBlock();
-        getLevel().dropItem(this.position, block instanceof BlockFallable ? ((BlockFallable) block).toFallingItem() : block.toItem());
+        this.level.dropItem(this.position, block instanceof BlockFallable ? ((BlockFallable) block).toFallingItem() : block.toItem());
     }
 
     @Override

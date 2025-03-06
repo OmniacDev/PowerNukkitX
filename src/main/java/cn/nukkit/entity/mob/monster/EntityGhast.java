@@ -69,7 +69,7 @@ public class EntityGhast extends EntityMonster implements EntityFlyable {
 
     @Override
     public void kill() {
-        Arrays.stream(getLevel().getEntities()).filter(entity -> {
+        Arrays.stream(this.level.getEntities()).filter(entity -> {
             if(entity instanceof EntityFireball fireball) {
                 return fireball.shootingEntity == this && !fireball.closed;
             }

@@ -97,7 +97,7 @@ public class EntityEnderPearl extends EntityThrowable {
     }
 
     private void teleport() {
-        if (!this.level.equals(this.shootingEntity.getLevel())) {
+        if (!this.level.equals(this.shootingEntity.level)) {
             return;
         }
 

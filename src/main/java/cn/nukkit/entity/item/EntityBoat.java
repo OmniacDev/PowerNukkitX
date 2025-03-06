@@ -275,7 +275,7 @@ public class EntityBoat extends EntityVehicle {
         double friction = 1 - this.getDrag();
 
         if (this.onGround && (Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.z) > 0.00001)) {
-            friction *= this.getLevel().getBlock(this.position.add(0, -1, 0).floor()).getFrictionFactor();
+            friction *= this.level.getBlock(this.position.add(0, -1, 0).floor()).getFrictionFactor();
         }
 
         this.motion.x *= friction;

@@ -61,13 +61,13 @@ public class EntityEnderman extends EntityMonster implements EntityWalkable {
                         new Behavior(new PlaySoundExecutor(Sound.MOB_ENDERMEN_IDLE, 0.8f, 1.2f, 1, 1), all(not(new EntityCheckEvaluator(CoreMemoryTypes.ATTACK_TARGET)), new RandomSoundEvaluator()), 6, 1, 1, true),
                         new Behavior(new PlaySoundExecutor(Sound.MOB_ENDERMEN_SCREAM, 0.8f, 1.2f, 1, 1), all(new EntityCheckEvaluator(CoreMemoryTypes.ATTACK_TARGET), new RandomSoundEvaluator(10, 7)), 5, 1, 1, true),
                         new Behavior(new TeleportExecutor(16, 5, 16), any(
-                                all(entity -> getLevel().isRaining(),
+                                all(entity -> this.level.isRaining(),
                                         entity -> !isUnderBlock(),
-                                        entity -> getLevel().getTick()%10 == 0),
+                                        entity -> this.level.getTick()%10 == 0),
                                 entity -> isInsideOfWater(),
                                 all(
                                         entity -> getMemoryStorage().isEmpty(CoreMemoryTypes.ATTACK_TARGET),
-                                        entity -> getLevel().getTick()%20==0,
+                                        entity -> this.level.getTick()%20==0,
                                         new ProbabilityEvaluator(2, 25)),
                                 all(
                                         entity -> !getMemoryStorage().isEmpty(CoreMemoryTypes.ATTACK_TARGET),
@@ -83,8 +83,8 @@ public class EntityEnderman extends EntityMonster implements EntityWalkable {
                                 )
                         ), 3, 1),
                         new Behavior(new EndermanBlockExecutor(), all(
-                                entity -> getLevel().getGameRules().getBoolean(GameRule.MOB_GRIEFING),
-                                entity -> getLevel().getTick()%60 == 0,
+                                entity -> this.level.getGameRules().getBoolean(GameRule.MOB_GRIEFING),
+                                entity -> this.level.getTick()%60 == 0,
                                 new ProbabilityEvaluator(1,20)
                         ), 2, 1, 1, true),
                         new Behavior(new FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)

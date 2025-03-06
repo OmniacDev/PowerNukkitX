@@ -118,7 +118,7 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
             this.level.addSound(this.position, Sound.AMBIENT_WEATHER_THUNDER);
             this.level.addSound(this.position, Sound.RANDOM_EXPLODE);
 
-            Block down = getLevel().getBlock(this.position.down());
+            Block down = this.level.getBlock(this.position.down());
             if (isVulnerableOxidizable(down)) {
                 Map<Locator, OxidizationLevel> changes = new LinkedHashMap<>();
                 changes.put(new Locator(down.getVector3(), level), OxidizationLevel.UNAFFECTED);
@@ -173,8 +173,8 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
                     if (event.isCancelled()) {
                         break;
                     }
-                    getLevel().setBlock(entry.getKey().position, event.getNewState());
-                    getLevel().addParticle(new ElectricSparkParticle(entry.getKey().position));
+                    this.level.setBlock(entry.getKey().position, event.getNewState());
+                    this.level.addParticle(new ElectricSparkParticle(entry.getKey().position));
                 }
             }
         }
@@ -199,7 +199,7 @@ public class EntityLightningBolt extends Entity implements EntityLightningStrike
                         if (!event.isCancelled()) {
                             Block fire = Block.get(BlockID.FIRE);
                             this.level.setBlock(block.position, fire);
-                            this.getLevel().scheduleUpdate(fire, fire.tickRate());
+                            this.level.scheduleUpdate(fire, fire.tickRate());
                         }
                     }
                 }

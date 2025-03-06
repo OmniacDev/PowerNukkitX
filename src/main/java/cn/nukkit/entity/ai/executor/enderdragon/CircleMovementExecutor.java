@@ -80,7 +80,7 @@ public class CircleMovementExecutor implements EntityControl, IBehaviorExecutor 
     public void onStop(EntityMob entity) {
         stop(entity);
         if(entity instanceof EntityEnderDragon) {
-            if(Utils.rand(0, 3 + (int) Arrays.stream(entity.getLevel().getEntities()).filter(entity1 -> entity1 instanceof EntityEnderCrystal && entity1.position.toHorizontal().distance(Vector2.ZERO) < 128).count()) < 1) {
+            if(Utils.rand(0, 3 + (int) Arrays.stream(entity.level.getEntities()).filter(entity1 -> entity1 instanceof EntityEnderCrystal && entity1.position.toHorizontal().distance(Vector2.ZERO) < 128).count()) < 1) {
                 entity.getMemoryStorage().put(CoreMemoryTypes.FORCE_PERCHING, true);
             }
         }

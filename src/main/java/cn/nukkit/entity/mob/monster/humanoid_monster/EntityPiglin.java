@@ -81,7 +81,7 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
                 Set.of(),
                 Set.of(
                         new Behavior(new PiglinTransformExecutor(), all(
-                                entity -> entity.getLevel().getDimension() != Level.DIMENSION_NETHER,
+                                entity -> entity.level.getDimension() != Level.DIMENSION_NETHER,
                                 entity -> !isImmobile(),
                                 entity -> !entity.namedTag.getBoolean("IsImmuneToZombification")
                         ), 13, 1),
@@ -91,7 +91,7 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
                                 not(
                                         all(
                                                 new MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.LAST_BE_ATTACKED_TIME),
-                                                entity -> entity.getLevel().getTick() - getMemoryStorage().get(CoreMemoryTypes.LAST_BE_ATTACKED_TIME) <= 1
+                                                entity -> entity.level.getTick() - getMemoryStorage().get(CoreMemoryTypes.LAST_BE_ATTACKED_TIME) <= 1
                                         )
                                 )
                         ), 12, 1),
@@ -198,7 +198,7 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
     @Override
     public boolean onUpdate(int currentTick) {
         if(currentTick%20 == 0) {
-            if(getLevel().getGameRules().getBoolean(GameRule.MOB_GRIEFING)) {
+            if(this.level.getGameRules().getBoolean(GameRule.MOB_GRIEFING)) {
                 pickupItems(this);
             }
         }
@@ -248,7 +248,7 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
                 if(entity instanceof EntityHoglin hoglin) {
                     if(!hoglin.isBaby()) {
                         if(hoglin.getHealth() - getDiffHandDamage(getServer().getDifficulty()) <= 0) {
-                            List<Entity> entities =  Arrays.stream(getLevel().getEntities()).filter(entity1 -> entity1 instanceof EntityPiglin piglin && piglin.position.distance(this.position) < 16).toList();
+                            List<Entity> entities =  Arrays.stream(this.level.getEntities()).filter(entity1 -> entity1 instanceof EntityPiglin piglin && piglin.position.distance(this.position) < 16).toList();
                             AnimateEntityPacket.Animation.AnimationBuilder builder = AnimateEntityPacket.Animation.builder();
                             builder.animation("animation.piglin.celebrate_hunt_special");
                             builder.nextState("r");
@@ -322,7 +322,7 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
         public void onStart(EntityMob entity) {
             super.onStart(entity);
             if(entity.position.distance(entity.getMemoryStorage().get(getMemory()).getVector3()) < 8) {
-                entity.getLevel().addSound(entity.position, Sound.MOB_PIGLIN_RETREAT);
+                entity.level.addSound(entity.position, Sound.MOB_PIGLIN_RETREAT);
             }
         }
     }
@@ -341,7 +341,7 @@ public class EntityPiglin extends EntityHumanoidMonster implements EntityWalkabl
             entity.level.addLevelSoundEvent(entity.position, LevelSoundEventPacket.SOUND_ANGRY, -1, Entity.PIGLIN, false, false);
             Arrays.stream(entity.level.getEntities()).filter(entity1 -> entity1 instanceof EntityPiglin && entity1.position.distance(entity.position) < 16 && ((EntityPiglin) entity1).getMemoryStorage().isEmpty(CoreMemoryTypes.ATTACK_TARGET)).forEach(entity1 -> ((EntityPiglin) entity1).getMemoryStorage().put(CoreMemoryTypes.ATTACK_TARGET, entity.getMemoryStorage().get(memory)));
             if(entity.getMemoryStorage().get(memory) instanceof EntityHoglin) {
-                entity.getMemoryStorage().put(CoreMemoryTypes.LAST_HOGLIN_ATTACK_TIME, entity.getLevel().getTick());
+                entity.getMemoryStorage().put(CoreMemoryTypes.LAST_HOGLIN_ATTACK_TIME, entity.level.getTick());
             }
         }
 

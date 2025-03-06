@@ -125,7 +125,7 @@ public class EntityBee extends EntityAnimal implements EntityFlyable {
             }
         }
         if(source instanceof EntityDamageByEntityEvent event) {
-            for(Entity entity : getLevel().getCollidingEntities(this.getBoundingBox().grow(4, 4, 4))) {
+            for(Entity entity : this.level.getCollidingEntities(this.getBoundingBox().grow(4, 4, 4))) {
                 if(entity instanceof EntityBee bee && bee.hasSting()) {
                     bee.setAngry(event.getDamager());
                 }
@@ -153,7 +153,7 @@ public class EntityBee extends EntityAnimal implements EntityFlyable {
                                 this.kill();
                             } else if(stayAtFlower) {
                                 this.setNectar(true);
-                                this.getLevel().addSound(this.position, Sound.MOB_BEE_POLLINATE);
+                                this.level.addSound(this.position, Sound.MOB_BEE_POLLINATE);
                             }
                             stayAtFlower = !stayAtFlower;
                         });
@@ -190,7 +190,7 @@ public class EntityBee extends EntityAnimal implements EntityFlyable {
     }
 
     public boolean shouldSearchBeehive() {
-        return hasNectar() || getLevel().isRaining() || !getLevel().isDay();
+        return hasNectar() || this.level.isRaining() || !this.level.isDay();
     }
 
     @Override

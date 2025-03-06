@@ -97,9 +97,9 @@ public class BlazeShootExecutor implements EntityControl, IBehaviorExecutor {
             tick2++;
             if (tick2 > fireTick) {
                 for(int i = 0; i < 3; i++) {
-                    entity.getLevel().getScheduler().scheduleDelayedTask(InternalPlugin.INSTANCE, () -> shootFireball(entity), i*6);
+                    entity.level.getScheduler().scheduleDelayedTask(InternalPlugin.INSTANCE, () -> shootFireball(entity), i*6);
                 }
-                entity.getLevel().getScheduler().scheduleDelayedTask(InternalPlugin.INSTANCE, () -> stopOnFire(entity), 20);
+                entity.level.getScheduler().scheduleDelayedTask(InternalPlugin.INSTANCE, () -> stopOnFire(entity), 20);
                 tick2 = 0;
                 return target.getHealth() != 0;
             }

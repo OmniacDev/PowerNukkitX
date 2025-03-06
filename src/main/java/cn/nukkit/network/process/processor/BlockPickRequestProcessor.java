@@ -28,7 +28,7 @@ public class BlockPickRequestProcessor extends DataPacketProcessor<BlockPickRequ
         Item item = block.toItem();
 
         if (pk.addUserData) {
-            BlockEntity blockEntity = player.getLevel().getBlockEntity(new Vector3(pk.x, pk.y, pk.z));
+            BlockEntity blockEntity = player.level.getBlockEntity(new Vector3(pk.x, pk.y, pk.z));
             if (blockEntity != null) {
                 CompoundTag nbt = blockEntity.getCleanedNBT();
                 if (nbt != null) {

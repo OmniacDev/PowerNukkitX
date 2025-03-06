@@ -25,7 +25,7 @@ public class PerchingExecutor implements EntityControl, IBehaviorExecutor {
     public PerchingExecutor() {}
     @Override
     public boolean execute(EntityMob entity) {
-        Vector3 target = new Vector3(0, entity.getLevel().getHighestBlockAt(0, 0) + 1, 0);
+        Vector3 target = new Vector3(0, entity.level.getHighestBlockAt(0, 0) + 1, 0);
         if(stayTick >= 0) {
             stayTick++;
         }

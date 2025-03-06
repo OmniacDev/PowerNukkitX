@@ -106,7 +106,7 @@ public class EntityVex extends EntityMonster implements EntityFlyable {
     protected void initEntity() {
         this.setMaxHealth(14);
         super.initEntity();
-        getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_TIME, getLevel().getTick());
+        getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_TIME, this.level.getTick());
         this.setItemInHand(Item.get(Item.IRON_SWORD));
         this.diffHandDamage = new float[]{5.5f, 9f, 13.5f};
     }

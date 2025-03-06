@@ -123,9 +123,9 @@ public class EntityMoveToOwnerExecutor implements EntityControl, IBehaviorExecut
         var random = ThreadLocalRandom.current();
         int x = random.nextInt(r * -1, r) + player.position.getFloorX();
         int z = random.nextInt(r * -1, r) + player.position.getFloorZ();
-        double y = player.getLevel().getHighestBlockAt(x, z);
+        double y = player.level.getHighestBlockAt(x, z);
         var vector3 = new Vector3(x, y, z);
-        var result = player.getLevel().getBlock(vector3);
+        var result = player.level.getBlock(vector3);
         if (result.isSolid() && result.getId() != BlockID.AIR) return result.up().position;
         else return null;
     }

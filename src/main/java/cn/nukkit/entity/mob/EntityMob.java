@@ -157,7 +157,7 @@ public abstract class EntityMob extends EntityPhysical implements EntityInventor
 
         var storage = getMemoryStorage();
         if (storage != null) {
-            storage.put(CoreMemoryTypes.ENTITY_SPAWN_TIME, getLevel().getTick());
+            storage.put(CoreMemoryTypes.ENTITY_SPAWN_TIME, this.level.getTick());
             MemoryType.getPersistentMemories().forEach(memory -> {
                 var mem = (MemoryType<Object>) memory;
                 var codec = mem.getCodec();
@@ -228,7 +228,7 @@ public abstract class EntityMob extends EntityPhysical implements EntityInventor
         var storage = getMemoryStorage();
         if (storage != null) {
             storage.put(CoreMemoryTypes.BE_ATTACKED_EVENT, source);
-            storage.put(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, getLevel().getTick());
+            storage.put(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, this.level.getTick());
         }
 
         if (this.isClosed() || !this.isAlive()) {
@@ -318,7 +318,7 @@ public abstract class EntityMob extends EntityPhysical implements EntityInventor
         armor.setDamage(armor.getDamage() + 1);
 
         if (armor.getDamage() >= armor.getMaxDurability()) {
-            getLevel().addSound(this.position, Sound.RANDOM_BREAK);
+            this.level.addSound(this.position, Sound.RANDOM_BREAK);
             return Item.get(BlockID.AIR, 0, 0);
         }
 

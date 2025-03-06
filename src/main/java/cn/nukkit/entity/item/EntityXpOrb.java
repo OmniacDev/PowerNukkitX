@@ -207,7 +207,7 @@ public class EntityXpOrb extends Entity {
             double friction = 1d - this.getDrag();
 
             if (this.onGround && (Math.abs(this.motion.x) > 0.00001 || Math.abs(this.motion.z) > 0.00001)) {
-                friction = this.getLevel().getBlock(this.position.add(0, -1, 0).floor()).getFrictionFactor() * friction;
+                friction = this.level.getBlock(this.position.add(0, -1, 0).floor()).getFrictionFactor() * friction;
             }
 
             this.motion.x *= friction;

@@ -92,7 +92,7 @@ public class EntityFishingHook extends SlenderProjectile {
         boolean hasUpdate;
         long target = getDataProperty(TARGET_EID);
         if (target != 0L) {
-            Entity entity = getLevel().getEntity(target);
+            Entity entity = this.level.getEntity(target);
             if (entity == null || !entity.isAlive()) {
                 setDataProperty(TARGET_EID, 0L);
             } else {
@@ -255,12 +255,12 @@ public class EntityFishingHook extends SlenderProjectile {
                 if (itemEntity != null) {
                     itemEntity.setOwner(player.getName());
                     itemEntity.spawnToAll();
-                    player.getLevel().dropExpOrb(player.position, event.getExperience());
+                    player.level.dropExpOrb(player.position, event.getExperience());
                 }
             }
         } else if (this.shootingEntity != null) {
             var eid = this.getDataProperty(TARGET_EID);
-            var targetEntity = this.getLevel().getEntity(eid);
+            var targetEntity = this.level.getEntity(eid);
             if (targetEntity != null && targetEntity.isAlive()) { // 钓鱼竿收杆应该牵引被钓生物
                 targetEntity.setMotion(this.shootingEntity.position.subtract(targetEntity.position).divide(8).add(0, 0.3, 0));
             }

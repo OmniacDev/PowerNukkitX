@@ -40,8 +40,8 @@ import java.util.Set;
 
 public class EntityWarden extends EntityMonster implements EntityWalkable, VibrationListener {
 
-    protected int lastDetectTime = getLevel().getTick();
-    protected int lastCollideTime = getLevel().getTick();
+    protected int lastDetectTime = this.level.getTick();
+    protected int lastCollideTime = this.level.getTick();
     protected boolean waitForVibration = false;
     public EntityWarden(IChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
@@ -195,7 +195,7 @@ public class EntityWarden extends EntityMonster implements EntityWalkable, Vibra
 
     @Override
     public boolean onVibrationOccur(VibrationEvent event) {
-        if (getLevel().getTick() - this.lastDetectTime >= 40 && !waitForVibration && !(event.initiator() instanceof EntityWarden)) {
+        if (this.level.getTick() - this.lastDetectTime >= 40 && !waitForVibration && !(event.initiator() instanceof EntityWarden)) {
             this.waitForVibration = true;
             return true;
         } else {
@@ -206,7 +206,7 @@ public class EntityWarden extends EntityMonster implements EntityWalkable, Vibra
     @Override
     public void onVibrationArrive(VibrationEvent event) {
         this.waitForVibration = false;
-        this.lastDetectTime = getLevel().getTick();
+        this.lastDetectTime = this.level.getTick();
         EntityEventPacket pk = new EntityEventPacket();
         pk.eid = this.getId();
         pk.event = EntityEventPacket.VIBRATION_DETECTED;
@@ -244,12 +244,12 @@ public class EntityWarden extends EntityMonster implements EntityWalkable, Vibra
 
     @Override
     protected boolean onCollide(int currentTick, List<Entity> collidingEntities) {
-        if (getLevel().getTick()- this.lastCollideTime > 20) {
+        if (this.level.getTick()- this.lastCollideTime > 20) {
             for (Entity collidingEntity : collidingEntities) {
                 if (isValidAngerEntity(collidingEntity))
                     addEntityAngerValue(collidingEntity, 35);
             }
-            this.lastCollideTime = getLevel().getTick();
+            this.lastCollideTime = this.level.getTick();
         }
         return super.onCollide(currentTick, collidingEntities);
     }

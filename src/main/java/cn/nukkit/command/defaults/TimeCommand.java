@@ -77,7 +77,7 @@ public class TimeCommand extends VanillaCommand {
                     }
                     Level level;
                     if (sender instanceof Player) {
-                        level = ((Player) sender).getLevel();
+                        level = ((Player) sender).level;
                     } else {
                         level = sender.getServer().getDefaultLevel();
                     }

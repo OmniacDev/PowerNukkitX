@@ -60,7 +60,7 @@ public class PlayerActionProcessor extends DataPacketProcessor<PlayerActionPacke
             }
             case PlayerActionPacket.ACTION_CREATIVE_PLAYER_DESTROY_BLOCK -> {
                 // Used by client to get book from lecterns and items from item frame in creative mode since 1.20.70
-                Block blockLectern = playerHandle.player.getLevel().getBlock(pos);
+                Block blockLectern = playerHandle.player.level.getBlock(pos);
                 if (blockLectern instanceof BlockLectern blockLecternI && blockLectern.position.distance(playerHandle.player.position) <= 6) {
                     blockLecternI.dropBook(playerHandle.player);
                 }
@@ -218,7 +218,7 @@ public class PlayerActionProcessor extends DataPacketProcessor<PlayerActionPacke
                     break;
                 }
 
-                if (!(player.isTouchingWater() || (player.getLevel().isRaining() && player.getLevel().canBlockSeeSky(player.position)))) {
+                if (!(player.isTouchingWater() || (player.level.isRaining() && player.level.canBlockSeeSky(player.position)))) {
                     player.sendPosition(player.position, player.rotation.yaw, player.rotation.pitch, MovePlayerPacket.MODE_RESET);
                     break;
                 }

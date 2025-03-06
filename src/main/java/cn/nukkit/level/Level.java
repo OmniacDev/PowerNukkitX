@@ -2761,7 +2761,7 @@ public class Level implements Metadatable {
                 }
             } else {
                 if ((item instanceof ItemBucket itemBucket) && itemBucket.isWater()) {
-                    player.getLevel().sendBlocks(new Player[]{player}, new Block[]{Block.get(BlockID.AIR, target)}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
+                    player.level.sendBlocks(new Player[]{player}, new Block[]{Block.get(BlockID.AIR, target)}, UpdateBlockPacket.FLAG_ALL_PRIORITY, 1);
                 }
                 return null;
             }
@@ -3537,7 +3537,7 @@ public class Level implements Metadatable {
     }
 
     public void removeEntity(Entity entity) {
-        if (entity.getLevel() != this) {
+        if (entity.level != this) {
             throw new LevelException("Invalid Entity level");
         }
 
@@ -3554,7 +3554,7 @@ public class Level implements Metadatable {
     }
 
     public void addEntity(Entity entity) {
-        if (entity.getLevel() != this) {
+        if (entity.level != this) {
             throw new LevelException("Invalid Entity level");
         }
 

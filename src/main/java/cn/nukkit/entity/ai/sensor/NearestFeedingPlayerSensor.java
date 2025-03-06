@@ -31,7 +31,7 @@ public class NearestFeedingPlayerSensor implements ISensor {
             double rangeSquared = this.range * this.range;
             double minRangeSquared = this.minRange * this.minRange;
             //寻找范围内最近满足乞食要求的玩家
-            for (Player p : entity.getLevel().getPlayers().values()) {
+            for (Player p : entity.level.getPlayers().values()) {
                 if (entity.position.distanceSquared(p.position) <= rangeSquared && entity.position.distanceSquared(p.position) >= minRangeSquared && entityAnimal.isBreedingItem(p.getInventory().getItemInHand())) {
                     if (player == null) {
                         player = p;

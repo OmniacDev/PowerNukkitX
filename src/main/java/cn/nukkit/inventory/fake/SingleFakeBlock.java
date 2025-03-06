@@ -64,7 +64,7 @@ public class SingleFakeBlock implements FakeBlock {
     public void remove(Player player) {
         getLastPositions(player).forEach(position -> {
             UpdateBlockPacket packet = new UpdateBlockPacket();
-            packet.blockRuntimeId = player.getLevel().getBlock(position).getRuntimeId();
+            packet.blockRuntimeId = player.level.getBlock(position).getRuntimeId();
             packet.flags = UpdateBlockPacket.FLAG_NETWORK;
             packet.x = position.getFloorX();
             packet.y = position.getFloorY();

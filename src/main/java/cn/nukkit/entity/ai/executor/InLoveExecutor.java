@@ -19,7 +19,7 @@ public class InLoveExecutor implements IBehaviorExecutor {
     @Override
     public boolean execute(EntityMob entity) {
         if (currentTick == 0) {
-            entity.getMemoryStorage().put(CoreMemoryTypes.LAST_IN_LOVE_TIME, entity.getLevel().getTick());
+            entity.getMemoryStorage().put(CoreMemoryTypes.LAST_IN_LOVE_TIME, entity.level.getTick());
             entity.getMemoryStorage().put(CoreMemoryTypes.IS_IN_LOVE, true);
         }
         currentTick++;

@@ -86,7 +86,7 @@ public class EntityEvocationIllager extends EntityIllager implements EntityWalka
                                 new PassByTimeEvaluator(CoreMemoryTypes.LAST_CONVERSION, 100),
                                 new PassByTimeEvaluator(CoreMemoryTypes.LAST_ATTACK_TIME, 40),
                                 entity -> {
-                                    for(Entity entity1 : entity.getLevel().getNearbyEntities(entity.getBoundingBox().grow(16, 16, 16))) {
+                                    for(Entity entity1 : entity.level.getNearbyEntities(entity.getBoundingBox().grow(16, 16, 16))) {
                                         if(entity1 instanceof EntitySheep entitySheep) {
                                             if(entitySheep.getColor() == DyeColor.BLUE.getWoolData()) {
                                                 return true;
@@ -100,7 +100,7 @@ public class EntityEvocationIllager extends EntityIllager implements EntityWalka
                                         entity -> entity.getMemoryStorage().get(LAST_MAGIC) == SPELL.NONE,
                                         entity -> entity.getMemoryStorage().get(LAST_MAGIC) == SPELL.COLOR_CONVERSION
                                 ),
-                                entity -> entity.getLevel().getGameRules().getBoolean(GameRule.MOB_GRIEFING)
+                                entity -> entity.level.getGameRules().getBoolean(GameRule.MOB_GRIEFING)
                         ), 7, 1),
                         new Behavior(new VexSummonExecutor(), all(
                                 new EntityCheckEvaluator(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET),
@@ -108,7 +108,7 @@ public class EntityEvocationIllager extends EntityIllager implements EntityWalka
                                 new PassByTimeEvaluator(CoreMemoryTypes.LAST_ATTACK_TIME, 40),
                                 entity -> {
                                     int count = 0;
-                                    for(Entity entity1 : entity.getLevel().getNearbyEntities(entity.getBoundingBox().grow(15, 15, 15))) {
+                                    for(Entity entity1 : entity.level.getNearbyEntities(entity.getBoundingBox().grow(15, 15, 15))) {
                                         if(entity1 instanceof EntityVex) count++;
                                     }
                                     return count < 8;

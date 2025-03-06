@@ -60,7 +60,7 @@ public class FleeFromTargetExecutor implements EntityControl, IBehaviorExecutor 
         setLookTarget(entity, moveTarget);
 
         //This gives the Evoker enough time to turn around before attacking.
-        entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_TIME, entity.getLevel().getTick());
+        entity.getMemoryStorage().put(CoreMemoryTypes.LAST_ATTACK_TIME, entity.level.getTick());
 
         if (updateRouteImmediatelyWhenTargetChange) {
             var floor = target.floor();

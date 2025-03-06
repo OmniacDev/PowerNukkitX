@@ -140,10 +140,10 @@ public class EntitySplashPotion extends EntityThrowable {
         int b = (color[2] / count) & 0xff;
         Particle particle = new SpellParticle(this.position, r, g, b);
 
-        this.getLevel().addParticle(particle);
-        this.getLevel().addSound(this.position, Sound.RANDOM_GLASS);
+        this.level.addParticle(particle);
+        this.level.addSound(this.position, Sound.RANDOM_GLASS);
 
-        Entity[] entities = this.getLevel().getNearbyEntities(this.getBoundingBox().grow(4.125, 2.125, 4.125));
+        Entity[] entities = this.level.getNearbyEntities(this.getBoundingBox().grow(4.125, 2.125, 4.125));
         for (Entity anEntity : entities) {
             double distance = anEntity.position.distanceSquared(this.position);
             if (distance < 16) {

@@ -69,7 +69,7 @@ public class LevelTest {
             resetPlayerStatus(p);
             Assertions.fail("Chunk cannot be regenerate in 10s, chunk size " + p.getUsedChunks().size());
         }
-        p.getLevel().regenerateChunk(0, 0);
+        p.level.regenerateChunk(0, 0);
 
         int limit = 100;
         while (limit-- != 0) {

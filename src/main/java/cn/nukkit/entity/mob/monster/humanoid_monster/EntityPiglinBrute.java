@@ -57,7 +57,7 @@ public class EntityPiglinBrute extends EntityPiglin implements EntityWalkable {
                 Set.of(),
                 Set.of(
                         new Behavior(new PiglinTransformExecutor(), all(
-                                entity -> entity.getLevel().getDimension() != Level.DIMENSION_NETHER,
+                                entity -> entity.level.getDimension() != Level.DIMENSION_NETHER,
                                 entity -> !isImmobile(),
                                 entity -> !entity.namedTag.getBoolean("IsImmuneToZombification")
                         ), 12, 1),

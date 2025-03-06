@@ -154,7 +154,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                 entity -> {
                                     Block block = getMemoryStorage().get(CoreMemoryTypes.NEAREST_BLOCK_2);
                                     if(block == null || getMoveDirectionEnd() == null) return false;
-                                    return getLevel().raycastBlocks(this.position, getMoveDirectionEnd(), true, false, 0.5d).contains(block);
+                                    return this.level.raycastBlocks(this.position, getMoveDirectionEnd(), true, false, 0.5d).contains(block);
                                 }
                         ), 4, 1),
                         new Behavior(
@@ -182,33 +182,33 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                 new EntityCheckEvaluator(CoreMemoryTypes.NEAREST_ZOMBIE),
                                 new DistanceEvaluator(CoreMemoryTypes.NEAREST_ZOMBIE, 8),
                                 entity -> getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_ZOMBIE) && getMemoryStorage().get(CoreMemoryTypes.NEAREST_ZOMBIE) instanceof EntityMob i && i.getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET) && i.getMemoryStorage().get(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET) == this,
-                                entity -> getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_ZOMBIE) && getLevel().raycastBlocks(this.position, getMemoryStorage().get(CoreMemoryTypes.NEAREST_ZOMBIE).position).isEmpty()
+                                entity -> getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_ZOMBIE) && this.level.raycastBlocks(this.position, getMemoryStorage().get(CoreMemoryTypes.NEAREST_ZOMBIE).position).isEmpty()
                         ), 8, 1),
                         new Behavior(new SleepExecutor(), all(
                                 new MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.OCCUPIED_BED),
                                 new DistanceEvaluator(CoreMemoryTypes.OCCUPIED_BED, 2),
                                 new PassByTimeEvaluator(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, 100),
-                                entity -> getLevel().getDayTime() >= 12000 && entity.getLevel().getDayTime() < Level.TIME_FULL
+                                entity -> this.level.getDayTime() >= 12000 && entity.level.getDayTime() < Level.TIME_FULL
                         ), 7, 1),
                         new Behavior(new MoveToTargetExecutor(CoreMemoryTypes.OCCUPIED_BED, 0.3f, true), all(
                                 new MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.OCCUPIED_BED),
                                 any(
-                                        entity -> getLevel().getDayTime() >= 12000 && entity.getLevel().getDayTime() < Level.TIME_FULL,
+                                        entity -> this.level.getDayTime() >= 12000 && entity.level.getDayTime() < Level.TIME_FULL,
                                         all(
-                                                entity -> getLevel().getDayTime() >= 11000 && entity.getLevel().getDayTime() < 12000,
+                                                entity -> this.level.getDayTime() >= 11000 && entity.level.getDayTime() < 12000,
                                                 not(new DistanceEvaluator(CoreMemoryTypes.OCCUPIED_BED, 5))
                                         )
                                 )
                         ), 6, 1),
                         new Behavior(new NearbyFlatRandomRoamExecutor(CoreMemoryTypes.OCCUPIED_BED ,0.2f, 5, 100, false, -1, true, 10), all(
                                 new MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.OCCUPIED_BED),
-                                entity -> getLevel().getDayTime() >= 11000 && entity.getLevel().getDayTime() < 12000
+                                entity -> this.level.getDayTime() >= 11000 && entity.level.getDayTime() < 12000
                         ), 5, 1),
                         new Behavior(new WorkExecutor(), all(
                                 new MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.SITE_BLOCK),
                                 any(
-                                        entity -> getLevel().getDayTime() >= 0 && entity.getLevel().getDayTime() < 8000,
-                                        entity -> getLevel().getDayTime() >= 10000 && entity.getLevel().getDayTime() < 11000
+                                        entity -> this.level.getDayTime() >= 0 && entity.level.getDayTime() < 8000,
+                                        entity -> this.level.getDayTime() >= 10000 && entity.level.getDayTime() < 11000
                                 )
                         ), 4, 1, 1),
                         new Behavior(new GossipExecutor(CoreMemoryTypes.GOSSIP_TARGET), all(
@@ -220,7 +220,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                 ),
                 Set.of(
                         entity -> {
-                            if(getLevel().getTick()%120==0) {
+                            if(this.level.getTick()%120==0) {
                                 if(getMemoryStorage().isEmpty(CoreMemoryTypes.OCCUPIED_BED)) {
                                     int range = 48;
                                     int lookY = 5;
@@ -231,7 +231,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                                                 Transform lookTransform = entity.getTransform().add(x, y, z);
                                                 Block lookBlock = lookTransform.getLevelBlock();
                                                 if (lookBlock instanceof BlockBed bed) {
-                                                    if (!bed.isHeadPiece() && Arrays.stream(getLevel().getEntities()).noneMatch(entity1 -> entity1 instanceof EntityVillagerV2 v && v.getMemoryStorage().notEmpty(CoreMemoryTypes.OCCUPIED_BED) && v.getBed().equals(bed))) {
+                                                    if (!bed.isHeadPiece() && Arrays.stream(this.level.getEntities()).noneMatch(entity1 -> entity1 instanceof EntityVillagerV2 v && v.getMemoryStorage().notEmpty(CoreMemoryTypes.OCCUPIED_BED) && v.getBed().equals(bed))) {
                                                         block = bed.getFootPart();
                                                     }
                                                 }
@@ -246,9 +246,9 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                             }
                         },
                         entity -> {
-                            if(getLevel().getTick() % 60 == 0) {
-                                Stream<EntityVillagerV2> entities = Arrays.stream(entity.getLevel().getCollidingEntities(entity.getBoundingBox().grow(64, 3, 64))).filter(entity1 -> entity1 instanceof EntityVillagerV2 && entity1 != this).map(entity1 -> ((EntityVillagerV2) entity1));
-                                if(getLevel().getDayTime() > 8000 && getLevel().getDayTime() < 10000) {
+                            if(this.level.getTick() % 60 == 0) {
+                                Stream<EntityVillagerV2> entities = Arrays.stream(entity.level.getCollidingEntities(entity.getBoundingBox().grow(64, 3, 64))).filter(entity1 -> entity1 instanceof EntityVillagerV2 && entity1 != this).map(entity1 -> ((EntityVillagerV2) entity1));
+                                if(this.level.getDayTime() > 8000 && this.level.getDayTime() < 10000) {
                                     if(getMemoryStorage().isEmpty(CoreMemoryTypes.GOSSIP_TARGET)) {
                                         double minDistance = Float.MAX_VALUE;
                                         EntityVillagerV2 nearest = null;
@@ -274,15 +274,15 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                             }
                         },
                         entity -> {
-                            if(getLevel().getTick() % 30 == 0) {
+                            if(this.level.getTick() % 30 == 0) {
                                 if(!isBaby()) {
                                     Block siteBlock = getMemoryStorage().get(CoreMemoryTypes.SITE_BLOCK);
                                     if(siteBlock != null) if(!siteBlock.getLevelBlock().getId().equals(siteBlock.getId())) {
                                         getMemoryStorage().clear(CoreMemoryTypes.SITE_BLOCK);
                                     }
                                     if(getMemoryStorage().isEmpty(CoreMemoryTypes.SITE_BLOCK)) {
-                                        for(Block block : getLevel().getCollisionBlocks(this.getBoundingBox().grow(16, 4, 16))) {
-                                            if(Arrays.stream(getLevel().getEntities()).noneMatch(entity1 -> entity1 instanceof EntityVillagerV2 v && v.getMemoryStorage().notEmpty(CoreMemoryTypes.SITE_BLOCK) && v.getSite().equals(block)))
+                                        for(Block block : this.level.getCollisionBlocks(this.getBoundingBox().grow(16, 4, 16))) {
+                                            if(Arrays.stream(this.level.getEntities()).noneMatch(entity1 -> entity1 instanceof EntityVillagerV2 v && v.getMemoryStorage().notEmpty(CoreMemoryTypes.SITE_BLOCK) && v.getSite().equals(block)))
                                                 if(setProfessionBlock(block)) return;
                                         }
                                         if(getTradeExp() == 0) setProfession(0, true);
@@ -291,7 +291,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                             }
                         },
                         entity -> {
-                            if(getLevel().getTick() % 100 == 0) {
+                            if(this.level.getTick() % 100 == 0) {
                                 if(getMemoryStorage().get(CoreMemoryTypes.WILLING)) {
                                     var entities = entity.level.getEntities();
                                     var maxDistanceSquared = -1d;
@@ -359,8 +359,8 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
                 float randX = Utils.rand(0f, 0.5f);
                 float randY = Utils.rand(0f, 0.3f);
                 float randZ = Utils.rand(0f, 0.5f);
-                this.getLevel().addParticleEffect(this.position.add(randX, this.getEyeHeight() + randY, randZ), ParticleEffect.VILLAGER_HAPPY);
-                this.getLevel().addParticleEffect(bed.position.add(randX, 0.5625f + randY, randZ), ParticleEffect.VILLAGER_HAPPY);
+                this.level.addParticleEffect(this.position.add(randX, this.getEyeHeight() + randY, randZ), ParticleEffect.VILLAGER_HAPPY);
+                this.level.addParticleEffect(bed.position.add(randX, 0.5625f + randY, randZ), ParticleEffect.VILLAGER_HAPPY);
             }
         }
     }
@@ -456,12 +456,12 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
             this.setDataProperty(EntityDataTypes.MARK_VARIANT, this.namedTag.getInt("clothing"));
         } else {
             BlockVector3 bv = this.position.asBlockVector3();
-            this.setDataProperty(EntityDataTypes.MARK_VARIANT, Clothing.getClothing(getLevel().getBiomeId(bv.x, bv.y, bv.z)).ordinal());
+            this.setDataProperty(EntityDataTypes.MARK_VARIANT, Clothing.getClothing(this.level.getBiomeId(bv.x, bv.y, bv.z)).ordinal());
         }
         if(this.namedTag.containsCompound("bed")) {
             CompoundTag compound = this.namedTag.getCompound("bed");
             Vector3 vector = new Vector3(compound.getInt("x"), compound.getInt("y"), compound.getInt("z"));
-            if(getLevel().getBlock(vector) instanceof BlockBed bed) {
+            if(this.level.getBlock(vector) instanceof BlockBed bed) {
                 setBed(bed);
             }
         }
@@ -486,7 +486,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
         if(this.namedTag.containsCompound("siteBlock")) {
             CompoundTag tag = this.namedTag.getCompound("siteBlock");
             Vector3 vector3 = new Vector3(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
-            Block block = getLevel().getBlock(vector3);
+            Block block = this.level.getBlock(vector3);
             setProfessionBlock(block);
         }
         if (this.namedTag.containsInt("profession")) {
@@ -527,7 +527,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
         if(getLastDamageCause() instanceof EntityDamageByEntityEvent event) {
             if(event.getEntity() instanceof Player player) {
                 System.out.println("1");
-                Arrays.stream(this.getLevel().getCollidingEntities(this.getBoundingBox().grow(16, 16, 16))).filter(entity -> entity instanceof EntityVillagerV2).forEach(entity -> ((EntityVillagerV2) entity).addGossip(player.getLoginChainData().getXUID(), Gossip.MAJOR_NEGATIVE, 25));
+                Arrays.stream(this.level.getCollidingEntities(this.getBoundingBox().grow(16, 16, 16))).filter(entity -> entity instanceof EntityVillagerV2).forEach(entity -> ((EntityVillagerV2) entity).addGossip(player.getLoginChainData().getXUID(), Gossip.MAJOR_NEGATIVE, 25));
             }
         }
         super.kill();
@@ -539,11 +539,11 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
         IntArrayList values = gossipMap.get(xuid);
         int ordinal = gossip.ordinal();
         values.set(ordinal, Math.min(gossip.max, values.getInt(ordinal) + value));
-        getLevel().getPlayers().values().stream().filter(player -> player.getLoginChainData().getXUID().equals(xuid)).findFirst().ifPresent(this::updateTrades);
+        this.level.getPlayers().values().stream().filter(player -> player.getLoginChainData().getXUID().equals(xuid)).findFirst().ifPresent(this::updateTrades);
     }
 
     public void spreadGossip() {
-        Arrays.stream(getLevel().getCollidingEntities(getBoundingBox().grow(2, 0, 2))).filter(entity2 -> entity2 instanceof EntityVillagerV2).map(entity2 -> ((EntityVillagerV2) entity2)).forEach(target -> {
+        Arrays.stream(this.level.getCollidingEntities(getBoundingBox().grow(2, 0, 2))).filter(entity2 -> entity2 instanceof EntityVillagerV2).map(entity2 -> ((EntityVillagerV2) entity2)).forEach(target -> {
             var gossipMap = getMemoryStorage().get(CoreMemoryTypes.GOSSIP);
             var targetGossipMap = target.getMemoryStorage().get(CoreMemoryTypes.GOSSIP);
             for(var entry : gossipMap.object2ObjectEntrySet()) {
@@ -843,7 +843,7 @@ public class EntityVillagerV2 extends EntityMob implements InventoryHolder {
         }
 
         if(tick % 20 == 0) {
-            for(Entity i : getLevel().getNearbyEntities(getBoundingBox().grow(1, 0.5, 1))) {
+            for(Entity i : this.level.getNearbyEntities(getBoundingBox().grow(1, 0.5, 1))) {
                 if(i instanceof EntityItem entityItem) {
                     Item item = entityItem.getItem();
                     if(switch (item.getId()) {

@@ -19,7 +19,7 @@ public class MoveEntityAbsoluteProcessor extends DataPacketProcessor<MoveEntityA
         if (!player.isAlive() || !player.spawned || player.getRiding() == null) {
             return;
         }
-        Entity movedEntity = player.getLevel().getEntity(pk.eid);
+        Entity movedEntity = player.level.getEntity(pk.eid);
         if (!(movedEntity instanceof EntityBoat)) {
             return;
         }

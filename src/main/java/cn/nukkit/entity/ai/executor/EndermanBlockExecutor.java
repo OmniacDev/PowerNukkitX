@@ -20,7 +20,7 @@ public class EndermanBlockExecutor implements IBehaviorExecutor {
                     Block block = optionalBlock.get();
                     enderman.setItemInHand(block.toItem());
                     enderman.setDataProperty(EntityDataTypes.CARRY_BLOCK_STATE, block);
-                    enderman.getLevel().setBlock(block.position, Block.get(Block.AIR));
+                    enderman.level.setBlock(block.position, Block.get(Block.AIR));
                 }
             } else {
                 if(enderman.getItemInHand().isBlock()) {

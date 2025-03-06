@@ -76,11 +76,11 @@ public abstract class ItemFood extends Item {
                 --this.count;
                 player.getInventory().setItemInHand(this);
 
-                player.getLevel().addSound(player.position, Sound.RANDOM_BURP);
+                player.level.addSound(player.position, Sound.RANDOM_BURP);
             }
         }
 
-        player.getLevel().getVibrationManager().callVibrationEvent(new VibrationEvent(player, player.position.add(0, player.getEyeHeight()), VibrationType.EAT));
+        player.level.getVibrationManager().callVibrationEvent(new VibrationEvent(player, player.position.add(0, player.getEyeHeight()), VibrationType.EAT));
 
         return true;
     }
