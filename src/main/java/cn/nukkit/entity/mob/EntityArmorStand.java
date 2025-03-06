@@ -106,7 +106,7 @@ public class EntityArmorStand extends EntityMob implements EntityInteractable, E
 
     @Override
     public boolean onInteract(Player player, Item item, Vector3 clickedPos) {
-        if (player.isSpectator() || !isValid()) {
+        if (player.isSpectator()) {
             return false;
         }
 

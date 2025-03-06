@@ -2063,11 +2063,6 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
         return new Locator(this.position.x, this.position.y, this.position.z, this.level);
     }
 
-    public boolean isValid() {
-        return this.level != null;
-    }
-
-
     public boolean isTouchingWater() {
         return hasWaterAt(0) || hasWaterAt(this.getEyeHeight());
     }
@@ -2757,9 +2752,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
                         this.chunk.removeEntity(this);
                     }
                 } finally {
-                    if (this.level != null) {
-                        this.level.removeEntity(this);
-                    }
+                    this.level.removeEntity(this);
                 }
             }
         }

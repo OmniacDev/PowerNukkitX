@@ -228,7 +228,7 @@ public class EntityBoat extends EntityVehicle {
             Iterator<Entity> iterator = ignoreCollision.iterator();
             while (iterator.hasNext()) {
                 Entity ignored = iterator.next();
-                if (!ignored.isValid() || ignored.isClosed() || !ignored.isAlive()
+                if (ignored.isClosed() || !ignored.isAlive()
                         || !ignored.getBoundingBox().intersectsWith(getBoundingBox().grow(0.5, 0.5, 0.5))) {
                     iterator.remove();
                     hasUpdated = true;
