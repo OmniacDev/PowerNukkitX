@@ -181,7 +181,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
 
     @Nullable public Level level;
 
-    @NotNull public Vector3 prevPos = position.clone();
+    @NotNull public Vector3 prevPosition = position.clone();
     @NotNull public Vector3 prevMotion = motion.clone();
     @NotNull public Rotator2 prevRotation = rotation.clone();
 
@@ -1529,7 +1529,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     }
 
     public boolean hasPosChanged(double threshold) {
-        return this.position.subtract(this.prevPos).lengthSquared() > threshold;
+        return this.position.subtract(this.prevPosition).lengthSquared() > threshold;
     }
 
     public boolean hasRotationChanged() {
@@ -1563,9 +1563,9 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
 
             this.moveDelta();
 
-            this.prevPos.x = this.position.x;
-            this.prevPos.y = this.position.y;
-            this.prevPos.z = this.position.z;
+            this.prevPosition.x = this.position.x;
+            this.prevPosition.y = this.position.y;
+            this.prevPosition.z = this.position.z;
 
             this.prevRotation.pitch = this.rotation.pitch;
             this.prevRotation.yaw = this.rotation.yaw;
@@ -1593,15 +1593,15 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     public void moveDelta() {
         MoveEntityDeltaPacket pk = new MoveEntityDeltaPacket();
         pk.runtimeEntityId = this.getId();
-        if (this.prevPos.x != this.position.x) {
+        if (this.prevPosition.x != this.position.x) {
             pk.x = (float) this.position.x;
             pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_X;
         }
-        if (this.prevPos.y != this.position.y) {
+        if (this.prevPosition.y != this.position.y) {
             pk.y = (float) this.position.y;
             pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_Y;
         }
-        if (this.prevPos.z != this.position.z) {
+        if (this.prevPosition.z != this.position.z) {
             pk.z = (float) this.position.z;
             pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_Z;
         }

@@ -996,11 +996,11 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
         }
 
         //update server-side position and rotation and aabb
-        Transform last = new Transform(this.prevPos.x, this.prevPos.y, this.prevPos.z, this.prevRotation.yaw, this.prevRotation.pitch, this.prevHeadYaw, this.level);
+        Transform last = new Transform(this.prevPosition.x, this.prevPosition.y, this.prevPosition.z, this.prevRotation.yaw, this.prevRotation.pitch, this.prevHeadYaw, this.level);
         Transform now = this.getTransform();
-        this.prevPos.x = now.position.x;
-        this.prevPos.y = now.position.y;
-        this.prevPos.z = now.position.z;
+        this.prevPosition.x = now.position.x;
+        this.prevPosition.y = now.position.y;
+        this.prevPosition.z = now.position.z;
         this.prevRotation.yaw = now.rotation.yaw;
         this.prevRotation.pitch = now.rotation.pitch;
         this.prevHeadYaw = now.headYaw;
@@ -1163,9 +1163,9 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     }
 
     protected void revertClientMotion(Transform originalPos) {
-        this.prevPos.x = originalPos.getX();
-        this.prevPos.y = originalPos.getY();
-        this.prevPos.z = originalPos.getZ();
+        this.prevPosition.x = originalPos.getX();
+        this.prevPosition.y = originalPos.getY();
+        this.prevPosition.z = originalPos.getZ();
         this.prevRotation.yaw = originalPos.getYaw();
         this.prevRotation.pitch = originalPos.getPitch();
 

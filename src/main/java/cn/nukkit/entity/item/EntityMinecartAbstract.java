@@ -149,9 +149,9 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
             }
 
             // Entity variables
-            this.prevPos.x = this.position.x;
-            this.prevPos.y = this.position.y;
-            this.prevPos.z = this.position.z;
+            this.prevPosition.x = this.position.x;
+            this.prevPosition.y = this.position.y;
+            this.prevPosition.z = this.position.z;
             this.motion.y -= 0.03999999910593033D;
             int dx = MathHelper.floor(this.position.x);
             int dy = MathHelper.floor(this.position.y);
@@ -184,8 +184,8 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
 
             // Minecart head
             this.rotation.pitch = 0;
-            double diffX = this.prevPos.x - this.position.x;
-            double diffZ = this.prevPos.z - this.position.z;
+            double diffX = this.prevPosition.x - this.position.x;
+            double diffZ = this.prevPosition.z - this.position.z;
             double yawToChange = this.rotation.yaw;
             if (diffX * diffX + diffZ * diffZ > 0.001D) {
                 yawToChange = (Math.atan2(diffZ, diffX) * 180 / Math.PI);
@@ -199,7 +199,7 @@ public abstract class EntityMinecartAbstract extends EntityVehicle {
 
             setRotation(yawToChange, this.rotation.pitch);
 
-            Transform from = new Transform(this.prevPos.x, this.prevPos.y, this.prevPos.z, this.prevRotation.yaw, this.prevRotation.pitch, level);
+            Transform from = new Transform(this.prevPosition.x, this.prevPosition.y, this.prevPosition.z, this.prevRotation.yaw, this.prevRotation.pitch, level);
             Transform to = new Transform(this.position.x, this.position.y, this.position.z, this.rotation.yaw, this.rotation.pitch, level);
 
             this.getServer().getPluginManager().callEvent(new VehicleUpdateEvent(this));

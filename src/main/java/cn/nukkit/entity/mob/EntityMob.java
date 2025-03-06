@@ -354,15 +354,15 @@ public abstract class EntityMob extends EntityPhysical implements EntityInventor
     public void moveDelta() {
         MoveEntityDeltaPacket pk = new MoveEntityDeltaPacket();
         pk.runtimeEntityId = this.getId();
-        if (this.prevPos.x != this.position.x) {
+        if (this.prevPosition.x != this.position.x) {
             pk.x = (float) this.position.x;
             pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_X;
         }
-        if (this.prevPos.y != this.position.y) {
+        if (this.prevPosition.y != this.position.y) {
             pk.y = (float) this.position.y;
             pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_Y;
         }
-        if (this.prevPos.z != this.position.z) {
+        if (this.prevPosition.z != this.position.z) {
             pk.z = (float) this.position.z;
             pk.flags |= MoveEntityDeltaPacket.FLAG_HAS_Z;
         }

@@ -70,13 +70,13 @@ public abstract class EntityHanging extends Entity {
 
         this.checkBlockCollision();
 
-        if (this.prevRotation.yaw != this.rotation.yaw || this.prevPos.x != this.position.x || this.prevPos.y != this.position.y || this.prevPos.z != this.position.z) {
+        if (this.prevRotation.yaw != this.rotation.yaw || this.prevPosition.x != this.position.x || this.prevPosition.y != this.position.y || this.prevPosition.z != this.position.z) {
             this.despawnFromAll();
             this.direction = (int) (this.rotation.yaw / 90);
             this.prevRotation.yaw = this.rotation.yaw;
-            this.prevPos.x = this.position.x;
-            this.prevPos.y = this.position.y;
-            this.prevPos.z = this.position.z;
+            this.prevPosition.x = this.position.x;
+            this.prevPosition.y = this.position.y;
+            this.prevPosition.z = this.position.z;
             this.spawnToAll();
             return true;
         }

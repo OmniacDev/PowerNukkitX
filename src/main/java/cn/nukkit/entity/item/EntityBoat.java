@@ -286,7 +286,7 @@ public class EntityBoat extends EntityVehicle {
 
         this.motion.z *= friction;
 
-        Transform from = new Transform(this.prevPos.x, this.prevPos.y, this.prevPos.z, this.prevRotation.yaw, this.prevRotation.pitch, level);
+        Transform from = new Transform(this.prevPosition.x, this.prevPosition.y, this.prevPosition.z, this.prevRotation.yaw, this.prevRotation.pitch, level);
         Transform to = new Transform(this.position.x, this.position.y, this.position.z, this.rotation.yaw, this.rotation.pitch, level);
 
         if (!from.equals(to)) {
