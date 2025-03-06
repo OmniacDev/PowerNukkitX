@@ -936,8 +936,8 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
     }
 
     @Override
-    public Player clone() {
-        throw new RuntimeException("Should not be cloning Player!");
+    public Location clone() {
+        return getLocation();
     }
 
     protected void handleMovement(Transform clientPos) {
