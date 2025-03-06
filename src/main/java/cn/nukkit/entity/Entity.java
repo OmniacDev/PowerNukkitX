@@ -2550,14 +2550,22 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
         }
     }
 
-    public boolean setPosition(Vector3 pos) {
+    public boolean setPosition(IVector3 pos) {
         if (this.closed) {
             return false;
         }
 
-        this.pos.x = pos.x;
-        this.pos.y = pos.y;
-        this.pos.z = pos.z;
+        if (pos instanceof Locator locator && locator.level != this.level) {
+            if (!this.switchLevel(locator.getLevel())) {
+                return false;
+            }
+        }
+
+        Vector3 vPos = pos.getVector3();
+
+        this.pos.x = vPos.x;
+        this.pos.y = vPos.y;
+        this.pos.z = vPos.z;
 
         this.recalculateBoundingBox(false); // Don't need to send BB height/width to client on position change
 

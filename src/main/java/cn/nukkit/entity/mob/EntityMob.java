@@ -28,6 +28,7 @@ import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.level.vibration.VibrationEvent;
 import cn.nukkit.level.vibration.VibrationType;
+import cn.nukkit.math.IVector3;
 import cn.nukkit.math.NukkitMath;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.NBTIO;
@@ -396,7 +397,7 @@ public abstract class EntityMob extends EntityPhysical implements EntityInventor
         this.scheduleUpdate();
     }
 
-    public boolean setPositionAndRotation(Vector3 pos, double yaw, double pitch, double headYaw) {
+    public boolean setPositionAndRotation(IVector3 pos, double yaw, double pitch, double headYaw) {
         this.setRotation(yaw, pitch, headYaw);
         return this.setPosition(pos);
     }

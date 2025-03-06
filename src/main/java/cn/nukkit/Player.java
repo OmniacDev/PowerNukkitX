@@ -4385,7 +4385,7 @@ public class Player extends EntityHuman implements CommandSender, ChunkLoader, I
 
         clientMovements.clear();
         //switch level, update pos and rotation, update aabb
-        if (setPositionAndRotation(to.position, to.getYaw(), to.getPitch(), to.getHeadYaw())) {
+        if (setPositionAndRotation(to, to.getYaw(), to.getPitch(), to.getHeadYaw())) {
             //if switch level or the distance teleported is too far
             if (switchLevel) {
                 this.playerChunkManager.handleTeleport();
