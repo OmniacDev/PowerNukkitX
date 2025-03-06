@@ -271,6 +271,9 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
 
     public Entity(IChunk chunk, CompoundTag nbt) {
         initEntityProperties(this.getIdentifier());
+
+        this.level = chunk.getProvider().getLevel();
+
         if (!(this instanceof Player)) {
             this.init(chunk, nbt);
         }
@@ -1555,7 +1558,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
         boolean rotationChanged = this.hasRotationChanged();
 
         if (posChanged || rotationChanged) { //0.2 ** 2, 1.5 ** 2
-            if (posChanged && this.level != null) {
+            if (posChanged) {
                 if (this.isOnGround()) {
                     this.level.getVibrationManager().callVibrationEvent(new VibrationEvent(this instanceof EntityProjectile projectile ? projectile.shootingEntity : this, this.position.clone(), VibrationType.STEP));
                 } else if (this.isTouchingWater()) {
@@ -1871,11 +1874,7 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
     }
 
     public void resetFallDistance() {
-        if (this.level != null) {
-            this.highestPosition = this.level.getMinHeight();
-        } else {
-            this.highestPosition = 0;
-        }
+        this.highestPosition = this.level.getMinHeight();
     }
 
     protected void updateFallState(boolean onGround) {
@@ -2030,19 +2029,17 @@ public abstract class Entity implements Metadatable, EntityID, EntityDataTypes, 
             return false;
         }
 
-        if (this.level != null) {
-            EntityLevelChangeEvent ev = new EntityLevelChangeEvent(this, this.level, targetLevel);
-            this.server.getPluginManager().callEvent(ev);
-            if (ev.isCancelled()) {
-                return false;
-            }
-
-            this.level.removeEntity(this);
-            if (this.chunk != null) {
-                this.chunk.removeEntity(this);
-            }
-            this.despawnFromAll();
+        EntityLevelChangeEvent ev = new EntityLevelChangeEvent(this, this.level, targetLevel);
+        this.server.getPluginManager().callEvent(ev);
+        if (ev.isCancelled()) {
+            return false;
         }
+
+        this.level.removeEntity(this);
+        if (this.chunk != null) {
+            this.chunk.removeEntity(this);
+        }
+        this.despawnFromAll();
 
         this.level = targetLevel;
         this.level.addEntity(this);
