@@ -16,7 +16,7 @@ public class Transform extends Locator {
     }
 
     public Transform(@NotNull Locator locator) {
-        this(locator.position, new Rotator2(0, 0), locator.level);
+        this(locator.position, new Rotator2(0, 0), 0D, locator.level);
     }
 
     public Transform(double x, @NotNull Level level) {
@@ -45,9 +45,10 @@ public class Transform extends Locator {
         this.headYaw = headYaw;
     }
 
-    public Transform(@NotNull Vector3 position, @NotNull Rotator2 rotation, @NotNull Level level) {
+    public Transform(@NotNull Vector3 position, @NotNull Rotator2 rotation, @NotNull Double headYaw, @NotNull Level level) {
         super(position.x, position.y, position.z, level);
         this.rotation = rotation;
+        this.headYaw = headYaw;
     }
 
     public static Transform fromObject(Vector3 pos, @NotNull Level level) {
